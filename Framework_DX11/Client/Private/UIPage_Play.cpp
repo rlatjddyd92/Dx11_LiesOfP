@@ -177,6 +177,9 @@ void CUIPage_Play::SetWeaponLock(_bool bIsWeaponLock)
 
 void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 {
+	if (m_bIsItemLock == true)
+		return;
+
 	_bool bUseGrinder = false;
 
 	if ((!m_bIsBagOpen) && (KEY_TAP(KEY::T)))

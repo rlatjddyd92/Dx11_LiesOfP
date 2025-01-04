@@ -68,9 +68,6 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
         if (nullptr != m_pStarGazer)
             Safe_AddRef(m_pStarGazer);
 
-        m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.2f);
-        Move_To_Stargazer();
-
         m_fDissloveRatio = 1.f;
         m_vRimLightColor.z = 1.f;
         m_vRimLightColor.w = 0.1f;
@@ -292,6 +289,15 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
     _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
     _int iFrame = m_pPlayer->Get_Frame();
 
+
+    // 25-01-04 김성용
+    // 플레이어 사망 UI 추가 
+    if (GET_GAMEINTERFACE->IsPlayerDead_UI_NowEnd() == true)
+    {
+        m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.2f);
+        Move_To_Stargazer();
+    }
+
     if (iCurAnim == m_iAnimation_TeleportEnd)
     {
         if (iFrame > 3)
@@ -300,7 +306,7 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
             {
                 m_pPlayer->Set_IsRespawnMonster(true);
 
-                GET_GAMEINTERFACE->Fade_In(0.9f);
+                //GET_GAMEINTERFACE->Fade_In(0.9f);
 
                 _Vec3 vPos = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
                 //vPos.y += 1.f;
