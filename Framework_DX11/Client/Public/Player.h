@@ -100,7 +100,7 @@ public:
 		_int iPoint_Heal = 1;
 
 		// ´É·ÂÄ¡ 
-		_float iStat_Attack = 20.f;
+		_float iStat_Attack = 1000.f;
 		_float iStat_Defence = 20.f;
 
 
@@ -283,6 +283,7 @@ public:
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();
+	void			Increase_Region(_float fAmount);
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 	void			Recovery_HP(_float fAmount);

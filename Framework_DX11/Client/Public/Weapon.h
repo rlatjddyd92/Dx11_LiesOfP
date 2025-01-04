@@ -131,6 +131,8 @@ protected:
 protected:
 	_float					m_fDamageAmount = {};
 	_float					m_fDamageRatio = { 1.f };
+	_float					m_fFinalDamageAmount = {};
+
 	_bool					m_isUpdatePos = { true };
 
 	list<CGameObject*>			m_DamagedObjects;

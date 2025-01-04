@@ -61,7 +61,9 @@ void CColliderObject::Late_Update(_float fTimeDelta)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 
+#ifdef _DEBUG
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+#endif
 }
 
 HRESULT CColliderObject::Render()
