@@ -75,14 +75,17 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 70;
-	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 2.f;
-	m_eStat.fStemina = 30.f;
+	m_eStat.fHp = 1000.f;
+	m_eStat.fAtk = 200.f;
+	//m_eStat.fDefence = 2.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 0.91f, 0.f };
 
 	m_bDiscover = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 210.f;
+
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -285,7 +288,7 @@ HRESULT CCarcassTail::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 120.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -304,7 +307,7 @@ HRESULT CCarcassTail::Ready_Components()
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
-	Desc.fDamageAmount = 120.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_TAIL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -315,7 +318,7 @@ HRESULT CCarcassTail::Ready_Components()
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
-	Desc.fDamageAmount = 120.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -325,7 +328,7 @@ HRESULT CCarcassTail::Ready_Components()
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(167);
-	Desc.fDamageAmount = 120.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_TAIL_2] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

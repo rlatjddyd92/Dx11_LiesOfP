@@ -70,16 +70,15 @@ HRESULT CRebornerMale::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 50.f;
-	m_eStat.fMaxHp = 50.f;
-	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 3.f;
-	m_eStat.fStemina = 30.f;
+	m_eStat.fHp = 160.f;
+	m_eStat.fMaxHp = 160.f;
+	m_eStat.fAtk = 40.f;
+	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 30.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
 

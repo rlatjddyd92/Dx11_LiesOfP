@@ -176,7 +176,21 @@ void CState_RaxasiaP1_Discharge::Effect_Check(_double CurTrackPos)
             if (CurTrackPos >= 35.f)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);    //어택 오브젝트로 수정 필요
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.1f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_ROOT))
+                    * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
+
                 m_bChargeActive = true;
             }
         }
@@ -257,7 +271,6 @@ void CState_RaxasiaP1_Discharge::Control_Sound(_double CurTrackPos)
             if (CurTrackPos >= 35.f)
             {
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
-                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Blast_03.wav"), false);
                 m_bChargeActiveForSound = true;
             }
         }

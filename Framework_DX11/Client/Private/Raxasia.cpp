@@ -113,14 +113,14 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	m_eStat.strName = TEXT("Raxasia");
 
-	m_eStat.fHp = 200.f;
-	m_eStat.fMaxHp = 200.f;
-	m_eStat.fAtk = 10.f;
-	m_eStat.fDefence = 5.f;
-	m_eStat.fStemina = 100.f;
+	m_eStat.fHp = 2000.f;
+	m_eStat.fMaxHp = 2000.f;
+	m_eStat.fAtk = 250.f;
+	//m_eStat.fDefence = 5.f;
+
 	m_eStat.bWeakness = false;
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 330.f;
 
 	m_vCenterOffset = _Vec3{0.f, 1.85f, 0.f};
 
@@ -973,7 +973,7 @@ HRESULT CRaxasia::Ready_Weapon()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
 	Desc.pParentWorldMatrix = WeaponDesc.pParentWorldMatrix;
 	Desc.pSocketBoneMatrix2 = WeaponDesc.pParentWorldMatrix;
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pKickCollObj = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -1190,12 +1190,12 @@ void CRaxasia::ChangePhase()
 	m_pColliderBindMatrix[CT_LOWERARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(24);//ForeArm
 	m_pColliderBindMatrix[CT_LOWERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(71);
 
-	m_eStat.fHp = 200.f;
-	m_eStat.fMaxHp = 200.f;
-	m_eStat.fAtk = 15.f;
-	m_eStat.fDefence = 8.f;
-	m_eStat.fStemina = 100.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fHp = 2500.f;
+	m_eStat.fMaxHp = 2500.f;
+	m_eStat.fAtk = 250.f;
+	//m_eStat.fDefence = 8.f;
+
+	m_eStat.fMaxGrogyPoint = 330.f;
 	m_eStat.fGrogyPoint = 0.f;
 
 	m_bDieState = false;

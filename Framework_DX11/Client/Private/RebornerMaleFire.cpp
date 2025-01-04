@@ -71,16 +71,15 @@ HRESULT CRebornerMaleFire::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 50.f;
-	m_eStat.fMaxHp = 50.f;
-	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 3.f;
-	m_eStat.fStemina = 30.f;
+	m_eStat.fHp = 130.f;
+	m_eStat.fMaxHp = 130.f;
+	m_eStat.fAtk = 5.f;
+	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 80.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
 
@@ -463,8 +462,6 @@ CRebornerMaleFire* CRebornerMaleFire::Create(ID3D11Device* pDevice, ID3D11Device
 	return pInstance;
 }
 
-
-
 CPawn* CRebornerMaleFire::Clone(void* pArg)
 {
 	CRebornerMaleFire* pInstance = new CRebornerMaleFire(*this);
@@ -485,7 +482,11 @@ void CRebornerMaleFire::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 
-	Safe_Release(m_pFireEffect);
+	if (true == m_isCloned)
+	{
+		m_pFireEffect->Set_Cloned(false);
+		Safe_Release(m_pFireEffect);
+	}
 
 	__super::Free();
 

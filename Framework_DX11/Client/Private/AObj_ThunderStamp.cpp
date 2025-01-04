@@ -33,7 +33,7 @@ HRESULT CAObj_ThunderStamp::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 280.f;
+    m_fDamageAmount = 250.f;
     m_fLifeDuration = 0.2f;
 
     m_pColliderCom->IsActive(true);
@@ -57,7 +57,7 @@ void CAObj_ThunderStamp::Priority_Update(_float fTimeDelta)
 
 void CAObj_ThunderStamp::Update(_float fTimeDelta)
 {
-    if (m_pEffect->Get_Loop())
+    if (m_pEffect->Get_Dead())
     {
         m_isDead = true;
     }

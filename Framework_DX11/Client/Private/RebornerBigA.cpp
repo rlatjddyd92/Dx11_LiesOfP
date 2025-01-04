@@ -77,16 +77,15 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 50.f;
-	m_eStat.fMaxHp = 50.f;
-	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 3.f;
-	m_eStat.fStemina = 30.f;
+	m_eStat.fHp = 160.f;
+	m_eStat.fMaxHp = 160.f;
+	m_eStat.fAtk = 180.f;
+	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 160.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
 	
@@ -495,6 +494,12 @@ void CRebornerBigA::Free()
 	for (_uint i = 0; i < CT_END - 1; ++i)
 	{
 		Safe_Release(m_EXCollider[i]);
+	}
+
+	if (true == m_isCloned)
+	{
+		m_pSwingEffect->Set_Cloned(false);
+		Safe_Release(m_pSwingEffect);
 	}
 
 	__super::Free();

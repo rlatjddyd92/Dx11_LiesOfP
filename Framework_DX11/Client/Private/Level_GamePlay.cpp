@@ -205,6 +205,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Effect()
 {
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_EffectObj"), TEXT("Prototype_GameObject_MachineEffect"))))
 		return E_FAIL;
+
+	return S_OK;
 }
 
 HRESULT CLevel_GamePlay::Ready_Layer_Monster()

@@ -55,8 +55,7 @@ HRESULT CMonster_Training02::Initialize(void* pArg)
 	m_eStat.fHp = 50.f;
 	m_eStat.fMaxHp = 50.f;
 	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 3.f;
-	m_eStat.fStemina = 30.f;
+	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
 

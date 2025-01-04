@@ -33,7 +33,8 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 270.f;
+
     m_fLifeDuration = 0.6f;
     m_pColliderCom->IsActive(true);
 

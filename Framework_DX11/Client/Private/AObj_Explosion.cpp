@@ -33,7 +33,7 @@ HRESULT CAObj_Explosion::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 280.f;
+    m_fDamageAmount = 180.f;
     m_fLifeDuration = 0.2f;
 
     m_pColliderCom->IsActive(true);

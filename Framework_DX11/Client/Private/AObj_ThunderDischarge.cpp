@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "AObj_ThunderLanding.h"
+#include "AObj_ThunderDischarge.h"
 
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
 
-CAObj_ThunderLanding::CAObj_ThunderLanding(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_ThunderDischarge::CAObj_ThunderDischarge(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
 }
 
-CAObj_ThunderLanding::CAObj_ThunderLanding(const CGameObject& Prototype)
+CAObj_ThunderDischarge::CAObj_ThunderDischarge(const CGameObject& Prototype)
     : CAttackObject{ Prototype }
 {
 }
 
-HRESULT CAObj_ThunderLanding::Initialize_Prototype()
+HRESULT CAObj_ThunderDischarge::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CAObj_ThunderLanding::Initialize(void* pArg)
+HRESULT CAObj_ThunderDischarge::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC GameObjDesc{};
     if (FAILED(__super::Initialize(&GameObjDesc)))
@@ -45,18 +45,18 @@ HRESULT CAObj_ThunderLanding::Initialize(void* pArg)
 
     if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
     {
-        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_FX_Ground_Explo_Huge_02.wav"), &g_fEffectVolume, false);
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Blast_03.wav"), &g_fEffectVolume, false);
     }
 
     return S_OK;
 }
 
-void CAObj_ThunderLanding::Priority_Update(_float fTimeDelta)
+void CAObj_ThunderDischarge::Priority_Update(_float fTimeDelta)
 {
     m_pEffect->Priority_Update(fTimeDelta);
 }
 
-void CAObj_ThunderLanding::Update(_float fTimeDelta)
+void CAObj_ThunderDischarge::Update(_float fTimeDelta)
 {
     if (m_pEffect->Get_Dead())
     {
@@ -68,7 +68,7 @@ void CAObj_ThunderLanding::Update(_float fTimeDelta)
     m_pEffect->Update(fTimeDelta);
 }
 
-void CAObj_ThunderLanding::Late_Update(_float fTimeDelta)
+void CAObj_ThunderDischarge::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
@@ -81,7 +81,7 @@ void CAObj_ThunderLanding::Late_Update(_float fTimeDelta)
     }
 }
 
-HRESULT CAObj_ThunderLanding::Render()
+HRESULT CAObj_ThunderDischarge::Render()
 {
 #ifdef DEBUG
     m_pColliderCom->Render();
@@ -89,12 +89,12 @@ HRESULT CAObj_ThunderLanding::Render()
     return S_OK;
 }
 
-HRESULT CAObj_ThunderLanding::Render_LightDepth()
+HRESULT CAObj_ThunderDischarge::Render_LightDepth()
 {
     return S_OK;
 }
 
-void CAObj_ThunderLanding::OnCollisionEnter(CGameObject* pOther)
+void CAObj_ThunderDischarge::OnCollisionEnter(CGameObject* pOther)
 {
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
@@ -117,15 +117,15 @@ void CAObj_ThunderLanding::OnCollisionEnter(CGameObject* pOther)
     }
 }
 
-void CAObj_ThunderLanding::OnCollisionStay(CGameObject* pOther)
+void CAObj_ThunderDischarge::OnCollisionStay(CGameObject* pOther)
 {
 }
 
-void CAObj_ThunderLanding::OnCollisionExit(CGameObject* pOther)
+void CAObj_ThunderDischarge::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-HRESULT CAObj_ThunderLanding::Ready_Components()
+HRESULT CAObj_ThunderDischarge::Ready_Components()
 {
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
@@ -142,7 +142,7 @@ HRESULT CAObj_ThunderLanding::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderLanding"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f));
 
     m_pEffect->Reset_Effects();
@@ -150,33 +150,33 @@ HRESULT CAObj_ThunderLanding::Ready_Components()
     return S_OK;
 }
 
-CAObj_ThunderLanding* CAObj_ThunderLanding::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_ThunderDischarge* CAObj_ThunderDischarge::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CAObj_ThunderLanding* pInstance = new CAObj_ThunderLanding(pDevice, pContext);
+    CAObj_ThunderDischarge* pInstance = new CAObj_ThunderDischarge(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed to Created : CAObj_ThunderLanding"));
+        MSG_BOX(TEXT("Failed to Created : CAObj_ThunderDischarge"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-CGameObject* CAObj_ThunderLanding::Clone(void* pArg)
+CGameObject* CAObj_ThunderDischarge::Clone(void* pArg)
 {
-    CAObj_ThunderLanding* pInstance = new CAObj_ThunderLanding(*this);
+    CAObj_ThunderDischarge* pInstance = new CAObj_ThunderDischarge(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed to Cloned : CAObj_ThunderLanding"));
+        MSG_BOX(TEXT("Failed to Cloned : CAObj_ThunderDischarge"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CAObj_ThunderLanding::Free()
+void CAObj_ThunderDischarge::Free()
 {
     __super::Free();
 

@@ -76,16 +76,15 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 50.f;
-	m_eStat.fMaxHp = 50.f;
-	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 3.f;
-	m_eStat.fStemina = 30.f;
+	m_eStat.fHp = 1300.f;
+	m_eStat.fMaxHp = 1300.f;
+	m_eStat.fAtk = 210.f;
+	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 210.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.7f, 0.f };
 
@@ -270,7 +269,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 	Desc.pOWner = this;
 
 	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
@@ -289,7 +288,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	ColliderOBBDesc_Obj.vExtents = _float3(0.4f, 0.75f, 1.2f);
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(2);
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

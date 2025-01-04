@@ -25,6 +25,8 @@ public:
 
         _bool             bWeakness{}; // 체력바 하얀 표시
         _bool             bFatalAttack{}; // 발톱 표시
+
+        _float            fAtkDmg{};
     };
 
 protected:

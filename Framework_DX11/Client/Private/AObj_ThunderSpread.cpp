@@ -37,7 +37,8 @@ HRESULT CAObj_ThunderSpread::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 250.f;
+
     m_fLifeDuration = 0.3f;
     m_fSpeed = 20.f;
 
