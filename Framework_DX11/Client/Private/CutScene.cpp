@@ -242,6 +242,8 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 void CCutScene::First_Setting()
 {
 	m_bFirstStart = false;
+	m_bHavePlayed = true;
+
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 
 	GET_GAMEINTERFACE->UIPart_Off();
@@ -384,6 +386,9 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
 		pPlayer->IsActive(true);
 		pPlayer->Init_PlayerCamera();
+		m_fTrackPosition = 0.f;
+		m_bFirstStart = true;
+		m_bFinished = false;
 		break;	
 	case BOSS1_DEAD:
 		m_pObjects[BOSS1]->End_CutScene(2);
@@ -418,6 +423,9 @@ void CCutScene::End_Setting()
 		pBoss2->End_CutScene(1);
 		pBoss2->Reset_Die();
 		pPlayer->Init_PlayerCamera();
+		m_fTrackPosition = 0.f;
+		m_bFirstStart = true;
+		m_bFinished = false;
 	}
 		break;
 	case BOSS2_DEFEAT:

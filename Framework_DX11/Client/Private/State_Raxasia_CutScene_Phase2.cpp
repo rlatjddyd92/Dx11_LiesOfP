@@ -55,7 +55,20 @@ HRESULT CState_Raxasia_CutScene_Phase2::Start_State(void* pArg)
     m_pMonster->Change_Animation(m_iAnimation_Phase2, false, 0.f, 0);
 
     m_isStartCutScene = false;
+    m_isChangePhase2Model = false;
+    m_isOnGroundWeapon = false;
+    m_isChangeWeaponPos = false;
+    m_isReConnetWeaponBone = false;
+    m_isPlayWeaponChangeAnim = false;
+    m_isConneectLeftHandShield = false;
+    m_isChangeRealWeapon = false;
+    m_isCrashGroundWeaon = false;
+    ZeroMemory(m_isGroundArmor, sizeof(_bool) * 9);
+    ZeroMemory(m_isShowDialog, sizeof(_bool) * 2);
     m_fDelay = 0.f;
+    m_fAnimationStopTimer = 0.f;
+    m_fAnimationStopTimer2 = 0.f;
+    m_vRootMoveStack = {0.f,0.f,0.f };
 
     m_pCutSceneWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon();
     m_pShieldWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_ShieldWeapon();
