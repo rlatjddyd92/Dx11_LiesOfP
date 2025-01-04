@@ -163,6 +163,27 @@ void CMonster_Training01::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 	m_pColliderObject->DeActive_Collider();
 }
 
+_bool CMonster_Training01::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
+{
+	if (m_bDieState)
+	{
+		return false;
+	}
+
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_STRONG)
+	{
+		m_eStat.bFatalAttack = true;
+	}
+
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
+	{
+		m_eStat.bFatalAttack = false;
+		m_bFatalAttacked = true;
+	}
+
+	return true;
+}
+
 HRESULT CMonster_Training01::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

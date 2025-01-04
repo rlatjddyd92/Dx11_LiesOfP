@@ -149,7 +149,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
@@ -941,6 +941,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			{
 				Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
 				Decrease_Stamina(fAtkDmg * 0.23f);
+
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-12.f);
 			}
 		}
 
@@ -1004,7 +1006,7 @@ _bool CPlayer::Decrease_Stamina(_float fAmount)
 	}
 	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x;
 
-	m_fStaminaRecoveryTime = 0.3f;	// 0.3초 후에 회복
+	m_fStaminaRecoveryTime = 0.7f;	// 0.7초 후에 회복
 
 	return true;
 }
@@ -1083,7 +1085,7 @@ void CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 
 	GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
 	m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.3f);
 	if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
 		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.7f);
 
@@ -1699,7 +1701,7 @@ void CPlayer::Check_FatalAttack()
 	_float fDirDot = vMonsterLook.Dot(vDir_MostertoPlayer);
 	_float fLookDot = vMonsterLook.Dot(vPlayerLook);
 
-	if (fDirDot >= 0.85f && fLookDot >= 0.8f)
+	if ((fDirDot >= 0.85f && fLookDot >= 0.8f) || m_pContactMonster->Get_Status()->bFatalAttack)
 	{
 		m_isFatalAttack = true;
 	}

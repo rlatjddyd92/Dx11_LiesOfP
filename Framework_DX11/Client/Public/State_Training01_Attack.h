@@ -31,6 +31,9 @@ private:
     _int                m_iColliderEndFrame = {};
     void                Control_Collider();
 
+    _bool               m_isRimLight = {};
+    _Vec4               m_vRimLightColor = {};
+
 public:
     static CState_Training01_Attack* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
