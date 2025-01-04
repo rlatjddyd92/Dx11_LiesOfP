@@ -89,7 +89,8 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
 
 void CState_SimonManusP2_HighJumpFall::End_State()
 {
-    m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 _bool CState_SimonManusP2_HighJumpFall::End_Check()

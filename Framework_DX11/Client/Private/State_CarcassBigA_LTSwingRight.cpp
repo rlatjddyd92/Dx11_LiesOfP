@@ -47,7 +47,8 @@ void CState_CarcassBigA_LTSwingRight::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_LTSwingRight::End_State()
 {
-
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 _bool CState_CarcassBigA_LTSwingRight::End_Check()

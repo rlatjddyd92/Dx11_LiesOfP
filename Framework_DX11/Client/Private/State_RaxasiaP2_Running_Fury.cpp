@@ -189,6 +189,8 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Running_Fury::End_State()
 {
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 _bool CState_RaxasiaP2_Running_Fury::End_Check()
