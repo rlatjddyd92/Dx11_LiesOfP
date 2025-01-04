@@ -105,12 +105,10 @@
 #include "State_Player_SophiaHandEnd.h"
 #include "State_Player_OpenRaxasiaDoor.h"
 
-// 24-11-27 김성용
-// 게임 인터페이스와 연결을 위해 추가 
 #include "GameInterface_Controller.h"
 
-// 고준호 추가
 #include "Dissolve_Player_Dead.h"
+#include "Decal_Blood.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -291,7 +289,18 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
+		for (_uint i = 0; i < 30; ++i)
+		{
+			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
+			vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
+
+			CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
+			DEsc.vPos = vPlayerPos;
+			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
+		}
+
+		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 		//Change_State(FLAME_FATAL);
 	}
 #pragma endregion
@@ -799,7 +808,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		if (ATK_STRONG == iAttackStrength)
 		{
 			Damaged(fAtkDmg);
-			Change_HitState(fAtkDmg, vHitPos);
+			Change_HitState(fAtkDmg, vHitPos, iAttackStrength);
 			return true;
 		}
 	}
@@ -934,7 +943,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			if (ATK_STRONG == iAttackStrength)
 			{
 				Damaged(fAtkDmg);
-				Change_HitState(fAtkDmg, vHitPos);
+				Change_HitState(fAtkDmg, vHitPos, iAttackStrength);
 				return true;
 			}
 			else
@@ -964,7 +973,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	else //그냥 맞음
 	{
 		Damaged(fAtkDmg);
-		Change_HitState(fAtkDmg, vHitPos);
+		Change_HitState(fAtkDmg, vHitPos, iAttackStrength);
 	}
 
 	return true;
@@ -1085,7 +1094,7 @@ void CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 	Decrease_Stamina(fAtkDmg * 0.23f);
 }
 
-void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos)
+void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStrength)
 {
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
@@ -1103,7 +1112,7 @@ void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos)
 		HitDesc.vHitPos = vHitPos;
 		HitDesc.isDown = false;
 
-		if (fAtkDmg >= 80.f)
+		if (iAttackStrength > ATK_NORMAL)
 			HitDesc.isDown = true;
 
 		if (fAtkDmg > 0.f)
@@ -1188,8 +1197,8 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 		m_fDebuffAcidDamageTime -= fTimeDelta;
 		if (m_fDebuffAcidDamageTime <= 0.f)
 		{
-			m_fDebuffAcidDamageTime = 1.5f;
-			Damaged(50.f);
+			m_fDebuffAcidDamageTime = 2.5f;
+			Damaged((m_tPlayer_Stat->vGauge_Hp.x + m_tPlayer_Stat_Adjust->vGauge_Hp.z) * 0.01f);	// 현재 체력의 1%씩
 		}
 	}
 	else

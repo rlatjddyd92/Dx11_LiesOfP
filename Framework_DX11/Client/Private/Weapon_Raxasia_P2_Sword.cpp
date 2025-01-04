@@ -98,10 +98,6 @@ HRESULT CWeapon_Raxasia_P2_Sword::Render_LightDepth()
 
 void CWeapon_Raxasia_P2_Sword::OnCollisionEnter(CGameObject* pOther)
 {
-}
-
-void CWeapon_Raxasia_P2_Sword::OnCollisionStay(CGameObject* pOther)
-{
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;
@@ -121,6 +117,10 @@ void CWeapon_Raxasia_P2_Sword::OnCollisionStay(CGameObject* pOther)
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
 		}
 	}
+}
+
+void CWeapon_Raxasia_P2_Sword::OnCollisionStay(CGameObject* pOther)
+{
 }
 
 void CWeapon_Raxasia_P2_Sword::OnCollisionExit(CGameObject* pOther)
