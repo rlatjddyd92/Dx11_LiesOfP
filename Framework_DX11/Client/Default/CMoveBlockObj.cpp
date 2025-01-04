@@ -47,6 +47,8 @@ HRESULT CMoveBlockObj::Initialize(void* pArg)
 	if (FAILED(Ready_Effect(pDesc)))
 		return E_FAIL;
 
+	m_strObjectTag = TEXT("MoveBlockObj");
+
 	return S_OK;
 }
 
