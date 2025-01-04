@@ -154,7 +154,7 @@ void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				fFinalDamageAmount *= 1.2f;
 
-			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_iAtkStrength, this))
+			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				if (m_eAttackStrength == ATK_STRONG)
 				{

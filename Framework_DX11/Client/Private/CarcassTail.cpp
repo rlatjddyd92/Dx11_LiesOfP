@@ -78,7 +78,6 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	m_eStat.fHp = 70;
 	m_eStat.fAtk = 4.f;
 	m_eStat.fDefence = 2.f;
-	m_eStat.fStemina = 30.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 0.91f, 0.f };
 
@@ -165,9 +164,9 @@ HRESULT CCarcassTail::Render()
 	return S_OK;
 }
 
-void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
 void CCarcassTail::DeActive_CurretnWeaponCollider(_uint iCollIndex)

@@ -169,14 +169,6 @@ _float CMonster::Calc_Distance_XZ()
 	return fDist;
 }
 
-void CMonster::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
-{
-}
-
-void CMonster::DeActive_CurretnWeaponCollider(_uint iCollIndex)
-{
-}
-
 void CMonster::OnCollisionEnter(CGameObject* pOther)
 {
 	//if (pOther->Get_Tag() == TEXT("PlayerWeapon"))

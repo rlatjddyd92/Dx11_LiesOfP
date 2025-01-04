@@ -47,6 +47,7 @@ HRESULT CState_Player_Rapier_Charge::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(31.f);
 
     return S_OK;
 }
@@ -102,7 +103,18 @@ void CState_Player_Rapier_Charge::Control_Collider()
     for (_uint i = 0; i < 3; ++i)
     {
         if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
+        {
+            if (i == 2)
+            {
+                m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(38.f);
+            }
+            else
+            {
+                m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(31.f);
+            }
+
             isColliderActive = true;
+        }
     }
 
     if (isColliderActive)

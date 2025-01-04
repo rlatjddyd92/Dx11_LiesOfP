@@ -54,7 +54,6 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 	m_eStat.fMaxHp = 50.f;
 	m_eStat.fAtk = 0.1f;
 	m_eStat.fDefence = 3.f;
-	m_eStat.fStemina = 30.f;
 
 	m_eStat.bWeakness = false;
 
@@ -145,7 +144,7 @@ void CMonster_Training01::Change_AttackType()
 		}
 
 		++m_iAttackCount;
-		m_isNormalAttack != m_isNormalAttack;
+		m_isNormalAttack = !m_isNormalAttack;
 	}
 }
 
@@ -154,9 +153,9 @@ _uint CMonster_Training01::Get_AttackStrength()
 	return m_pColliderObject->Get_AttackStrength();
 }
 
-void CMonster_Training01::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CMonster_Training01::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
 void CMonster_Training01::DeActive_CurretnWeaponCollider(_uint iCollIndex)

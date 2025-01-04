@@ -149,7 +149,7 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionEnter(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
 		}
 	}
 }
@@ -177,7 +177,8 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionStay(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
+
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
 		}
 	}
 }
@@ -195,15 +196,15 @@ _bool CWeapon_RebornerMaleFire_FireBreath::is_EndAnim(_int iAnimIndex)
 	return false;
 }
 
-_bool CWeapon_RebornerMaleFire_FireBreath::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
+_bool CWeapon_RebornerMaleFire_FireBreath::Active_Collider(_float fDamageRatio, _uint iHandIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
 	if (m_pColliderCom->IsActive())
 		return false;
 
 	m_fDamageRatio = fDamageRatio;
 	m_pColliderCom->IsActive(true);
-	m_iHitType = iHitType;
-	m_iAtkStrength = iAtkStrength;
+	m_eHitType = eHitType;
+	m_eAttackStrength = eAtkStrength;
 	m_DamagedObjects.clear();
 	m_bRangeCtl = true;
 

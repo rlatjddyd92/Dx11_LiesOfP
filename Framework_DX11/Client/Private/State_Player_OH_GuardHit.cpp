@@ -32,7 +32,7 @@ HRESULT CState_Player_OH_GuardHit::Start_State(void* pArg)
         m_isBreak = true;
         m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Break, false, 0.f, 0, true, true);
     }
-    else if (pIsStrong)
+    else if (*pIsStrong)
     {
         m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Strong, false, 0.f, 0, true, true);
     }
@@ -49,6 +49,11 @@ HRESULT CState_Player_OH_GuardHit::Start_State(void* pArg)
 void CState_Player_OH_GuardHit::Update(_float fTimeDelta)
 {
     _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
+
+    if (m_pPlayer->Key_Tab(KEY::LSHIFT))
+    {
+        m_pPlayer->Set_IsGuard(true, true, 0.5f);
+    }
 
     if (m_pPlayer->Get_EndAnim(iCurAnim))
     {

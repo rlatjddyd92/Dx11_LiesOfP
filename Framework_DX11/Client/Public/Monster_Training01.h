@@ -42,7 +42,7 @@ public:
 	_uint			Get_AttackStrength();
 
 private:
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) override;
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) override;
 
 private:

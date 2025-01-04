@@ -176,7 +176,7 @@ void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				fFinalDamageAmount *= 1.2f;
 
-			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_iAtkStrength, this))
+			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();

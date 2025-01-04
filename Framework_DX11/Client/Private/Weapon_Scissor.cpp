@@ -184,7 +184,7 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				fFinalDamageAmount *= 1.2f;
 
-			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_iAtkStrength, this))
+			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
@@ -239,7 +239,7 @@ void CWeapon_Scissor::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-_bool CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
+_bool CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eStrength)
 {
 	if (!m_isSeperate)
 	{
@@ -248,8 +248,8 @@ _bool CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, _u
 
 		m_fDamageRatio = fDamageRatio;
 		m_pColliderCom->IsActive(true);
-		m_iHitType = iHitType;
-		m_iAtkStrength = iAtkStrength;
+		m_eHitType = eHitType;
+		m_eAttackStrength = eStrength;
 		m_DamagedObjects.clear();
 
 		return true;

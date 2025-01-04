@@ -128,7 +128,6 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	m_eStat.fMaxHp = 200.f;
 	m_eStat.fAtk = 10.f;
 	m_eStat.fDefence = 5.f;
-	m_eStat.fStemina = 100.f;
 	m_eStat.bWeakness = false;
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
@@ -404,9 +403,9 @@ HRESULT CSimonManus::Render()
 	return S_OK;
 }
 
-void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
 void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
@@ -941,7 +940,6 @@ void CSimonManus::ChangePhase()
 	m_eStat.fMaxHp = 200.f;
 	m_eStat.fAtk = 15.f;
 	m_eStat.fDefence = 8.f;
-	m_eStat.fStemina = 100.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 	m_eStat.fGrogyPoint = 0.f;
 

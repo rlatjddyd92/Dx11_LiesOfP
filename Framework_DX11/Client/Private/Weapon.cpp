@@ -209,16 +209,19 @@ HRESULT CWeapon::Render_LightDepth()
 	return S_OK;
 }
 
-_bool CWeapon::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
+_bool CWeapon::Active_Collider(_float fDamageRatio, _uint iHandIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
 	if (m_pColliderCom->IsActive())
 		return false ;
 
 	m_fDamageRatio = fDamageRatio;
 	m_pColliderCom->IsActive(true);
-	m_iHitType = iHitType;
-	m_iAtkStrength = iAtkStrength;
 	m_DamagedObjects.clear();
+
+	if(eHitType != HIT_END)
+		m_eHitType = eHitType;
+	if(eAtkStrength != ATK_END)
+		m_eAttackStrength = eAtkStrength;
 
 	return true;
 }

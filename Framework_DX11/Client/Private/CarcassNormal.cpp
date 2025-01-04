@@ -76,7 +76,6 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 	m_eStat.fMaxHp = 50.f;
 	m_eStat.fAtk = 4.f;
 	m_eStat.fDefence = 3.f;
-	m_eStat.fStemina = 30.f;
 
 	m_eStat.bWeakness = false;
 
@@ -169,9 +168,9 @@ HRESULT CCarcassNormal::Render()
 	return S_OK;
 }
 
-void CCarcassNormal::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CCarcassNormal::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, iHitType, iAtkStrength);
+	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, eHitType, eAtkStrength);
 }
 
 void CCarcassNormal::DeActive_CurretnWeaponCollider(_uint iCollIndex)

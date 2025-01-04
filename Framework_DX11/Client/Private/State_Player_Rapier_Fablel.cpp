@@ -129,7 +129,18 @@ void CState_Player_Rapier_Fable::Control_Collider(_int iFrame)
     for (_uint i = 0; i < 5; ++i)
     {
         if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
+        {
+            if (i == 4)
+            {
+                m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(40.f);
+            }
+            else
+            {
+                m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(25.f);
+            }
+
             isColliderActive = true;
+        }
     }
 
     if (isColliderActive)

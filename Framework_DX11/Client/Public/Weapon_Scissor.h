@@ -40,7 +40,7 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 public:
-	virtual _bool		Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1, _uint iHitType = 0, _uint iAtkStrength = 0) override;
+	virtual _bool		Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eStrength = ATK_END) override;
 	virtual void		DeActive_Collider(_uint iHandIndex = 1) override;
 	virtual void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1) override;
 	virtual void		Play_HitSound(HIT_TYPE eType) override;

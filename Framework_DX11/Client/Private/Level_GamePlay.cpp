@@ -40,8 +40,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Effect()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Monster()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Layer_Monster()))
+		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
@@ -63,10 +63,6 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_MonasteryA_YK1_Fix.wav"), &g_fBGMVolume);
 	m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Inside_01.wav"), &g_fEnvVolume);
-
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_TitleObject"),
-	//	TEXT("Prototype_GameObject_SteelHeart"))))
-	//	return E_FAIL;
 
 	return S_OK;
 }
