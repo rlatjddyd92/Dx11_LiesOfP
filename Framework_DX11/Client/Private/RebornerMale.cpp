@@ -176,9 +176,9 @@ HRESULT CRebornerMale::Render()
 	return S_OK;
 }
 
-void CRebornerMale::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CRebornerMale::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
 void CRebornerMale::DeActive_CurretnWeaponCollider(_uint iCollIndex)

@@ -116,7 +116,6 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eStat.fHp = 2000.f;
 	m_eStat.fMaxHp = 2000.f;
 	m_eStat.fAtk = 250.f;
-	//m_eStat.fDefence = 5.f;
 
 	m_eStat.bWeakness = false;
 	m_eStat.fGrogyPoint = 0.f;
@@ -358,28 +357,28 @@ HRESULT CRaxasia::Render()
 	return S_OK;
 }
 
-void CRaxasia::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CRaxasia::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
 	if (!m_isChanged)
 	{
 		if (iCollIndex == 0)
 		{
-			m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+			m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 		}
 		else if (iCollIndex == 1)
 		{
-			m_pKickCollObj->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+			m_pKickCollObj->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 		}
 	}
 	else
 	{
 		if (iCollIndex == 0)
 		{
-			m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+			m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 		}
 		else if (iCollIndex == 1)
 		{
-			m_pWeaponShield->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+			m_pWeaponShield->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 		}
 	}
 }

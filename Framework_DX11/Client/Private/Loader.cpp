@@ -114,10 +114,13 @@
 #include "SimonManus_2P_Aura.h"
 #pragma endregion
 
+#pragma region ADDITIONAL_EFFECT
 #include "BossDoor_Veli.h"
 #include "CMoveBlockObj.h"
+#include "BloodTrail.h"
 #pragma endregion
 
+#include "CMoveBlockObj.h"
 #include "Machine_EffectObj.h"
 #include "Decal.h"
 #include "Decal_Blood.h"
@@ -1352,7 +1355,7 @@ HRESULT CLoader::Ready_Resources_For_Obj()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Butterfly/Butterfly.dat", PreTransformMatrix))))
 		return E_FAIL;
 
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	PreTransformMatrix = XMMatrixScaling(0.0001f, 0.0001f, 0.0001f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_TreasureBox"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_TreasureChest_02_Red.dat", PreTransformMatrix))))
 		return E_FAIL;
@@ -1814,6 +1817,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Effect_BossDoor_Veli */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_BossDoor_Veli"),
 		CBossDoor_Veli::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_BloodTrail */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_BloodTrail"),
+		CBloodTrail::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;

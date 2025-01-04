@@ -221,7 +221,7 @@ void CState_Player_Arm_Start::Control_Sound()
 
 void CState_Player_Arm_Start::Control_Effect(_int iFrame)
 {
-    if (!m_isActiveEffect && m_iEffectFrame < (_uint)iFrame)
+    if (!m_isActiveEffect && m_iEffectFrame < iFrame)
     {
         m_pPlayer->Active_Effect(CPlayer::EFFECT_ARM_SHIELDBLOCK, false);
         m_isActiveEffect = true;

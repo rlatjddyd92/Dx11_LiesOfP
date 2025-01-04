@@ -36,7 +36,7 @@ HRESULT CState_Training01_Attack::Start_State(void* pArg)
         m_pMonster->Get_Model()->Set_SpeedRatio(m_iAnimation_Attack, 2.8);
     }
 
-    m_pMonster->Change_Animation(m_iAnimation_Attack, true, 0.1f);
+    m_pMonster->Change_Animation(m_iAnimation_Attack, false, 0.1f);
 
     return S_OK;
 }

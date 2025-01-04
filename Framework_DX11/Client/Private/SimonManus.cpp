@@ -404,9 +404,9 @@ HRESULT CSimonManus::Render()
 	return S_OK;
 }
 
-void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
 void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
@@ -935,7 +935,6 @@ void CSimonManus::ChangePhase()
 	
 	Desc.vRotate = _Vec3{0.f, 0.f, 180.f};
 	m_Effects[SWING_DRAG_REVERSE]->Set_EffectDesc(Desc);
-
 
 	m_eStat.fHp = 4000.f;
 	m_eStat.fMaxHp = 4000.f;

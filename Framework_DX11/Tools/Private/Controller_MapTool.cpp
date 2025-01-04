@@ -926,7 +926,7 @@ void CController_MapTool::SaveMap()
 
 void CController_MapTool::LoadMap()
 {
-	const char cFile[128] = "../Bin/DataFiles/Map_GamePlay_Data.dat";
+	const char cFile[128] = "../Bin/DataFiles/Map_Data.dat";
 	ifstream fin(cFile, ios::in | ios::binary);
 
 	//	fin.open("../Bin/Map_Data.txt");

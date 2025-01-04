@@ -168,9 +168,9 @@ HRESULT CCarcassNormal::Render()
 	return S_OK;
 }
 
-void CCarcassNormal::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CCarcassNormal::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, iHitType, iAtkStrength);
+	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, eHitType, eAtkStrength);
 }
 
 void CCarcassNormal::DeActive_CurretnWeaponCollider(_uint iCollIndex)

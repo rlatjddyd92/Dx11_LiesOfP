@@ -54,6 +54,11 @@ public:
 	ATTACK_STRENGTH		Get_AttackStrength() { return m_eAttackStrength; }
 	virtual void		Set_AttackStrength(ATTACK_STRENGTH eStrength) { m_eAttackStrength = eStrength; }
 
+	_float				Get_DamageAmount() { return m_fDamageAmount; }
+	void				Set_DamageAmount(_float fDamageAmount) { m_fDamageAmount = fDamageAmount; }
+
+	_float Get_AtkDmg() { return m_fDamageAmount * m_fDamageRatio; }
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -63,7 +68,6 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_LightDepth() override;
 
-	_float Get_AtkDmg() { return m_fDamageAmount * m_fDamageRatio; }
 
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) {};
@@ -74,7 +78,7 @@ public:
 	virtual _bool is_EndAnim(_int iAnimIndex) { return false; }
 
 public:
-	virtual _bool Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);		//1번 왼손 0번 오른손
+	virtual _bool Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END);		//1번 왼손 0번 오른손
 	virtual void DeActive_Collider(_uint iHandIndex = 1);
 
 	virtual void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
@@ -127,11 +131,6 @@ protected:
 protected:
 	_float					m_fDamageAmount = {};
 	_float					m_fDamageRatio = { 1.f };
-	
-	_uint					m_iHitType{};
-	_uint					m_iAtkStrength{};
-	_uint					m_iAttackType{};
-
 	_bool					m_isUpdatePos = { true };
 
 	list<CGameObject*>			m_DamagedObjects;
@@ -141,7 +140,11 @@ protected:
 
 	_float*					m_pParentAtk = { nullptr };
 
+
+	HIT_TYPE				m_eHitType{};
 	ATTACK_STRENGTH			m_eAttackStrength = { ATK_WEAK };
+
+	_float					m_fGrogyAmount = {};
 
 protected:
 	HRESULT Ready_Components();

@@ -157,10 +157,10 @@ public:
 	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
 
 	_bool					Get_IsGuard() { return m_isGuard; }
-	void					Set_IsGuard(_bool isGuard, _bool isReset = true) {
+	void					Set_IsGuard(_bool isGuard, _bool isReset = true, _float fTimeOffset = 0.f) {
 		m_isGuard = isGuard;
 		if (m_isGuard && isReset)
-			m_fGuardTime = 0.f;
+			m_fGuardTime = 0.f + fTimeOffset;
 	}
 
 	class CWeapon_PlayerArm* Get_Arm() { return m_pWeapon_Arm; }
@@ -264,7 +264,7 @@ public:
 	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 
 	void			LockOnOff();
-	CMonster* Find_TargetMonster();
+	CMonster*		Find_TargetMonster();
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
@@ -278,6 +278,7 @@ public:
 	void			Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount);
 	void			Damaged(_float fAtkDmg);
 	void			Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix = nullptr);
+	void			DotDamaged(_float fDamageAmount);
 	void			Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStrength);
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
@@ -370,6 +371,9 @@ private:
 	_Vec2				m_vGuage_Arm = { 200.f, 200.f };
 
 	_float				m_fAttackBuffTime = {};
+
+	_bool				m_isDotDamage = {};
+	_float				m_fDotDamgeAmount = {};
 
 private:
 

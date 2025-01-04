@@ -69,7 +69,7 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 	m_eStat.fMaxHp = 400.f;
 	m_eStat.fAtk = 260.f;
 	//m_eStat.fDefence = 3.f;
-	
+
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
@@ -162,9 +162,9 @@ HRESULT CCurruptedStrongArm_Puppet::Render()
 	return S_OK;
 }
 
-void CCurruptedStrongArm_Puppet::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CCurruptedStrongArm_Puppet::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
-	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, iHitType, iAtkStrength);
+	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, eHitType, eAtkStrength);
 }
 
 void CCurruptedStrongArm_Puppet::DeActive_CurretnWeaponCollider(_uint iCollIndex)

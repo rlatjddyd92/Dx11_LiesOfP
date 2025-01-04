@@ -89,6 +89,12 @@ namespace Engine
 
 	typedef struct
 	{
+		_float3 vTop;
+		_float3 vBottom;
+	}TWOPOINT;
+
+	typedef struct
+	{
 		vector<string>			m_ModelFilePaths;
 	}FilePathStruct;
 

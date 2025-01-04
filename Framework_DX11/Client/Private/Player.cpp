@@ -158,8 +158,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 
 	m_iRespawn_Cell_Num = 772;
@@ -405,24 +405,11 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 {
 	CollisionStay_IntercObj(pOther);
 	
-	/*if (pOther->Get_Tag() == TEXT("Monster"))
-	{
-		_Vec3 vColNormal = m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-		vColNormal.y = 0.f;
-		vColNormal.Normalize();
-
-		_Vec3 vVel = m_pRigidBodyCom->Get_Velocity();
-		_Vec3 vProjected = vVel.Dot(vColNormal) * vColNormal;
-
-		vVel = vVel = vProjected;
-		m_pRigidBodyCom->Set_Velocity(vVel);
-	}*/
 	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
 
 		m_pIntersectMonster = pMonster;
-		// 페이탈 어택 여부 정하기
 		
 		m_isCollisionMonster = true;
 	}
@@ -817,7 +804,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Aegis_All");
 
 		//퍼펙트 가드
-		if (m_isGuard && m_fGuardTime < 0.19f)
+		if (m_isGuard && m_fGuardTime < 0.18f)
 		{
 			if (nullptr != pAttacker)
 			{
@@ -1094,6 +1081,12 @@ void CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 	Decrease_Stamina(fAtkDmg * 0.23f);
 }
 
+void CPlayer::DotDamaged(_float fAtkDmg)
+{
+	m_isDotDamage = true;
+	m_fDotDamgeAmount = fAtkDmg;
+}
+
 void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStrength)
 {
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
@@ -1124,6 +1117,12 @@ void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStreng
 
 void CPlayer::Update_Stat(_float fTimeDelta)
 {
+	if (m_isDotDamage)
+	{
+		Damaged(m_fDotDamgeAmount * fTimeDelta);
+		m_isDotDamage = false;
+	}
+	
 #pragma region 스테미나
 	if (m_fStaminaRecoveryTime > 0.f)
 	{
@@ -1131,7 +1130,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 	else if (m_fStaminaRecoveryTime <= 0.f)
 	{
-		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 100.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z);
+		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 130.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z);
 	}
 #pragma endregion
 

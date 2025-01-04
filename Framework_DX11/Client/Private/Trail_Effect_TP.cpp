@@ -157,6 +157,15 @@ void CTrail_Effect_TP::Reset()
 	m_fAccumulateTime = 0.f;
 }
 
+const list<TWOPOINT>& CTrail_Effect_TP::Get_TrailPoses()
+{
+	return m_pVIBufferCom->Get_TrailPoses();
+}
+
+TWOPOINT CTrail_Effect_TP::Get_PointPos(_uint iIndex)
+{
+	return m_pVIBufferCom->Get_PointPos(iIndex);
+}
 
 HRESULT CTrail_Effect_TP::Ready_Components(const TRAIL_TP_DESC& Desc)
 {

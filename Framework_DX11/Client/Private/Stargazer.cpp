@@ -188,6 +188,7 @@ HRESULT CStargazer::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
+
 	_uint		iNumMeshes = m_pCurrentModel->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)

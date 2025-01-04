@@ -1014,7 +1014,7 @@ void CItem_Manager::ChestItem_To_Inven(_int iIndex, _int iCount)
 	if (pNow == nullptr)
 		return;
 
-	if (pNow->iCount < iCount)
+	if ((_int)pNow->iCount < iCount)
 		return;
 
 	pNow->iCount -= iCount;

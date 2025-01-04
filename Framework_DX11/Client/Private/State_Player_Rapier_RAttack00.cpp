@@ -46,6 +46,7 @@ HRESULT CState_Player_Rapier_RAttack00::Start_State(void* pArg)
     m_isPlaySound = false;
 
     m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(35.f);
 
     return S_OK;
 }

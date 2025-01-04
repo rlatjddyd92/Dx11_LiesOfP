@@ -47,6 +47,7 @@ HRESULT CWeapon_Scissor::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_fDamageAmount = 10.f;
+	m_fGrogyAmount = 15.f;
 
 	m_isActive = false;
 	m_isSeperate = false;
@@ -184,25 +185,38 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				fFinalDamageAmount *= 1.2f;
 
-			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_iAtkStrength, this))
+			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
 
 				if (m_eAttackStrength == ATK_STRONG)
 				{
+					pMonster->Increase_GroggyPoint(m_fGrogyAmount * 1.5f);
+
 					m_pPlayer->Get_Camera()->Start_PosShake(0.45f, 0.2f);
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_1"),
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
 				else if (m_eAttackStrength == ATK_LAST)
 				{
+					pMonster->Reset_GroggyPoint();
+
 					m_pPlayer->Get_Camera()->Start_PosShake(0.6f, 0.25f);
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_2"),
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
-				else
+				else if (m_eAttackStrength == ATK_NORMAL)
 				{
+					pMonster->Increase_GroggyPoint(m_fGrogyAmount);
+
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_Normal"),
+						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+				}
+				else if (m_eAttackStrength == ATK_WEAK)
+				{
+					pMonster->Increase_GroggyPoint(m_fGrogyAmount * 0.8f);
+
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_Normal"),
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
@@ -239,7 +253,7 @@ void CWeapon_Scissor::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-_bool CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
+_bool CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eStrength)
 {
 	if (!m_isSeperate)
 	{
@@ -248,9 +262,12 @@ _bool CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, _u
 
 		m_fDamageRatio = fDamageRatio;
 		m_pColliderCom->IsActive(true);
-		m_iHitType = iHitType;
-		m_iAtkStrength = iAtkStrength;
 		m_DamagedObjects.clear();
+
+		if (eHitType != HIT_END)
+			m_eHitType = eHitType;
+		if (eStrength != ATK_END)
+			m_eAttackStrength = eStrength;
 
 		return true;
 	}

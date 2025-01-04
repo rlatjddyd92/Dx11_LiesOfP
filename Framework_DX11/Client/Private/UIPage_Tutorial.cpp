@@ -4,14 +4,14 @@
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
-#include "UITutorial_Info.h";
-#include "UITutorial_Guide.h";
-#include "UITutorial_Timing.h";
-#include "UITutorial_Result.h";
-#include "UITutorial_Popup.h";
+#include "UITutorial_Info.h"
+#include "UITutorial_Guide.h"
+#include "UITutorial_Timing.h"
+#include "UITutorial_Result.h"
+#include "UITutorial_Popup.h"
 
-#include "Monster_Training01.h";
-#include "Monster_Training02.h";
+#include "Monster_Training01.h"
+#include "Monster_Training02.h"
 
 #include "Player.h"
 

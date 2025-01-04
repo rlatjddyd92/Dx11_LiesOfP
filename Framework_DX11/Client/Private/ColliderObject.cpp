@@ -95,7 +95,7 @@ void CColliderObject::OnCollisionStay(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			m_DamagedObjects.push_back(pOther);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_iHitType, m_iAtkStrength, (CGameObject*)m_pOwner);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_eHitType, m_eAttackStrength, (CGameObject*)m_pOwner);
 		}
 	}
 }

@@ -169,14 +169,6 @@ _float CMonster::Calc_Distance_XZ()
 	return fDist;
 }
 
-void CMonster::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
-{
-}
-
-void CMonster::DeActive_CurretnWeaponCollider(_uint iCollIndex)
-{
-}
-
 void CMonster::OnCollisionEnter(CGameObject* pOther)
 {
 	//if (pOther->Get_Tag() == TEXT("PlayerWeapon"))
@@ -210,7 +202,7 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 		return false;
 	}
 
-	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
+	m_eStat.fHp -= fAtkDmg;
 	m_eStat.fAtkDmg = fAtkDmg;
 
 	if (m_pFsmCom->Get_CurrentState() != HITFATAL)

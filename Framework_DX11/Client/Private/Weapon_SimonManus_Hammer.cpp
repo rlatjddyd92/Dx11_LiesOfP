@@ -129,7 +129,7 @@ void CWeapon_SimonManus_Hammer::OnCollisionEnter(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
 		}
 	}
 }
@@ -156,15 +156,15 @@ _bool CWeapon_SimonManus_Hammer::is_EndAnim(_int iAnimIndex)
 	return m_pModelCom->Get_IsEndAnimArray()[iAnimIndex];
 }
 
-_bool CWeapon_SimonManus_Hammer::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
+_bool CWeapon_SimonManus_Hammer::Active_Collider(_float fDamageRatio, _uint iHandIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAttackStrength)
 {
 	if (m_pColliderCom->IsActive())
 		return false;
 
 	m_fDamageRatio = fDamageRatio;
 	m_pColliderCom->IsActive(true);
-	m_iHitType = iHitType;
-	m_iAtkStrength = iAtkStrength;
+	m_eHitType = eHitType;
+	m_eAttackStrength = eAttackStrength;
 	m_DamagedObjects.clear();
 
 	if (iHandIndex == 1)

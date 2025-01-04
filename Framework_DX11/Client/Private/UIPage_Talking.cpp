@@ -320,7 +320,7 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 	{
 		pNow->bSoundStart = false;
 
-		_int iSize = pNow->strSound.size();
+		_int iSize = (_int)pNow->strSound.size();
 
 		TCHAR* szFileName = new TCHAR[iSize];
 
