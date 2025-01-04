@@ -1089,6 +1089,7 @@ HRESULT CRaxasia::Ready_Effects()
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P2_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 
+	m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(true);
 	return S_OK;
 }
 

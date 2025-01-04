@@ -80,6 +80,9 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
 	m_strObjectTag = TEXT("Monster");
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
