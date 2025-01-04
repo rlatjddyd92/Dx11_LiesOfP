@@ -25,7 +25,7 @@ HRESULT CState_CarcassBigA_LOSwingRight::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_LOSWINGRIGHT, false, 0.1f, 0, true);
 
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
-
+    m_isRimLight = true;
     m_bSwingSound = false;
 
     return S_OK;
