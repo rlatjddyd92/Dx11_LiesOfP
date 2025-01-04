@@ -181,8 +181,9 @@ HRESULT CSophia::Ready_Effect()
     Desc.fRotationPerSec = XMConvertToRadians(90.f);
     Desc.fSpeedPerSec = 1.f;
     Desc.iLevelIndex = LEVEL_GAMEPLAY;
-    Desc.pModelCom = m_pModelCom;
-    Desc.pSophiaTransformCom = m_pTransformCom;
+    Desc.pTarget_ModelCom = m_pModelCom;
+    Desc.pTarget_TransformCom = m_pTransformCom;
+    Desc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Sophia_Dead");
 
     m_pDissolveEffect = static_cast<CDissolve_Sophia_Death*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Sophia_Dead"), &Desc));
 

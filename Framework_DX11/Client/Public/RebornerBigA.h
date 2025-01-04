@@ -62,8 +62,8 @@ private:
 	class CWeapon* m_pWeapon = { nullptr };
 
 	class CEffect_Container* m_pSwingEffect = { nullptr };
-
-
+	class CDissolve_Effect* m_pDissolveEffect = { nullptr };
+	
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();

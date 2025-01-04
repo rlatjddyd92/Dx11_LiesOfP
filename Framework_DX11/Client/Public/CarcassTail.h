@@ -52,6 +52,8 @@ private:
 
 	const _Matrix*		m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
+	class CDissolve_Effect* m_pDissolveEffect = { nullptr };
+
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) override;
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
@@ -61,6 +63,7 @@ private:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
+	HRESULT Ready_Effect();
 
 	void	Update_Collider();
 
@@ -68,7 +71,6 @@ public:
 	static CCarcassTail* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CPawn* Clone(void* pArg);
 	virtual void Free() override;
-
 };
 
 END

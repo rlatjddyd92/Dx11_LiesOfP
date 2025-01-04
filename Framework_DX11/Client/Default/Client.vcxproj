@@ -205,7 +205,9 @@
     <ClInclude Include="..\Public\CarcassTail.h" />
     <ClInclude Include="..\Public\Decal.h" />
     <ClInclude Include="..\Public\Decal_Blood.h" />
+    <ClInclude Include="..\public\Dissolve_Effect.h" />
     <ClInclude Include="..\Public\Dissolve_Player_Dead.h" />
+    <ClInclude Include="..\public\Dissolve_PowerAttack.h" />
     <ClInclude Include="..\public\Dissolve_Raxasia_Dead.h" />
     <ClInclude Include="..\Public\Dissolve_SimonManus_Dead.h" />
     <ClInclude Include="..\public\Dissolve_Sophia_Death.h" />
@@ -596,7 +598,9 @@
     <ClCompile Include="..\Private\CarcassTail.cpp" />
     <ClCompile Include="..\Private\Decal.cpp" />
     <ClCompile Include="..\Private\Decal_Blood.cpp" />
+    <ClCompile Include="..\private\Dissolve_Effect.cpp" />
     <ClCompile Include="..\Private\Dissolve_Player_Dead.cpp" />
+    <ClCompile Include="..\private\Dissolve_PowerAttack.cpp" />
     <ClCompile Include="..\private\Dissolve_Raxasia_Dead.cpp" />
     <ClCompile Include="..\Private\Dissolve_SimonManus_Dead.cpp" />
     <ClCompile Include="..\private\Dissolve_Sophia_Death.cpp" />

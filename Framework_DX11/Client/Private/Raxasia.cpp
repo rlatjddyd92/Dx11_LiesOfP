@@ -70,6 +70,7 @@
 #include "Weapon.h"
 
 #include "Dissolve_Raxasia_Dead.h"
+#include "Dissolve_PowerAttack.h"
 
 CRaxasia::CRaxasia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -114,6 +115,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eStat.strName = TEXT("Raxasia");
 
 	m_eStat.fHp = 2000.f;
+	m_eStat.fHp = 1.f;
 	m_eStat.fMaxHp = 2000.f;
 	m_eStat.fAtk = 250.f;
 
@@ -181,7 +183,10 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Priority_Update(fTimeDelta);
 	}
-	m_pDissolveEffect->Priority_Update(fTimeDelta);
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CRaxasia::Update(_float fTimeDelta)
@@ -216,7 +221,10 @@ void CRaxasia::Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Update(fTimeDelta);
 	}
-	m_pDissolveEffect->Update(fTimeDelta);
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Update(fTimeDelta);
+	}
 
 	if (!m_isCutScene)
 	{
@@ -245,7 +253,10 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Late_Update(fTimeDelta);
 	}
-	m_pDissolveEffect->Late_Update(fTimeDelta);
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Late_Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -651,7 +662,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_DIE)
 	{
 		m_isStartDisslove = true;
-		m_pDissolveEffect->Set_On(true);
+		m_DissolveEffects[DISSOLVE_DEAD]->Set_On(true);
 
 		m_pWeapon->IsActive(false);
 		m_pWeaponShield->IsActive(false);
@@ -1046,17 +1057,32 @@ HRESULT CRaxasia::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 0.f));
 	
 
+	m_DissolveEffects.resize(DISSOLVE_END);
+
 	CDissolve_Raxasia_Dead::DISSOLVE_OBJECT_DESC TestDesc = {};
 	TestDesc.fRotationPerSec = 90.f;
 	TestDesc.fSpeedPerSec = 1.f;
 	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	TestDesc.pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
-	TestDesc.pRaxasiaTransformCom = m_pTransformCom;
+	TestDesc.pTarget_ModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
+	TestDesc.pTarget_TransformCom = m_pTransformCom;
 	TestDesc.pDissolveTextureCom = m_pDissloveTexture;
 	TestDesc.pThreshold = &m_fDissloveRatio;
 	TestDesc.vTextureSize = _float2(2048.f, 2048.f);
+	TestDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_Dead");
 
-	m_pDissolveEffect = static_cast<CDissolve_Raxasia_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Raxasia_Dead"), &TestDesc));
+	m_DissolveEffects[DISSOLVE_DEAD] = static_cast<CDissolve_Raxasia_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Raxasia_Dead"), &TestDesc));
+
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC PowerAttackDesc = {};
+	PowerAttackDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	PowerAttackDesc.fSpeedPerSec = 1.f;
+	PowerAttackDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	PowerAttackDesc.pTarget_ModelCom = m_pModelCom;
+	PowerAttackDesc.pTarget_TransformCom = m_pTransformCom;
+	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P1_PowerAttack");
+	m_DissolveEffects[DISSOLVE_POWERATTACK_P1] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
+
+	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P2_PowerAttack");
+	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 
 	return S_OK;
 }
@@ -1190,6 +1216,7 @@ void CRaxasia::ChangePhase()
 	m_pColliderBindMatrix[CT_LOWERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(71);
 
 	m_eStat.fHp = 2500.f;
+	m_eStat.fHp = 1.f;
 	m_eStat.fMaxHp = 2500.f;
 	m_eStat.fAtk = 250.f;
 	//m_eStat.fDefence = 8.f;
@@ -1297,7 +1324,10 @@ void CRaxasia::Free()
 		m_pCutSceneFsmCom->Release_States();
 	}
 	Safe_Release(m_pCutSceneFsmCom);
-	Safe_Release(m_pDissolveEffect);
+	
+	for (auto& DissolveEffect : m_DissolveEffects)
+		Safe_Release(DissolveEffect);
+	m_DissolveEffects.clear();
 
 	__super::Free();
 

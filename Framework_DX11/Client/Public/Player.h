@@ -56,6 +56,12 @@ public:
 		STATE_END
 	};
 
+	enum DISSOLVE_EFFECT
+	{
+		DISSOLVE_DEAD,
+		DISSOLVE_END
+	};
+
 	// 24-11-27 김성용
 	// 플레이어 스탯 구조체 
 #pragma region PLAYER_STAT
@@ -299,7 +305,7 @@ public:
 	void			Init_PlayerCamera();
 	void			Input_Level_UP_Stat(_int iPoint[5], _float pLevelUpStat[9]);
 
-	void			On_DissolveEffect(_bool bOn);
+	void			On_DissolveEffect(_uint iIndex, _bool bOn);
 
 	void			SetUp_Monster_Fatal();
 
@@ -341,7 +347,7 @@ private:
 	class CWeapon_PlayerArm* m_pWeapon_Arm = { nullptr };
 
 	class CItem_Throw* m_pThrowItem = { nullptr };
-	class CDissolve_Player_Dead* m_pDissolveEffect = { nullptr };
+	vector<class CDissolve_Effect*> m_DissolveEffects;
 
 	class CPlayerCollider_Fatal* m_pFatalColliderObj = { nullptr };
 	class CMonster* m_pContactMonster = { nullptr };

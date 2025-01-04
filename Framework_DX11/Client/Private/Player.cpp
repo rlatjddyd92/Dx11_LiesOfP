@@ -158,8 +158,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 
 	m_iRespawn_Cell_Num = 772;
@@ -207,15 +207,16 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	}
 	Check_FatalAttack();
 
-	if (nullptr != m_pDissolveEffect)
-		m_pDissolveEffect->Priority_Update(fTimeDelta);
 
 	for (auto& pEffect : m_Effects)
 	{
 		if(!pEffect->Get_Dead())
 			pEffect->Priority_Update(fTimeDelta);
 	}
-
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -246,9 +247,6 @@ void CPlayer::Update(_float fTimeDelta)
 	if (nullptr != m_pFatalColliderObj)
 		m_pFatalColliderObj->Update(fTimeDelta);
 
-	if (nullptr != m_pDissolveEffect)
-		m_pDissolveEffect->Update(fTimeDelta);
-
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{
 		m_pSoundCom[i]->Update(fTimeDelta);
@@ -263,6 +261,11 @@ void CPlayer::Update(_float fTimeDelta)
 			pEffect->Update(fTimeDelta);
 	}
 
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Update(fTimeDelta);
+	}
+
 #pragma region 디버그 확인용
 	if (KEY_TAP(KEY::L))
 	{
@@ -274,11 +277,7 @@ void CPlayer::Update(_float fTimeDelta)
 		Calc_DebuffGain(DEBUFF_ELEC, 30.f);
 		//Change_State(RAPIER_FATAL);
 	}
-	if (KEY_HOLD(KEY::N))
-	{
-		//m_fDissloveRatio += fTimeDelta * 0.5f;
-		m_pDissolveEffect->Reset();
-	};
+
 
 	//마누스 컷신 실행부분
 	if (m_pNavigationCom->Get_CurrentCellIndex() == 208 && m_bActivated_ManusCutScene == false)
@@ -318,13 +317,15 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	if (nullptr != m_pFatalColliderObj)
 		m_pFatalColliderObj->Late_Update(fTimeDelta);
 
-	if (nullptr != m_pFatalColliderObj)
-		m_pDissolveEffect->Late_Update(fTimeDelta);
-
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
 			pEffect->Late_Update(fTimeDelta);
+	}
+
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Late_Update(fTimeDelta);
 	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -1234,9 +1235,9 @@ void CPlayer::Decrease_Arm(_float fAmount)
 	m_vGuage_Arm.x = max(0.f, m_vGuage_Arm.x - fAmount);
 }
 
-void CPlayer::On_DissolveEffect(_bool bOn)
+void CPlayer::On_DissolveEffect(_uint iIndex, _bool bOn)
 {
-	m_pDissolveEffect->Set_On(bOn);
+	m_DissolveEffects[iIndex]->Set_On(bOn);
 }
 
 void CPlayer::SetUp_Monster_Fatal()
@@ -1928,17 +1929,23 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_CUTSCENE_ARM_OPENDOOR] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Arm_Electric"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+
+	m_DissolveEffects.resize(DISSOLVE_END);
+
 	CDissolve_Player_Dead::DISSOLVE_OBJECT_DESC TestDesc = {};
 	TestDesc.fRotationPerSec = 90.f;
 	TestDesc.fSpeedPerSec = 1.f;
 	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	TestDesc.pModelCom = m_pModelCom;
-	TestDesc.pPlayerTransformCom = m_pTransformCom;
+	TestDesc.pTarget_ModelCom = m_pModelCom;
+	TestDesc.pTarget_TransformCom = m_pTransformCom;
 	TestDesc.pDissolveTextureCom = m_pDissloveTexture;
 	TestDesc.pThreshold = &m_fDissloveRatio;
 	TestDesc.vTextureSize = _float2(2048.f, 2048.f);
+	TestDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Dead");	// 여기 추가.
 
-	m_pDissolveEffect = static_cast<CDissolve_Player_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Player_Dead"), &TestDesc));
+	m_DissolveEffects[DISSOLVE_DEAD] = static_cast<CDissolve_Player_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Player_Dead"), &TestDesc));
+	if (nullptr == m_DissolveEffects[DISSOLVE_DEAD])
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -2004,6 +2011,8 @@ void CPlayer::Free()
 	Safe_Delete(m_tPlayer_Stat_Adjust);
 
 	// 고준호
-	Safe_Release(m_pDissolveEffect);
+	for (auto& DissolveEffect : m_DissolveEffects)
+		Safe_Release(DissolveEffect);
+	m_DissolveEffects.clear();
 }
 

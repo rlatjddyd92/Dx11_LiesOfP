@@ -29,6 +29,7 @@
 #include "State_CarcassBigA_HitFatal.h"
 #include "State_CarcassBigA_Paralyze.h"
 
+#include "Dissolve_PowerAttack.h"
 
 CCarcassBigA::CCarcassBigA(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
@@ -65,6 +66,9 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 
 	if (FAILED(Ready_FSM()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
 	m_strObjectTag = TEXT("Monster");
@@ -108,6 +112,7 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 		m_bDieState = true;
 		m_pFsmCom->Change_State(DIE);
 	}
+	m_pDissolveEffect->Priority_Update(fTimeDelta);
 }
 
 void CCarcassBigA::Update(_float fTimeDelta)
@@ -130,6 +135,7 @@ void CCarcassBigA::Update(_float fTimeDelta)
 		}
 	Update_Collider();
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	m_pDissolveEffect->Update(fTimeDelta);
 }
 
 void CCarcassBigA::Late_Update(_float fTimeDelta)
@@ -141,8 +147,9 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 			__super::Late_Update(fTimeDelta);
 
 			m_pRigidBodyCom->Update(fTimeDelta);
-			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+			m_pDissolveEffect->Late_Update(fTimeDelta);
 
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 			for (_uint i = 0; i < TYPE_END; ++i)
 			{
 				m_pColliderObject[i]->Late_Update(fTimeDelta);
@@ -364,6 +371,23 @@ HRESULT CCarcassBigA::Ready_FSM()
 
 }
 
+HRESULT CCarcassBigA::Ready_Effect()
+{
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pTarget_ModelCom = m_pModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassBigA_PowerAttack");
+
+	m_pDissolveEffect = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
+	if (nullptr == m_pDissolveEffect)
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CCarcassBigA::Update_Collider()
 {
 	_float4x4 UpdateMat{};
@@ -433,6 +457,7 @@ void CCarcassBigA::Free()
 	{
 		Safe_Release(m_EXCollider[i]);
 	}
+	Safe_Release(m_pDissolveEffect);
 
 	__super::Free();
 
