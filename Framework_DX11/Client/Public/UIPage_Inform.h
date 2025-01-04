@@ -122,16 +122,19 @@ protected:
 
 
 	// 플레이어 사망 
-	_Vec4 m_vPlayerDead_Time = { 0.f,0.f,0.f,0.f }; // <- 현재 Time, 등장하는 시간, 바늘과 중심기어를 빨강으로 변경하는 시간, 사라지는 시간
+	_Vec4 m_vPlayerDead_Time = { -1.f,0.f,0.f,0.f }; // <- 현재 Time, 등장하는 시간, 바늘과 중심기어를 빨강으로 변경하는 시간, 사라지는 시간
 
 
 
 
+	_float m_fAngle_Clock_Hour_Start = 0.f;
+	_float m_fAngle_Clock_Minitue_Start = 0.f;
 
-
-	_float m_fAngle_Clock_Hour = -20.f;
-	_float m_fAngle_Clock_Minitue = -10.f;
-	_float m_fAdjust_Clock_Angle = -45.f; // 우측 방향이 Direct의 0도 기준이므로 45도 회전하여 위 방향을 기준점으로 함 
+	_float m_fAngle_Clock_Hour = m_fAngle_Clock_Hour_Start;
+	_float m_fAngle_Clock_Minitue = m_fAngle_Clock_Minitue_Start;
+	_float m_fAngle_Clock_Hour_Pos = m_fAngle_Clock_Hour_Start;
+	_float m_fAngle_Clock_Minitue_Pos = m_fAngle_Clock_Minitue_Start;
+	_float m_fAdjust_Clock_Angle = 90.f; // 우측 방향이 Direct의 0도 기준이므로 45도 회전하여 위 방향을 기준점으로 함 
 	_float m_fAdjustLength = 0.f; // <- 바늘의 Adjust_End.y 값, 구한 벡터 방향으로 이 길이만큼 가야 함 
 
 
