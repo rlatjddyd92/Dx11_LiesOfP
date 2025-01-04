@@ -170,6 +170,8 @@ public: // 외부에서 매니저 접근
 	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop) { m_pUIManager->Show_ItemUsePopup(strTitle, strDescA, bIsTop); }
 	void Show_TrueFalsePopup(_wstring strTitle, _wstring strDescA, _int* iResult) { m_pUIManager->Show_TrueFalsePopup(strTitle, strDescA, iResult); } // true,false,none 3개 상태 표현 위해 _int 사용
 
+	void Show_PlayerDead_UI() { m_pUIManager->Show_PlayerDead_UI(); }
+
 	// 텔레포트
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIManager->Set_Now_Interact_Stargezer(iNaviIndex); }
 

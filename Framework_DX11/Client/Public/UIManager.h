@@ -277,6 +277,8 @@ public:
 		m_pUIPage_Popup->Show_ItemPopup(strTitle, strInputTitle, iMin, pNow_Input, iMax, strCountTitle, iInterval, pNow_Count);
 	}
 
+	void Show_PlayerDead_UI() { m_pUIPage_Inform->Show_PlayerDead_UI(); }
+
 	_bool IsPopupOn() { return !m_pUIPage_Popup->GetPageAction(PAGEACTION::ACTION_INACTIVE); }
 
 	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop) { m_pUIPage_Popup->Show_ItemUsePopup(strTitle, strDescA, bIsTop); }
