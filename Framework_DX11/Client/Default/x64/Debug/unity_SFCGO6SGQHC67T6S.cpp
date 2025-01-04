@@ -42,6 +42,9 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderCalling.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderDischarge.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderLanding.cpp"
 
 
@@ -67,6 +70,9 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\BackGround.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\BloodTrail.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\BossDoor_Veli.cpp"

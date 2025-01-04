@@ -36,6 +36,8 @@ public:
 	void			Start_Play();
 	_bool			Get_isFinished() { return m_bFinished; }
 
+	_bool			Get_bHavePlayed() { return m_bHavePlayed; }
+
 private:
 	_uint						m_iIndex = { 0 };
 	_int						m_iPlayerMoveCellNum = { 0 };
@@ -44,6 +46,7 @@ private:
 	_float						m_fPlayerSetDelayTimer = { 0.f };
 	_bool						m_bPlay = { false };
 	_bool						m_bFinished = { false };
+	_bool						m_bHavePlayed = { false };				//재생된적 있는 지
 	_bool						m_bFinishe_Setting = { false };
 	_bool						m_bFirstStart = { true };
 	_bool						m_bDeactivePlayer = { false };
