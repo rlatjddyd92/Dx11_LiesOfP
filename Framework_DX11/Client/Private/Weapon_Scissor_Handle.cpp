@@ -50,6 +50,7 @@ HRESULT CWeapon_Scissor_Handle::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_fDamageAmount = 4.f;
+	m_fGrogyAmount = 11.f;
 
 	m_isActive = false;
 	m_pColliderCom->IsActive(false);
@@ -186,6 +187,29 @@ void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Scissor"),
 					m_pParentMatrix, m_pSocketMatrix);
+
+
+				if (m_eAttackStrength == ATK_STRONG)
+				{
+					pMonster->Increase_GroggyPoint(m_fGrogyAmount * 1.5f);
+
+					m_pPlayer->Get_Camera()->Start_PosShake(0.45f, 0.2f);
+				}
+				else if (m_eAttackStrength == ATK_LAST)
+				{
+					pMonster->Reset_GroggyPoint();
+
+					m_pPlayer->Get_Camera()->Start_PosShake(0.6f, 0.25f);
+				}
+				else if (m_eAttackStrength == ATK_NORMAL)
+				{
+					pMonster->Increase_GroggyPoint(m_fGrogyAmount);
+				}
+				else if (m_eAttackStrength == ATK_WEAK)
+				{
+					pMonster->Increase_GroggyPoint(m_fGrogyAmount * 0.8f);
+				}
+
 
 				// 24-12-06 김성용
 				// 무기 사용 시, 내구도 감소 

@@ -72,7 +72,6 @@ public:
 
 public:
     virtual _bool   Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
-    virtual void    Gain_Grogy_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
 
     virtual void    Start_CutScene(_uint iCutSceneNum) {};
     virtual void    End_CutScene(_uint iCutSceneNum) {};

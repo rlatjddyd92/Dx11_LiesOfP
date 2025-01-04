@@ -144,6 +144,8 @@ protected:
 	HIT_TYPE				m_eHitType{};
 	ATTACK_STRENGTH			m_eAttackStrength = { ATK_WEAK };
 
+	_float					m_fGrogyAmount = {};
+
 protected:
 	HRESULT Ready_Components();
 	HRESULT Ready_Effect();

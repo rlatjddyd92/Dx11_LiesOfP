@@ -72,6 +72,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\private\BackGround.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\private\BloodTrail.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\private\BossDoor_Veli.cpp"
 
 
