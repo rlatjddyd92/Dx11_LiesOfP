@@ -231,6 +231,10 @@ public: // 외부에서 매니저 접근
 
 	const CItem_Manager::EQUIP* Get_Equip_Slot_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Slot_Info(eSlot); }
 
+	// 포션, 투척물 
+	void Set_PotionThrow_Lock(_bool bIsLock) { m_pItem_Manager->Set_PotionThrow_Lock(bIsLock); }
+
+
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext) { return m_pItem_Manager->Change_Potion_Select(bNext); }
 	_int Change_Tool_Select(_bool bNext) { return m_pItem_Manager->Change_Tool_Select(bNext); }

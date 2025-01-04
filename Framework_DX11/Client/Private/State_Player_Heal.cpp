@@ -5,6 +5,10 @@
 #include "Player.h"
 #include "Camera.h"
 
+// 25-01-04 김성용
+   // 포션, 투척물 사용 확정
+#include "GameInterface_Controller.h"
+
 CState_Player_Heal::CState_Player_Heal(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -56,6 +60,10 @@ HRESULT CState_Player_Heal::Start_State(void* pArg)
     m_isRecoveryHP = false;
 
     m_fRecoveryAmount = 0.f;
+
+    // 25-01-04 김성용
+    // 포션, 투척물 락 풀기
+    GET_GAMEINTERFACE->Set_PotionThrow_Lock(false);
 
     return S_OK;
 }

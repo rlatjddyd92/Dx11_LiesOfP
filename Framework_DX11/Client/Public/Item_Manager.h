@@ -225,7 +225,9 @@ public:
 				return ITEM_RESULT::RESULT_INVALID;
 
 			if (!vecItemInfo[iIndex]->bStack)
+			{
 				return ITEM_RESULT::RESULT_SUCCESS;
+			}
 			else if (vecItemInfo[iIndex]->iCount >= iCount)
 			{
 				vecItemInfo[iIndex]->iCount -= iCount;
@@ -316,6 +318,10 @@ public:
 		return Check_Item_Special_Enum(iIndex);
 	}
 
+	// 포션 및 투척물 락 걸기 
+	void Set_PotionThrow_Lock(_bool bIsLock) { m_bPotion_Throw_Lock = bIsLock; }
+
+
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_bIsChange; }
 	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
@@ -386,12 +392,6 @@ public:
 
 		return m_vecEquip_ItemInfo[_int(eSlot)];
 	}
-
-
-
-
-
-
 	
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext)
@@ -626,7 +626,7 @@ private:
 		return true;
 	}
 
-
+	
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
@@ -690,6 +690,9 @@ private:
 	// 업적
 	_bool m_bAmulet_Achievment_Complete = false;
 	_bool m_bDefence_Achievment_Complete = false;
+
+	// 아이템 락 
+	_bool m_bPotion_Throw_Lock = true;
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);

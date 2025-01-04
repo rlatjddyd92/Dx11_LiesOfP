@@ -98,6 +98,7 @@ public:
 
 	} // 매니저에 게임 입장 / 나가기 상태 알림
 
+
 	_bool IsGamePause()
 	{
 		if ((m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_OPENING)))

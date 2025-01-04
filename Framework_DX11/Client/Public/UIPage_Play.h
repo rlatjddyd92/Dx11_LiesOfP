@@ -264,6 +264,7 @@ private:
 	_bool m_bIsWeapon_Lock[2] = { false, false }; // <- [0] : UI의 작동을 실제 막는 변수, [1] : 외부에서 요청 들어온 내용 
 	// 만일 [0], [1]이 {false,true}인 경우 무기 전환 후 {true,true}로 바로 맞춘다 
 	// [0], [1]이 {true, false}인 경우 {false,false}로 맞추기만 한다 
+	_bool m_bIsItemLock = false;
 
 	_int m_iWeapon_Equip_0_Symbol = 0;
 	_Vec2 m_vSwitch_Time = { 0.f,0.25f };
