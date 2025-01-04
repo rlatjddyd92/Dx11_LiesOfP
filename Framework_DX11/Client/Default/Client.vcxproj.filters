@@ -1432,6 +1432,9 @@
     <Filter Include="02.GameObjects\16.Decal\Decal_Blood">
       <UniqueIdentifier>{c1035c53-ff8c-4be7-a14e-eccce099ddd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\00.Player\BloodTrail">
+      <UniqueIdentifier>{a51e19ff-28d8-4da6-9d9e-1cede35aadd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2636,6 +2639,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderDischarge.h">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderDischarge</Filter>
+	</ClInclude>
+    <ClInclude Include="..\public\BloodTrail.h">
+      <Filter>02.GameObjects\02.Pawn\00.Player\BloodTrail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3811,6 +3817,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderDischarge.cpp">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderDischarge</Filter>
+	</ClCompile>
+    <ClCompile Include="..\private\BloodTrail.cpp">
+      <Filter>02.GameObjects\02.Pawn\00.Player\BloodTrail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

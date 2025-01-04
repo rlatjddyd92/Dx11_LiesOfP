@@ -105,9 +105,6 @@ void CEffect_Container::Late_Update(_float fTimeDelta)
 			m_isDead = false;
 		}
 	}
-
-	if (true == m_isDead)
-		int a = 0;
 }
 
 HRESULT CEffect_Container::Render()
