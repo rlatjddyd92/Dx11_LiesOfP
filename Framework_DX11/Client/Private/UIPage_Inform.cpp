@@ -312,10 +312,13 @@ void CUIPage_Inform::Update_PlayerDead_UI(_float fTimeDelta)
 		{
 			m_vecPart[i]->bRender = false;
 			m_vecPart[i]->fTextureColor.w = 0.f;
-			m_vecPart[i]->fTextureColor.x = 1.f;
 			m_vecPart[i]->fTextColor.w = 0.f;
+			if ((i >= _int(PART_GROUP::INFORM_PlayerDeath_HourNeedle)) && (i <= _int(PART_GROUP::INFORM_PlayerDeath_ClockInGear)))
+				m_vecPart[i]->fTextureColor = { 1.f,1.f,1.f,0.f };
 			m_vecPart[i]->fRatio = 0.f;
 		}
+
+
 		return;
 	}
 
@@ -349,7 +352,6 @@ void CUIPage_Inform::Update_PlayerDead_Back(_float fTimeDelta, _int iPhase)
 		fAlpha = (m_vPlayerDead_Time.w - (m_vPlayerDead_Time.x - (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))) / m_vPlayerDead_Time.w;
 
 	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_Back)]->fTextureColor.w = fAlpha;
-	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_Back)]->fTextureColor.x = 0.f;
 }
 
 void CUIPage_Inform::Update_PlayerDead_Static(_float fTimeDelta, _int iPhase)
@@ -384,7 +386,7 @@ void CUIPage_Inform::Update_PlayerDead_Neddle(_float fTimeDelta, _int iPhase)
 	}
 	else 
 	{
-		_float fAddSpeed = (m_vPlayerDead_Time.x - m_vPlayerDead_Time.y) * 10.f;
+		_float fAddSpeed = (m_vPlayerDead_Time.x - m_vPlayerDead_Time.y) * 30.f;
 		m_fAngle_Clock_Hour -= fTimeDelta * (5.f + fAddSpeed);
 		m_fAngle_Clock_Minitue -= fTimeDelta * 12.f * (5.f + fAddSpeed);
 		m_fAngle_Clock_Hour_Pos += fTimeDelta * (5.f + fAddSpeed);
@@ -413,7 +415,14 @@ void CUIPage_Inform::Update_PlayerDead_Neddle(_float fTimeDelta, _int iPhase)
 	{
 		if (m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_HourNeedle)]->fTextureColor.x < 2.f)
 			for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_HourNeedle); i <= _int(PART_GROUP::INFORM_PlayerDeath_ClockInGear); ++i)
+			{
 				m_vecPart[i]->fTextureColor.x += fTimeDelta * 5.f;
+				m_vecPart[i]->fTextureColor.y -= fTimeDelta * 5.f;
+				m_vecPart[i]->fTextureColor.z -= fTimeDelta * 5.f;
+				if (m_vecPart[i]->fTextureColor.y < 0.f) m_vecPart[i]->fTextureColor.y = 0.f;
+				if (m_vecPart[i]->fTextureColor.z < 0.f) m_vecPart[i]->fTextureColor.z = 0.f;
+			}
+				
 	}
 	else if (iPhase == 2)
 	{
@@ -426,7 +435,8 @@ void CUIPage_Inform::Update_PlayerDead_Neddle(_float fTimeDelta, _int iPhase)
 
 void CUIPage_Inform::Update_PlayerDead_Debris(_float fTimeDelta, _int iPhase)
 {
-	_float fRatio = m_vPlayerDead_Time.x / (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z + m_vPlayerDead_Time.w);
+	_float fRatio = m_vPlayerDead_Time.x / (m_vPlayerDead_Time.y + (m_vPlayerDead_Time.z * 0.5f));
+	fRatio = fRatio > 1.f ? 1.f : fRatio;
 
 	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_XII); i <= _int(PART_GROUP::INFORM_PlayerDeath_DebrisSmall); ++i)
 		m_vecPart[i]->fRatio = fRatio;
@@ -441,7 +451,6 @@ void CUIPage_Inform::Update_PlayerDead_Debris(_float fTimeDelta, _int iPhase)
 	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_XII); i <= _int(PART_GROUP::INFORM_PlayerDeath_DebrisSmall); ++i)
 	{
 		m_vecPart[i]->fTextureColor.w = fAlpha;
-		m_vecPart[i]->fTextureColor.x = 1.f;
 	}
 		
 }
