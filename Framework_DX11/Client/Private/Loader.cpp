@@ -113,10 +113,12 @@
 #include "SimonManus_2P_Aura.h"
 #pragma endregion
 
+#pragma region ADDITIONAL_EFFECT
 #include "BossDoor_Veli.h"
-#include "CMoveBlockObj.h"\
+#include "BloodTrail.h"
 #pragma endregion
 
+#include "CMoveBlockObj.h"
 #include "Machine_EffectObj.h"
 #include "Decal.h"
 #include "Decal_Blood.h"
@@ -1810,6 +1812,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Effect_BossDoor_Veli */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_BossDoor_Veli"),
 		CBossDoor_Veli::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_BloodTrail */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_BloodTrail"),
+		CBloodTrail::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;

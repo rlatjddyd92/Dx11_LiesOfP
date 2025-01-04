@@ -71,12 +71,17 @@ public:
 
 public:
 	virtual void Reset() override;
+
 	void Set_Loop(_bool bLoop) override {
 		m_DefaultDesc.bLoop = bLoop;
 		m_InitDesc.bLoop = bLoop;
 		if (true == bLoop)
 			Reset();
 	}
+
+public:
+	const list<TWOPOINT>& Get_TrailPoses();
+	TWOPOINT Get_PointPos(_uint iIndex);
 
 private:
 	class CShader* m_pShaderCom = { nullptr };

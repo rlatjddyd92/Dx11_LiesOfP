@@ -42,6 +42,13 @@ public:
 
 	HRESULT Add_Effect_ToLayer_Rot(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vRot = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
 
+	CParticle_Effect* Clone_ParticleEffect(const _wstring& strEffectTag);
+	CTexture_Effect* Clone_TextureEffect(const _wstring& strEffectTag);
+	CMesh_Effect* Clone_MeshEffect(const _wstring& strEffectTag);
+	CTrail_Effect_OP* Clone_TrailOP_Effect(const _wstring strEffectTag);
+	CTrail_Effect_TP* Clone_TrailTP_Effect(const _wstring strEffectTag);
+	CTrail_Effect_MP* Clone_TrailMP_Effect(const _wstring strEffectTag);
+
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 	ID3D11Device* m_pDevice = { nullptr };
@@ -73,13 +80,6 @@ private:
 	HRESULT Load_TrailOP_Effect(const _wstring strResultPath);
 	HRESULT Load_TrailTP_Effect(const _wstring strResultPath);
 	HRESULT Load_TrailMP_Effect(const _wstring strResultPath);
-
-	CParticle_Effect* Clone_ParticleEffect(const _wstring& strEffectTag);
-	CTexture_Effect* Clone_TextureEffect(const _wstring& strEffectTag);
-	CMesh_Effect* Clone_MeshEffect(const _wstring& strEffectTag);
-	CTrail_Effect_OP* Clone_TrailOP_Effect(const _wstring strEffectTag);
-	CTrail_Effect_TP* Clone_TrailTP_Effect(const _wstring strEffectTag);
-	CTrail_Effect_MP* Clone_TrailMP_Effect(const _wstring strEffectTag);
 
 	_wstring Get_FileName(const _wstring& strFileTag);
 	_wstring Get_FileExtentin(const _wstring& strFileTag);

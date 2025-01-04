@@ -173,6 +173,19 @@ void CTrail_TwoPoint_Instance::Reset()
 	m_bFirst = false;
 }
 
+TWOPOINT CTrail_TwoPoint_Instance::Get_PointPos(_uint iIndex)
+{
+	_uint i = 0;
+	for (auto& Point : m_TrailPoses)
+	{
+		if (i == iIndex)
+			return Point;
+		++i;
+	}
+
+	return TWOPOINT();
+}
+
 
 HRESULT CTrail_TwoPoint_Instance::Ready_Buffers(const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
 {
