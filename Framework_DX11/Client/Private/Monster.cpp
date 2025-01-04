@@ -202,7 +202,7 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 		return false;
 	}
 
-	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
+	m_eStat.fHp -= fAtkDmg;
 	m_eStat.fAtkDmg = fAtkDmg;
 
 	if (m_pFsmCom->Get_CurrentState() != HITFATAL)
