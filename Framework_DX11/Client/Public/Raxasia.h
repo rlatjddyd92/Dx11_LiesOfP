@@ -115,6 +115,8 @@ public:
 	virtual void    End_CutScene(_uint iCutSceneNum) override;
 	virtual void    Change_Model(_uint iModelNum) override;
 
+	virtual void		Resetting() override;
+
 private:
 	vector<CGameObject*>	CollObjRenderP{};
 	vector<class CEffect_Container*> m_Effects;

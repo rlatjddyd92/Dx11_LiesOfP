@@ -26,6 +26,9 @@ public:
 private:
     class CMonster*     m_pMonster = { nullptr };
 
+    _Vec4               m_vRimLightColor = {};
+    _bool               m_isRimLight = { false };
+
     _bool               m_bSwing = { false };
     _bool               m_bSwingSound = { false };
 
@@ -36,6 +39,7 @@ private:
     void                Collider_Check(_double CurTrackPos);
     void                Sound_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
+    void                Update_Rimlight(_float fTimeDelta, _double CurTrackPos);
 
 public:
     static CState_RebornerBigA_SwingMultiple* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

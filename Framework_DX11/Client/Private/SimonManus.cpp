@@ -556,6 +556,13 @@ void CSimonManus::On_Aura(_bool bAura, _bool bCutScene)
 	m_pAuraEffect->Set_On(bAura, bCutScene);
 }
 
+void CSimonManus::Resetting()
+{
+	m_isDead = true;
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+}
+
 HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

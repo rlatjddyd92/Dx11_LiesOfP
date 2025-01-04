@@ -24,11 +24,9 @@ HRESULT CState_RaxasiaP2_WaveSting::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_CHARGE, false, 0.1f, 50);
-    m_bResetRim = false;
-    m_bControlRim = false;
 
-    m_fGoalRimAlpha = 0.1f;
-    m_fCurtRimAlpha = 1.f;
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_isRimLight = false;
 
     m_bSwingSound = false;
     m_bAccelForSound = false;
@@ -83,7 +81,7 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_bControlRim = true;
+            m_isRimLight = true;
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
             m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
             m_pMonster->Change_Animation(AN_STING, false, 0.02f, 50);
@@ -107,16 +105,8 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
-        if (!m_bResetRim)
-        {
-            if (CurTrackPos >= 180.f)
-            {
-                m_fGoalRimAlpha = 1.f;
-                m_bResetRim = true;
-            }
-        }
-
         break;
+
     default:
         break;
     }
@@ -124,11 +114,7 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
-
-    if (m_bControlRim)
-    {
-        Update_Rimlight();
-    }
+    Update_Rimlight(fTimeDelta, CurTrackPos);
 
 }
 
@@ -269,20 +255,22 @@ void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
     }
 }
 
-void CState_RaxasiaP2_WaveSting::Update_Rimlight()
+void CState_RaxasiaP2_WaveSting::Update_Rimlight(_float fTimeDelta, _double CurTrackPos)
 {
-    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    if (m_isRimLight)
     {
-        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
-        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
-        if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+        if (CurTrackPos < 170.f)
         {
-            m_fCurtRimAlpha = m_fGoalRimAlpha;
-            if (m_fGoalRimAlpha == 1.f)
-            {
-                m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
-            }
+            m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
         }
+        else
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
+        }
+
+        m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
 }
 

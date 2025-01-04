@@ -22,9 +22,9 @@ HRESULT CState_SimonManusP2_Route2::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
-    m_fGoalRimAlpha = 0.1f;
-    m_fCurtRimAlpha = 1.f;
-    m_bControlRim = false;
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_isRimLight = false;
+
     m_isJump = true;
     m_bLandSound = false;
     m_bSwingSound = false;
@@ -43,7 +43,6 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 170);
-            m_bControlRim = true;
             return;
         }
 
@@ -55,6 +54,14 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
     }
     else
     {
+        if (!m_isRimLight)
+        {
+            if (CurTrackPos >= 100.f)
+            {
+                m_isRimLight = true;
+            }
+        }
+
         if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
         {
             m_vTargetDir = m_pMonster->Get_TargetDir();
@@ -74,14 +81,6 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
             m_vFlyMoveStack = vMove;
         }
 
-        if (!m_bResetRim)
-        {
-            if (CurTrackPos >= 245.f)
-            {
-                m_fGoalRimAlpha = 1.f;
-                m_bResetRim = true;
-            }
-        }
     }
 
 
@@ -94,11 +93,7 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
-
-    if (m_bControlRim)
-    {
-        Update_Rimlight();
-    }
+    Update_Rimlight(fTimeDelta, CurTrackPos);
 
 }
 
@@ -182,20 +177,22 @@ void CState_SimonManusP2_Route2::Effect_Check(_double CurTrackPos)
     }
 }
 
-void CState_SimonManusP2_Route2::Update_Rimlight()
+void CState_SimonManusP2_Route2::Update_Rimlight(_float fTimeDelta, _double CurTrackPos)
 {
-    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    if (m_isRimLight)
     {
-        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
-        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
-        if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+        if (CurTrackPos < 240.f)
         {
-            m_fCurtRimAlpha = m_fGoalRimAlpha;
-            if (m_fGoalRimAlpha == 1.f)
-            {
-                m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
-            }
+            m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
         }
+        else
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
+        }
+
+        m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
 }
 

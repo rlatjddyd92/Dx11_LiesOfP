@@ -83,14 +83,18 @@ public:
 	_bool*				Get_bFatalAttacked() { return &m_bFatalAttacked; }
 
 	_bool*				Get_bDicover() { return &m_bDiscover; };
+	_bool*				Get_FirstMeetCheck() { return &m_bFirstMeetCheck; };
 	_Vec3				Get_Look() { return XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)); }
 	_bool				Get_IsWeakness() { return m_eStat.bWeakness; }//해당 위크니스는 각각 몹에서 그로기 양 비교하도록 만들기
+
+	virtual void		Resetting() {};
 
 protected:
 	_Vec4		m_vRootMoveStack{};
 	_Vec3		m_vCurRootMove{};
 
 	_bool               m_bDiscover = { false };
+	_bool               m_bFirstMeetCheck = { false };
 
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
@@ -99,6 +103,8 @@ protected:
 	_bool		m_bFatalAttacked = { false };
 
 	_float		m_fPrevTrackPos{};
+
+	_int		m_iOriginCellNum = {0};
 
 	_Vec4		m_vPosTarget{};
 

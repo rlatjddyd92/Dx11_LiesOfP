@@ -25,10 +25,9 @@ HRESULT CState_SimonManusP2_HighJumpFall::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_HIGHJUMPFALL, false, 0.1f, 0);
 
-    m_fGoalRimAlpha = 0.1f;
-    m_fCurtRimAlpha = 1.f;
-    
-    //m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, 1.f });
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_isRimLight = false;
+
     m_bStartSpot = true;
     m_bStompAttack = false;
 
@@ -41,6 +40,14 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
 
     _double CurTrackPos{};
     CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (!m_isRimLight)
+    {
+        if (CurTrackPos >= 100.f)
+        {
+            m_isRimLight = true;
+        }
+    }
 
     if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
@@ -66,14 +73,6 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
         m_vFlyMoveStack = vMove;
     }
 
-    if (!m_bResetRim)
-    {
-        if (CurTrackPos >= 245.f)
-        {
-            m_fGoalRimAlpha = 1.f;
-            m_bResetRim = true;
-        }
-    }
 
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
@@ -83,7 +82,7 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
-    Update_Rimlight();
+    Update_Rimlight(fTimeDelta, CurTrackPos);
     Control_Sound(CurTrackPos);
 
 }
@@ -145,20 +144,22 @@ void CState_SimonManusP2_HighJumpFall::Effect_Check(_double CurTrackPos)
     }
 }
 
-void CState_SimonManusP2_HighJumpFall::Update_Rimlight()
+void CState_SimonManusP2_HighJumpFall::Update_Rimlight(_float fTimeDelta, _double CurTrackPos)
 {
-    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    if (m_isRimLight)
     {
-        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 20;
-        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
-        if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+        if (CurTrackPos < 240.f)
         {
-            m_fCurtRimAlpha = m_fGoalRimAlpha;
-            if (m_fGoalRimAlpha == 1.f)
-            {
-                m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
-            }
+            m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
         }
+        else
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
+        }
+
+        m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
 }
 

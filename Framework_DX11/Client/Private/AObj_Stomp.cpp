@@ -45,28 +45,33 @@ HRESULT CAObj_Stomp::Initialize(void* pArg)
 
 void CAObj_Stomp::Priority_Update(_float fTimeDelta)
 {
-    //m_pEffect->Priority_Update(fTimeDelta);
+    m_pEffect->Priority_Update(fTimeDelta);
 }
 
 void CAObj_Stomp::Update(_float fTimeDelta)
 {
-    if (m_fLifeTime >= m_fLifeDuration)
+    //if (m_fLifeTime >= m_fLifeDuration)
+    //{
+    //    m_isDead = true;
+    //}
+    //else
+    //{
+    //    m_fLifeTime += fTimeDelta;
+    //}
+
+    if (m_pEffect->Get_Dead())
     {
         m_isDead = true;
-    }
-    else
-    {
-        m_fLifeTime += fTimeDelta;
     }
 
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
-    //m_pEffect->Update(fTimeDelta);
+    m_pEffect->Update(fTimeDelta);
 }
 
 void CAObj_Stomp::Late_Update(_float fTimeDelta)
 {
-    //m_pEffect->Late_Update(fTimeDelta);
+    m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -139,12 +144,12 @@ HRESULT CAObj_Stomp::Ready_Components()
         return E_FAIL;
     m_pColliderCom->Set_Owner(this);
 
-    //const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-    //
-    //m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
-    //    nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-    //
-    //m_pEffect->Reset_Effects();
+    const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+    
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Stamp"), pParetnMatrix,
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+    
+    m_pEffect->Reset_Effects();
 
     return S_OK;
 }
@@ -178,9 +183,9 @@ CGameObject* CAObj_Stomp::Clone(void* pArg)
 void CAObj_Stomp::Free()
 {
     __super::Free();
-    //if (nullptr != m_pEffect)
-    //{
-    //    m_pEffect->Set_Cloned(false);
-    //}
-    //Safe_Release(m_pEffect);
+    if (true == m_isCloned)
+    {
+        m_pEffect->Set_Cloned(false);
+        Safe_Release(m_pEffect);
+    }
 }

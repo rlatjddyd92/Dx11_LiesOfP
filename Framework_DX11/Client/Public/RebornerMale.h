@@ -42,6 +42,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void		Resetting() override;
+
 private:
 	CColliderObject* m_pColliderObject = { nullptr };
 	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };
@@ -52,16 +55,16 @@ private:
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
 
-	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
-
-	class CWeapon* m_pWeapon = { nullptr };
-
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();
 
 	void	Update_Collider();
+
+	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
+
+	class CWeapon* m_pWeapon = { nullptr };
 
 public:
 	static CRebornerMale* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
