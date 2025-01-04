@@ -578,7 +578,7 @@ HRESULT CLevel_GamePlay::Ready_PoolingObject()
 	BloodTrailDesc.pParentMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr();
 	BloodTrailDesc.pSocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	for (_uint i = 0; i < 5; ++i)
+	for (_uint i = 0; i < 8; ++i)
 	{
 		CBloodTrail* pBloodTrail = dynamic_cast<CBloodTrail*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect_Polling"), TEXT("Prototype_GameObject_Effect_BloodTrail"), &BloodTrailDesc));
 		if (!pBloodTrail)
