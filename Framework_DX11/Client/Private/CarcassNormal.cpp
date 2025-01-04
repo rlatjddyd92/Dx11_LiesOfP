@@ -50,6 +50,16 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
+	
+	m_eStat.fHp = 120.f;
+	m_eStat.fMaxHp = 120.f;
+	m_eStat.fAtk = 120.f;
+	//m_eStat.fDefence = 3.f;
+
+	m_eStat.bWeakness = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 80.f;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -67,27 +77,12 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
-
-
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
-
-	m_eStat.fHp = 120.f;
-	m_eStat.fMaxHp = 120.f;
-	m_eStat.fAtk = 120.f;
-	//m_eStat.fDefence = 3.f;
-
-	m_eStat.bWeakness = false;
-
-	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 80.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.2f, 0.f };
 
 	m_bDiscover = false;
-	// 24-11-26 김성용
-	// 몬스터 직교 UI 접근 코드 
-	// 정식 코드  
+
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);

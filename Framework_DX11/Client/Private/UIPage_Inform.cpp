@@ -65,6 +65,7 @@ void CUIPage_Inform::Late_Update(_float fTimeDelta)
 	Update_Region(fTimeDelta);
 	Update_Inform(fTimeDelta);
 	Update_Heart(fTimeDelta);
+	Update_PlayerDead_UI(fTimeDelta);
 
 	__super::Late_Update(fTimeDelta);
 }
@@ -100,6 +101,11 @@ HRESULT CUIPage_Inform::Ready_UIPart_Group_Control()
 	m_bUpdate = true;
 	m_bRender = true;
 	m_fTopPartMove = -1.f;
+
+	m_fAdjustLength = m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_HourNeedle)]->fAdjust_End.y;
+	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_HourNeedle); i <= _int(PART_GROUP::INFORM_PlayerDeath_ClockInGear); ++i)
+		m_vecPart[i]->iMoveType = 0;
+
 	return S_OK;
 }
 
@@ -192,6 +198,27 @@ void CUIPage_Inform::Show_Dead(_float fTime_Emerge, _float fTime_Show)
 
 }
 
+void CUIPage_Inform::Show_PlayerDead_UI()
+{
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_bUpdate = true;
+	m_fTopPartMove = -1.f;
+	m_vPlayerDead_Time = { 0.f, 1.f ,5.f ,1.f };
+
+	m_fAngle_Clock_Hour = m_fAngle_Clock_Hour_Start;
+	m_fAngle_Clock_Minitue = m_fAngle_Clock_Minitue_Start;
+	m_fAngle_Clock_Hour_Pos = m_fAngle_Clock_Hour_Start;
+	m_fAngle_Clock_Minitue_Pos = m_fAngle_Clock_Minitue_Start;
+
+	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_Back); i <= _int(PART_GROUP::INFORM_PlayerDeath_LieORDie); ++i)
+	{
+		m_vecPart[i]->bRender = true;
+		m_vecPart[i]->fTextureColor.w = 0.f;
+		m_vecPart[i]->fTextColor.w = 0.f;
+	}
+}
+
 void CUIPage_Inform::Update_Region(_float fTimeDelta)
 {
 	_float fRatio = Check_Ratio(&m_vLifeTime_Region, fTimeDelta);
@@ -268,6 +295,159 @@ void CUIPage_Inform::Update_Dead(_float fTimeDelta)
 
 
 
+}
+
+void CUIPage_Inform::Update_PlayerDead_UI(_float fTimeDelta)
+{
+	if (m_vPlayerDead_Time.x >= 0.f)
+		m_vPlayerDead_Time.x += fTimeDelta;
+	else 
+		return;
+
+	if (m_vPlayerDead_Time.x > (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z + m_vPlayerDead_Time.w))
+	{
+		m_vPlayerDead_Time = { -1.f,0.f,0.f,0.f };
+		for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_Back); i <= _int(PART_GROUP::INFORM_PlayerDeath_LieORDie); ++i)
+		{
+			m_vecPart[i]->bRender = false;
+			m_vecPart[i]->fTextureColor.w = 0.f;
+			m_vecPart[i]->fTextureColor.x = 1.f;
+			m_vecPart[i]->fTextColor.w = 0.f;
+			m_vecPart[i]->fRatio = 0.f;
+		}
+		return;
+	}
+
+	_int iPhase = 0;
+	if (m_vPlayerDead_Time.x > (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))
+		iPhase = 2;
+	else if (m_vPlayerDead_Time.x > m_vPlayerDead_Time.y)
+		iPhase = 1;
+
+	Update_PlayerDead_Back(fTimeDelta, iPhase);
+	Update_PlayerDead_Static(fTimeDelta, iPhase);
+	Update_PlayerDead_Neddle(fTimeDelta, iPhase);
+	Update_PlayerDead_Debris(fTimeDelta, iPhase);
+	Update_PlayerDead_Message(fTimeDelta, iPhase);
+}
+
+void CUIPage_Inform::Update_PlayerDead_Back(_float fTimeDelta, _int iPhase)
+{
+	_float fAlpha = 1.f;
+
+	if (iPhase == 0)
+		fAlpha = m_vPlayerDead_Time.x / m_vPlayerDead_Time.y;
+	else if (iPhase == 2)
+		fAlpha = (m_vPlayerDead_Time.w - (m_vPlayerDead_Time.x - (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))) / m_vPlayerDead_Time.w;
+
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_Back)]->fTextureColor.w = fAlpha;
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_Back)]->fTextureColor.x = 0.f;
+}
+
+void CUIPage_Inform::Update_PlayerDead_Static(_float fTimeDelta, _int iPhase)
+{
+	_float fAlpha = 1.f;
+
+	if (iPhase == 0)
+		fAlpha = m_vPlayerDead_Time.x / m_vPlayerDead_Time.y;
+	else if (iPhase == 2)
+		fAlpha = (m_vPlayerDead_Time.w - (m_vPlayerDead_Time.x - (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))) / m_vPlayerDead_Time.w;
+
+	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_ClockFrame); i <= _int(PART_GROUP::INFORM_PlayerDeath_ClockInnerRing); ++i)
+		m_vecPart[i]->fTextureColor.w = fAlpha;
+}
+
+void CUIPage_Inform::Update_PlayerDead_Neddle(_float fTimeDelta, _int iPhase)
+{
+	/*
+	1. 각도 구하기 
+	2. sin->y, cos->x 좌표 구하기 
+	3. x,y에 adjustlength 곱하기 
+	4. 위 값을 adjustpos로 사용 
+	5. 텍스쳐 각도 만큼 돌리기 
+	*/
+
+	if (iPhase == 0)
+	{
+		m_fAngle_Clock_Hour -= fTimeDelta;
+		m_fAngle_Clock_Minitue -= fTimeDelta * 12.f;
+		m_fAngle_Clock_Hour_Pos += fTimeDelta;
+		m_fAngle_Clock_Minitue_Pos += fTimeDelta * 12.f;
+	}
+	else 
+	{
+		_float fAddSpeed = (m_vPlayerDead_Time.x - m_vPlayerDead_Time.y) * 10.f;
+		m_fAngle_Clock_Hour -= fTimeDelta * (5.f + fAddSpeed);
+		m_fAngle_Clock_Minitue -= fTimeDelta * 12.f * (5.f + fAddSpeed);
+		m_fAngle_Clock_Hour_Pos += fTimeDelta * (5.f + fAddSpeed);
+		m_fAngle_Clock_Minitue_Pos += fTimeDelta * 12.f * (5.f + fAddSpeed);
+	}
+		
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_HourNeedle)]->fTurn_Degree = m_fAngle_Clock_Hour;
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_MinitueNeedle)]->fTurn_Degree = m_fAngle_Clock_Minitue;
+	
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_HourNeedle)]->fAdjust = { 
+		cos(XMConvertToRadians(m_fAngle_Clock_Hour_Pos + m_fAdjust_Clock_Angle)) * m_fAdjustLength,
+		sin(XMConvertToRadians(m_fAngle_Clock_Hour_Pos + m_fAdjust_Clock_Angle)) * m_fAdjustLength };
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_MinitueNeedle)]->fAdjust = { 
+		cos(XMConvertToRadians(m_fAngle_Clock_Minitue_Pos + m_fAdjust_Clock_Angle)) * m_fAdjustLength,
+		sin(XMConvertToRadians(m_fAngle_Clock_Minitue_Pos + m_fAdjust_Clock_Angle)) * m_fAdjustLength };
+
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_ClockInGear)]->fTurn_Degree += fTimeDelta;
+
+	_float fAlpha = 1.f;
+
+	if (iPhase == 0)
+	{
+		fAlpha = m_vPlayerDead_Time.x / m_vPlayerDead_Time.y;
+	}
+	else if (iPhase == 1)
+	{
+		if (m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_HourNeedle)]->fTextureColor.x < 2.f)
+			for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_HourNeedle); i <= _int(PART_GROUP::INFORM_PlayerDeath_ClockInGear); ++i)
+				m_vecPart[i]->fTextureColor.x += fTimeDelta * 5.f;
+	}
+	else if (iPhase == 2)
+	{
+		fAlpha = (m_vPlayerDead_Time.w - (m_vPlayerDead_Time.x - (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))) / m_vPlayerDead_Time.w;
+	}
+		
+	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_HourNeedle); i <= _int(PART_GROUP::INFORM_PlayerDeath_ClockInGear); ++i)
+		m_vecPart[i]->fTextureColor.w = fAlpha;
+}
+
+void CUIPage_Inform::Update_PlayerDead_Debris(_float fTimeDelta, _int iPhase)
+{
+	_float fRatio = m_vPlayerDead_Time.x / (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z + m_vPlayerDead_Time.w);
+
+	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_XII); i <= _int(PART_GROUP::INFORM_PlayerDeath_DebrisSmall); ++i)
+		m_vecPart[i]->fRatio = fRatio;
+
+	_float fAlpha = 1.f;
+
+	if (iPhase == 0)
+		fAlpha = m_vPlayerDead_Time.x / m_vPlayerDead_Time.y;
+	else if (iPhase == 2)
+		fAlpha = (m_vPlayerDead_Time.w - (m_vPlayerDead_Time.x - (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))) / m_vPlayerDead_Time.w;
+	
+	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_XII); i <= _int(PART_GROUP::INFORM_PlayerDeath_DebrisSmall); ++i)
+	{
+		m_vecPart[i]->fTextureColor.w = fAlpha;
+		m_vecPart[i]->fTextureColor.x = 1.f;
+	}
+		
+}
+
+void CUIPage_Inform::Update_PlayerDead_Message(_float fTimeDelta, _int iPhase)
+{
+	_float fAlpha = 1.f;
+
+	if (iPhase == 0)
+		fAlpha = m_vPlayerDead_Time.x / m_vPlayerDead_Time.y;
+	else if (iPhase == 2)
+		fAlpha = (m_vPlayerDead_Time.w - (m_vPlayerDead_Time.x - (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))) / m_vPlayerDead_Time.w;
+
+	m_vecPart[_int(PART_GROUP::INFORM_PlayerDeath_LieORDie)]->fTextureColor.w = fAlpha;
 }
 
 _float CUIPage_Inform::Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta)

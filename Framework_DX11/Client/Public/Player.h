@@ -100,7 +100,7 @@ public:
 		_int iPoint_Heal = 1;
 
 		// 능력치 
-		_float iStat_Attack = 20.f;
+		_float iStat_Attack = 1000.f;
 		_float iStat_Defence = 20.f;
 
 
@@ -204,6 +204,9 @@ public:
 	_float					Get_AttackBuffTime() { return m_fAttackBuffTime; }
 	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime; }
 
+	_bool					Get_IsRespawnMonster() { return m_isRespawnMonster; }
+	void					Set_IsRespawnMonster(_bool isRespawn) { m_isRespawnMonster = isRespawn; }
+
 #pragma region PLAYER_STAT
 	STAT_INFO& Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 김성용
@@ -283,6 +286,7 @@ public:
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();
+	void			Increase_Region(_float fAmount);
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 	void			Recovery_HP(_float fAmount);
@@ -326,6 +330,7 @@ private:
 	_bool				m_isLadderEnd = { false };
 	_bool				m_isTeleport = { false };
 	_bool				m_isCollisionMonster = { false };
+	_bool				m_isRespawnMonster = { false };
 
 	_float				m_fGuardTime = {};
 	_float				m_fDebuffSpeedRatio = { 1.f };

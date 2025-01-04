@@ -316,15 +316,16 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 	pAdjust_Stat[7] = pAdjust->fResist_Electric;
 	pAdjust_Stat[8] = pAdjust->fResist_Acid;
 
-	m_iLevelUp_Buffer_Stat[0] = m_iLevelUp_Buffer_Point[0] * 50.f;
-	m_iLevelUp_Buffer_Stat[1] = m_iLevelUp_Buffer_Point[1] * 50.f;
-	m_iLevelUp_Buffer_Stat[2] = m_iLevelUp_Buffer_Point[2] * 10.f;
-	m_iLevelUp_Buffer_Stat[3] = m_iLevelUp_Buffer_Point[3] * 10.f;
-	m_iLevelUp_Buffer_Stat[4] = m_iLevelUp_Buffer_Point[4] * 10.f;
-	m_iLevelUp_Buffer_Stat[5] = m_iLevelUp_Buffer_Point[1] * 10.f;
-	m_iLevelUp_Buffer_Stat[6] = m_iLevelUp_Buffer_Point[3] * 10.f;
-	m_iLevelUp_Buffer_Stat[7] = m_iLevelUp_Buffer_Point[2] * 10.f;
-	m_iLevelUp_Buffer_Stat[8] = m_iLevelUp_Buffer_Point[3] * 10.f;
+	// 곱해지는 수치가 스탯 포인트 1당 올라가는 수치
+	m_iLevelUp_Buffer_Stat[0] = m_iLevelUp_Buffer_Point[0] * 50.f; // 체력 최대치
+	m_iLevelUp_Buffer_Stat[1] = m_iLevelUp_Buffer_Point[1] * 50.f; // 스태미나 최대치
+	m_iLevelUp_Buffer_Stat[2] = m_iLevelUp_Buffer_Point[2] * 10.f; // 공격력
+	m_iLevelUp_Buffer_Stat[3] = m_iLevelUp_Buffer_Point[3] * 10.f; // 방어력
+	m_iLevelUp_Buffer_Stat[4] = m_iLevelUp_Buffer_Point[4] * 10.f; // 회복력 
+	m_iLevelUp_Buffer_Stat[5] = m_iLevelUp_Buffer_Point[1] * 10.f; // 리전 최대치 (페이블 아츠)
+	m_iLevelUp_Buffer_Stat[6] = m_iLevelUp_Buffer_Point[3] * 10.f; // 화염 저항
+	m_iLevelUp_Buffer_Stat[7] = m_iLevelUp_Buffer_Point[2] * 10.f; // 전격 저항
+	m_iLevelUp_Buffer_Stat[8] = m_iLevelUp_Buffer_Point[3] * 10.f; // 산성 저항
 
 	
 

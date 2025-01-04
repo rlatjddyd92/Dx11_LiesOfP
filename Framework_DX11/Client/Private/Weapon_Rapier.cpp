@@ -152,14 +152,17 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 			if (m_pBladeMatrix)
 				vHitPos = m_BladeWorldMatrix.Translation();
 
-			_float fFinalDamageAmount = m_fDamageAmount;
+			m_fFinalDamageAmount = m_fDamageAmount;
+			m_fFinalDamageAmount *= m_pPlayer->Get_Player_Stat().iStat_Attack * 0.0005f * m_pGameInstance->Get_Random(0.97f, 1.05f);
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
-				fFinalDamageAmount *= 1.2f;
+				m_fFinalDamageAmount *= 1.2f;
 
-			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
+			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
+
+				m_pPlayer->Increase_Region(10.f);
 
 				if (m_eAttackStrength == ATK_STRONG)
 				{

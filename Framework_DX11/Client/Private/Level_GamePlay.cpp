@@ -16,8 +16,6 @@
 #include "Ladder.h"
 #include "CutScene.h"
 
-#include "CMoveBlockObj.h"
-
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -52,12 +50,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_CutScene_Data()))
 		return E_FAIL;
 
-
-
-	// 24-11-19 김성용
-	// 게임 인터페이스를 인게임 모드로 전환
 	GET_GAMEINTERFACE->SetIngame(true);
-
 
 	m_pGameInstance->Set_Listener(m_pPlayer);
 
@@ -87,6 +80,13 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 
 		tDesc->isOnHDR = !tDesc->isOnHDR;
 
+	}
+
+	if (m_pPlayer->Get_IsRespawnMonster())
+	{
+		// 몬스터 부활
+
+		m_pPlayer->Set_IsRespawnMonster(false);
 	}
 }
 

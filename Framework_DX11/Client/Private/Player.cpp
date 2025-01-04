@@ -149,7 +149,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
@@ -161,6 +161,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
+	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
 	m_iRespawn_Cell_Num = 772;
 
@@ -175,6 +176,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	GET_GAMEINTERFACE->Input_Player_Pointer(this);
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
+
+	
 
 	return S_OK;
 }
@@ -813,14 +816,14 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				if (strObjecTag == TEXT("Monster"))
 				{
 					CMonster* pMonster = dynamic_cast<CMonster*>(pAttacker);
-					pMonster->Increase_GroggyPoint(10.f);
+					pMonster->Increase_GroggyPoint(50.f);
 
 				}
 				else if (strObjecTag == TEXT("MonsterWeapon"))
 				{
 					CWeapon* pWeapon = dynamic_cast<CWeapon*>(pAttacker);
 					CMonster* pMonster = pWeapon->Get_Monster();
-					pMonster->Increase_GroggyPoint(10.f);
+					pMonster->Increase_GroggyPoint(50.f);
 				}
 			}
 
@@ -828,6 +831,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
+
 
 			return false;
 		}
@@ -1035,6 +1039,11 @@ _bool CPlayer::Check_Region_Fable02()
 	return true;
 }
 
+void CPlayer::Increase_Region(_float fAmount)
+{
+	m_tPlayer_Stat->vGauge_Region.x = min(m_tPlayer_Stat->vGauge_Region.x + fAmount, m_tPlayer_Stat->vGauge_Region.z + m_tPlayer_Stat_Adjust->vGauge_Region.z);
+}
+
 void CPlayer::Decrease_Region(_uint iRegionCount)
 {
 	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
@@ -1046,8 +1055,8 @@ void CPlayer::Decrease_Region(_uint iRegionCount)
 			return;
 	}
 
-	//m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
-	//m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+	m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
+	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
 }
 
 void CPlayer::Recovery_Region(_float fAmount)

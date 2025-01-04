@@ -95,6 +95,15 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 	
+	m_eStat.strName = TEXT("Raxasia");
+
+	m_eStat.fHp = 2000.f;
+	m_eStat.fMaxHp = 2000.f;
+	m_eStat.fAtk = 250.f;
+
+	m_eStat.bWeakness = false;
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 330.f;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -110,16 +119,6 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 	m_pColliderCom->Set_Owner(this);
-
-	m_eStat.strName = TEXT("Raxasia");
-
-	m_eStat.fHp = 2000.f;
-	m_eStat.fMaxHp = 2000.f;
-	m_eStat.fAtk = 250.f;
-
-	m_eStat.bWeakness = false;
-	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 330.f;
 
 	m_vCenterOffset = _Vec3{0.f, 1.85f, 0.f};
 
