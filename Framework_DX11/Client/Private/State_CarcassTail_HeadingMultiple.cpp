@@ -24,6 +24,9 @@ HRESULT CState_CarcassTail_HeadingMultiple::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_HEADING, false, 0.1f, 0, true);
 
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+
+    m_isRimLight = false;
     m_bHeadingSound = false;
 
     m_iRouteTrack = 0;
@@ -46,8 +49,12 @@ void CState_CarcassTail_HeadingMultiple::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bHeadingSound = false;
-
+            if (m_iRouteTrack == 2)
+            {
+                m_isRimLight = true;
+            }
             m_pMonster->Change_Animation(AN_HEADING, false, 0.1f, 0, true, true);
+            return;
         }
     }
     else
@@ -60,6 +67,7 @@ void CState_CarcassTail_HeadingMultiple::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Sound_Check(CurTrackPos);
+    Update_Rimlight(fTimeDelta, CurTrackPos);
 
 }
 
@@ -95,6 +103,25 @@ void CState_CarcassTail_HeadingMultiple::Sound_Check(_double CurTrackPos)
             m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Heavy_03.wav"), false);
             m_bHeadingSound = true;
         }
+    }
+}
+
+void CState_CarcassTail_HeadingMultiple::Update_Rimlight(_float fTimeDelta, _double CurTrackPos)
+{
+    if (m_isRimLight)
+    {
+        if (CurTrackPos < 95.f)
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
+        }
+        else
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
+        }
+
+        m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
 }
 

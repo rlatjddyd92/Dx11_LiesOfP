@@ -24,8 +24,7 @@ HRESULT CState_CarcassBigA_LOSwingRight::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_LOSWINGRIGHT, false, 0.1f, 0, true);
 
-    m_fGoalRimAlpha = 0.1f;
-    m_fCurtRimAlpha = 1.f;
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
 
     m_bSwingSound = false;
 
@@ -41,18 +40,10 @@ void CState_CarcassBigA_LOSwingRight::Update(_float fTimeDelta)
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
-    if (!m_bResetRim)
-    {
-        if (CurTrackPos > 85.f)
-        {
-            m_fGoalRimAlpha = 0.f;
-            m_bResetRim = true;
-        }
-    }
 
     Collider_Check(CurTrackPos);
     Sound_Check(CurTrackPos);
-    Update_Rimlight();
+    Update_Rimlight(fTimeDelta, CurTrackPos);
 
 }
 
@@ -92,21 +83,24 @@ void CState_CarcassBigA_LOSwingRight::Sound_Check(_double CurTrackPos)
     }
 }
 
-void CState_CarcassBigA_LOSwingRight::Update_Rimlight()
+void CState_CarcassBigA_LOSwingRight::Update_Rimlight(_float fTimeDelta, _double CurTrackPos)
 {
-    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    if (m_isRimLight)
     {
-        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 20;
-        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
-        if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+        if (CurTrackPos < 85.f)
         {
-            m_fCurtRimAlpha = m_fGoalRimAlpha;
-            if (m_fGoalRimAlpha == 1.f)
-            {
-                m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
-            }
+            m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
         }
+        else
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
+        }
+
+        m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
+
 }
 
 CState_CarcassBigA_LOSwingRight* CState_CarcassBigA_LOSwingRight::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

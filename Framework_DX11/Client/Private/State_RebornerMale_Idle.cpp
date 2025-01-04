@@ -16,6 +16,7 @@ HRESULT CState_RebornerMale_Idle::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     m_pDiscover = m_pMonster->Get_bDicover();
+    m_pFirstMeetCheck = m_pMonster->Get_FirstMeetCheck();
 
     return S_OK;
 }
@@ -71,11 +72,11 @@ void CState_RebornerMale_Idle::Update(_float fTimeDelta)
 
             if (fDist <= m_fRecognitionDist)
             {
-                if (!m_bFirstMeetCheck)
+                if (!(*m_pFirstMeetCheck))
                 {
                     GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
 
-                    m_bFirstMeetCheck = true;
+                    (*m_pFirstMeetCheck) = true;
                 }
 
                 _float fRadian = vTargetDir.Dot(vLook);
@@ -96,7 +97,7 @@ void CState_RebornerMale_Idle::Update(_float fTimeDelta)
     {
         if (fDist >= 30.f)
         {
-            m_bFirstMeetCheck = false;
+            (*m_pFirstMeetCheck) = false;
             *m_pDiscover = false;
             return;
         }

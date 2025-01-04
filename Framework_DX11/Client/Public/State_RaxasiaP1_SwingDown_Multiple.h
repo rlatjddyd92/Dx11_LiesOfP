@@ -30,11 +30,8 @@ private:
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 
-    _float              m_fCurtRimAlpha = {};
-    _float              m_fGoalRimAlpha = {};
-
-    _bool               m_bResetRim = { false };
-    _bool               m_bControlRim = { false };
+    _Vec4               m_vRimLightColor = {};
+    _bool               m_isRimLight = { false };
 
     _int                m_iCurAnimIndex = {};
 
@@ -52,7 +49,7 @@ private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
-    void                Update_Rimlight();
+    void                Update_Rimlight(_float fTimeDelta, _double CurTrackPos);
     void                Control_Sound(_double CurTrackPos);
 
 public:

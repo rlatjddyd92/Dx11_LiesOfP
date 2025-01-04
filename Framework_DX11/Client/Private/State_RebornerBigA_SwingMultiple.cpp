@@ -26,7 +26,9 @@ HRESULT CState_RebornerBigA_SwingMultiple::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_LINKED_START, false, 0.1f, 0, true);
     m_iRouteTrack = 0;
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
 
+    m_isRimLight = false;
     m_bSwingSound = false;
     m_bSwing = false;
 
@@ -59,6 +61,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bSwing = false;
+            m_isRimLight = true;
             m_pMonster->SetUp_Animation(AN_LINKED_LAST, false, 0, true);
             return;
         }
@@ -89,6 +92,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Sound_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Update_Rimlight(fTimeDelta, CurTrackPos);
 
 }
 
@@ -238,6 +242,25 @@ void CState_RebornerBigA_SwingMultiple::Effect_Check(_double CurTrackPos)
             m_pMonster->DeActive_Effect(0);
             m_bSwing = false;
         }
+    }
+}
+
+void CState_RebornerBigA_SwingMultiple::Update_Rimlight(_float fTimeDelta, _double CurTrackPos)
+{
+    if (m_isRimLight)
+    {
+        if (CurTrackPos < 145.f)
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
+        }
+        else
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
+        }
+
+        m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
 }
 
