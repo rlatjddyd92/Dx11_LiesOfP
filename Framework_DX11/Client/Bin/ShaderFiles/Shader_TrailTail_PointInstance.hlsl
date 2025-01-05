@@ -607,6 +607,36 @@ PS_OUT PS_SMOKE_LOWALPHA_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_SMOKE_HALFALPHA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    Out.vColor.rgb *= In.vColor.rgb;
+    
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    Out.vColor.a *= 0.25f;
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
+    return Out;
+}
+
 PS_EFFECT_OUT PS_FIRE_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
@@ -899,6 +929,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_DIR_MAIN();
         PixelShader = compile ps_5_0 PS_RGBTOA_MAIN();
+    }
+
+    pass SMOKE_HALFALPHA // 15
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_SMOKE_HALFALPHA_MAIN();
     }
 
 }
