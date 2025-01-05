@@ -261,6 +261,9 @@ public:
 	_bool IsTalking_WithNPC() { return m_pUIPage_Talking->IsTalking_WithNPC(); }
 	_bool IsTalking_SelectPage() { return m_pUIPage_Talking->IsTalking_SelectPage(); }
 
+	_bool IsTalking_WithNPC(NPC_SCRIPT eNPC) { return m_pUIPage_Talking->IsTalking_WithNPC(eNPC); } // 대화가 진행 중일 때 
+	_bool IsEndTalk_WithNPC(NPC_SCRIPT eNPC) { return m_pUIPage_Talking->IsEndTalk_WithNPC(eNPC); } // 대화가 끝난 경우
+
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIPage_Talking->Show_Select_Script(strLeft, strRight, fTime); }
 	_bool IsLeft_LastSelect_Result() { return m_pUIPage_Talking->IsLeft_LastSelect_Result(); }
 

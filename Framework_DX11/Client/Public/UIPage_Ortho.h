@@ -29,7 +29,6 @@ public:
 		CGameObject* pHost = { nullptr };
 		_bool bIsActive = true;
 
-
 	}OR_HOST;
 
 	

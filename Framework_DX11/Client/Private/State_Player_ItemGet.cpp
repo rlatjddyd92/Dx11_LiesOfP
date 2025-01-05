@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
+#include "GameInterface_Controller.h"
 
 CState_Player_ItemGet::CState_Player_ItemGet(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -55,6 +56,15 @@ void CState_Player_ItemGet::Update(_float fTimeDelta)
 void CState_Player_ItemGet::End_State()
 {
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
+
+    // 25-01-05 김성용
+    // 아이템을 획득하여 인벤에 넣는 함수 
+    GET_GAMEINTERFACE->AddNewItem_Inven(331, 1); // 아이템 인덱스, 수량 입력 (디폴트 1개)
+    // 현재 테스트용으로 미사용 아이템인 코어(331)을 얻도록 설정 
+    // 아이템의 인덱스는 아래 문서 참조 
+    // Client/Bin/DataFiles/Item_Spec_Data.xlsx
+    // 문서의 0번째 열의 숫자 사용하기 
+
 }
 
 _bool CState_Player_ItemGet::End_Check()
