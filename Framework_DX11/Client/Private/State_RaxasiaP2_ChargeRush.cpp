@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Raxasia.h"
+#include "AttackObject.h"
 
 CState_RaxasiaP2_ChargeRush::CState_RaxasiaP2_ChargeRush(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -216,7 +217,20 @@ void CState_RaxasiaP2_ChargeRush::Effect_Check(_double CurTrackPos)
         {
             if (!m_bCharge)
             {
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.1f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_ROOT))
+                    * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderDischarge"), &Desc);
+
                 m_bCharge = true;
             }
         }

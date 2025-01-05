@@ -186,7 +186,7 @@ void CState_RaxasiaP1_Discharge::Effect_Check(_double CurTrackPos)
 
                 Desc.vPos = vPos;
                 Desc.vDir = vTargetDir;
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderDischarge"), &Desc);
 
                 m_bChargeActive = true;
             }
