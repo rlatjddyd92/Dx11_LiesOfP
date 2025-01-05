@@ -59,6 +59,7 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
             if (CurTrackPos >= 100.f)
             {
                 m_isRimLight = true;
+                m_pMonster->On_PowerAttack(true);
             }
         }
 
@@ -99,6 +100,7 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
 
 void CState_SimonManusP2_Route2::End_State()
 {
+    m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
     m_iRouteTrack = 0;
 }
@@ -191,6 +193,9 @@ void CState_SimonManusP2_Route2::Update_Rimlight(_float fTimeDelta, _double CurT
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x == 0.f && m_vRimLightColor.w == 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }

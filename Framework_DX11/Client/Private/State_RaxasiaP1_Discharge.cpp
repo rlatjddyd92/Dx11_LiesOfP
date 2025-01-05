@@ -54,6 +54,7 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_isRimLight = true;
+            m_pMonster->On_PowerAttack(true);
             m_bStampSound = false;
             m_pMonster->Change_Animation(AN_DISCHARGE, false, 0.1f, 0);
             return;
@@ -100,6 +101,7 @@ void CState_RaxasiaP1_Discharge::End_State()
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
 
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
@@ -228,6 +230,9 @@ void CState_RaxasiaP1_Discharge::Update_Rimlight(_float fTimeDelta, _double CurT
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x == 0.f && m_vRimLightColor.w == 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }

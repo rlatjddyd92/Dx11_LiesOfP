@@ -77,6 +77,8 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN;
                 m_isRimLight = true;
+                m_pMonster->On_PowerAttack(true);
+
                 m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)0.3f);
                 m_bSpeedController = true;
             }
@@ -153,6 +155,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::End_State()
     m_pMonster->Get_Model()->Set_SpeedRatio(AN_SWINGDOWN_R, (double)1);
 
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
@@ -273,6 +276,9 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update_Rimlight(_float fTimeDelta, _do
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x == 0.f && m_vRimLightColor.w == 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }

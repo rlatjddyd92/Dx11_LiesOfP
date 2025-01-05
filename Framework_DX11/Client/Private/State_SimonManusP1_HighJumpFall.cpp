@@ -48,6 +48,7 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
         if (CurTrackPos >= 100.f)
         {
             m_isRimLight = true;
+            m_pMonster->On_PowerAttack(true);
         }
     }
     if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
@@ -91,6 +92,7 @@ void CState_SimonManusP1_HighJumpFall::End_State()
 {
     m_vFlyMoveStack = _vector{0, 0, 0, 0};
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
@@ -161,6 +163,9 @@ void CState_SimonManusP1_HighJumpFall::Update_Rimlight(_float fTimeDelta, _doubl
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x == 0.f && m_vRimLightColor.w == 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
