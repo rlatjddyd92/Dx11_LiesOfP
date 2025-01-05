@@ -42,6 +42,7 @@ private:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };
+	class CEffect_Container* m_pEffect = { nullptr };
 
 private:
 	_bool m_bShadow = { false };
