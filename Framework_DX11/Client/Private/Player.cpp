@@ -156,13 +156,13 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
@@ -878,6 +878,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
 			}
 
+			Decrease_Arm(15.f);
 			m_pFsmCom->Change_State(ARM_BOMB);
 		}
 		else if (ATK_WEAK == iAttackStrength)
@@ -1480,11 +1481,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		{
 			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 사용한다")))
 			{
-				/*dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
-				m_pFsmCom->Change_State(CHEST, pGameObject);*/
-
-				// 12-15 김성용 추가 
-				// 별바라기 상호작용 화면
+				GET_GAMEINTERFACE->Set_Potion_Count_Full();
 				GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_STARGAZER, 0); // 별바라기 화면 열기 
 				GET_GAMEINTERFACE->Set_Now_Interact_Stargezer(pStargazer->Get_CellNum());
 			}
@@ -1967,10 +1964,6 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_SophiaHand::Create(m_pFsmCom, this, SOPHIA_HAND, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaHandEnd::Create(m_pFsmCom, this, SOPHIA_HANDEND, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OpenRaxasiaDoor::Create(m_pFsmCom, this, RAXASIA_DOOR_OPEN, &Desc));
-
-	/* 락사시아 컷신 */
-
-	/* 시몬 마누스 컷신 */
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

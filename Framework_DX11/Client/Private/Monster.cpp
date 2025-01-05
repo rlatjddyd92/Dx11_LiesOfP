@@ -55,7 +55,7 @@ void CMonster::Priority_Update(_float fTimeDelta)
 		m_eStat.bWeakness = true;
 	}
 	
-	if (pPlayer->Get_Player_Stat().vGauge_Hp.x <= 0.f)
+	if (pPlayer->Get_IsDieState())
 	{
 		m_bTargetDead = true;
 	}

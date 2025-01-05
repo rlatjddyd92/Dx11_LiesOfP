@@ -241,6 +241,7 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
             m_isEnd_Teleport = false;
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
 
+            GET_GAMEINTERFACE->Set_Potion_Count_Full();
             GET_GAMEINTERFACE->Fade_In(0.7f);
             GET_GAMEINTERFACE->UIPart_On();
             
@@ -309,7 +310,7 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
             {
                 m_pPlayer->Set_IsRespawnMonster(true);
 
-                //GET_GAMEINTERFACE->Fade_In(0.9f);
+                GET_GAMEINTERFACE->Set_Potion_Count_Full();
 
                 _Vec3 vPos = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
                 //vPos.y += 1.f;

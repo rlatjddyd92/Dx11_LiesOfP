@@ -45,7 +45,10 @@ HRESULT CState_Player_Arm_Counter::Start_State(void* pArg)
 
 void CState_Player_Arm_Counter::Update(_float fTimeDelta)
 {
-    _int iFrmae = m_pPlayer->Get_Frame();
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_isActiveEffect && m_iDeActiveEffectFrame > iFrame)
+        m_pPlayer->Decrease_Arm(5.f * fTimeDelta);
 
     if (End_Check())
     {
@@ -55,7 +58,7 @@ void CState_Player_Arm_Counter::Update(_float fTimeDelta)
     }
 
     Control_Collider();
-    Control_Effect(iFrmae);
+    Control_Effect(iFrame);
 
     if (m_isPlaySound == false)
     {
@@ -105,6 +108,7 @@ void CState_Player_Arm_Counter::Control_Effect(_int iFrame)
     {
         m_pPlayer->DeActive_Effect(CPlayer::EFFECT_ARM_COUNTER_CHARGE);
     }
+
 }
 
 CState_Player_Arm_Counter* CState_Player_Arm_Counter::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

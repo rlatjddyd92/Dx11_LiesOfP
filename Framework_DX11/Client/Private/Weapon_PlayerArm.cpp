@@ -120,8 +120,9 @@ void CWeapon_PlayerArm::OnCollisionEnter(CGameObject* pOther)
 			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
 
 			m_DamagedObjects.push_back(pOther);
-			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
+			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio * m_pGameInstance->Get_Random(0.95,1.1f)))
 			{
+				m_pPlayer->Decrease_Arm(20.f);
 				// 사우드 및 각종 이펙트
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_CounterCharge_Explosion"),
 					m_WorldMatrix.Translation());
