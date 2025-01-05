@@ -1437,7 +1437,7 @@
     </Filter>
     <Filter Include="96.ObjectPool">
       <UniqueIdentifier>{9ee28dfe-06e1-4e56-85f9-09a61cb75164}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\05.Effect\Dissolve_Effect">
       <UniqueIdentifier>{cb27b1cf-8327-4c1b-935d-7b188622fd12}</UniqueIdentifier>
     </Filter>
@@ -2513,16 +2513,10 @@
     <ClInclude Include="..\Public\RebornerMale.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
-      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\UIPage_Achievment.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
-    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
-      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Achievment_DataLine.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
     </ClInclude>
@@ -2654,12 +2648,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\ObjectPool.h">
       <Filter>96.ObjectPool</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Dissolve_Effect.h">
       <Filter>02.GameObjects\05.Effect\Dissolve_Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Dissolve_PowerAttack.h">
       <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_PowerAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
+      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
+      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3700,16 +3700,10 @@
     <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp">
       <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
-      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\UIPage_Achievment.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
-    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
-      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Achievment_DataLine.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
     </ClCompile>
@@ -3844,6 +3838,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Dissolve_PowerAttack.cpp">
       <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_PowerAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
+      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
+      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

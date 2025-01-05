@@ -99,7 +99,13 @@
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Decal_Blood.cpp"
 
 
+#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Effect.cpp"
+
+
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Dissolve_Player_Dead.cpp"
+
+
+#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_PowerAttack.cpp"
 
 
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Raxasia_Dead.cpp"
