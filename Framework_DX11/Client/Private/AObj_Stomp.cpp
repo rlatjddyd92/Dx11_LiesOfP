@@ -146,7 +146,7 @@ HRESULT CAObj_Stomp::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
     
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Stamp"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_PowerAttack_Stamp"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
     
     m_pEffect->Reset_Effects();
