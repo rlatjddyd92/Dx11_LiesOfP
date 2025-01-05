@@ -216,6 +216,8 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 			m_eStat.bWeakness = false;
 			m_eStat.bFatalAttack = true;
 
+			m_pFsmCom->Change_State(GROGY);
+			return;
 		}
 	}
 
@@ -223,7 +225,9 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	{
 		if (!m_bDiscover)
 		{
+			m_bDiscover = true;
 			m_pFsmCom->Change_State(KNOCKBACK);
+			return;
 		}
 	}
 	
