@@ -40,6 +40,13 @@ void CState_CarcassNormal_HeadingMultiple::Update(_float fTimeDelta)
     {
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(95, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CCarcassNormal::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bHeadingSound = false;
             m_bSwingSound = false;

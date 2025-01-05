@@ -22,9 +22,7 @@ HRESULT CState_CarcassBigA_AttackRoute_1::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0, true);
 
-    m_fIdleTime = m_fIdleDuration;
     m_iRouteTrack = 0;
-    m_isDelayed = false;
     m_bSwingSound = false;
     m_bStampSound = false;
 
@@ -36,53 +34,46 @@ void CState_CarcassBigA_AttackRoute_1::Update(_float fTimeDelta)
 
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (!m_isDelayed)
+    if (End_Check())
     {
+        //플레이어 사망시 아이들로 되돌아가기
+        if (m_pMonster->Get_TargetDead())
+        {
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
+        }
+
+        ++m_iRouteTrack;
+        m_bSwingSound = false;
+
         if (m_iRouteTrack == 1)
         {
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
         }
-
-        if (End_Check())
+        else if (m_iRouteTrack >= 2)
         {
-            ++m_iRouteTrack;
-            m_bSwingSound = false;
-
-            if (m_iRouteTrack >= 2)
-            {
-                m_pMonster->Change_State(CCarcassBigA::IDLE);
-                return;
-            }
-            m_fIdleTime = 0.f;
-            m_isDelayed = true;
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
         }
     }
-    else
+
+
+    switch (m_iRouteTrack)
     {
-        m_fIdleTime += fTimeDelta;
-
-        if (m_fIdleTime >= m_fIdleDuration)
+    case 0:
+        if (CurTrackPos >= 60.f && CurTrackPos <= 90.f)
         {
-            m_isDelayed = false;
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
         }
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
-        switch (iDir)
+        break;
+    case 1:
+        if (CurTrackPos >= 65.f && CurTrackPos <= 95.f)
         {
-        case -1:
-            m_pMonster->Change_Animation(30, true, 0.1f);
-            break;
-
-        case 0:
-            m_pMonster->Change_Animation(20, true, 0.1f);
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(31, true, 0.1f);
-            break;
-                
-        default:
-            break;
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
         }
+        break;
+    default:
+        break;
     }
 
     Collider_Check(CurTrackPos);
@@ -94,7 +85,6 @@ void CState_CarcassBigA_AttackRoute_1::End_State()
 {
 
     m_iRouteTrack = 0;
-    m_fIdleTime = 0.f;
 }
 
 _bool CState_CarcassBigA_AttackRoute_1::End_Check()

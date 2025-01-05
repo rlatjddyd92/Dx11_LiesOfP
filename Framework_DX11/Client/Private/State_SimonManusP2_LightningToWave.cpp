@@ -34,6 +34,13 @@ void CState_SimonManusP2_LightningToWave::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 100.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
             ++m_iRouteTrack;
         }

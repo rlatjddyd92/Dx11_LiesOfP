@@ -42,6 +42,12 @@ void CState_CurruptedStrongArm_JumpPunch::Update(_float fTimeDelta)
     {
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bTentaSound = false;

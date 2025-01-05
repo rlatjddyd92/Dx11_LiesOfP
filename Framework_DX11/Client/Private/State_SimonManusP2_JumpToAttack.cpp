@@ -75,6 +75,12 @@ void CState_SimonManusP2_JumpToAttack::Update(_float fTimeDelta)
         switch (m_iRouteTrack)
         {
         case 0:
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             if (m_iCurLastAnim != AN_CANCLEATTACK)
             {

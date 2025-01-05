@@ -5,6 +5,7 @@
 #include "Monster.h"
 #include "Camera.h"
 
+
 CState_CarcassTail_HeadingMultiple::CState_CarcassTail_HeadingMultiple(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -47,6 +48,13 @@ void CState_CarcassTail_HeadingMultiple::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 140)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(44, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bHeadingSound = false;
             if (m_iRouteTrack == 2)

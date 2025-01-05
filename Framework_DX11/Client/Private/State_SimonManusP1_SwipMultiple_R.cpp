@@ -36,6 +36,13 @@ void CState_SimonManusP1_SwipMultiple_R::Update(_float fTimeDelta)
         switch (m_iRouteTrack)
         {
         case 0:
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
             m_bSwing = false;
             m_bSwing_Sound = false;

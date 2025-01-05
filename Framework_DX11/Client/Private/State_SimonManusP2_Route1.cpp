@@ -41,6 +41,12 @@ void CState_SimonManusP2_Route1::Update(_float fTimeDelta)
     case 0:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_ROUTE_MIDDLE, false, 0.0f, 0);
             m_bSwing = false;
@@ -58,6 +64,12 @@ void CState_SimonManusP2_Route1::Update(_float fTimeDelta)
     case 1:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.0f, 0);
             m_bSwing = false;

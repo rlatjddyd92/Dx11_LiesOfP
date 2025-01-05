@@ -77,6 +77,13 @@ void CState_RebornerMale_RapidFire::Update(_float fTimeDelta)
             {
                 if (End_Check())
                 {
+                    if (m_pMonster->Get_TargetDead())
+                    {
+                        m_iRouteTrack = 10;
+                        m_pMonster->SetUp_Animation(AN_LINKED_LAST, false, 0, true);
+                        return;
+                    }
+
                     m_bFire = false;
 
                     ++m_iRouteTrack; 

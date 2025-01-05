@@ -44,6 +44,13 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
     case 0:
         if (CurTrackPos >= 150.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -64,6 +71,13 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
     case 1:
         if (CurTrackPos >= 130.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;

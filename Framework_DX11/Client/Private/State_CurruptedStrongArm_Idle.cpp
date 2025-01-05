@@ -33,6 +33,12 @@ HRESULT CState_CurruptedStrongArm_Idle::Start_State(void* pArg)
 
 void CState_CurruptedStrongArm_Idle::Update(_float fTimeDelta)
 {
+    if (m_pMonster->Get_TargetDead())
+    {
+        m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+        return;
+    }
+
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (!(*m_pDiscover))
     {

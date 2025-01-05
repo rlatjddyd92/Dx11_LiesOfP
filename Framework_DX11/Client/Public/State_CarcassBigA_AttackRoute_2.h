@@ -31,11 +31,6 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _float              m_fIdleTime = {};
-    _float              m_fIdleDuration = { 0.2f };
-
-    _bool               m_isDelayed = { false };
-
     _uint               m_iRouteTrack = {};
 
     _bool               m_bSwingSound = { false };

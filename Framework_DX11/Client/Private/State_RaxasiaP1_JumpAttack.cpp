@@ -73,6 +73,13 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
 
         if (CurTrackPos >= fTime)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;

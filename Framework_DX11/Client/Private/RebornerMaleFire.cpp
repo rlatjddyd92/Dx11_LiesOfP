@@ -194,9 +194,12 @@ void CRebornerMaleFire::Resetting()
 	m_eStat.fAtk = 5.f;
 
 	m_eStat.bWeakness = false;
+	m_eStat.bFatalAttack = false;
 
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 80.f;
+
+	m_bDieState = false;
 
 	m_bDiscover = false;
 	m_bFirstMeetCheck = false;

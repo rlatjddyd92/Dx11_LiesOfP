@@ -1240,7 +1240,6 @@ void CRaxasia::ChangePhase()
 	m_eStat.fGrogyPoint = 0.f;
 
 	m_bDieState = false;
-	m_isDead = false;
 	m_isChanged = true;
 }
 

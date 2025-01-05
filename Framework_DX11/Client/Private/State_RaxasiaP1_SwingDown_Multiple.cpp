@@ -55,6 +55,13 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
         }
         if (CurTrackPos >= 80.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStamp = false;
@@ -73,6 +80,13 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 70.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             if (m_iRouteTrack == 7)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN;

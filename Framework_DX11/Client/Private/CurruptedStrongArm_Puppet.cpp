@@ -167,9 +167,12 @@ void CCurruptedStrongArm_Puppet::Resetting()
 	m_eStat.fAtk = 260.f;
 
 	m_eStat.bWeakness = false;
+	m_eStat.bFatalAttack = false;
 
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 130.f;
+
+	m_bDieState = false;
 
 	m_bDiscover = false;
 	m_bFirstMeetCheck = false;

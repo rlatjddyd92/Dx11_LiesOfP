@@ -75,6 +75,13 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
     case 0://1
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -93,6 +100,13 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
     case 1://23
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -119,6 +133,13 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
     case 2://45
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -145,6 +166,13 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
     case 3://67
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -157,6 +185,13 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
     case 4://89
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -169,6 +204,13 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
     case 5://10 11
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;

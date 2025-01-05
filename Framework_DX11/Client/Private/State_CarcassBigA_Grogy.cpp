@@ -27,16 +27,13 @@ HRESULT CState_CarcassBigA_Grogy::Start_State(void* pArg)
 
 void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
 {
-
-    _bool bCheck = End_Check();
-
     switch (m_iAnimCnt)
     {
     case 0:
-        if (bCheck)
+        if (End_Check())
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, 0.f);
+            m_pMonster->Change_Animation(AN_GROGY_LOOP, true, 0.f);
         }
         break;
 
@@ -44,14 +41,14 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
         if (m_fGrogyTime >= m_fGrogyDuration)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, false, 0.f);
+            m_pMonster->Change_Animation(AN_GROGY_END, false, 0.f);
         }
         else
             m_fGrogyTime += fTimeDelta;
         break;
 
     case 2:
-        if (bCheck)
+        if (End_Check())
         {
             m_iAnimCnt = 0;
             m_pMonster->Change_State(CCarcassBigA::IDLE);

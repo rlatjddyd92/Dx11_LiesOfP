@@ -177,6 +177,9 @@ void CCarcassNormal::Resetting()
 	m_eStat.fMaxGrogyPoint = 80.f;
 
 	m_eStat.bWeakness = false;
+	m_eStat.bFatalAttack = false;
+
+	m_bDieState = false;
 
 	m_bDiscover = false;
 	m_bFirstMeetCheck = false;

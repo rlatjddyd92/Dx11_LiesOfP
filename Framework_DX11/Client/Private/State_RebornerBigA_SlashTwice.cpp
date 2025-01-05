@@ -41,6 +41,13 @@ void CState_RebornerBigA_SlashTwice::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 80.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(51, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bSwing = false;

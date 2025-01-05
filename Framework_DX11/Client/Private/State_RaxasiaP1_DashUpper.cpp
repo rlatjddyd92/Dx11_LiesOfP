@@ -84,6 +84,13 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 1:
         if (CurTrackPos >= 130.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bStampSound = false;
@@ -102,6 +109,13 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 2:
         if (CurTrackPos >= 70.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bStampSound = false;
@@ -124,6 +138,13 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 3:
         if (CurTrackPos >= 70.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bStampSound = false;

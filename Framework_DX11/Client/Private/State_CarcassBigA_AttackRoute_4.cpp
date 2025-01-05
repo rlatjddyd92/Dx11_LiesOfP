@@ -28,9 +28,18 @@ HRESULT CState_CarcassBigA_AttackRoute_4::Start_State(void* pArg)
 
 void CState_CarcassBigA_AttackRoute_4::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (End_Check())
     {
+        if (m_pMonster->Get_TargetDead())
+        {
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
+        }
+
         ++m_iRouteTrack;
+        m_bSwingSound = false;
         if (m_iRouteTrack == 1)
         {
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f);
@@ -41,7 +50,6 @@ void CState_CarcassBigA_AttackRoute_4::Update(_float fTimeDelta)
             return;
         }
     }
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     if (m_iRouteTrack == 0 && CurTrackPos >= 55.f && CurTrackPos <= 140.f)
     {
@@ -51,15 +59,14 @@ void CState_CarcassBigA_AttackRoute_4::Update(_float fTimeDelta)
     }
     else
     {
-
         if (CurTrackPos <= 30.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
         }
     }
 
-
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 

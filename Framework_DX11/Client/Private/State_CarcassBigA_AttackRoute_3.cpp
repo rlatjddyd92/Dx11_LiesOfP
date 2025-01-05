@@ -13,7 +13,6 @@ CState_CarcassBigA_AttackRoute_3::CState_CarcassBigA_AttackRoute_3(CFsm* pFsm, C
 HRESULT CState_CarcassBigA_AttackRoute_3::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 1.f;
     //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
@@ -23,7 +22,6 @@ HRESULT CState_CarcassBigA_AttackRoute_3::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
-    m_fIdleTime = m_fIdleDuration;
     m_bSwingSound = false;
     return S_OK;
 }
@@ -32,53 +30,45 @@ void CState_CarcassBigA_AttackRoute_3::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (!m_isDelayed)
+    if (End_Check())
     {
+        if (m_pMonster->Get_TargetDead())
+        {
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
+        }
+
+        ++m_iRouteTrack;
+        m_bSwingSound = false;
+
         if (m_iRouteTrack == 1)
         {
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
         }
-
-        if (End_Check())
+        else if (m_iRouteTrack >= 2)
         {
-            ++m_iRouteTrack;
-            m_bSwingSound = false;
-
-            if (m_iRouteTrack >= 2)
-            {
-                m_pMonster->Change_State(CCarcassBigA::IDLE);
-                return;
-            }
-            m_fIdleTime = 0.f;
-            m_isDelayed = true;
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
         }
     }
-    else
+
+
+    switch (m_iRouteTrack)
     {
-        m_fIdleTime += fTimeDelta;
-
-        if (m_fIdleTime >= m_fIdleDuration)
+    case 0:
+        if (CurTrackPos <= 35.f)
         {
-            m_isDelayed = false;
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
         }
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
-        switch (iDir)
+        break;
+    case 1:
+        if (CurTrackPos >= 40.f && CurTrackPos <= 75.f)
         {
-        case -1:
-            m_pMonster->Change_Animation(30, true, 0.1f);
-            break;
-
-        case 0:
-            m_pMonster->Change_Animation(20, true, 0.1f);
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(31, true, 0.1f);
-            break;
-
-        default:
-            break;
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
         }
+        break;
+    default:
+        break;
     }
 
     Collider_Check(CurTrackPos);
