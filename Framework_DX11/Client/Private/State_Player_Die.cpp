@@ -104,7 +104,7 @@ void CState_Player_Die::Update(_float fTimeDelta)
             //GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
             m_isFadeOut = true;
         }
-        else if (m_fDieTime > 1.5f && m_isFadeOut)
+        else if (m_isFadeOut)
         {
             CState_Player_Teleport::TELEPORT_DESC Desc{};
             Desc.isDie = true;
