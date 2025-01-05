@@ -152,11 +152,11 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
@@ -207,7 +207,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	if (m_pTargetMonster && m_pTargetMonster->Get_IsDieState())
 	{
 		m_isLockOn = false;
-		Safe_Release(m_pTargetMonster);
+		//Safe_Release(m_pTargetMonster);
+		m_pTargetMonster = nullptr;
 	}
 
 	if(nullptr != m_pWeapon[m_eWeaponType])
@@ -655,46 +656,44 @@ void CPlayer::Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
 
 void CPlayer::LockOnOff()
 {
-	if (!m_isLockOn && !m_isPlayingCutscene)
+	if (m_isLockOn || m_isPlayingCutscene || m_pFsmCom->Get_CurrentState() == DIE 
+		|| m_pFsmCom->Get_CurrentState() == TELEPORT || m_bDieState)
 	{
-		m_pTargetMonster = Find_TargetMonster();
-		if (nullptr == m_pTargetMonster)
+		m_isLockOn = false;
+
+		if (m_pTargetMonster)
 		{
-			// 카메라를 플레이어 뒤로 회전
+			Safe_Release(m_pTargetMonster);
+			m_pTargetMonster = nullptr;
+		}
+
+		return;
+	}
+
+
+	if (!m_isLockOn)
+	{
+		if (m_pTargetMonster)
+		{
+			Safe_Release(m_pTargetMonster);
+			m_pTargetMonster = nullptr;
+		}
+
+		m_pTargetMonster = Find_TargetMonster();
+		if (!m_pTargetMonster)
+			return;
+
+		_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		_float fLength = (vTargetPos - vPlayerPos).Length();
+		if (fLength < 20.f)
+		{
+			Safe_AddRef(m_pTargetMonster);
+			m_isLockOn = true;
 		}
 		else
 		{
-			Safe_AddRef(m_pTargetMonster);
-
-			_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-			_float fLength = (vTargetPos - vPlayerPos).Length();
-			if (fLength < 20.f)
-			{
-				m_isLockOn = true;
-			}
-			else
-			{
-				Safe_Release(m_pTargetMonster);
-				m_pTargetMonster = nullptr;
-				m_isLockOn = false;
-			}
-		}
-	}
-	else
-	{
-		Safe_Release(m_pTargetMonster);
-		m_pTargetMonster = nullptr;
-		m_isLockOn = false;
-	}
-
-
-	if (m_isLockOn)
-	{
-		if (m_pTargetMonster->Get_IsDieState() || m_pFsmCom->Get_CurrentState() == DIE)
-		{
-			Safe_Release(m_pTargetMonster);
 			m_pTargetMonster = nullptr;
 			m_isLockOn = false;
 		}
@@ -944,7 +943,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	else if (m_isGuard)	// 가드 상태
 	{
 		//퍼펙트 가드
-		if (m_fGuardTime < 0.17f)
+		if (m_fGuardTime < 0.18f)
 		{
 			if (nullptr != pAttacker)
 			{
@@ -953,14 +952,14 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				if (strObjecTag == TEXT("Monster"))
 				{
 					CMonster* pMonster = dynamic_cast<CMonster*>(pAttacker);
-					pMonster->Increase_GroggyPoint(10.f);
+					pMonster->Increase_GroggyPoint(50.f);
 
 				}
 				else if (strObjecTag == TEXT("MonsterWeapon"))
 				{
 					CWeapon* pWeapon = dynamic_cast<CWeapon*>(pAttacker);
 					CMonster* pMonster = pWeapon->Get_Monster();
-					pMonster->Increase_GroggyPoint(10.f);
+					pMonster->Increase_GroggyPoint(50.f);
 				}
 			}
 

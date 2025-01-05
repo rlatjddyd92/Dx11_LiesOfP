@@ -401,6 +401,7 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = m_eStat.fAtk;
+	Desc.pOWner = this;
 
 	m_pColliderObject[TYPE_HAND_LEFT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

@@ -192,11 +192,11 @@ HRESULT CDecal_Blood::Ready_Components()
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_TrailFlow_01_C_RSW"),
-		TEXT("Com_Texture4"), reinterpret_cast<CComponent**>(&m_pTextureCom_Diffuse[3]))))
+		TEXT("Com_Texture4"), reinterpret_cast<CComponent**>(&m_pTextureCom_Diffuse[4]))))
 		return E_FAIL;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_TrailFlow_01_C_RSW"),		//마스크 텍스쳐
-		TEXT("Com_NormalTexture4"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal[3]))))
+		TEXT("Com_NormalTexture4"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal[4]))))
 		return E_FAIL;
 
 	/* FOR.Com_VIBuffer */
