@@ -80,6 +80,9 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 		if (i == _int(PART_GROUP::GROUP_POTION_FILL))
 			continue;
 
+		/*if ((i >= _int(PART_GROUP::GROUP_WEAPON_DURABLE_FRAME)) && (i <= _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)))
+			continue;*/
+
 		__super::UpdatePart_ByControl(m_vec_Group_Ctrl[i]);
 	}
 

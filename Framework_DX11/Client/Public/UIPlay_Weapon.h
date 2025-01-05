@@ -36,14 +36,13 @@ public:
 private:
 	void Switch_Weapon();
 	void Switch_Mode();
-	void Set_Fable();
 
 	void Start_WeaponCell_Change(_float fTimeDelta);
 	void Start_FableGauge_Use(_float fTimeDelta);
 
 	void Update_DurableGauge(_float fTimeDelta);
 	void Update_WeaponCell_Fx(_float fTimeDelta);
-	void Update_FableGauge(_float fTimeDelta);
+	void Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now);
 
 
 private:
@@ -52,7 +51,11 @@ private:
 	CPlayer::WEAPON_TYPE m_eType_Now = CPlayer::WEAPON_TYPE::WEP_END;
 
 	_int iNow_Fable_Count = 0;
+	_int iNow_SelectWeapon = 0;
+	_int m_iWeapon_Equip_Symbol = 0;
 
+	_bool m_bIsBladeWhite_Active = false;
+	_Vec2 m_vFableWhite_ActionTime = { 0.f,0.5f };
 
 
 

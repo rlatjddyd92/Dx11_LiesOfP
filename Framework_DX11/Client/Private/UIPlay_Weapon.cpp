@@ -79,6 +79,9 @@ CHECK_MOUSE CUIPlay_Weapon::Check_Page_Action(_float fTimeDelta)
 
 void CUIPlay_Weapon::Initialize_Weapon_Component(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
+	m_vecPart = vecOrigin;
+
+
 	for (auto& iter : vecOrigin)
 	{
 		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_CENTER))
@@ -139,20 +142,29 @@ void CUIPlay_Weapon::Initialize_Weapon_Component(vector<struct CUIPage::UIPART_I
 			m_vecSharedPointer_HandleFable_KeySet_Combine.push_back(iter);
 	}
 
+	m_iWeapon_Equip_Symbol = m_pSharedPointer_SelectNum->iTexture_Index;
 
+	for (auto& iter : m_vecSharedPointer_BladeFable_KeySet_F)
+		iter->bRender = true;
+	for (auto& iter : m_vecSharedPointer_BladeFable_KeySet_Combine)
+		iter->bRender = false;
+	for (auto& iter : m_vecSharedPointer_HandleFable_KeySet_F)
+		iter->bRender = false;
+	for (auto& iter : m_vecSharedPointer_HandleFable_KeySet_Combine)
+		iter->bRender = true;
 }
 
 void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
 {
-	_int iWeapon = GET_GAMEINTERFACE->Get_Weapon();
+	iNow_SelectWeapon = GET_GAMEINTERFACE->Get_Weapon();
 
-	if (iWeapon == 0)
+	if (iNow_SelectWeapon == 0)
 	{
 		m_pItem_Blade = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
 		m_pItem_Handle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0);
 		m_pSharedPointer_SelectNum->iTexture_Index;
 	}
-	else if (iWeapon == 1)
+	else if (iNow_SelectWeapon == 1)
 	{
 		m_pItem_Blade = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1);
 		m_pItem_Handle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1);
@@ -167,12 +179,13 @@ void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
 	{
 		if (iNow_Fable_Count > iFable_Count_Now)
 			Start_FableGauge_Use(fTimeDelta);
+
+		iNow_Fable_Count = iFable_Count_Now;
 	}
 
-	Set_Fable();
 	Update_DurableGauge(fTimeDelta);
 	Update_WeaponCell_Fx(fTimeDelta);
-	Update_FableGauge(fTimeDelta);
+	Update_FableGauge(fTimeDelta, iFable_Count_Now);
 }
 
 void CUIPlay_Weapon::Switch_Weapon()
@@ -187,23 +200,7 @@ void CUIPlay_Weapon::Switch_Weapon()
 		m_pSharedPointer_NormalWeapon_Handle->iTexture_Index = m_pItem_Handle->iTexture_Index;
 	}
 
-
-
-
-
-	UPART* m_pSharedPointer_Center = { nullptr };
-	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;
-	UPART* m_pSharedPointer_DurableGauge_Fill = { nullptr };
-
-	vector<UPART*> m_vecSharedPointer_NormalWeapon_Static;
-	vector<UPART*> m_vecSharedPointer_NormalWeapon_Fx;
-	UPART* m_pSharedPointer_NormalWeapon_Blade = { nullptr };
-	UPART* m_pSharedPointer_NormalWeapon_Handle = { nullptr };
-
-	vector<UPART*> m_vecSharedPointer_SpecialWeapon_Static;
-	UPART* m_pSharedPointer_SpecialWeapon = { nullptr };
-
-	UPART* m_pSharedPointer_SelectNum = { nullptr };
+	m_pSharedPointer_SelectNum->iTexture_Index = m_iWeapon_Equip_Symbol + iNow_SelectWeapon;
 }
 
 void CUIPlay_Weapon::Switch_Mode()
@@ -236,10 +233,6 @@ void CUIPlay_Weapon::Switch_Mode()
 	}
 }
 
-void CUIPlay_Weapon::Set_Fable()
-{
-}
-
 void CUIPlay_Weapon::Start_WeaponCell_Change(_float fTimeDelta)
 {
 	_bool bSwitchMode = false;
@@ -257,18 +250,138 @@ void CUIPlay_Weapon::Start_WeaponCell_Change(_float fTimeDelta)
 
 void CUIPlay_Weapon::Start_FableGauge_Use(_float fTimeDelta)
 {
+	if (KEY_HOLD(KEY::LSHIFT))
+		m_bIsBladeWhite_Active = false;
+	else
+		m_bIsBladeWhite_Active = true;
+
+	m_vFableWhite_ActionTime.x = m_vFableWhite_ActionTime.y;
 }
 
 void CUIPlay_Weapon::Update_DurableGauge(_float fTimeDelta)
 {
+	_float fDurable = m_pItem_Blade->fDurable_Now / m_pItem_Blade->fDurable_Max;
+
+	m_pSharedPointer_DurableGauge_Fill->fRatio = fDurable;
 }
 
 void CUIPlay_Weapon::Update_WeaponCell_Fx(_float fTimeDelta)
 {
 }
 
-void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta)
+void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)
 {
+	if (m_eType_Now == CPlayer::WEP_SCISSOR)
+	{
+		for (auto& iter : m_vecSharedPointer_BladeFable_Side_Frame)
+			iter->bRender = false;
+		for (auto& iter : m_vecSharedPointer_HandleFable_Side_Frame)
+			iter->bRender = true;
+	}
+	else
+	{
+		for (auto& iter : m_vecSharedPointer_BladeFable_Side_Frame)
+			iter->bRender = true;
+		for (auto& iter : m_vecSharedPointer_HandleFable_Side_Frame)
+			iter->bRender = false;
+	}
+
+	if (iFable_Count_Now >= 1)
+	{
+		for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+			iter->bRender = true;
+		for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+			iter->bRender = true;
+	}
+	else
+	{
+		for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+			iter->bRender = false;
+		for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+			iter->bRender = false;
+	}
+
+	for (auto& iter : m_vecSharedPointer_BladeFable_Side_Fill)
+		iter->bRender = false;
+	for (auto& iter : m_vecSharedPointer_HandleFable_Side_Fill)
+		iter->bRender = false;
+
+	if (iFable_Count_Now >= 3)
+	{
+		if (m_eType_Now != CPlayer::WEP_SCISSOR)
+		{
+			for (auto& iter : m_vecSharedPointer_BladeFable_Side_Fill)
+				iter->bRender = true;
+		}
+		else
+		{
+			for (auto& iter : m_vecSharedPointer_HandleFable_Side_Fill)
+				iter->bRender = true;
+		}
+	}
+	
+	if (m_vFableWhite_ActionTime.x > 0.f)
+		m_vFableWhite_ActionTime.x -= fTimeDelta;
+		
+	if (m_vFableWhite_ActionTime.x < 0.f)
+		m_vFableWhite_ActionTime.x = 0.f;
+
+	for (auto& iter : m_vecSharedPointer_BladeFable_Side_White)
+		iter->bRender = false;
+	for (auto& iter : m_vecSharedPointer_BladeFable_Center_White)
+		iter->bRender = false;
+	for (auto& iter : m_vecSharedPointer_HandleFable_Side_White)
+		iter->bRender = false;
+	for (auto& iter : m_vecSharedPointer_HandleFable_Center_White)
+		iter->bRender = false;
+
+	if (m_vFableWhite_ActionTime.x > 0.f)
+	{
+		_float fRatio = m_vFableWhite_ActionTime.x / m_vFableWhite_ActionTime.y;
+
+		if ((m_eType_Now == CPlayer::WEP_SCISSOR) && (m_bIsBladeWhite_Active == true))
+		{
+			for (auto& iter : m_vecSharedPointer_BladeFable_Center_White)
+			{
+				iter->bRender = true;
+				iter->fRatio = fRatio;
+			}
+		}
+		else if ((m_eType_Now == CPlayer::WEP_SCISSOR) && (m_bIsBladeWhite_Active == false))
+		{
+			for (auto& iter : m_vecSharedPointer_HandleFable_Side_White)
+			{
+				iter->bRender = true;
+				iter->fRatio = fRatio;
+			}
+			for (auto& iter : m_vecSharedPointer_HandleFable_Center_White)
+			{
+				iter->bRender = true;
+				iter->fRatio = fRatio;
+			}
+		}
+		else if ((m_eType_Now != CPlayer::WEP_SCISSOR) && (m_bIsBladeWhite_Active == true))
+		{
+			for (auto& iter : m_vecSharedPointer_BladeFable_Side_White)
+			{
+				iter->bRender = true;
+				iter->fRatio = fRatio;
+			}
+			for (auto& iter : m_vecSharedPointer_BladeFable_Center_White)
+			{
+				iter->bRender = true;
+				iter->fRatio = fRatio;
+			}
+		}
+		if ((m_eType_Now != CPlayer::WEP_SCISSOR) && (m_bIsBladeWhite_Active == false))
+		{
+			for (auto& iter : m_vecSharedPointer_HandleFable_Center_White)
+			{
+				iter->bRender = true;
+				iter->fRatio = fRatio;
+			}
+		}
+	}
 }
 
 CUIPlay_Weapon* CUIPlay_Weapon::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

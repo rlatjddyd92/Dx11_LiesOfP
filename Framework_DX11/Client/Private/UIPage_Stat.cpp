@@ -180,6 +180,8 @@ void CUIPage_Stat::Action_LevelUp(_float fTimeDelta)
 
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NEED))->strText = to_wstring(pOrigin.iErgo_LevelUp * m_iUsing_Point_Now);
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NOW))->strText = to_wstring(iErgo);
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_DEPOSIT_NUM_0))->strText = to_wstring(iErgo);
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_DEPOSIT_NUM_1))->strText = TEXT("0");
 
 	m_bActive_LevelUp_Button = false;
 
