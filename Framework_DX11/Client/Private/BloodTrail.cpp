@@ -130,6 +130,11 @@ TWOPOINT CBloodTrail::Get_PointPos(_uint iIndex)
 	return m_Effect[m_eType]->Get_PointPos(iIndex);
 }
 
+_bool CBloodTrail::IsFalling()
+{
+	return m_Effect[m_eType]->IsFalling();
+}
+
 void CBloodTrail::Create_TrailDecal()
 {
 	for (_uint i = 0; i < m_Effect[m_eType]->Get_NumInstance(); ++i)
