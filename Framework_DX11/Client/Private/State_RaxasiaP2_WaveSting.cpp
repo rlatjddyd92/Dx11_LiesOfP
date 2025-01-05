@@ -220,6 +220,7 @@ void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderWave"), &Desc);
 
+                m_bWave = true;
             }
         }
         else
