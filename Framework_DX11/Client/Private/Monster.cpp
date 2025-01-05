@@ -250,7 +250,7 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 		}
 	}
 	
-	if (m_eStat.bFatalAttack && iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
 	{
 		m_bFatalAttacked = true;
 		m_eStat.bFatalAttack = false;
