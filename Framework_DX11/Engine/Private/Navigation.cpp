@@ -359,11 +359,10 @@ _float CNavigation::Get_CellPosY(CTransform* pTransform, _float fOffset)
 
 _float CNavigation::Get_CellPosY(_Vec3 vPos, _float fOffset)
 {
-	if (m_iCurrentCellIndex < 0 || m_iCurrentCellIndex >= m_Cells.size())
-		return 100.f;
-
 	_vector      vLocalPos = XMVector3TransformCoord(vPos, XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
 
+	Research_Cell(vPos);
+	
 	_vector vPointA = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_A);
 	_vector vPointB = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_B);
 	_vector vPointC = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_C);

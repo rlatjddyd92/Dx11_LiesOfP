@@ -54,8 +54,11 @@ private:
 private:
 	void	Create_TrailDecal();
 
+	_uint	m_iTrailPointCount = {};
+	vector<_bool> m_IsCreatDecals;
+
 private:
-	HRESULT Reayd_Navigation();
+	HRESULT Ready_Navigation();
 	HRESULT Ready_Effect();
 
 public:

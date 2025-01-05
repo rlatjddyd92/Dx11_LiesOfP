@@ -109,6 +109,8 @@
 #include "GameInterface_Controller.h"
 
 #include "Dissolve_Player_Dead.h"
+
+#include "ObjectPool.h"
 #include "Decal_Blood.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -159,8 +161,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
@@ -298,16 +300,14 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		//for (_uint i = 0; i < 30; ++i)
-		//{
-		//	_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		//	vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
-		//	vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
+		for (_uint i = 0; i < 30; ++i)
+		{
+			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
+			vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
 
-		//	CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
-		//	DEsc.vPos = vPlayerPos;
-		//	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
-		//}
+			CObjectPool<CDecal_Blood>::Get_GameObject()->Active_Random(vPlayerPos);
+		}
 
 		// late call
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));

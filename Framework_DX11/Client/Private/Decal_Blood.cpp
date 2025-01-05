@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "ObjectPool.h"
+
 CDecal_Blood::CDecal_Blood(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -49,7 +51,10 @@ void CDecal_Blood::Update(_float fTimeDelta)
 		m_fCurrentSize -= (m_fShrinkSpeed * fTimeDelta);
 
 		if (m_fCurrentSize <= 0.f)
+		{
+			CObjectPool<CDecal_Blood>::Return_GameObject(this);
 			m_isActive = false;
+		}
 		else
 			m_pTransformCom->Set_Scaled(m_fCurrentSize, m_fCurrentSize, m_fCurrentSize);
 	}
@@ -85,20 +90,15 @@ HRESULT CDecal_Blood::Render()
 
 	if (FAILED(m_pTextureCom_Diffuse[m_eType]->Bind_ShadeResource(m_pShaderCom, "g_DeacalDiffuseTexture", 0)))
 		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("bNormal", &m_isNormal, sizeof(_bool))))
+	if (FAILED(m_pTextureCom_Normal[m_eType]->Bind_ShadeResource(m_pShaderCom, "g_DeacalNormalTexture", 0)))
 		return E_FAIL;
 
 	_bool bFalse = false;
 	if (FAILED(m_pShaderCom->Bind_RawValue("bARM", &bFalse, sizeof(_bool))))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("bUseWorldColor", &m_bUseWorldColor, sizeof(_bool))))
-		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("vColor", &m_vColor, sizeof(_Vec3))))
 		return E_FAIL;
 
-	if (FAILED(m_pTextureCom_Normal[m_eType]->Bind_ShadeResource(m_pShaderCom, "g_DeacalNormalTexture", 0)))
-		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
@@ -108,7 +108,11 @@ HRESULT CDecal_Blood::Render()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_ARM"), "g_ARMTexture")))
 		return E_FAIL;
 
-	m_pShaderCom->Begin(2);
+	if(!m_isTrailDecal)
+		m_pShaderCom->Begin(2);
+	else
+		m_pShaderCom->Begin(3);
+
 
 	m_pVIBufferCom->Bind_Buffers();
 
@@ -117,10 +121,10 @@ HRESULT CDecal_Blood::Render()
 	return S_OK;
 }
 
-void CDecal_Blood::Active(_Vec3 vPos)
+void CDecal_Blood::Active_Random(_Vec3 vPos)
 {
 	m_fCurrentSize = m_pGameInstance->Get_Random(0.3f, 1.f);
-	m_fShrinkSpeed = m_pGameInstance->Get_Random(0.3f, 0.4f);
+	m_fShrinkSpeed = m_pGameInstance->Get_Random(0.2f, 0.3f);
 	m_fRenderTime = m_pGameInstance->Get_Random(1.f, 2.f);
 	m_pTransformCom->Set_Scaled(m_fCurrentSize, m_fCurrentSize, m_fCurrentSize);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
@@ -128,6 +132,22 @@ void CDecal_Blood::Active(_Vec3 vPos)
 	m_fRenderTimer = 0.f;
 	m_eType = (BLOOD_TYPE)(rand() % 4);
 
+	m_isTrailDecal = false;
+	m_isActive = true;
+}
+
+void CDecal_Blood::Active_Trail(_Vec3 vPos)
+{
+	m_fCurrentSize = 1.f;
+	m_fShrinkSpeed = 0.25f;
+	m_fRenderTime = 1.5f;
+	m_pTransformCom->Set_Scaled(m_fCurrentSize, m_fCurrentSize, m_fCurrentSize);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
+
+	m_fRenderTimer = 0.f;
+	m_eType = TYPE_TRAIL;
+
+	m_isTrailDecal = true;
 	m_isActive = true;
 }
 
@@ -171,6 +191,13 @@ HRESULT CDecal_Blood::Ready_Components()
 		TEXT("Com_NormalTexture3"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal[3]))))
 		return E_FAIL;
 
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_TrailFlow_01_C_RSW"),
+		TEXT("Com_Texture4"), reinterpret_cast<CComponent**>(&m_pTextureCom_Diffuse[3]))))
+		return E_FAIL;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_TrailFlow_01_C_RSW"),		//마스크 텍스쳐
+		TEXT("Com_NormalTexture4"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal[3]))))
+		return E_FAIL;
 
 	/* FOR.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"),

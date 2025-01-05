@@ -88,6 +88,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     else if (m_pPlayer->Key_Tab(KEY::R))
     {
         SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+        //_uint iItemCount = GET_GAMEINTERFACE->Get_Now_Select_Item_Count()
 
         if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
         {

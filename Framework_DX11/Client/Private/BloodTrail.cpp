@@ -6,6 +6,7 @@
 #include "Trail_Effect_TP.h"
 
 #include "ObjectPool.h"
+#include "Decal_Blood.h"
 
 CBloodTrail::CBloodTrail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -30,6 +31,9 @@ HRESULT CBloodTrail::Initialize(void* pArg)
 		return E_FAIL;
 
 	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
+	if(FAILED(Ready_Navigation()))
 		return E_FAIL;
 
 	m_eType = pDesc->eStartType;
@@ -78,7 +82,7 @@ void CBloodTrail::Late_Update(_float fTimeDelta)
 		return;
 
 	m_Effect[m_eType]->Late_Update(fTimeDelta);
-
+	Create_TrailDecal();
 
 	_bool isEffectDead = m_Effect[m_eType]->Get_Dead();
 	if (true == isEffectDead)
@@ -102,6 +106,13 @@ void CBloodTrail::Set_Weapon(WEAPON_TYPE eType)
 			m_Effect[i]->Set_Loop(true);
 		else
 			m_Effect[i]->Set_Loop(false);
+	}
+
+	m_iTrailPointCount = m_Effect[m_eType]->Get_NumInstance();
+	m_IsCreatDecals.resize(m_iTrailPointCount);
+	for (_uint i = 0; i < m_iTrailPointCount; ++i)
+	{
+		m_IsCreatDecals[i] = false;
 	}
 }
 
@@ -132,20 +143,28 @@ TWOPOINT CBloodTrail::Get_PointPos(_uint iIndex)
 
 void CBloodTrail::Create_TrailDecal()
 {
-	for (_uint i = 0; i < m_Effect[m_eType]->Get_NumInstance(); ++i)
+	for (_uint i = 0; i < m_iTrailPointCount; ++i)
 	{
+		if (m_IsCreatDecals[i])
+			continue;
+		
 		TWOPOINT tTwoPoint = m_Effect[m_eType]->Get_PointPos(i);
 
 		_Vec3 vCenterPos = (tTwoPoint.vBottom + tTwoPoint.vTop) * 0.5f;
+		_float fGroundY = m_pNavigationCom->Get_CellPosY(vCenterPos);
 
-		if (fabs(vCenterPos.y) - fabs(m_pNavigationCom->Get_CellPosY(vCenterPos)) <= 0.3f)
+		_float fDiff = fabs(vCenterPos.y) - fabs(fGroundY);
+		if (fabs(fDiff) <= 1.2f)
 		{
-			//µ¥Ä® »ý¼º
+			m_IsCreatDecals[i] = true;
+			vCenterPos.y = fGroundY;
+
+			CObjectPool<CDecal_Blood>::Get_GameObject()->Active_Random(vCenterPos);
 		}
 	}
 }
 
-HRESULT CBloodTrail::Reayd_Navigation()
+HRESULT CBloodTrail::Ready_Navigation()
 {
 	/* For.Com_Navigation */
 	CNavigation::NAVIGATION_DESC			NaviDesc{};
