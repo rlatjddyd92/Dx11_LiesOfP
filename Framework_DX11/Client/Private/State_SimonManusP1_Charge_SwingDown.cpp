@@ -69,6 +69,21 @@ void CState_SimonManusP1_Charge_SwingDown::Collider_Check(_double CurTrackPos)
 
 void CState_SimonManusP1_Charge_SwingDown::Effect_Check(_double CurTrackPos)
 {
+    if (m_bCharging)
+    {
+        if (CurTrackPos >= 10.f)//Â÷Â¡ 
+        {
+            //Â÷Áö ÀÌÆåÆ® set loop
+            m_pMonster->Active_Effect(CSimonManus::P1_CHARGEHAMMER);
+
+            m_bCharging = false;
+        }
+    }
+    else if (CurTrackPos >= 220.f)
+    {
+        m_pMonster->DeActive_Effect(CSimonManus::P1_CHARGEHAMMER);
+    }
+
     if (m_bChargeSwing)
     {
         if (CurTrackPos >= 240.f)

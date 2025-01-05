@@ -35,11 +35,11 @@ HRESULT CState_RebornerBigA_HitFatal::Start_State(void* pArg)
 
     if (fDirCheck.y < 0)
     {
-        m_iDirCnt = DIR::DIR_BEHIND;
+        m_iDirCnt = DIR::DIR_FRONT;
     }
     else
     {
-        m_iDirCnt = DIR::DIR_FRONT;
+        m_iDirCnt = DIR::DIR_BEHIND;
     }
 
     m_pMonster->Change_Animation(AN_FATAL_START, false, 0.f);

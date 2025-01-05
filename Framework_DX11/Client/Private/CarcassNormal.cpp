@@ -94,7 +94,6 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 void CCarcassNormal::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
-
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
 		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -102,7 +101,6 @@ void CCarcassNormal::Priority_Update(_float fTimeDelta)
 		m_pFsmCom->Change_State(DIE);
 
 		m_pRigidBodyCom->Set_Kinematic(false);
-		//GET_GAMEINTERFACE.
 	}
 }
 
