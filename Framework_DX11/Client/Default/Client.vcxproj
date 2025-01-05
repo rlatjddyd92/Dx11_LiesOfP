@@ -345,6 +345,8 @@
     <ClInclude Include="..\Public\UIPart_3D.h" />
     <ClInclude Include="..\Public\UIPart_3D_Normal.h" />
     <ClInclude Include="..\Public\UIPart_3D_Path.h" />
+    <ClInclude Include="..\Public\UIPlay_Component.h" />
+    <ClInclude Include="..\Public\UIPlay_Weapon.h" />
     <ClInclude Include="..\Public\UITutorial_Guide.h" />
     <ClInclude Include="..\Public\UITutorial_Info.h" />
     <ClInclude Include="..\Public\UITutorial_Popup.h" />
@@ -738,6 +740,8 @@
     <ClCompile Include="..\Private\UIPart_3D.cpp" />
     <ClCompile Include="..\Private\UIPart_3D_Normal.cpp" />
     <ClCompile Include="..\Private\UIPart_3D_Path.cpp" />
+    <ClCompile Include="..\Private\UIPlay_Component.cpp" />
+    <ClCompile Include="..\Private\UIPlay_Weapon.cpp" />
     <ClCompile Include="..\Private\UITutorial_Guide.cpp" />
     <ClCompile Include="..\Private\UITutorial_Info.cpp" />
     <ClCompile Include="..\Private\UITutorial_Popup.cpp" />

@@ -333,6 +333,9 @@ ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 
 			bIsThrow = true;
 		}
+
+		if (m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
+			GET_GAMEINTERFACE->Get_Player()->Change_State(CPlayer::TELEPORT);
 		
 		if (m_vecArray_Inven[_uint(eArray)]->Use_Item(iIndex, iCount) == ITEM_RESULT::RESULT_SUCCESS)
 		{

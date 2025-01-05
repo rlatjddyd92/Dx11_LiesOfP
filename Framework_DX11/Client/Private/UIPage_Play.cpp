@@ -62,6 +62,9 @@ void CUIPage_Play::Update(_float fTimeDelta)
 
 void CUIPage_Play::Late_Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::O))
+		GET_GAMEINTERFACE->Set_Potion_Count_Full();
+
 	LU_Gauge_Update(fTimeDelta);
 	LD_Potion_Tool_Update(fTimeDelta);
 	LD_Bag_Update(fTimeDelta);
@@ -72,8 +75,13 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CTRL)]->bRender = m_bIsKeyGuideOn;
 
-	for (auto& iter : m_vec_Group_Ctrl)
-		__super::UpdatePart_ByControl(iter);
+	for (_int i = 0; i < m_vec_Group_Ctrl.size(); ++i)
+	{
+		if (i == _int(PART_GROUP::GROUP_POTION_FILL))
+			continue;
+
+		__super::UpdatePart_ByControl(m_vec_Group_Ctrl[i]);
+	}
 
 	Boss_Hp_Update(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
@@ -297,7 +305,7 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 			{
 				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + iPotion))->iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
 				{
-					GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), true);
+					
 				}
 				else 
 					GET_GAMEINTERFACE->Use_Potion_Slot();
@@ -312,7 +320,7 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 			{
 				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool))->iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
 				{
-					GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), false);
+					
 				}
 				else
 					GET_GAMEINTERFACE->Use_Tool_Slot();
@@ -460,7 +468,9 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 {
 	if (m_bIsBagOpen)
 		return;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->fRatio = 0.f;
+
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->PartIndexlist.front()]->fRatio = 0.f;
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->PartIndexlist.back()]->fRatio = 0.f;
 	
 
 	_int iPotion_Select = GET_GAMEINTERFACE->Get_Potion_Select();
@@ -500,12 +510,18 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 		{
 			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->m_bEmpty_Stack_Item = false;
 			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->iTexture_Index = pNow->iTexture_Index;
+
 			if (pNow->bStack)
 			{
 				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = true;
 				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_COUNT))->strText = to_wstring(pNow->iCount);
 				if (pNow->iCount <= 0)
+				{
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->m_bEmpty_Stack_Item = true;
+					if (pNow->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+						Set_Potion_Gauge(true);
+				}
+					
 			}
 			else
 				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = false;
@@ -565,7 +581,12 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_COUNT)]->bRender = true;
 				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_COUNT))->strText = to_wstring(pNow->iCount);
 				if (pNow->iCount <= 0)
+				{
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_ITEM))->m_bEmpty_Stack_Item = true;
+					if (pNow->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+						Set_Potion_Gauge(false);
+				}
+					
 			}
 			else
 				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_COUNT)]->bRender = false;
@@ -1083,6 +1104,22 @@ void CUIPage_Play::Switch_Bag_UI_Action(_float fTimeDelta, _bool bIsOpen)
 void CUIPage_Play::Using_Fable_UI_Action(_float fTimeDelta)
 {
 	
+}
+
+void CUIPage_Play::Set_Potion_Gauge(_bool bIsTop)
+{
+	_float fRatio = GET_GAMEINTERFACE->Get_Potion_Gauge_Ratio();
+
+	if (bIsTop == true)
+	{
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->PartIndexlist.front()]->fRatio = fRatio;
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->PartIndexlist.back()]->fRatio = 0.f;
+	}
+	else
+	{
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->PartIndexlist.front()]->fRatio = 0.f;
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->PartIndexlist.back()]->fRatio = fRatio;
+	}
 }
 
 CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

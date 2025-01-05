@@ -30,12 +30,21 @@ public:
 
 	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
 
+	void Initialize_Weapon_Component(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
 	void Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta);
 
 private:
 	void Switch_Weapon();
 	void Switch_Mode();
 	void Set_Fable();
+
+	void Start_WeaponCell_Change(_float fTimeDelta);
+	void Start_FableGauge_Change(_float fTimeDelta);
+
+	void Update_DurableGauge(_float fTimeDelta);
+	void Update_WeaponCell_Fx(_float fTimeDelta);
+	void Update_FableGauge(_float fTimeDelta);
+
 
 private:
 	const CItem_Manager::ITEM* m_pItem = { nullptr };

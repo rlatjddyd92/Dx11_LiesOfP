@@ -114,7 +114,11 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
         else if (SPECIAL_ITEM::SP_TELEPOT == eNow)
         {
             //UI를 띄우자
-            m_pPlayer->Change_State(CPlayer::TELEPORT );
+            // 25-01-05 김성용
+            // 회중시계 팝업으로 변경 
+            // 팝업의 확인을 눌러야 작동함 
+            // 순간이동은 Item_Manager에서 회중시계 사용을 감지하면 진행
+            GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), true);
         }
         else if (SPECIAL_ITEM::SP_DEAD == eNow)
         {
