@@ -219,6 +219,7 @@
     <ClInclude Include="..\Public\RebornerMale.h" />
     <ClInclude Include="..\Public\RebornerMaleFire.h" />
     <ClInclude Include="..\Public\SimonManus_2P_Aura.h" />
+    <ClInclude Include="..\Public\State_Player_RetryBoss.h" />
     <ClInclude Include="..\Public\State_RebornerMaleFire_Breath.h" />
     <ClInclude Include="..\Public\State_RebornerMaleFire_Die.h" />
     <ClInclude Include="..\Public\State_RebornerMaleFire_HitFatal.h" />
@@ -612,6 +613,7 @@
     <ClCompile Include="..\Private\RebornerMale.cpp" />
     <ClCompile Include="..\Private\RebornerMaleFire.cpp" />
     <ClCompile Include="..\Private\SimonManus_2P_Aura.cpp" />
+    <ClCompile Include="..\Private\State_Player_RetryBoss.cpp" />
     <ClCompile Include="..\Private\State_RebornerMaleFire_Breath.cpp" />
     <ClCompile Include="..\Private\State_RebornerMaleFire_Die.cpp" />
     <ClCompile Include="..\Private\State_RebornerMaleFire_HitFatal.cpp" />

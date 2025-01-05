@@ -138,6 +138,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_2P_Aura.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_RetryBoss.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerMaleFire_Breath.cpp"
 
 
