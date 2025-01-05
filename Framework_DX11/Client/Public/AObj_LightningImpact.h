@@ -2,12 +2,12 @@
 #include "AttackObject.h"
 #include "Effect_Container.h"
 
-class CAObj_ThunderStamp	final : public CAttackObject
+class CAObj_LightningImpact	final : public CAttackObject
 {
 protected:
-	CAObj_ThunderStamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAObj_ThunderStamp(const CGameObject& Prototype);
-	virtual ~CAObj_ThunderStamp() = default;
+	CAObj_LightningImpact(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAObj_LightningImpact(const CGameObject& Prototype);
+	virtual ~CAObj_LightningImpact() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -30,7 +30,7 @@ private:
 	HRESULT Ready_Components();
 
 public:
-	static CAObj_ThunderStamp* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAObj_LightningImpact* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };
