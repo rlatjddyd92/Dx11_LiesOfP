@@ -89,8 +89,7 @@ void CRigidBody::Update(_float fTimeDelta)
 
 			if(m_pOwnerNavigation->isMove(vPos + vSlide * fTimeDelta))
 			{
-				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(_Vec3(0.f, 0.f, 0.f)));
-				//pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
+				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
 			}
 			else
 			{
