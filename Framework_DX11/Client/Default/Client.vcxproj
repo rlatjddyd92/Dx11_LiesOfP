@@ -333,6 +333,8 @@
     <ClInclude Include="..\Public\State_Training01_Attack.h" />
     <ClInclude Include="..\Public\State_Training01_Idle.h" />
     <ClInclude Include="..\Public\State_Training02_Idle.h" />
+    <ClInclude Include="..\Public\State_Training_Grogy.h" />
+    <ClInclude Include="..\Public\State_Training_HitFatal.h" />
     <ClInclude Include="..\Public\Statistic_Data.h" />
     <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
@@ -729,6 +731,8 @@
     <ClCompile Include="..\Private\State_Training01_Attack.cpp" />
     <ClCompile Include="..\Private\State_Training01_Idle.cpp" />
     <ClCompile Include="..\Private\State_Training02_Idle.cpp" />
+    <ClCompile Include="..\Private\State_Training_Grogy.cpp" />
+    <ClCompile Include="..\Private\State_Training_HitFatal.cpp" />
     <ClCompile Include="..\Private\Statistic_Data.cpp" />
     <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />

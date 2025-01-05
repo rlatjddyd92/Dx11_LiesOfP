@@ -52,12 +52,13 @@ HRESULT CState_Player_Flame_Fable::Start_State(void* pArg)
     m_pPlayer->Decrease_Region(3);
     //m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First_Ready"));
 
-    for (_uint i = 0; i < 5; ++i)
+    for (_uint i = 0; i < 3; ++i)
     {
         m_isPlaySound[i] = false;
     }
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(45.f);
 
     m_iEffectStartFrame[0] = 21;
 
@@ -141,6 +142,11 @@ void CState_Player_Flame_Fable::Control_Collider(_int iFrame)
 
     for (_uint i = 0; i < 3; ++i)
     {
+        if (i == 2)
+        {
+            m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(60.f);
+        }
+
         if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
             isColliderActive = true;
     }

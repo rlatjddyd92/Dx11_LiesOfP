@@ -55,6 +55,7 @@ HRESULT CState_Player_Scissor_Fatal::Start_State(void* pArg)
     m_bSwishM_Sound_Play2 = false;
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(30.f);
 
     m_pPlayer->SetUp_Monster_Fatal();
 
@@ -96,6 +97,7 @@ void CState_Player_Scissor_Fatal::Control_Collider(_int iFrame)
         {
             if (i == 3)
             {
+                m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(50.f);
                 m_pPlayer->Set_WeaponStrength(ATK_LAST);
             }
 

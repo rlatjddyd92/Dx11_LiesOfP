@@ -60,6 +60,7 @@ HRESULT CState_Player_Scissor_Charge01::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(30.f);
 
     m_isLeftActiveEffect[0] = m_isLeftActiveEffect[1] = false;
     m_isRightActiveEffect[0] = m_isRightActiveEffect[1] = false;
@@ -170,7 +171,7 @@ void CState_Player_Scissor_Charge01::Control_Collider()
         if (m_iColliderStartFrame_Left[i] <= iFrame && iFrame <= m_iColliderEndFrame_Left[i])
         {
             isOnLeftCollider[i] = true;
-            if (m_pPlayer->Active_CurrentWeaponCollider(3.f, 1))
+            if (m_pPlayer->Active_CurrentWeaponCollider(1.f, 1))
             {
                 m_pPlayer->Decrease_Stamina(45.f);
             }
@@ -183,7 +184,7 @@ void CState_Player_Scissor_Charge01::Control_Collider()
         if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
         {
             isOnRightCollider[i] = true;
-            if (m_pPlayer->Active_CurrentWeaponCollider(3.f, 0))
+            if (m_pPlayer->Active_CurrentWeaponCollider(1.f, 0))
             {
                 m_pPlayer->Decrease_Stamina(45.f);
             }

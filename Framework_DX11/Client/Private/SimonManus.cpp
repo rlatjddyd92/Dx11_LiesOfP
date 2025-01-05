@@ -1034,13 +1034,10 @@ void CSimonManus::Free()
 
 	if (m_pModelCom != m_pP1ModelCom)
 		Safe_Release(m_pP1ModelCom);
-
 	if (m_pModelCom != m_pExtraModelCom)
 		Safe_Release(m_pExtraModelCom);
-
 	if (m_pModelCom != m_pCutSceneModelCom[0])
 		Safe_Release(m_pCutSceneModelCom[0]);
-
 	if (m_pModelCom != m_pCutSceneModelCom[1])
 		Safe_Release(m_pCutSceneModelCom[1]);
 

@@ -54,6 +54,7 @@ HRESULT CState_Player_Scissor_Fable0::Start_State(void* pArg)
     m_pPlayer->Decrease_Region();
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(25.f);
 
     m_isActiveEffect = m_isActiveFableEffect =  false;
 
@@ -160,8 +161,8 @@ void CState_Player_Scissor_Fable0::Control_Collider()
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
     {
-        m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
-        m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+        m_pPlayer->Active_CurrentWeaponCollider(1.f, 0);
+        m_pPlayer->Active_CurrentWeaponCollider(1.f, 1);
     }
     else
     {

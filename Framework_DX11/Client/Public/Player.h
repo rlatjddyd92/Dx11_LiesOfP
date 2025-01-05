@@ -189,9 +189,6 @@ public:
 	_bool					Get_IsLockOn() { return m_isLockOn; }
 	void					Set_IsLockOn(_bool isLockOn) { m_isLockOn = isLockOn; }
 
-	_bool					Get_IsInvicible() { return m_isInvicible; }
-	void					Set_IsInvicible(_bool isInvicible) { m_isInvicible = isInvicible; }
-
 	_bool					Get_IsLadderEnd() { return m_isLadderEnd; }
 
 	_bool					Get_IsTeleport() { return m_isTeleport; }
@@ -339,7 +336,6 @@ private:
 	_bool				m_isArm = { false };
 	_bool				m_isParry = { false };
 	_bool				m_isLockOn = { false };
-	_bool				m_isInvicible = { false };
 	_bool				m_isRecoveryStamina = { false };
 	_bool				m_isLadderEnd = { false };
 	_bool				m_isTeleport = { false };

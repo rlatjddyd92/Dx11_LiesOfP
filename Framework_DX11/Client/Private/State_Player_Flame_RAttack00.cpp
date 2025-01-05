@@ -45,6 +45,9 @@ HRESULT CState_Player_Flame_RAttack00::Start_State(void* pArg)
     m_isActiveEffect = false;
     m_isPlaySound = false;
 
+    m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(30.f);
+
     return S_OK;
 }
 

@@ -1447,6 +1447,12 @@
     <Filter Include="04.Fsm\Player\Common\RetryBoss">
       <UniqueIdentifier>{203a1c8c-357c-4559-8cc5-2b9cebda668d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Fsm\Monster\Training\Grogy">
+      <UniqueIdentifier>{976c77db-0cb2-46aa-bc4e-e84bac37a114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\Training\HitFatal">
+      <UniqueIdentifier>{57b88088-8a84-46a1-bbc7-7dfd8384afd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2523,9 +2529,6 @@
     <ClInclude Include="..\Public\Achievment_DataLine.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Statistic_Data.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
     </ClInclude>
@@ -2672,6 +2675,13 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPlay_Weapon.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h" />
+    <ClInclude Include="..\Public\State_Training_Grogy.h">
+      <Filter>04.Fsm\Monster\Training\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Training_HitFatal.h">
+      <Filter>04.Fsm\Monster\Training\HitFatal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3719,9 +3729,6 @@
     <ClCompile Include="..\Private\Achievment_DataLine.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Statistic_Data.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
     </ClCompile>
@@ -3865,6 +3872,13 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPlay_Component.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp" />
+    <ClCompile Include="..\Private\State_Training_Grogy.cpp">
+      <Filter>04.Fsm\Monster\Training\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Training_HitFatal.cpp">
+      <Filter>04.Fsm\Monster\Training\HitFatal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

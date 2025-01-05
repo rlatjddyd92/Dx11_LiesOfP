@@ -55,7 +55,7 @@ public:
 	virtual void		Set_AttackStrength(ATTACK_STRENGTH eStrength) { m_eAttackStrength = eStrength; }
 
 	_float				Get_DamageAmount() { return m_fDamageAmount; }
-	void				Set_DamageAmount(_float fDamageAmount) { m_fDamageAmount = fDamageAmount; }
+	virtual void		Set_DamageAmount(_float fDamageAmount) { m_fDamageAmount = fDamageAmount; }
 
 	_float Get_AtkDmg() { return m_fDamageAmount * m_fDamageRatio; }
 

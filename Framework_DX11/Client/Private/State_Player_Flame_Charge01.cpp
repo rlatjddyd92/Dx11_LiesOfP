@@ -52,6 +52,9 @@ HRESULT CState_Player_Flame_Charge01::Start_State(void* pArg)
     m_isSwishM_PlaySound = false;
     m_isSwishL_PlaySound = false;
 
+    m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(50.f);
+
     return S_OK;
 }
 
@@ -142,7 +145,13 @@ void CState_Player_Flame_Charge01::Control_Collider()
     for (_uint i = 0; i < 2; ++i)
     {
         if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
+        {
+            if (i == 1)
+            {
+                m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(70.f);
+            }
             isColliderActive = true;
+        }
     }
 
     if (isColliderActive)

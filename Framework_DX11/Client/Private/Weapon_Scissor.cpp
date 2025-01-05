@@ -420,6 +420,13 @@ void CWeapon_Scissor::DeActive_AllEffect(_uint iHandIndex)
 	m_pScissor_Sperate[0]->DeActive_AllEffect();
 }
 
+void CWeapon_Scissor::Set_DamageAmount(_float fDamageAmount)
+{
+	m_fDamageAmount = fDamageAmount;
+	m_pScissor_Sperate[0]->Set_DamageAmount(fDamageAmount);
+	m_pScissor_Sperate[1]->Set_DamageAmount(fDamageAmount);
+}
+
 void CWeapon_Scissor::Change_SeperateMode()
 {
 	if (m_isSeperate)

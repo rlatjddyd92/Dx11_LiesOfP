@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
+#include "Weapon_FlameSword.h"
 
 CState_Player_Flame_ParryAttack::CState_Player_Flame_ParryAttack(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -39,6 +39,9 @@ HRESULT CState_Player_Flame_ParryAttack::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_isSwishL_PlaySound = false;
+
+    m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(130.f);
 
     return S_OK;
 }

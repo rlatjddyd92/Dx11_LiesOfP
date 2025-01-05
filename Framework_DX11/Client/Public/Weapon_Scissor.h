@@ -50,6 +50,8 @@ public:
 	virtual void		DeActive_Effect(_uint iType, _uint iHandIndex = 0) override;
 	virtual void		DeActive_AllEffect(_uint iHandIndex = 0);
 
+	virtual void		Set_DamageAmount(_float fDamageAmount) override;
+
 public:
 	void		Change_SeperateMode();
 	void		Change_CombineMode(_bool isForce = false);

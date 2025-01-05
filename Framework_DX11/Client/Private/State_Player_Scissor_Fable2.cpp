@@ -68,6 +68,7 @@ HRESULT CState_Player_Scissor_Fable2::Start_State(void* pArg)
     m_pPlayer->Decrease_Region();
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(25.f);
 
     m_isActiveSeperateEffect = m_isActiveCombineEffect = false;
     m_isActiveFableEffect[0] = m_isActiveFableEffect[1] = false;
@@ -110,6 +111,7 @@ void CState_Player_Scissor_Fable2::Update(_float fTimeDelta)
     }
     else if (m_iCombineFrame == iFrame || m_iCombineFrame + 1 == iFrame)
     {
+        m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(40.f);
         m_pPlayer->Combine_Scissor();
     }
 
@@ -184,7 +186,7 @@ void CState_Player_Scissor_Fable2::Control_Collider()
             if (m_iColliderStartFrame_Left[i] <= iFrame && iFrame <= m_iColliderEndFrame_Left[i])
             {
                 isOnLeftCollider[i] = true;
-                m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+                m_pPlayer->Active_CurrentWeaponCollider(1.f, 1);
             }
             else if (!isOnLeftCollider[0] && !isOnLeftCollider[1])
             {
@@ -194,7 +196,7 @@ void CState_Player_Scissor_Fable2::Control_Collider()
             if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
             {
                 isOnRightCollider[i] = true;
-                m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+                m_pPlayer->Active_CurrentWeaponCollider(1.f, 0);
             }
             else if (!isOnRightCollider[0] && !isOnRightCollider[1])
             {
@@ -206,7 +208,7 @@ void CState_Player_Scissor_Fable2::Control_Collider()
     {
         if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
         {
-            m_pPlayer->Active_CurrentWeaponCollider(3.f);
+            m_pPlayer->Active_CurrentWeaponCollider(1.f);
         }
         else
         {

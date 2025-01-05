@@ -71,6 +71,8 @@ void CState_CarcassBigA_HitFatal::Update(_float fTimeDelta)
         {
             ++m_iAnimCnt;
             m_pMonster->Change_Animation(AN_UP, false, 0.1f);
+            *m_pFatalAttacked = false;
+
             return;
         }
         break;

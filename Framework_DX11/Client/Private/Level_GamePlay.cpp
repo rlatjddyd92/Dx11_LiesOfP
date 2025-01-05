@@ -99,7 +99,7 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 		// 몬스터 부활
 		vector<CGameObject*> ObjectVector = m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_ObjectList();
 
-		_int iSize = ObjectVector.size();
+		_int iSize = (_int)ObjectVector.size();
 
 		for (_int i = 0; i < iSize; ++i)
 		{

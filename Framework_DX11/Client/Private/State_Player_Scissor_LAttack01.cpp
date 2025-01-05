@@ -44,6 +44,7 @@ HRESULT CState_Player_Scissor_LAttack01::Start_State(void* pArg)
     m_isActiveEffect = false;
 
     m_pPlayer->Set_WeaponStrength(ATK_WEAK);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(40.f);
 
     return S_OK;
 }

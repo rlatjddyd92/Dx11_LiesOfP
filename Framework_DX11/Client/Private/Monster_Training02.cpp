@@ -7,6 +7,8 @@
 
 #include "State_Training02_Idle.h"
 #include "State_Training01_Attack.h"
+#include "State_Training_Grogy.h"
+#include "State_Training_HitFatal.h"
 
 #include "GameInterface_Controller.h"
 
@@ -60,7 +62,7 @@ HRESULT CMonster_Training02::Initialize(void* pArg)
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 5.f;
 
 	m_vCenterOffset = _Vec3(0.f, 1.5f, 0.f);
 
@@ -124,6 +126,37 @@ HRESULT CMonster_Training02::Render()
 	return S_OK;
 }
 
+_bool CMonster_Training02::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
+{
+	if (m_bDieState || m_isInvicible)
+	{
+		return false;
+	}
+
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_STRONG)
+	{
+		if (m_eStat.bWeakness)
+		{
+			if (iAttackStrength >= ATTACK_STRENGTH::ATK_NORMAL)
+			{
+				m_eStat.bWeakness = false;
+				m_eStat.bFatalAttack = true;
+
+				m_pFsmCom->Change_State(GROGY);
+				return true;
+			}
+		}
+	}
+
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
+	{
+		m_bFatalAttacked = true;
+		m_eStat.bFatalAttack = false;
+	}
+
+	return true;
+}
+
 HRESULT CMonster_Training02::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -183,6 +216,8 @@ HRESULT CMonster_Training02::Ready_FSM()
 	FSM_INIT_DESC Desc{};
 
 	m_pFsmCom->Add_State(CState_Training02_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Training_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
+	m_pFsmCom->Add_State(CState_Training_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 
 	m_pFsmCom->Set_State(IDLE);
 

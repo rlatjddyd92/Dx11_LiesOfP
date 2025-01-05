@@ -63,6 +63,7 @@ HRESULT CState_Player_Scissor_Charge00::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(30.f);
 
     m_isLeftActiveEffect[0] = m_isLeftActiveEffect[1] = false;
     m_isRightActiveEffect[0] = m_isRightActiveEffect[1] = false;

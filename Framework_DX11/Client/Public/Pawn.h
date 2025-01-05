@@ -43,6 +43,9 @@ public:
     class CSound* Get_SoundCom(PAWN_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
 
 public:
+    _bool					Get_IsInvicible() { return m_isInvicible; }
+    void					Set_IsInvicible(_bool isInvicible) { m_isInvicible = isInvicible; }
+
     _float				Get_MoveSpeed() { return m_fMoveSpeed; }
     void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
 
@@ -119,6 +122,7 @@ protected:
     class CSound* m_pSoundCom[PAWN_SOUND_END] = { nullptr, };
 
     _bool            m_isGravity = { false };
+    _bool			 m_isInvicible = { false };
     _bool            m_isPlayAnimation = { true };
     _bool            m_isCutScene = { false };
     _bool            m_isStartDisslove = { false };

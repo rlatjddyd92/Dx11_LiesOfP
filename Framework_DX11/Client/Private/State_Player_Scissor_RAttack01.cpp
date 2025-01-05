@@ -50,6 +50,7 @@ HRESULT CState_Player_Scissor_RAttack01::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
+    m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(25.f);
 
     m_isLeftActiveEffect = false;
     m_isRightActiveEffect = false;
@@ -152,7 +153,7 @@ void CState_Player_Scissor_RAttack01::Control_Collider()
     {
         if (m_iColliderStartFrameLeft <= iFrame && iFrame <= m_iColliderEndFrameLeft)
         {
-            if (m_pPlayer->Active_CurrentWeaponCollider(3.f, 1))
+            if (m_pPlayer->Active_CurrentWeaponCollider(1.f, 1))
             {
                 m_pPlayer->Decrease_Stamina(45.f);
             }
@@ -164,7 +165,7 @@ void CState_Player_Scissor_RAttack01::Control_Collider()
 
         if (m_iColliderStartFrameRight <= iFrame && iFrame <= m_iColliderEndFrameRight)
         {
-            if (m_pPlayer->Active_CurrentWeaponCollider(3.f, 0))
+            if (m_pPlayer->Active_CurrentWeaponCollider(1.f, 0))
             {
                 m_pPlayer->Decrease_Stamina(45.f);
             }

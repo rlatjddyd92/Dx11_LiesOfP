@@ -60,7 +60,8 @@ HRESULT CState_Player_Flame_Fatal::Start_State(void* pArg)
      m_isSwishM_Play_Sound = false;
      m_isSwishS_Play_Sound = false;
 
-    m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+     m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(35.f);
 
     m_pPlayer->SetUp_Monster_Fatal();
 
@@ -102,6 +103,7 @@ void CState_Player_Flame_Fatal::Control_Collider(_int iFrame)
         {
             if (i == 2)
             {
+                m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(50.f);
                 m_pPlayer->Set_WeaponStrength(ATK_LAST);
             }
             isColliderActive = true;
