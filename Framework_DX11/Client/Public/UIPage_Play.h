@@ -242,6 +242,7 @@ private:
 	void Switch_Bag_UI_Action(_float fTimeDelta, _bool bIsOpen);
 	void Using_Fable_UI_Action(_float fTimeDelta);
 
+	void Set_Potion_Gauge(_bool bIsTop);
 
 private:
 	// 보조 가방

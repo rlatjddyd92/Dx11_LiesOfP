@@ -77,6 +77,71 @@ CHECK_MOUSE CUIPlay_Weapon::Check_Page_Action(_float fTimeDelta)
 	return CHECK_MOUSE();
 }
 
+void CUIPlay_Weapon::Initialize_Weapon_Component(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
+{
+	for (auto& iter : vecOrigin)
+	{
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_CENTER))
+			m_pSharedPointer_Center = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_DURABLE_FRAME))
+			m_vecSharedPointer_DurableGauge_Static.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL))
+			m_pSharedPointer_DurableGauge_Fill = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK))
+			m_vecSharedPointer_NormalWeapon_Static.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX))
+			m_vecSharedPointer_NormalWeapon_Fx.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_NORMAL_BLADE))
+			m_pSharedPointer_NormalWeapon_Blade = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE))
+			m_pSharedPointer_NormalWeapon_Handle = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK))
+			m_vecSharedPointer_SpecialWeapon_Static.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX))
+			m_pSharedPointer_SpecialWeapon = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM))
+			m_pSharedPointer_SelectNum = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SYMBOL))
+			m_pSharedPointer_BladeFable_Symbol = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SYMBOL))
+			m_pSharedPointer_HandleFable_Symbol = iter;
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME))
+			m_vecSharedPointer_BladeFable_Side_Frame.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE))
+			m_vecSharedPointer_BladeFable_Side_White.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FILL))
+			m_vecSharedPointer_BladeFable_Side_Fill.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FRAME))
+			m_vecSharedPointer_BladeFable_Center_Frame.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE))
+			m_vecSharedPointer_BladeFable_Center_White.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FILL))
+			m_vecSharedPointer_HandleFable_Side_Fill.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME))
+			m_vecSharedPointer_HandleFable_Side_Frame.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE))
+			m_vecSharedPointer_HandleFable_Side_White.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL))
+			m_vecSharedPointer_HandleFable_Side_Fill.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FRAME))
+			m_vecSharedPointer_HandleFable_Center_Frame.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE))
+			m_vecSharedPointer_HandleFable_Center_White.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FILL))
+			m_vecSharedPointer_HandleFable_Center_Fill.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_A))
+			m_vecSharedPointer_BladeFable_KeySet_F.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B))
+			m_vecSharedPointer_BladeFable_KeySet_Combine.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A))
+			m_vecSharedPointer_HandleFable_KeySet_F.push_back(iter);
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B))
+			m_vecSharedPointer_HandleFable_KeySet_Combine.push_back(iter);
+	}
+
+
+}
+
 void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
 {
 
@@ -91,6 +156,26 @@ void CUIPlay_Weapon::Switch_Mode()
 }
 
 void CUIPlay_Weapon::Set_Fable()
+{
+}
+
+void CUIPlay_Weapon::Start_WeaponCell_Change(_float fTimeDelta)
+{
+}
+
+void CUIPlay_Weapon::Start_FableGauge_Change(_float fTimeDelta)
+{
+}
+
+void CUIPlay_Weapon::Update_DurableGauge(_float fTimeDelta)
+{
+}
+
+void CUIPlay_Weapon::Update_WeaponCell_Fx(_float fTimeDelta)
+{
+}
+
+void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta)
 {
 }
 
@@ -123,4 +208,25 @@ CGameObject* CUIPlay_Weapon::Clone(void* pArg)
 void CUIPlay_Weapon::Free()
 {
 	__super::Free();
+
+	m_vecSharedPointer_DurableGauge_Static.clear();
+	m_vecSharedPointer_NormalWeapon_Static.clear();
+	m_vecSharedPointer_NormalWeapon_Fx.clear();
+	m_vecSharedPointer_SpecialWeapon_Static.clear();
+	m_vecSharedPointer_BladeFable_Side_Frame.clear();
+	m_vecSharedPointer_BladeFable_Side_White.clear();
+	m_vecSharedPointer_BladeFable_Side_Fill.clear();
+	m_vecSharedPointer_BladeFable_Center_Frame.clear();
+	m_vecSharedPointer_BladeFable_Center_White.clear();
+	m_vecSharedPointer_BladeFable_Center_Fill.clear();
+	m_vecSharedPointer_BladeFable_KeySet_F.clear();
+	m_vecSharedPointer_BladeFable_KeySet_Combine.clear();
+	m_vecSharedPointer_HandleFable_Side_Frame.clear();
+	m_vecSharedPointer_HandleFable_Side_White.clear();
+	m_vecSharedPointer_HandleFable_Side_Fill.clear();
+	m_vecSharedPointer_HandleFable_Center_Frame.clear();
+	m_vecSharedPointer_HandleFable_Center_White.clear();
+	m_vecSharedPointer_HandleFable_Center_Fill.clear();
+	m_vecSharedPointer_HandleFable_KeySet_F.clear();
+	m_vecSharedPointer_HandleFable_KeySet_Combine.clear();
 }

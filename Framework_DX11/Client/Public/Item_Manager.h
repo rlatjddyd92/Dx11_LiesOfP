@@ -318,6 +318,26 @@ public:
 		return Check_Item_Special_Enum(iIndex);
 	}
 
+	_int Get_Now_Select_Item_Count()
+	{
+		_int iCount = 0;
+		if (m_bIsPotion)
+		{
+			const ITEM* pItem = Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + m_iPotion_Select));
+			if (pItem != nullptr)
+				iCount = pItem->iCount;
+		}
+		else
+		{
+			const ITEM* pItem = Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + m_iTool_Select));
+			if (pItem != nullptr)
+				iCount = pItem->iCount;
+		}
+
+		return iCount;
+	}
+
+
 	// 포션 및 투척물 락 걸기 
 	void Set_PotionThrow_Lock(_bool bIsLock) { m_bPotion_Throw_Lock = bIsLock; }
 
@@ -477,6 +497,15 @@ public:
 		}
 	}
 	_bool Use_Potion();
+	void Set_Potion_Count_Full()
+	{
+		m_fNow_Potion_Gauge = 0.f;
+		m_iNow_Potion_Count = m_iMax_Potion_Count;
+		for (_int i = 0; i < 5; ++i)
+			if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+				m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iCount = m_iMax_Potion_Count;
+	}
+	_float Get_Potion_Gauge_Ratio() {return (m_fNow_Potion_Gauge / m_fMax_Potion_Gauge);}
 
 	// 암 관련
 	void Add_Arm_Gauge(_float fAdd)

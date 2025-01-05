@@ -2667,6 +2667,12 @@
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
       <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPlay_Component.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPlay_Weapon.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3853,6 +3859,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
       <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPlay_Weapon.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPlay_Component.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

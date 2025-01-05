@@ -204,9 +204,9 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 
 	if (Part.m_bEmpty_Stack_Item)
 	{
-		pNew->vColor_Texture.x *= 0.1f;
-		pNew->vColor_Texture.y *= 0.1f;
-		pNew->vColor_Texture.z *= 0.1f;
+		pNew->vColor_Texture.x *= 0.3f;
+		pNew->vColor_Texture.y *= 0.3f;
+		pNew->vColor_Texture.z *= 0.3f;
 	}
 		
 

@@ -208,6 +208,7 @@ public: // 외부에서 매니저 접근
 	_bool Get_CanSwitch_Weapon() { return m_pItem_Manager->Get_CanSwitch_Weapon(); }
 	void Add_Durable_Weapon(_float fAdd) { return m_pItem_Manager->Add_Durable_Weapon(fAdd); }
 	SPECIAL_ITEM Get_Now_Select_Item() { return m_pItem_Manager->Get_Now_Select_Item(); }
+	_int Get_Now_Select_Item_Count() { return m_pItem_Manager->Get_Now_Select_Item_Count(); }
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_pItem_Manager->Is_ItemData_Change(); }
@@ -257,6 +258,8 @@ public: // 외부에서 매니저 접근
 	// 포션 관련
 	void Add_Potion_Gauge(_float fAdd) { m_pItem_Manager->Add_Potion_Gauge(fAdd); }
 	_bool Use_Potion() { return m_pItem_Manager->Use_Potion(); }
+	void Set_Potion_Count_Full() { m_pItem_Manager->Set_Potion_Count_Full(); }
+	_float Get_Potion_Gauge_Ratio() { return m_pItem_Manager->Get_Potion_Gauge_Ratio(); }
 
 	// 리전 암 관련
 	void Add_Arm_Gauge(_float fAdd) { m_pItem_Manager->Add_Arm_Gauge(fAdd); }

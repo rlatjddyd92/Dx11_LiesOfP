@@ -183,7 +183,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	// 25-01-05 김성용
 	// 튜토리얼 시작 함수
 	// 아래 함수 주석 걸면 튜토리얼 안들어감
-	//GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
+	GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
 
 	return S_OK;
 }
