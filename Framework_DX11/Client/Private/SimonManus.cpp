@@ -113,6 +113,8 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 390.f;
 
+	m_iErgoPoint = 700;
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -132,6 +134,8 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	{
 		m_EXCollider[i]->Set_Owner(this);
 	}
+
+	m_isBoss = true;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.95f, 0.f };
 
@@ -182,7 +186,11 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	{
 		m_fDissloveRatio += 0.3f * fTimeDelta;
 		if (m_fDissloveRatio >= 2.f)
+		{
 			m_isDead = true;
+			CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+			pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+		}
 	}
 
 	for (auto& pEffect : m_Effects)

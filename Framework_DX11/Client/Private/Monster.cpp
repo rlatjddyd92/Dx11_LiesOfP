@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Weapon.h"
 
+#include "GameInterface_Controller.h"
 #include "Fsm.h"
 
 
@@ -62,6 +63,22 @@ void CMonster::Priority_Update(_float fTimeDelta)
 	else
 	{
 		m_bTargetDead = false;
+	}
+
+	if (!m_isBoss)
+	{
+		if (!m_bDieState && m_eStat.fHp <= 0.f)
+		{
+			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+			m_bDieState = true;
+			m_pFsmCom->Change_State(DIE);
+
+			m_pRigidBodyCom->Set_Kinematic(false);
+
+			//에르고 추가
+
+			pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+		}
 	}
 }
 

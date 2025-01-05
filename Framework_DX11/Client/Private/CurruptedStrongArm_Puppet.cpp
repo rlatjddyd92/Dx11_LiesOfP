@@ -57,6 +57,8 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 130.f;
 
+	m_iErgoPoint = 200;
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -88,14 +90,6 @@ void CCurruptedStrongArm_Puppet::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
-	if (!m_bDieState && m_eStat.fHp <= 0.f)
-	{
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-		m_bDieState = true;
-		m_pFsmCom->Change_State(DIE);
-
-		m_pRigidBodyCom->Set_Kinematic(false);
-	}
 }
 
 void CCurruptedStrongArm_Puppet::Update(_float fTimeDelta)
