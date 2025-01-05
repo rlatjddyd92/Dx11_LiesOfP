@@ -2,6 +2,8 @@
 #include "TreasureBox.h"
 #include "GameInstance.h"
 #include "Item_Dropped.h"
+#include "Effect_Container.h"
+#include "Effect_Manager.h"
 
 CTreasureBox::CTreasureBox(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -43,11 +45,18 @@ HRESULT CTreasureBox::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("TreasureBox");
 
+	m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("ItemBox_Closed"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr);
+	m_pEffect->Set_Loop(true);
+
 	return S_OK;
 }
 
 void CTreasureBox::Priority_Update(_float fTimeDelta)
 {
+	if (m_bOpen == false)
+	{
+		m_pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CTreasureBox::Update(_float fTimeDelta)
@@ -64,6 +73,8 @@ void CTreasureBox::Update(_float fTimeDelta)
 			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Item_Dropped"), TEXT("Prototype_GameObject_Item_Dropped"), &pDesc);
 		}
 	}
+	else
+		m_pEffect->Update(fTimeDelta);
 
 	m_pModelCom->Play_Animation(fTimeDelta);
 
@@ -76,7 +87,10 @@ void CTreasureBox::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
-
+	if (m_bOpen == false)
+	{
+		m_pEffect->Late_Update(fTimeDelta);
+	}
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
 		m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -231,6 +245,13 @@ CGameObject* CTreasureBox::Clone(void* pArg)
 void CTreasureBox::Free()
 {
 	__super::Free();
+
+	if (true == m_isCloned)
+	{
+		m_pEffect->Set_Cloned(false);
+		Safe_Release(m_pEffect);
+	}
+
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

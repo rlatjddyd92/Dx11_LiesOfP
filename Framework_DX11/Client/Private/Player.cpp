@@ -205,7 +205,10 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		LockOnOff();
 
 	if (m_pTargetMonster && m_pTargetMonster->Get_IsDieState())
+	{
+		m_isLockOn = false;
 		Safe_Release(m_pTargetMonster);
+	}
 
 	if(nullptr != m_pWeapon[m_eWeaponType])
 		m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
