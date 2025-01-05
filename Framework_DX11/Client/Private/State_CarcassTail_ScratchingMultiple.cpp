@@ -33,20 +33,15 @@ void CState_CarcassTail_ScratchingMultiple::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (!m_isDelayed)
+    if (End_Check())
     {
-        if (End_Check())
+        if (m_pMonster->Get_TargetDead())
         {
-            ++m_iRouteTrack;
-
-            if (m_iRouteTrack >= 2)
-            {
-                m_pMonster->Change_State(CCarcassBigA::IDLE);
-                return;
-            }
-            m_fIdleTime = 0.f;
-            m_isDelayed = true;
+            m_pMonster->Change_State(CMonster::IDLE);
+            return;
         }
+
+        ++m_iRouteTrack;
 
         if (m_iRouteTrack == 1)
         {
@@ -55,34 +50,16 @@ void CState_CarcassTail_ScratchingMultiple::Update(_float fTimeDelta)
 
             return;
         }
-
+        else if (m_iRouteTrack >= 2)
+        {
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
+        }
     }
-    else
+
+    if (CurTrackPos >= 40.f && CurTrackPos <= 70.f)
     {
-        m_fIdleTime += fTimeDelta;
-
-        if (m_fIdleTime >= m_fIdleDuration)
-        {
-            m_isDelayed = false;
-        }
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
-        switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(49, true, 0.1f);
-            break;
-
-        case 0:
-            m_pMonster->Change_Animation(44, true, 0.1f);
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(50, true, 0.1f);
-            break;
-
-        default:
-            break;
-        }
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
     }
 
     Collider_Check(CurTrackPos);

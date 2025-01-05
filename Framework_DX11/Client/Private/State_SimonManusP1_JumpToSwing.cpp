@@ -57,6 +57,13 @@ void CState_SimonManusP1_JumpToSwing::Update(_float fTimeDelta)
         switch (m_iRouteTrack)
         {
         case 0:
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             if (m_pMonster->Calc_Distance_XZ() > 5.f)
             {

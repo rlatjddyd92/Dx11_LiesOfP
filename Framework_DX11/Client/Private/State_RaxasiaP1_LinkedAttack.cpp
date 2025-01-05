@@ -44,6 +44,13 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
     case 0:
         if (CurTrackPos >= 150.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -64,11 +71,19 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
     case 1:
         if (CurTrackPos >= 130.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
             m_bInchentSound = false;
             m_isRimLight = true;
+            m_pMonster->On_PowerAttack(true);
             m_vRootMoveStack = _Vec3(0.f, 0.f, 0.f);
             m_pMonster->SetUp_Animation(AN_LINKEDATTACK_LAST, false, 0);
         }
@@ -110,6 +125,7 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
 void CState_RaxasiaP1_LinkedAttack::End_State()
 {
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
@@ -227,6 +243,9 @@ void CState_RaxasiaP1_LinkedAttack::Update_Rimlight(_float fTimeDelta, _double C
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x == 0.f && m_vRimLightColor.w == 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }

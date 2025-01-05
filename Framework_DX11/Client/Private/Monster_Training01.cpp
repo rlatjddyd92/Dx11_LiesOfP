@@ -73,7 +73,7 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 
 void CMonster_Training01::Priority_Update(_float fTimeDelta)
 {
-	__super::Set_UpTargetPos();
+	__super::Priority_Update(fTimeDelta);
 
 	if (m_eStat.fHp <= 0.f)
 	{

@@ -44,12 +44,25 @@ HRESULT CMonster::Initialize(void* pArg)
 
 void CMonster::Priority_Update(_float fTimeDelta)
 {
-	Set_UpTargetPos();
+	CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+	if (m_pGameInstance->Find_Player(LEVEL_GAMEPLAY) != nullptr)
+	{
+		m_vPosTarget = pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	}
+
 	if (m_eStat.fGrogyPoint >= m_eStat.fMaxGrogyPoint)
 	{
 		m_eStat.bWeakness = true;
 	}
 	
+	if (pPlayer->Get_Player_Stat().vGauge_Hp.x <= 0.f)
+	{
+		m_bTargetDead = true;
+	}
+	else
+	{
+		m_bTargetDead = false;
+	}
 }
 
 void CMonster::Update(_float fTimeDelta)
@@ -136,15 +149,6 @@ _Vec4 CMonster::Get_TargetDir()
 		return _Vec4{0, 0, -1, 1};
 	}
 	return vDir;
-}
-
-
-void CMonster::Set_UpTargetPos()
-{
-	if (m_pGameInstance->Find_Player(LEVEL_GAMEPLAY) != nullptr)
-	{
-		m_vPosTarget = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY)->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-	}
 }
 
 void CMonster::Look_Player()

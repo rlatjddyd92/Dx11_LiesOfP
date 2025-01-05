@@ -40,6 +40,13 @@ void CState_CarcassNormal_TripleClaw::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 90.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(95, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CCarcassNormal::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_LINKED_MIDDLE, false, 0.1f, 0, true);
@@ -55,6 +62,13 @@ void CState_CarcassNormal_TripleClaw::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 65.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(95, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CCarcassNormal::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.1f, 0, true);

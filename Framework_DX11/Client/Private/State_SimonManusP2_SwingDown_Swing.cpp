@@ -55,6 +55,13 @@ void CState_SimonManusP2_SwingDown_Swing::Update(_float fTimeDelta)
     {
         if (130 >= m_pMonster->Get_CurrentTrackPos())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             m_pMonster->Change_Animation(m_iCurLastAnim, false, 0, 0);
             ++m_iRouteTrack;
             m_isSwing = false;

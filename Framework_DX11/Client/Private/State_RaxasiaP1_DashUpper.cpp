@@ -84,6 +84,13 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 1:
         if (CurTrackPos >= 130.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bStampSound = false;
@@ -102,6 +109,13 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 2:
         if (CurTrackPos >= 70.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bStampSound = false;
@@ -124,6 +138,13 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 3:
         if (CurTrackPos >= 70.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bSwingSound = false;
             m_bStampSound = false;
@@ -131,6 +152,8 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             m_bStamp = false;
             m_bSpeedController = true;//림라이트 온
             m_isRimLight = true;
+            m_pMonster->On_PowerAttack(true);
+
             m_pMonster->Change_Animation(AN_TRIPLELINK_FIRST, false, 0.1f, 0);
             m_pMonster->Get_Model()->Set_SpeedRatio(AN_TRIPLELINK_FIRST, (double)0.5f);
             return;
@@ -178,6 +201,7 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
 void CState_RaxasiaP1_DashUpper::End_State()
 {
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
@@ -403,6 +427,9 @@ void CState_RaxasiaP1_DashUpper::Update_Rimlight(_float fTimeDelta, _double CurT
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x == 0.f && m_vRimLightColor.w == 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }

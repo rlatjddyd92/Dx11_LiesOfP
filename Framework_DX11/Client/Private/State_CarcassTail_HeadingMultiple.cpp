@@ -5,6 +5,7 @@
 #include "Monster.h"
 #include "Camera.h"
 
+
 CState_CarcassTail_HeadingMultiple::CState_CarcassTail_HeadingMultiple(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -47,11 +48,19 @@ void CState_CarcassTail_HeadingMultiple::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 140)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(44, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
+
             ++m_iRouteTrack;
             m_bHeadingSound = false;
             if (m_iRouteTrack == 2)
             {
                 m_isRimLight = true;
+                m_pMonster->On_PowerAttack(true);
             }
             m_pMonster->Change_Animation(AN_HEADING, false, 0.1f, 0, true, true);
             return;
@@ -75,6 +84,7 @@ void CState_CarcassTail_HeadingMultiple::End_State()
 {
     m_iRouteTrack = 0;
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
@@ -122,6 +132,9 @@ void CState_CarcassTail_HeadingMultiple::Update_Rimlight(_float fTimeDelta, _dou
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x == 0.f && m_vRimLightColor.w == 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }

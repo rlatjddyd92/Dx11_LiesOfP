@@ -203,9 +203,12 @@ void CRebornerBigA::Resetting()
 	m_eStat.fAtk = 180.f;
 
 	m_eStat.bWeakness = false;
+	m_eStat.bFatalAttack = false;
 
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 160.f;
+
+	m_bDieState = false;
 
 	m_bDiscover = false;
 	m_bFirstMeetCheck = false;

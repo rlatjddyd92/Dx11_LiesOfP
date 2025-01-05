@@ -37,6 +37,12 @@ void CState_CarcassTail_LeapToAttack::Update(_float fTimeDelta)
 
     if (End_Check())
     {
+        if (m_pMonster->Get_TargetDead())
+        {
+            m_pMonster->Change_State(CMonster::IDLE);
+            return;
+        }
+
         if (m_iRouteTrack == 0)
         {
             //앞뒤 판단해서 꼬리 or 손으로 공격
