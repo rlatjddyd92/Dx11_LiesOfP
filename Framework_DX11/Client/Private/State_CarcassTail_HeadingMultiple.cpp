@@ -74,6 +74,8 @@ void CState_CarcassTail_HeadingMultiple::Update(_float fTimeDelta)
 void CState_CarcassTail_HeadingMultiple::End_State()
 {
     m_iRouteTrack = 0;
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 _bool CState_CarcassTail_HeadingMultiple::End_Check()

@@ -151,6 +151,9 @@ void CState_RaxasiaP1_SwingDown_Multiple::End_State()
     m_pMonster->Get_Model()->Set_SpeedRatio(AN_SWINGDOWN, (double)1);
     m_pMonster->Get_Model()->Set_SpeedRatio(AN_SWINGDOWN_L, (double)1);
     m_pMonster->Get_Model()->Set_SpeedRatio(AN_SWINGDOWN_R, (double)1);
+
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 _bool CState_RaxasiaP1_SwingDown_Multiple::End_Check()
