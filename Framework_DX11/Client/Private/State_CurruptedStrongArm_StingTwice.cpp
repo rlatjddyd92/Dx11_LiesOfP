@@ -66,7 +66,7 @@ void CState_CurruptedStrongArm_StingTwice::Collider_Check(_double CurTrackPos)
     //¿À¸¥¼ö¿°
     if (CurTrackPos >= 45.f && CurTrackPos <= 52.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.2f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.9f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
@@ -75,7 +75,7 @@ void CState_CurruptedStrongArm_StingTwice::Collider_Check(_double CurTrackPos)
     //¿Þ¼ö¿°
     if (CurTrackPos >= 52.f && CurTrackPos <= 58.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.2f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.9f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {

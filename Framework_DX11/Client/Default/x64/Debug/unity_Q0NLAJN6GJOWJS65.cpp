@@ -138,6 +138,9 @@
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_2P_Aura.cpp"
 
 
+#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_RetryBoss.cpp"
+
+
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerMaleFire_Breath.cpp"
 
 
@@ -514,6 +517,12 @@
 
 
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPart_3D_Path.cpp"
+
+
+#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPlay_Component.cpp"
+
+
+#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPlay_Weapon.cpp"
 
 
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UITutorial_Guide.cpp"

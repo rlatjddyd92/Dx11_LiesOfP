@@ -93,6 +93,8 @@ void CCurruptedStrongArm_Puppet::Priority_Update(_float fTimeDelta)
 		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
 		m_pFsmCom->Change_State(DIE);
+
+		m_pRigidBodyCom->Set_Kinematic(false);
 	}
 }
 
@@ -286,6 +288,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = m_eStat.fAtk;
+	Desc.pOWner = this;
 
 	m_pColliderObject[TYPE_ARM_LEFT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

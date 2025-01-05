@@ -61,7 +61,7 @@ void CState_CarcassNormal_ClawRush::Collider_Check(_double CurTrackPos)
     if ((CurTrackPos >= 109.f && CurTrackPos <= 119.f) ||
         (CurTrackPos >= 155.f && CurTrackPos <= 165.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.4f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
@@ -73,7 +73,7 @@ void CState_CarcassNormal_ClawRush::Collider_Check(_double CurTrackPos)
         (CurTrackPos >= 125.f && CurTrackPos <= 140.f) ||
         (CurTrackPos >= 200.f && CurTrackPos <= 205.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.1f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.45f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {

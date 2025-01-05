@@ -60,7 +60,7 @@ void CState_CarcassTail_MultyHittingDown::Collider_Check(_double CurTrackPos)
     if ((CurTrackPos >= 85.f && CurTrackPos <= 95.f) ||
         (CurTrackPos >= 165.f && CurTrackPos <= 175.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(0.8f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {
@@ -70,7 +70,7 @@ void CState_CarcassTail_MultyHittingDown::Collider_Check(_double CurTrackPos)
     if ((CurTrackPos >= 120.f && CurTrackPos <= 129.f) ||
         (CurTrackPos >= 195.f && CurTrackPos <= 204.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.2f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(0.8f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {

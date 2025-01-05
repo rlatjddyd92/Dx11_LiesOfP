@@ -148,6 +148,9 @@ _bool CBloodTrail::IsFalling()
 
 void CBloodTrail::Create_TrailDecal()
 {
+	if (!m_Effect[m_eType]->IsFalling())
+		return;
+
 	for (_uint i = 0; i < m_iTrailPointCount; ++i)
 	{
 		if (m_IsCreatDecals[i])
@@ -159,7 +162,7 @@ void CBloodTrail::Create_TrailDecal()
 		_float fGroundY = m_pNavigationCom->Get_CellPosY(vCenterPos);
 
 		_float fDiff = fabs(vCenterPos.y) - fabs(fGroundY);
-		if (fabs(fDiff) <= 1.2f)
+		if (fabs(fDiff) <= 0.5f)
 		{
 			m_IsCreatDecals[i] = true;
 			vCenterPos.y = fGroundY;

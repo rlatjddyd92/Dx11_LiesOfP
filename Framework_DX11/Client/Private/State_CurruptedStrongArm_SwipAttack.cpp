@@ -66,7 +66,7 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     //¿Þ¼ö¿°
     if (CurTrackPos >= 50.f && CurTrackPos <= 76.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.6f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
@@ -76,8 +76,8 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     //¿À¸¥¼ö¿°, ¿À¸¥¼Õ
     if (CurTrackPos >= 50.f && CurTrackPos <= 68.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.5f, CCurruptedStrongArm_Puppet::TYPE_ARM_RIGHT, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
-        m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_ARM_RIGHT, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(0.6f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
@@ -88,7 +88,7 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     //µÚ ¿À¸¥ ¼ö¿°
     if (CurTrackPos >= 62.f && CurTrackPos <= 75.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.6f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
@@ -98,7 +98,7 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     //µÚ ¿À¸¥ ¼ö¿°
     if (CurTrackPos >= 65.f && CurTrackPos <= 78.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.6f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {

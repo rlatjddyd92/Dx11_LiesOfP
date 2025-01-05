@@ -5,6 +5,7 @@
 #include "SimonManus.h"
 
 #include "EffectObject.h"
+#include "Effect_Manager.h"
 #include "AttackObject.h"
 
 CState_SimonManusP2_HighJumpFall::CState_SimonManusP2_HighJumpFall(CFsm* pFsm, CMonster* pMonster)
@@ -132,15 +133,15 @@ void CState_SimonManusP2_HighJumpFall::Effect_Check(_double CurTrackPos)
     {
         if (!m_bStampEffect)
         {
-            CEffectObject::EFFECTOBJ_DESC Desc{};
-            Desc.fLifeDuration = 1.5f;
-            Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
             _float4x4 WorldMat{};
-
+            _Vec3 vPos = { 0.f, 0.f, -1.75f };
             XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
-            Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
 
-            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SpotEffect"), &Desc);
+            vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+            vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_Stamp"),
+                vPos, _Vec3{ 0.f, 0.f, 1.f });
 
             m_bStampEffect = true;
         }

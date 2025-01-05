@@ -26,6 +26,7 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bCharging = { true };
     _bool           m_bChargeSwing = { true };
     _bool           m_bStampSound = { true };
 

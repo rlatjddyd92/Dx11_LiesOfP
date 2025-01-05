@@ -57,7 +57,7 @@ void CState_CarcassBigA_RageAttack::Collider_Check(_double CurTrackPos)
         (CurTrackPos >= 225.f && CurTrackPos <= 245.f) ||
         (CurTrackPos >= 275.f && CurTrackPos <= 295.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(0.7f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {
@@ -69,7 +69,7 @@ void CState_CarcassBigA_RageAttack::Collider_Check(_double CurTrackPos)
         (CurTrackPos >= 185.f && CurTrackPos <= 195.f) ||
         (CurTrackPos >= 205.f && CurTrackPos <= 225.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.4f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(0.72f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {

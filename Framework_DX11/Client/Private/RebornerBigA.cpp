@@ -107,6 +107,8 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
 		m_pFsmCom->Change_State(DIE);
+
+		m_pRigidBodyCom->Set_Kinematic(false);
 	}
 	m_pWeapon->Priority_Update(fTimeDelta);
 
