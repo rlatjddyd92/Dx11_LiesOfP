@@ -25,7 +25,6 @@
 #include "Decal_Blood.h"
 #pragma endregion
 
-#include "CMoveBlockObj.h"
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -69,10 +68,6 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_MonasteryA_YK1_Fix.wav"), &g_fBGMVolume);
 	m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Inside_01.wav"), &g_fEnvVolume);
-
-	CMoveBlockObj::MOVEBLOCK_DESC Desc= {};
-	Desc.iTypeNum = CMoveBlockObj::MANUS1;
-	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlock"), TEXT("Prototype_GameObject_MoveBlockObj"),&Desc);
 
 	return S_OK;
 }
