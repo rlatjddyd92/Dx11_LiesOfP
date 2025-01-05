@@ -94,6 +94,12 @@ void CMoveBlockObj::OnCollisionExit(CGameObject* pOther)
 {
 }
 
+void CMoveBlockObj::Open_Door()
+{
+	m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_OPEN);
+	m_pRigidBodyCom->Set_Kinematic(true);
+}
+
 HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 {
 	/* For.Com_Collider */

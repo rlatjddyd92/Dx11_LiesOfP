@@ -298,7 +298,6 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		
 		*/
 
-
 		if (((*iter)->pHost == nullptr) || ((*iter)->pHost->Get_Dead()))
 		{
 			// iter->pHost는 얕은 복사로 가져왔으며 addref 하지 않았음

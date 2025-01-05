@@ -589,6 +589,15 @@ HRESULT CLevel_GamePlay::Ready_PoolingObject()
 		CObjectPool<CBloodTrail>::Return_GameObject(pBloodTrail);
 	}
 
+	for (_uint i = 0; i < 200; ++i)
+	{
+		CDecal_Blood* pDecalBlood = dynamic_cast<CDecal_Blood*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect_Polling"), TEXT("Prototype_GameObject_Decal_Blood")));
+		if (!pDecalBlood)
+			return E_FAIL;
+
+		CObjectPool<CDecal_Blood>::Return_GameObject(pDecalBlood);
+	}
+
 	return S_OK;
 }
 

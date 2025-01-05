@@ -40,6 +40,7 @@
 #include "State_Player_ThrowItem.h"
 #include "State_Player_DebuffResistance.h"
 #include "State_Player_DebuffReset.h"
+#include "State_Player_RetryBoss.h"
 #include "State_Player_Die.h"
 
 #include "State_Player_OH_Idle.h"
@@ -153,12 +154,12 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
@@ -1480,7 +1481,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	else if (pGameObject->Get_Tag() == TEXT("LastDoor"))
 	{
 		CLastDoor* pLastDoor = dynamic_cast<CLastDoor*>(pGameObject);
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
+		if (!pLastDoor->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
 		{
 			pLastDoor->Set_IsOpen(true);
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_ENTER))->Start_Play();
@@ -1490,7 +1491,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	else if (pGameObject->Get_Tag() == TEXT("TowerDoor"))
 	{
 		CTowerDoor* pTowerDoor = dynamic_cast<CTowerDoor*>(pGameObject);
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
+		if (!pTowerDoor->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
 		{
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
 			//m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
@@ -1502,6 +1503,30 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		{
 			pGameObject->Set_Dead(true);
 			m_pFsmCom->Change_State(ITEMGET);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("MoveBlockObj"))
+	{
+		_bool isExistBoss = false;
+
+		CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"));
+		if (pLayer && pLayer->Get_ObjectList().size() > 0)
+		{
+			isExistBoss = true;
+		}
+
+		pLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"));
+		if (pLayer && pLayer->Get_ObjectList().size() > 0)
+		{
+			isExistBoss = true;
+		}
+
+		if (!isExistBoss)
+		{
+			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("진입한다")))
+			{
+				m_pFsmCom->Change_State(RETRY_BOSS, pGameObject);
+			}
 		}
 	}
 }
@@ -1842,6 +1867,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_ThrowItem::Create(m_pFsmCom, this, THROW_ITEM, &Desc));
 	m_pFsmCom->Add_State(CState_Player_DebuffResistance::Create(m_pFsmCom, this, DEBUFF_RESISTANCE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_DebuffReset::Create(m_pFsmCom, this, DEBUFF_RESET, &Desc));
+	m_pFsmCom->Add_State(CState_Player_RetryBoss::Create(m_pFsmCom, this, RETRY_BOSS, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));

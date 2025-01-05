@@ -61,8 +61,10 @@ void CState_Player_RetryBoss::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 
-    if (!m_isPlaySound && iFrame == 87 || iFrame == 88)
+    if (!m_isPlaySound && (iFrame == 70 || iFrame == 71))
     {
+        m_pBlockObj->Open_Door();
+
         m_isPlaySound = true;
         m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_TreasureChest_Lock_Break_02.wav"));
     }
@@ -76,6 +78,7 @@ void CState_Player_RetryBoss::Update(_float fTimeDelta)
 
 void CState_Player_RetryBoss::End_State()
 {
+    m_pBlockObj->Set_Dead(true);
     m_pBlockObj = nullptr;
 
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);

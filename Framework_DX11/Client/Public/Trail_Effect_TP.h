@@ -62,6 +62,9 @@ private:
 	virtual ~CTrail_Effect_TP() = default;
 
 public:
+	_uint		Get_NumInstance() { return m_DefaultDesc.iNumInstance; }
+
+public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
 	virtual void Priority_Update(_float fTimeDelta);

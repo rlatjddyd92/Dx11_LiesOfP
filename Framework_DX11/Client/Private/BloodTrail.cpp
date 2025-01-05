@@ -130,6 +130,34 @@ TWOPOINT CBloodTrail::Get_PointPos(_uint iIndex)
 	return m_Effect[m_eType]->Get_PointPos(iIndex);
 }
 
+void CBloodTrail::Create_TrailDecal()
+{
+	for (_uint i = 0; i < m_Effect[m_eType]->Get_NumInstance(); ++i)
+	{
+		TWOPOINT tTwoPoint = m_Effect[m_eType]->Get_PointPos(i);
+
+		_Vec3 vCenterPos = (tTwoPoint.vBottom + tTwoPoint.vTop) * 0.5f;
+
+		if (fabs(vCenterPos.y) - fabs(m_pNavigationCom->Get_CellPosY(vCenterPos)) <= 0.3f)
+		{
+			//µ¥Ä® »ý¼º
+		}
+	}
+}
+
+HRESULT CBloodTrail::Reayd_Navigation()
+{
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NaviDesc{};
+	NaviDesc.iCurrentIndex = 0;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CBloodTrail::Ready_Effect()
 {
 	m_Effect[WEAPON_RAPIER] = CEffect_Manager::Get_Instance()->Clone_TrailTP_Effect(TEXT("Trail_Player_Attack_Blood_Rapier"));
@@ -184,6 +212,8 @@ CGameObject* CBloodTrail::Clone(void* pArg)
 void CBloodTrail::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pNavigationCom);
 
 	for(auto* Effect : m_Effect)
 		Safe_Release(Effect);
