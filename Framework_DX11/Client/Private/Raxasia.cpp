@@ -1081,11 +1081,12 @@ HRESULT CRaxasia::Ready_Effects()
 	PowerAttackDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	PowerAttackDesc.fSpeedPerSec = 1.f;
 	PowerAttackDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	PowerAttackDesc.pTarget_ModelCom = m_pModelCom;
+	PowerAttackDesc.pTarget_ModelCom = m_pP1ModelCom;
 	PowerAttackDesc.pTarget_TransformCom = m_pTransformCom;
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P1_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P1] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 
+	PowerAttackDesc.pTarget_ModelCom = m_pExtraModelCom;
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P2_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 
