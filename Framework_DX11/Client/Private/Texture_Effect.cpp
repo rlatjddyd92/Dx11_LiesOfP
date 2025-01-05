@@ -60,6 +60,7 @@ void CTexture_Effect::Update(_float fTimeDelta)
     {
         Reset();
         m_isReset = false;
+        m_isActive = true;
     }
 
     m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;

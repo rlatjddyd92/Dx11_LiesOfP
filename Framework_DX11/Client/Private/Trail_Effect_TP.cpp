@@ -167,6 +167,14 @@ TWOPOINT CTrail_Effect_TP::Get_PointPos(_uint iIndex)
 	return m_pVIBufferCom->Get_PointPos(iIndex);
 }
 
+_bool CTrail_Effect_TP::IsFalling()
+{
+	if (false == m_DefaultDesc.bLoop && true == m_DefaultDesc.bFall && false == m_isDead)
+		return true;
+
+	return false;
+}
+
 HRESULT CTrail_Effect_TP::Ready_Components(const TRAIL_TP_DESC& Desc)
 {
 	/* FOR.Com_Shader */

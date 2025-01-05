@@ -85,6 +85,7 @@ public:
 public:
 	const list<TWOPOINT>& Get_TrailPoses();
 	TWOPOINT Get_PointPos(_uint iIndex);
+	_bool IsFalling();
 
 private:
 	class CShader* m_pShaderCom = { nullptr };
