@@ -12,8 +12,8 @@ class CState_SimonManusP2_LightningToWave :
 {
 private:
     typedef enum {
-        AN_ROUTE_FIRST = 46,        //SwingDown
-        AN_ROUTE_LAST = 45,       //SwingRight
+        AN_ROUTE_FIRST = 46,        //
+        AN_ROUTE_LAST = 45,       //
     }ANIMNUM;
 
 public:
