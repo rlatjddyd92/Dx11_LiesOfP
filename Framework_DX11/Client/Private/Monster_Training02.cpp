@@ -135,7 +135,7 @@ _bool CMonster_Training02::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint 
 
 	if (iAttackStrength == ATTACK_STRENGTH::ATK_STRONG)
 	{
-		if (m_eStat.bWeakness)
+		if (m_eStat.bWeakness && m_pFsmCom->Get_CurrentState() != HITFATAL && m_pFsmCom->Get_CurrentState() != GROGY)
 		{
 			if (iAttackStrength >= ATTACK_STRENGTH::ATK_NORMAL)
 			{

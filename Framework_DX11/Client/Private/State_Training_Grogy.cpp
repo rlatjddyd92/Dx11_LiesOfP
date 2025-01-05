@@ -57,6 +57,7 @@ void CState_Training_Grogy::Update(_float fTimeDelta)
 
 void CState_Training_Grogy::End_State()
 {
+    m_pMonster->Reset_GroggyPoint();
 }
 
 CState_Training_Grogy* CState_Training_Grogy::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

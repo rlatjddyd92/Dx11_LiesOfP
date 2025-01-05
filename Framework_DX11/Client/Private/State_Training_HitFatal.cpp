@@ -43,8 +43,8 @@ void CState_Training_HitFatal::Update(_float fTimeDelta)
    
     if ((*m_pFatalAttacked) == true)
     {
-        //m_pMonster->Set_IsInvicible(true);
-        m_pMonster->Change_Animation(m_iAnimation_HitFatal[2], false, 0.f);
+        m_pMonster->Set_IsInvicible(true);
+        m_pMonster->Change_Animation(m_iAnimation_HitFatal[2], false, 0.1f);
         *m_pFatalAttacked = false;
     }
 
