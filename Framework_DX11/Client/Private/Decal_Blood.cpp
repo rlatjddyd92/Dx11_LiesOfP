@@ -237,7 +237,7 @@ void CDecal_Blood::Free()
 {
 	__super::Free();
 
-	for (_uint i = 0; i < 4; ++i)
+	for (_uint i = 0; i < 5; ++i)
 	{
 		Safe_Release(m_pTextureCom_Diffuse[i]);
 		Safe_Release(m_pTextureCom_Normal[i]);

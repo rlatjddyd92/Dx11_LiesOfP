@@ -304,7 +304,7 @@ public:
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 	void			Recovery_HP(_float fAmount);
-	void			Decrease_Arm(_float fAmount = 30.f);
+	void			Decrease_Arm(_float fAmount = 0.1f);
 
 	class CStargazer* Find_Stargazer(_int iCellNumber = -1);
 
@@ -350,6 +350,7 @@ private:
 	_float				m_fDebuffSpeedRatio = { 1.f };
 	_float				m_fDebuffAcidDamageTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };
+	_float				m_fRecoveryArmTime = { 0.f };
 
 	CMonster* m_pTargetMonster = { nullptr };
 	CMonster* m_pIntersectMonster = { nullptr };

@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "TreasureBox.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Player_Arm_Loop::CState_Player_Arm_Loop(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -54,6 +56,8 @@ void CState_Player_Arm_Loop::Update(_float fTimeDelta)
 {
     if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
+        m_pPlayer->Decrease_Arm(1.f * fTimeDelta);
+
         // shift 연타하면 퍼펙트 가드 가능인 사기템
         if (m_pPlayer->Key_Tab(KEY::LSHIFT))
         {

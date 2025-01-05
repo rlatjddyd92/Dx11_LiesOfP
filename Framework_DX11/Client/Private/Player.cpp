@@ -1285,6 +1285,7 @@ void CPlayer::Recovery_HP(_float fAmount)
 
 void CPlayer::Decrease_Arm(_float fAmount)
 {
+	m_fRecoveryArmTime = 5.f;
 	m_vGuage_Arm.x = max(0.f, m_vGuage_Arm.x - fAmount);
 }
 

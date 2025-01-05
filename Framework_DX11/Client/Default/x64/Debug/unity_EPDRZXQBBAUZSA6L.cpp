@@ -519,6 +519,12 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPart_3D_Path.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPlay_Component.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPlay_Weapon.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UITutorial_Guide.cpp"
 
 
