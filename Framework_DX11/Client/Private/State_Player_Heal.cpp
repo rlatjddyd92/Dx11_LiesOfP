@@ -85,7 +85,7 @@ void CState_Player_Heal::Update(_float fTimeDelta)
     }
     //m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.1f);
     
-    if ((iFrame == 50 || iFrame == 51) && !m_isPlaySound)
+    if (iFrame >= 50 && !m_isPlaySound)
     {
         m_isRecoveryHP = true;
         m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FX_Item_Ergo_S.wav"));

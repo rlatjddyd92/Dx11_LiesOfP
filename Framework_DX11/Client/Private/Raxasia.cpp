@@ -127,15 +127,11 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	m_pWeapon->DeActive_Collider();
 	m_pWeaponShield->DeActive_Collider();
-	//m_pModelCom->SetUp_NextAnimation(12);
 
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	//Start_CutScene(CUTSCENE_MEET);
-
-	//ChangePhase();
 	return S_OK;
 }
 
