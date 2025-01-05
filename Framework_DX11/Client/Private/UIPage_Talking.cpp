@@ -194,15 +194,20 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 			{
 				CloseAction();
 
-				if (m_eNowNpc != NPC_SCRIPT::SCR_ZEMINI_SECOND)
+				if (m_eNowNpc == NPC_SCRIPT::SCR_ZEMINI)
+				{
+					GET_GAMEINTERFACE->Start_Tutorial();
 					GET_GAMEINTERFACE->UIPart_On();
-				else
+				}
+				else if (m_eNowNpc == NPC_SCRIPT::SCR_ZEMINI_SECOND)
 				{
 					GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다."));
-					
+				}
+				else
+				{
+					GET_GAMEINTERFACE->UIPart_On();
 				}
 					
-
 				return;
 			}
 	}

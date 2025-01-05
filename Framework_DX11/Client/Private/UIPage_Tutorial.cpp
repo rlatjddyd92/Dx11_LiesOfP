@@ -68,6 +68,18 @@ void CUIPage_Tutorial::Update(_float fTimeDelta)
 
 void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 {
+	if (m_bWaitStart)
+	{
+		m_fStartTime -= fTimeDelta * 0.3f;
+		if (m_fStartTime < 0.f)
+		{
+			CloseAction();
+			GET_GAMEINTERFACE->Get_Player()->Get_Navigation()->Move_to_Cell(GET_GAMEINTERFACE->Get_Player()->Get_RigidBody(), 774);
+			GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
+			GET_GAMEINTERFACE->Fade_In();
+		}
+	}
+
 	if (m_iNowChapter == -1)
 		Next_Chapter();
 
@@ -810,8 +822,9 @@ void CUIPage_Tutorial::Next_Chapter()
 	else
 	{
 		--m_iNowChapter;
-		GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
-		CloseAction();
+		
+		GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), {0.f,0.f,0.f}, m_fStartTime);
+		m_bWaitStart = true;
 		// 여기에 종료 팝업 필요
 	}
 }
