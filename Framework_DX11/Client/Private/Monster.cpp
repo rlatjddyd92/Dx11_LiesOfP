@@ -209,7 +209,7 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	m_eStat.fHp -= fAtkDmg;
 	m_eStat.fAtkDmg = fAtkDmg;
 
-	if (m_eStat.bWeakness)
+	if (m_eStat.bWeakness && m_pFsmCom->Get_CurrentState() == HITFATAL && m_pFsmCom->Get_CurrentState() == GROGY)
 	{
 		if (iAttackStrength >= ATTACK_STRENGTH::ATK_NORMAL)
 		{
@@ -217,24 +217,27 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 			m_eStat.bFatalAttack = true;
 
 			m_pFsmCom->Change_State(GROGY);
+			m_bDiscover = true;
 			return true;
 		}
 	}
 
-	if (m_pFsmCom->Get_CurrentState() != HITFATAL)
+	if (!m_bDiscover)
 	{
-		if (!m_bDiscover)
+		if (m_pFsmCom->Get_CurrentState() != HITFATAL)
 		{
 			m_bDiscover = true;
 			m_pFsmCom->Change_State(KNOCKBACK);
+			m_bDiscover = true;
 			return true;
 		}
 	}
 	
-	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
+	if (m_eStat.bFatalAttack && iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
 	{
 		m_bFatalAttacked = true;
 		m_eStat.bFatalAttack = false;
+		m_bDiscover = true;
 	}
 
 	if (!m_bDiscover)
