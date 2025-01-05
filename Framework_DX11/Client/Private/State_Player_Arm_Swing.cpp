@@ -39,13 +39,10 @@ HRESULT CState_Player_Arm_Swing::Start_State(void* pArg)
 
 void CState_Player_Arm_Swing::Update(_float fTimeDelta)
 {
-    if (m_pPlayer->Key_Hold(KEY::CTRL))
+    if (End_Check())
     {
-        if (End_Check())
-        {
-            m_pPlayer->Change_State(CPlayer::ARM_LOOP);
-            return;
-        }
+        m_pPlayer->Change_State(CPlayer::ARM_LOOP);
+        return;
     }
 
     Control_Collider();

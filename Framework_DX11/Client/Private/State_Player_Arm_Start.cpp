@@ -39,7 +39,7 @@ HRESULT CState_Player_Arm_Start::Start_State(void* pArg)
 
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmStart, false);
 
-    m_pPlayer->Set_MoveSpeed(3.f);
+    m_pPlayer->Set_MoveSpeed(2.f);
 
     m_pPlayer->Change_CameraMode(CPlayerCamera::MODE_STATIC);
 
@@ -221,7 +221,9 @@ void CState_Player_Arm_Start::Control_Sound()
 
 void CState_Player_Arm_Start::Control_Effect(_int iFrame)
 {
-    if (!m_isActiveEffect && m_iEffectFrame < iFrame)
+    _int iBoundryFrmae = m_pPlayer->Get_Frame();
+
+    if (!m_isActiveEffect && (m_iEffectFrame < iFrame || m_iEffectFrame < iBoundryFrmae))
     {
         m_pPlayer->Active_Effect(CPlayer::EFFECT_ARM_SHIELDBLOCK, false);
         m_isActiveEffect = true;

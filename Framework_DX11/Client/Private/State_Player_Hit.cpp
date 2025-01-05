@@ -14,17 +14,17 @@ CState_Player_Hit::CState_Player_Hit(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_Hit::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Hit[HIT_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_B", 2.5f);
-    m_iAnimation_Hit[HIT_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_L", 2.5f);
-    m_iAnimation_Hit[HIT_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_R", 2.5f);
-    m_iAnimation_Hit[HIT_FB] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_FtoB", 2.5f);
-    m_iAnimation_Hit[HIT_LR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_LtoR", 2.5f);
-    m_iAnimation_Hit[HIT_RL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_RtoL", 2.5f);
+    m_iAnimation_Hit[HIT_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_B", 2.6f);
+    m_iAnimation_Hit[HIT_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_L", 2.6f);
+    m_iAnimation_Hit[HIT_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_R", 2.6f);
+    m_iAnimation_Hit[HIT_FB] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_FtoB", 2.6f);
+    m_iAnimation_Hit[HIT_LR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_LtoR", 2.6f);
+    m_iAnimation_Hit[HIT_RL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_RtoL", 2.6f);
 
-    m_iAnimation_Down[DOWN_DRAG_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_B", 2.f);
-    m_iAnimation_Down[DOWN_STAMP_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_B", 2.f);
-    m_iAnimation_Down[DOWN_DRAG_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_F", 2.f);
-    m_iAnimation_Down[DOWN_STAMP_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_F", 2.f);
+    m_iAnimation_Down[DOWN_DRAG_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_B", 2.3f);
+    m_iAnimation_Down[DOWN_STAMP_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_B", 2.3f);
+    m_iAnimation_Down[DOWN_DRAG_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_F", 2.3f);
+    m_iAnimation_Down[DOWN_STAMP_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_F", 2.3f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -60,6 +60,7 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
             m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.05f);
 
         m_eHitType = eType;
+        m_iChangeFrame = m_pPlayer->Get_Model()->Get_LastFrame_CurrentAnim(m_iAnimation_Hit[m_eHitType]) - 30;
     }
 
     
@@ -74,6 +75,8 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
 
 void CState_Player_Hit::Update(_float fTimeDelta)
 {
+    _int iFrame = m_pPlayer->Get_Frame();
+
     if (m_isDown)
     {
         if (End_Check())
@@ -100,6 +103,19 @@ void CState_Player_Hit::Update(_float fTimeDelta)
     }
     else
     {
+        if (m_iChangeFrame > iFrame)
+        {
+            if (m_pPlayer->Key_Hold(KEY::LSHIFT))
+            {
+                _uint iWeponType = m_pPlayer->Get_WeaponType();
+
+                if (iWeponType < 2)
+                    m_pPlayer->Change_State(CPlayer::OH_GUARD);
+                else
+                    m_pPlayer->Change_State(CPlayer::TH_GUARD);
+            }
+        }
+
         if (End_Check())
         {
             _uint iWeponType = m_pPlayer->Get_WeaponType();

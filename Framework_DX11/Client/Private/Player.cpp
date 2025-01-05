@@ -201,7 +201,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	}
 
 	if (Key_Tab(KEY::WHEELBUTTON))
-		LockOnOff();
+		Toggle_LockOn();
 
 	if (m_pTargetMonster && m_pTargetMonster->Get_IsDieState())
 	{
@@ -653,7 +653,7 @@ void CPlayer::Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
 	m_pPlayerCamera->Change_Mode(eMode);
 }
 
-void CPlayer::LockOnOff()
+void CPlayer::Toggle_LockOn()
 {
 	if (m_isLockOn || m_isPlayingCutscene || m_pFsmCom->Get_CurrentState() == DIE 
 		|| m_pFsmCom->Get_CurrentState() == TELEPORT || m_bDieState)
@@ -697,6 +697,18 @@ void CPlayer::LockOnOff()
 			m_isLockOn = false;
 		}
 	}
+}
+
+void CPlayer::Off_LockOn()
+{
+	m_isLockOn = false;
+
+	if (m_pTargetMonster)
+	{
+		Safe_Release(m_pTargetMonster);
+		m_pTargetMonster = nullptr;
+	}
+
 }
 
 CMonster* CPlayer::Find_TargetMonster()
@@ -863,11 +875,21 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				}
 			}
 
-			m_pFsmCom->Change_State(ARM_GURAD_HARD);
+			if (ATK_WEAK == iAttackStrength)
+			{
+				m_pFsmCom->Change_State(ARM_GURAD_WEAK);
+			}
+			else 
+			{
+				m_pFsmCom->Change_State(ARM_GURAD_HARD);
+			}
+
+			m_fGuardTime = 0.8f;	// 퍼펙트 가드 성공하면 다시 0.8초동안
 			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
-			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
-
+	
+			if(m_isGuardSlow)
+				m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 
 			return false;
 		}
@@ -962,9 +984,13 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				}
 			}
 
-			Decrease_Stamina(fAtkDmg * 0.15f);
+
+			m_fGuardTime = 0.8f;	// 퍼펙트 가드 성공하면 다시 0.8초동안
+			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
-			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
+
+			if (m_isGuardSlow)
+				m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 		}
 		else
 		{

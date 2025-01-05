@@ -42,6 +42,8 @@ private:
     _uint               m_iAnimation_Hit[HIT_END] = {};       
     _uint               m_iAnimation_Down[DOWN_END] = {};
 
+    _int                m_iChangeFrame = {};
+
     _double*            m_pTrackPos = { nullptr };
 
     _bool               m_isDown = { false };

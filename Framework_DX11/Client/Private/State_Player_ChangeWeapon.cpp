@@ -49,7 +49,7 @@ void CState_Player_ChangeWeapon::Update(_float fTimeDelta)
     {
         if (m_iAnimation_ChangeWeapon[0] == m_pPlayer->Get_CurrentAnimIndex())
         {
-            if (iFrame == 10)
+            if (iFrame >= 10)
             {
                 m_pPlayer->Change_Weapon();
                 m_isChangeWeapon = true;
@@ -57,7 +57,7 @@ void CState_Player_ChangeWeapon::Update(_float fTimeDelta)
         }
         else if (m_iAnimation_ChangeWeapon[1] == m_pPlayer->Get_CurrentAnimIndex())
         {
-            if (iFrame == 20)
+            if (iFrame >= 20)
             {
                 m_pPlayer->Change_Weapon();
                 m_isChangeWeapon = true;

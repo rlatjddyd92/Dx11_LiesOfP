@@ -170,7 +170,10 @@ public:
 	void					Set_IsGuard(_bool isGuard, _bool isReset = true, _float fTimeOffset = 0.f) {
 		m_isGuard = isGuard;
 		if (m_isGuard && isReset)
+		{
+			m_isGuardSlow = true;
 			m_fGuardTime = 0.f + fTimeOffset;
+		}
 	}
 
 	class CWeapon_PlayerArm* Get_Arm() { return m_pWeapon_Arm; }
@@ -187,7 +190,6 @@ public:
 	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
 
 	_bool					Get_IsLockOn() { return m_isLockOn; }
-	void					Set_IsLockOn(_bool isLockOn) { m_isLockOn = isLockOn; }
 
 	_bool					Get_IsLadderEnd() { return m_isLadderEnd; }
 
@@ -277,7 +279,8 @@ public:
 
 	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 
-	void			LockOnOff();
+	void			Toggle_LockOn();
+	void			Off_LockOn();
 	CMonster*		Find_TargetMonster();
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
@@ -333,6 +336,7 @@ private:
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
+	_bool				m_isGuardSlow = { false };
 	_bool				m_isArm = { false };
 	_bool				m_isParry = { false };
 	_bool				m_isLockOn = { false };

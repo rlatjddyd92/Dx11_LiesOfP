@@ -123,7 +123,7 @@ void CState_Player_Scissor_Fable1::Update(_float fTimeDelta)
             }
         }
     }
-    else if (m_isInputFButton)
+    else if (m_isInputFButton && m_pPlayer->Check_Region_Fable01())
     {
         if (m_iComboFrame < iFrame && iFrame < m_iComboFrame + 10)
         {

@@ -251,7 +251,7 @@ void CCutScene::First_Setting()
 	_Vec3 vInitPos = {};
 
 	pPlayer->Set_isPlayingCutscene(true);
-	pPlayer->LockOnOff();
+	pPlayer->Off_LockOn();
 
 	switch (m_iIndex)
 	{

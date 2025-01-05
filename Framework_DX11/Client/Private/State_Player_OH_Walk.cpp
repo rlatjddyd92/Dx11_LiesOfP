@@ -51,7 +51,7 @@ HRESULT CState_Player_OH_Walk::Start_State(void* pArg)
 {
     //m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true);
 
-    m_pPlayer->Set_MoveSpeed(1.5f);
+    m_pPlayer->Set_MoveSpeed(2.f);
 
     m_fSpaceTime = 0.f;
     m_isInputSpace = false;

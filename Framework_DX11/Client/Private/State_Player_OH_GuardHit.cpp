@@ -50,11 +50,6 @@ void CState_Player_OH_GuardHit::Update(_float fTimeDelta)
 {
     _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
 
-    if (m_pPlayer->Key_Tab(KEY::LSHIFT))
-    {
-        m_pPlayer->Set_IsGuard(true, true, 0.5f);
-    }
-
     if (m_pPlayer->Get_EndAnim(iCurAnim))
     {
         if (m_isBreak)

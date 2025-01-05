@@ -113,7 +113,7 @@ void CPlayerCollider_Fatal::OnCollisionExit(CGameObject* pOther)
 HRESULT CPlayerCollider_Fatal::Ready_Components()
 {
 	CBounding_Sphere::BOUNDING_SPHERE_DESC ColliderSphereDesc{};
-	ColliderSphereDesc.fRadius = 1.5f;
+	ColliderSphereDesc.fRadius = 1.2f;
 	ColliderSphereDesc.vCenter = _Vec3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),

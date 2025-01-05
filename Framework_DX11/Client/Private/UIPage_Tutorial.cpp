@@ -75,6 +75,7 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 		{
 			m_bWaitStart = false;
 			CloseAction();
+			GET_GAMEINTERFACE->Get_Player()->Off_LockOn();
 			GET_GAMEINTERFACE->Get_Player()->Get_Navigation()->Move_to_Cell(GET_GAMEINTERFACE->Get_Player()->Get_RigidBody(), 774);
 			GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
 			GET_GAMEINTERFACE->Fade_In();
