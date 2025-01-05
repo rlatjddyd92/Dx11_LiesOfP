@@ -112,6 +112,7 @@ public:
 	void On_Aura(_bool bAura, _bool bCutScene);
 
 	virtual void		Resetting() override;
+	virtual void		On_PowerAttack(_bool bOn) override;
 private:
 	CColliderObject* m_pColliderObject = { nullptr };
 	vector<CGameObject*>	CollObjRenderP{};

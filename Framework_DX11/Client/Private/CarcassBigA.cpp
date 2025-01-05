@@ -392,6 +392,12 @@ void CCarcassBigA::Resetting()
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
+void CCarcassBigA::On_PowerAttack(_bool bOn)
+{
+	if(bOn != m_pDissolveEffect->Get_On())
+		m_pDissolveEffect->Set_On(bOn);
+}
+
 HRESULT CCarcassBigA::Ready_Effect()
 {
 	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};

@@ -49,6 +49,8 @@ void CState_CarcassBigA_LTSwingRight::End_State()
 {
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
+
+    m_pMonster->On_PowerAttack(false);
 }
 
 _bool CState_CarcassBigA_LTSwingRight::End_Check()
@@ -86,14 +88,20 @@ void CState_CarcassBigA_LTSwingRight::Update_Rimlight(_float fTimeDelta, _double
     {
         if (CurTrackPos < 85.f)
         {
+            m_pMonster->On_PowerAttack(true);
+
             m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
             m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
         }
         else
         {
+
             m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
         }
+
+        if (m_vRimLightColor.x <= 0.f && m_vRimLightColor.w <= 0.5f)
+            m_pMonster->On_PowerAttack(false);
 
         m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }

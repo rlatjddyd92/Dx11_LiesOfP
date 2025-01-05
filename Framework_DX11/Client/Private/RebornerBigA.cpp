@@ -220,6 +220,12 @@ void CRebornerBigA::Resetting()
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
+void CRebornerBigA::On_PowerAttack(_bool bOn)
+{
+	if (bOn != m_pDissolveEffect->Get_On())
+		m_pDissolveEffect->Set_On(bOn);
+}
+
 void CRebornerBigA::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
 	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
