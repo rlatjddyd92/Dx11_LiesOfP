@@ -195,6 +195,12 @@ void CCarcassTail::Resetting()
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
+void CCarcassTail::On_PowerAttack(_bool bOn)
+{
+	if (bOn != m_pDissolveEffect->Get_On())
+		m_pDissolveEffect->Set_On(bOn);
+}
+
 void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
 	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);

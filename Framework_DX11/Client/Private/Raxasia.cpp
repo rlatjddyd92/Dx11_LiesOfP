@@ -691,6 +691,14 @@ void CRaxasia::Resetting()
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
+void CRaxasia::On_PowerAttack(_bool bOn)
+{
+	if (false == m_isChanged)
+		m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(bOn);
+	else
+		m_DissolveEffects[DISSOLVE_POWERATTACK_P2]->Set_On(bOn);
+}
+
 HRESULT CRaxasia::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

@@ -18,7 +18,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	virtual void Set_On(_bool bOn);
+	virtual void Set_On(_bool bOn) override;
 
 private:
 	// 이건 뭐 알아서 하고
