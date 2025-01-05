@@ -47,6 +47,9 @@ private:
 	class CBossDoor_Veli* m_pVeliEffect = { nullptr };
 
 private:
+	_bool		m_bOpened = { false };
+
+private:
 	HRESULT Ready_Components(MOVEBLOCK_DESC* pDesc);
 	HRESULT Ready_Effect(MOVEBLOCK_DESC* pDesc);
 

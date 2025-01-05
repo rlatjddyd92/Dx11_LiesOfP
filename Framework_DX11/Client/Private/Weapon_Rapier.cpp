@@ -159,7 +159,7 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 
 			GET_GAMEINTERFACE->Add_Potion_Gauge(m_fDamageAmount * 2.f);
 
-			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
+			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio * 100, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
