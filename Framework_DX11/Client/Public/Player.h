@@ -36,7 +36,7 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP, THROW_ITEM, DEBUFF_RESISTANCE, DEBUFF_RESET, DIE,
+		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP, THROW_ITEM, DEBUFF_RESISTANCE, DEBUFF_RESET, RETRY_BOSS, DIE,
 
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_GUARDHIT, OH_JUMP, OH_DASH,
 
@@ -244,6 +244,10 @@ public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
+
+public:
+	virtual void                SetUp_Die() override;
+	virtual void			    Reset_Die() override;
 
 public:
 	_bool			Key_Tab(KEY eKey);

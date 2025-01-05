@@ -48,6 +48,7 @@ public:
 
 public:
 	virtual void		Resetting() override;
+	virtual void		On_PowerAttack(_bool bOn) override;
 
 private:
 	CColliderObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr, nullptr };

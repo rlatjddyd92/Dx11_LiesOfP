@@ -141,9 +141,6 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 void CRaxasia::Priority_Update(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::F9))
-		Set_Dead(true);
-
 	//if (m_bChanging)
 	//{
 	//	m_bChanging = false;
@@ -694,6 +691,14 @@ void CRaxasia::Resetting()
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
+void CRaxasia::On_PowerAttack(_bool bOn)
+{
+	if (false == m_isChanged)
+		m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(bOn);
+	else
+		m_DissolveEffects[DISSOLVE_POWERATTACK_P2]->Set_On(bOn);
+}
+
 HRESULT CRaxasia::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -1084,11 +1089,12 @@ HRESULT CRaxasia::Ready_Effects()
 	PowerAttackDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	PowerAttackDesc.fSpeedPerSec = 1.f;
 	PowerAttackDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	PowerAttackDesc.pTarget_ModelCom = m_pModelCom;
+	PowerAttackDesc.pTarget_ModelCom = m_pP1ModelCom;
 	PowerAttackDesc.pTarget_TransformCom = m_pTransformCom;
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P1_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P1] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 
+	PowerAttackDesc.pTarget_ModelCom = m_pExtraModelCom;
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P2_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 

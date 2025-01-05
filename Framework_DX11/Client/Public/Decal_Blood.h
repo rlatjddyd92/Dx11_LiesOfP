@@ -13,7 +13,7 @@ class CDecal_Blood :
     public CGameObject
 {
 public:
-	enum BLOOD_TYPE{TYPE1, TYPE2, TYPE3, TYPE4, TYPE_END};
+	enum BLOOD_TYPE{TYPE1, TYPE2, TYPE3, TYPE4, TYPE_TRAIL, TYPE_END};
 
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
@@ -33,12 +33,16 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void	Active_Random(_Vec3 vPos);
+	void	Active_Trail(_Vec3 vPos);
+
 private:
 	CShader* m_pShaderCom = { nullptr };
 	CVIBuffer_Cube* m_pVIBufferCom = { nullptr };
 
-	CTexture* m_pTextureCom_Diffuse = { nullptr };
-	CTexture* m_pTextureCom_Normal = { nullptr };
+	CTexture* m_pTextureCom_Diffuse[TYPE_END] = {nullptr};
+	CTexture* m_pTextureCom_Normal[TYPE_END] = {nullptr};
 
 private:
 	_bool	m_isNormal = { false };
@@ -54,8 +58,12 @@ private:
 
 	_Vec3 m_vColor = { 0.f ,0.05f,0.1f };
 
+	BLOOD_TYPE	m_eType = { TYPE_END };
+
+	_bool		m_isTrailDecal = {};
+
 private:
-	HRESULT Ready_Components(_uint iType);
+	HRESULT Ready_Components();
 
 public:
 	static CDecal_Blood* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

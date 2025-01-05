@@ -57,7 +57,7 @@ HRESULT CState_Player_OpenRaxasiaDoor::Start_State(void* pArg)
     m_pPlayer->Get_Navigation()->Research_Cell(vInitPos);
     m_pTowerDoor->Set_IsOpen(true);
 
-    for (_uint i = 0; i < 14; ++i)
+    for (_uint i = 0; i < 7; ++i)
     {
         m_isPlaySound[i] = false;
     }

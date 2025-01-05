@@ -1,7 +1,5 @@
 #include "Shader_Engine_Defines.hlsli"
-
-matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-matrix g_ViewMatrixInv, g_ProjMatrixInv;
+#include "Shader_Function.hlsli"
 float g_fFar;
 //matrix g_CameraViewMatrix;
 
@@ -237,6 +235,79 @@ PS_OUT PS_Blood(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLOODTRAIL(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float2 vTexUV;
+    
+    vTexUV.x = In.vProjPos.x / In.vProjPos.w * 0.5f + 0.5f;
+    vTexUV.y = In.vProjPos.y / In.vProjPos.w * -0.5f + 0.5f;
+    
+    vector vDepthDesc = g_DepthTexture.Sample(PointSampler, vTexUV);
+    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, vTexUV);
+    vector vARMDesc = g_ARMTexture.Sample(PointSampler, vTexUV);
+    
+    
+    float fViewZ = vDepthDesc.y * g_fFar;
+    
+    vector vPosition = (vector) 0;
+    
+    /* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
+   /* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
+    vPosition.x = vTexUV.x * 2.f - 1.f;
+    vPosition.y = vTexUV.y * -2.f + 1.f;
+    vPosition.z = vDepthDesc.x;
+    vPosition.w = 1.f;
+
+   /* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+   /* 로컬위치 * 월드행렬 * 뷰행렬  */
+    vPosition = vPosition * fViewZ;
+    vPosition = mul(vPosition, g_ProjMatrixInv);
+    /* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+    vPosition = mul(vPosition, g_ViewMatrixInv);
+    
+    //데칼의 로컬로 이동
+    vector vLocalPos = mul(vPosition, g_vDecalWorldInverse);
+    
+    // 월드 노멀을 데칼 공간으로 이동하여 회전
+    float3 vNormal = mul(float4(vNormalDesc.xyz, 0.f), g_vDecalWorldInverse);
+    
+    float3 ObjectAbsPos = abs(vLocalPos.xyz);
+    clip(0.5f - ObjectAbsPos);
+    
+    float2 vNewTexUV = vLocalPos.xy;
+    vNewTexUV -= vLocalPos.z * vNormal.xy;
+    vNewTexUV *= 0.5f;
+    
+    //데칼 이미지 텍스 쿠드 조정
+    vNewTexUV *= 2.f;
+    vNewTexUV += 0.5f;
+    
+    //float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
+    vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearClampSampler, vNewTexUV);
+    vDecalDiffuse = vector(vDecalDiffuse.xyz, 0.8f);
+    
+    float2 vMaskUV = vNewTexUV;
+    vMaskUV.x *= 2.f;
+    vector vDecalMask = g_DeacalNormalTexture.Sample(LinearClampSampler, vMaskUV);
+    vDecalMask = vector(vDecalMask.xyz, 0.8f);
+    
+    if (vDecalDiffuse.a <= 0.1f)
+        discard;
+    
+    if (vDecalDiffuse.r <= 0.3f)
+        discard;
+    
+    Out.vColor = vector((vDecalDiffuse * vDecalMask).xyz, 1.f);
+    Out.vNormal = vNormalDesc;
+    Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    Out.vPickObjectDepth = g_fHashColor;
+    
+    return Out;
+}
+
 struct PS_OUT_PICKING
 {
     vector vColor : SV_TARGET0;
@@ -284,6 +355,17 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_Blood();
+    }
+
+    pass Monster_BloodTrail // 3
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+      
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLOODTRAIL();
     }
 }
 

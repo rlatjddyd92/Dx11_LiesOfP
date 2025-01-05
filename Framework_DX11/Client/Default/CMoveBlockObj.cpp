@@ -94,11 +94,17 @@ void CMoveBlockObj::OnCollisionExit(CGameObject* pOther)
 {
 }
 
+void CMoveBlockObj::Open_Door()
+{
+	m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_OPEN);
+	m_pRigidBodyCom->Set_Kinematic(true);
+}
+
 HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 {
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(20.f, 3.f, 0.5f);
+	ColliderDesc.vExtents = _float3(20.f, 3.f, 1.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 	ColliderDesc.vCenter = _float3(ColliderDesc.vExtents.x * 0.5f, ColliderDesc.vExtents.y*0.5f, ColliderDesc.vExtents.z * 0.5f);
 

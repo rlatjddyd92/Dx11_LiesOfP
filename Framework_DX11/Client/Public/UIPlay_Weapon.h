@@ -59,7 +59,7 @@ private:
 	UPART* m_pSharedPointer_Center = { nullptr };
 	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;
 	UPART* m_pSharedPointer_DurableGauge_Fill = { nullptr };
-	
+
 	vector<UPART*> m_vecSharedPointer_NormalWeapon_Static;
 	vector<UPART*> m_vecSharedPointer_NormalWeapon_Fx;
 	UPART* m_pSharedPointer_NormalWeapon_Blade = { nullptr };

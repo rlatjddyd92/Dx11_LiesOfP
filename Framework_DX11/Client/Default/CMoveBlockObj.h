@@ -38,6 +38,9 @@ public:
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
+public:
+	void		Open_Door();
+
 private:
 	CCollider* m_pColliderCom = { nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };

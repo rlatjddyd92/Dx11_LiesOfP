@@ -40,6 +40,7 @@
 #include "State_Player_ThrowItem.h"
 #include "State_Player_DebuffResistance.h"
 #include "State_Player_DebuffReset.h"
+#include "State_Player_RetryBoss.h"
 #include "State_Player_Die.h"
 
 #include "State_Player_OH_Idle.h"
@@ -108,6 +109,8 @@
 #include "GameInterface_Controller.h"
 
 #include "Dissolve_Player_Dead.h"
+
+#include "ObjectPool.h"
 #include "Decal_Blood.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -147,7 +150,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
@@ -159,7 +162,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
@@ -200,6 +203,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 	if (Key_Tab(KEY::WHEELBUTTON))
 		LockOnOff();
+
+	if (m_pTargetMonster && m_pTargetMonster->Get_IsDieState())
+		Safe_Release(m_pTargetMonster);
 
 	if(nullptr != m_pWeapon[m_eWeaponType])
 		m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
@@ -294,16 +300,14 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		//for (_uint i = 0; i < 30; ++i)
-		//{
-		//	_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		//	vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
-		//	vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
+		for (_uint i = 0; i < 30; ++i)
+		{
+			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
+			vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
 
-		//	CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
-		//	DEsc.vPos = vPlayerPos;
-		//	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
-		//}
+			CObjectPool<CDecal_Blood>::Get_GameObject()->Active_Random(vPlayerPos);
+		}
 
 		// late call
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
@@ -452,6 +456,24 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 
 		m_isCollisionMonster = false;
 	}
+}
+
+void CPlayer::SetUp_Die()
+{
+	m_isLockOn = false;
+
+	if (m_pTargetMonster)
+	{
+		Safe_Release(m_pTargetMonster);
+		m_pTargetMonster = nullptr;
+	}
+
+	m_bDieState = true;
+}
+
+void CPlayer::Reset_Die()
+{
+	m_bDieState = false;
 }
 
 _bool CPlayer::Key_Tab(KEY eKey)
@@ -639,6 +661,8 @@ void CPlayer::LockOnOff()
 		}
 		else
 		{
+			Safe_AddRef(m_pTargetMonster);
+
 			_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
@@ -649,6 +673,7 @@ void CPlayer::LockOnOff()
 			}
 			else
 			{
+				Safe_Release(m_pTargetMonster);
 				m_pTargetMonster = nullptr;
 				m_isLockOn = false;
 			}
@@ -656,6 +681,7 @@ void CPlayer::LockOnOff()
 	}
 	else
 	{
+		Safe_Release(m_pTargetMonster);
 		m_pTargetMonster = nullptr;
 		m_isLockOn = false;
 	}
@@ -665,6 +691,7 @@ void CPlayer::LockOnOff()
 	{
 		if (m_pTargetMonster->Get_IsDieState() || m_pFsmCom->Get_CurrentState() == DIE)
 		{
+			Safe_Release(m_pTargetMonster);
 			m_pTargetMonster = nullptr;
 			m_isLockOn = false;
 		}
@@ -716,9 +743,11 @@ CMonster* CPlayer::Find_TargetMonster()
 		}
 	}
 
-	if (nullptr != m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia")))
+	CLayer* pRaxasiaLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"));
+	CLayer* pSimonLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"));
+	if (nullptr != pRaxasiaLayer && pRaxasiaLayer->Get_ObjectCount() > 0)
 	{
-		CGameObject* pRaxasia =  m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList().front();
+		CGameObject* pRaxasia = pRaxasiaLayer->Get_ObjectList().front();
 
 		_Vec3 vNearObjPos = pNearObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		_Vec3 vRaxasiaPos = pRaxasia->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -733,9 +762,9 @@ CMonster* CPlayer::Find_TargetMonster()
 			pNearObject = pRaxasia;
 		}
 	}
-	else if (nullptr != m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus")))
+	else if (nullptr != pSimonLayer && pSimonLayer->Get_ObjectCount() > 0)
 	{
-		CGameObject* pSimon = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList().front();
+		CGameObject* pSimon = pSimonLayer->Get_ObjectList().front();
 
 		_Vec3 vNearObjPos = pNearObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		_Vec3 vRaxasiaPos = pSimon->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -1106,6 +1135,9 @@ void CPlayer::DotDamaged(_float fAtkDmg)
 
 void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStrength)
 {
+	if (m_bDieState)
+		return;
+
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 	
@@ -1253,6 +1285,7 @@ void CPlayer::Recovery_HP(_float fAmount)
 
 void CPlayer::Decrease_Arm(_float fAmount)
 {
+	m_fRecoveryArmTime = 5.f;
 	m_vGuage_Arm.x = max(0.f, m_vGuage_Arm.x - fAmount);
 }
 
@@ -1315,7 +1348,7 @@ void CPlayer::Create_ThrowItem(SPECIAL_ITEM eItemType)
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	if (0/*m_pTargetMonster*/)
+	if (m_pTargetMonster)
 	{
 		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -1480,7 +1513,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	else if (pGameObject->Get_Tag() == TEXT("LastDoor"))
 	{
 		CLastDoor* pLastDoor = dynamic_cast<CLastDoor*>(pGameObject);
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
+		if (!pLastDoor->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
 		{
 			pLastDoor->Set_IsOpen(true);
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_ENTER))->Start_Play();
@@ -1490,7 +1523,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	else if (pGameObject->Get_Tag() == TEXT("TowerDoor"))
 	{
 		CTowerDoor* pTowerDoor = dynamic_cast<CTowerDoor*>(pGameObject);
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
+		if (!pTowerDoor->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
 		{
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
 			//m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
@@ -1502,6 +1535,30 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		{
 			pGameObject->Set_Dead(true);
 			m_pFsmCom->Change_State(ITEMGET);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("MoveBlockObj"))
+	{
+		_bool isExistBoss = false;
+
+		CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"));
+		if (pLayer && pLayer->Get_ObjectList().size() > 0)
+		{
+			isExistBoss = true;
+		}
+
+		pLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"));
+		if (pLayer && pLayer->Get_ObjectList().size() > 0)
+		{
+			isExistBoss = true;
+		}
+
+		if (!isExistBoss)
+		{
+			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("진입한다")))
+			{
+				m_pFsmCom->Change_State(RETRY_BOSS, pGameObject);
+			}
 		}
 	}
 }
@@ -1842,6 +1899,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_ThrowItem::Create(m_pFsmCom, this, THROW_ITEM, &Desc));
 	m_pFsmCom->Add_State(CState_Player_DebuffResistance::Create(m_pFsmCom, this, DEBUFF_RESISTANCE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_DebuffReset::Create(m_pFsmCom, this, DEBUFF_RESET, &Desc));
+	m_pFsmCom->Add_State(CState_Player_RetryBoss::Create(m_pFsmCom, this, RETRY_BOSS, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));

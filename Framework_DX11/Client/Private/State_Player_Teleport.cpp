@@ -71,6 +71,8 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
         m_fDissloveRatio = 1.f;
         m_vRimLightColor.z = 1.f;
         m_vRimLightColor.w = 0.1f;
+
+        m_pPlayer->SetUp_Die();
     }
     else
     {
@@ -93,8 +95,6 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
     m_isFadeOut = false;
 
     m_pPlayer->Disappear_Weapon();
-
-    m_pPlayer->Reset_Die();
 
     return S_OK;
 }
@@ -134,6 +134,8 @@ void CState_Player_Teleport::End_State()
     {
         Safe_Release(m_pSteppingStone);
     }
+
+    m_pPlayer->Reset_Die();
 }
 
 _bool CState_Player_Teleport::End_Check()

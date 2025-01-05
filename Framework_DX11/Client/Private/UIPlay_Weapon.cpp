@@ -150,7 +150,7 @@ void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
 	{
 		m_pItem_Blade = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
 		m_pItem_Handle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0);
-		m_pSharedPointer_SelectNum->iTexture_Index
+		m_pSharedPointer_SelectNum->iTexture_Index;
 	}
 	else if (iWeapon == 1)
 	{
@@ -162,7 +162,7 @@ void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
 	{
 		Start_WeaponCell_Change(fTimeDelta);
 	}
-	
+
 	if (iNow_Fable_Count != iFable_Count_Now)
 	{
 		if (iNow_Fable_Count > iFable_Count_Now)
@@ -191,7 +191,7 @@ void CUIPlay_Weapon::Switch_Weapon()
 
 
 
-		UPART* m_pSharedPointer_Center = { nullptr };
+	UPART* m_pSharedPointer_Center = { nullptr };
 	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;
 	UPART* m_pSharedPointer_DurableGauge_Fill = { nullptr };
 
@@ -249,7 +249,7 @@ void CUIPlay_Weapon::Start_WeaponCell_Change(_float fTimeDelta)
 
 	m_eType_Now = GET_GAMEINTERFACE->Get_Weapon_Model_Index();
 
-	if (bSwitchMode == true) 
+	if (bSwitchMode == true)
 		Switch_Mode();
 
 	Switch_Weapon();

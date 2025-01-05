@@ -3,8 +3,9 @@
 #include "GameObject.h"
 #include "Client_Defines.h"
 
-// 공격 맞출때마다 오브젝트 매니저에 추가하는 식.
-// Prototype_GameObject_Effect_BloodTrail
+BEGIN(Engine)
+class CNavigation;
+END
 
 BEGIN(Client)
 class CBloodTrail final : public CGameObject
@@ -42,6 +43,8 @@ public:
 	TWOPOINT Get_PointPos(_uint iIndex);
 
 private:
+	class CNavigation* m_pNavigationCom = { nullptr };
+
 	class CTrail_Effect_TP* m_Effect[WEAPON_END] = {nullptr};
 	WEAPON_TYPE m_eType = { WEAPON_END };
 	_Matrix m_WorldMatrix = {};
@@ -49,6 +52,13 @@ private:
 	const _Matrix* m_pSocketMatrix = { nullptr };;
 
 private:
+	void	Create_TrailDecal();
+
+	_uint	m_iTrailPointCount = {};
+	vector<_bool> m_IsCreatDecals;
+
+private:
+	HRESULT Ready_Navigation();
 	HRESULT Ready_Effect();
 
 public:

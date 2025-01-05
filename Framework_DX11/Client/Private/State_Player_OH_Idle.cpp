@@ -88,37 +88,37 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     else if (m_pPlayer->Key_Tab(KEY::R))
     {
         SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+        _uint iItemCount = GET_GAMEINTERFACE->Get_Now_Select_Item_Count();
 
-        if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+        if (iItemCount > 0)
         {
-            m_pPlayer->Change_State(CPlayer::HEAL);
+            if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::HEAL);
+            }
+            else if (SPECIAL_ITEM::SP_GRANADE == eNow
+                || SPECIAL_ITEM::SP_THERMITE == eNow
+                || SPECIAL_ITEM::SP_THROW_BATTERY == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::THROW_ITEM);
+            }
+            else if (SPECIAL_ITEM::SP_RESISTANCE == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::DEBUFF_RESISTANCE);
+            }
+            else if (SPECIAL_ITEM::SP_PURIFICATION == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::DEBUFF_RESET);
+            }
+        }
+        
+        if (SPECIAL_ITEM::SP_TELEPOT == eNow)
+        {
+            GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), true);
         }
         else if (SPECIAL_ITEM::SP_GRINDER == eNow)
         {
-            m_pPlayer->Change_State(CPlayer::GRINDER); 
-        }
-        else if (SPECIAL_ITEM::SP_GRANADE == eNow 
-            || SPECIAL_ITEM::SP_THERMITE == eNow
-            || SPECIAL_ITEM::SP_THROW_BATTERY == eNow)
-        {
-            m_pPlayer->Change_State(CPlayer::THROW_ITEM);
-        }
-        else if (SPECIAL_ITEM::SP_RESISTANCE == eNow)
-        {
-            m_pPlayer->Change_State(CPlayer::DEBUFF_RESISTANCE);
-        }
-        else if (SPECIAL_ITEM::SP_PURIFICATION == eNow)
-        {
-            m_pPlayer->Change_State(CPlayer::DEBUFF_RESET);
-        }
-        else if (SPECIAL_ITEM::SP_TELEPOT == eNow)
-        {
-            //UI를 띄우자
-            // 25-01-05 김성용
-            // 회중시계 팝업으로 변경 
-            // 팝업의 확인을 눌러야 작동함 
-            // 순간이동은 Item_Manager에서 회중시계 사용을 감지하면 진행
-            GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), true);
+            m_pPlayer->Change_State(CPlayer::GRINDER);
         }
         else if (SPECIAL_ITEM::SP_DEAD == eNow)
         {

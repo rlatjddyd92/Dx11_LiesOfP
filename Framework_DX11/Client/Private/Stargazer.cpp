@@ -131,7 +131,6 @@ void CStargazer::Update(_float fTimeDelta)
 	{
 		m_isOpening = false;
 		m_isOpened = true;
-		GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_STARGAZER);
 		m_Effects[0]->Set_Loop(true);
 		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
 	}
@@ -150,6 +149,9 @@ void CStargazer::Update(_float fTimeDelta)
 				_Vec3 vEffectPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 				vEffectPos.y += 0.9f;
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("StarGazer_Interaction"), vEffectPos);
+
+				GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_STARGAZER);
+
 				m_isInteractEffect = true;
 			}
 		}

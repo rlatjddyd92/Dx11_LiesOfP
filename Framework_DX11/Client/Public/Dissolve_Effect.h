@@ -42,6 +42,9 @@ public:
 		m_bOn = bOn;
 		Reset();
 	}
+	_bool Get_On() {
+		return m_bOn;
+	}
 
 protected:
 	class CShader_NonVTX* m_pShaderCom = { nullptr };

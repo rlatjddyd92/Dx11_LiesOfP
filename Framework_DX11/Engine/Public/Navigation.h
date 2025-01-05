@@ -37,6 +37,7 @@ public:
 	void Move_to_Cell(class CRigidBody* pRigidBody, _int iIndex);
 	void Research_Cell(_Vec3 vNewPos, _uint* iIndex = nullptr);
 	_float Get_CellPosY(class CTransform* pTransform, _float fOffset = 0.f);
+	_float Get_CellPosY(_Vec3 vPos, _float fOffset = 0.f);
 
 #ifdef _DEBUG
 public:

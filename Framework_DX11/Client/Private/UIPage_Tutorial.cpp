@@ -73,12 +73,20 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 		m_fStartTime -= fTimeDelta * 0.3f;
 		if (m_fStartTime < 0.f)
 		{
+			m_bWaitStart = false;
 			CloseAction();
 			GET_GAMEINTERFACE->Get_Player()->Get_Navigation()->Move_to_Cell(GET_GAMEINTERFACE->Get_Player()->Get_RigidBody(), 774);
 			GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
 			GET_GAMEINTERFACE->Fade_In();
 		}
 	}
+	else if (m_fStartTime < 0.f)
+	{
+		m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+		return;
+	}
+		
+
 
 	if (m_iNowChapter == -1)
 		Next_Chapter();

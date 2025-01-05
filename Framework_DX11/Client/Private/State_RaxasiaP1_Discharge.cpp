@@ -98,6 +98,9 @@ void CState_RaxasiaP1_Discharge::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
+
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 _bool CState_RaxasiaP1_Discharge::End_Check()

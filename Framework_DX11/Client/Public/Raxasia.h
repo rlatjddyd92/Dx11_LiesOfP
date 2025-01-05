@@ -125,6 +125,7 @@ public:
 	virtual void    Change_Model(_uint iModelNum) override;
 
 	virtual void		Resetting() override;
+	virtual void		On_PowerAttack(_bool bOn) override;
 
 private:
 	vector<CGameObject*>	CollObjRenderP{};

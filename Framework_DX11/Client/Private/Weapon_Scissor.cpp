@@ -225,7 +225,7 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
 
-				CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_SCISSOR_RIGHT, m_pSocketMatrix);
+				CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_SCISSOR_LEFT, m_pSocketMatrix);
 
 				// 24-12-06 김성용
 				// 무기 사용 시, 내구도 감소 

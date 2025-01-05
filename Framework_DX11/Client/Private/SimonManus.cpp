@@ -572,6 +572,14 @@ void CSimonManus::Resetting()
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
+void CSimonManus::On_PowerAttack(_bool bOn)
+{
+	if (false == m_isChanged)
+		m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(bOn);
+	else
+		m_DissolveEffects[DISSOLVE_POWERATTACK_P2]->Set_On(bOn);
+}
+
 HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -869,11 +877,12 @@ HRESULT CSimonManus::Ready_Effects()
 	PowerAttackDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	PowerAttackDesc.fSpeedPerSec = 1.f;
 	PowerAttackDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	PowerAttackDesc.pTarget_ModelCom = m_pModelCom;
+	PowerAttackDesc.pTarget_ModelCom = m_pP1ModelCom;
 	PowerAttackDesc.pTarget_TransformCom = m_pTransformCom;
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP1_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P1] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
-
+	
+	PowerAttackDesc.pTarget_ModelCom = m_pExtraModelCom;
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 

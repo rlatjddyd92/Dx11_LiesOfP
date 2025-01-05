@@ -46,6 +46,8 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
         if(eType != m_eHitType)
             m_pPlayer->Change_Animation(m_iAnimation_Down[eType], false, 0.05f);
 
+        m_pPlayer->Set_IsInvicible(true);
+
         m_eDownType = eType;
     }
     else
@@ -112,6 +114,7 @@ void CState_Player_Hit::Update(_float fTimeDelta)
 
 void CState_Player_Hit::End_State()
 {
+    m_pPlayer->Set_IsInvicible(false);
     m_pPlayer->Set_IsGuard(false);
     m_pPlayer->Stop_Sound(CPlayer::PAWN_SOUND_EFFECT1);
 }

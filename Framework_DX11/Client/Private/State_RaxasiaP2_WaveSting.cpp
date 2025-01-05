@@ -122,6 +122,9 @@ void CState_RaxasiaP2_WaveSting::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
+
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+    m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 _bool CState_RaxasiaP2_WaveSting::End_Check()

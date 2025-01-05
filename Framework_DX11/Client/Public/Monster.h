@@ -86,7 +86,7 @@ public:
 	_bool*				Get_FirstMeetCheck() { return &m_bFirstMeetCheck; };
 	_Vec3				Get_Look() { return XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)); }
 	_bool				Get_IsWeakness() { return m_eStat.bWeakness; }//해당 위크니스는 각각 몹에서 그로기 양 비교하도록 만들기
-
+	virtual void		On_PowerAttack(_bool bOn) {};
 	virtual void		Resetting() {};
 
 protected:
