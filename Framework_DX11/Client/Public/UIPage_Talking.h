@@ -162,6 +162,12 @@ public:
 	_bool IsTalking_WithNPC() { return !m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)]; }
 	_bool IsTalking_SelectPage() { return (m_vSelectTime.x >= 0.f); }
 
+	_bool IsTalking_WithNPC(NPC_SCRIPT eNPC); // 대화가 진행 중일 때 
+	_bool IsEndTalk_WithNPC(NPC_SCRIPT eNPC); // 대화가 끝난 경우
+
+
+
+
 protected:
 	void Update_Script(_float fTimeDelta);
 	void Update_Select(_float fTimeDelta);

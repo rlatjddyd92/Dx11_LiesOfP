@@ -199,7 +199,10 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_1)] = TEXT("착용하기 : 보조가방 2번");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_2)] = TEXT("착용하기 : 보조가방 3번");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_3)] = TEXT("착용하기 : 보조가방 4번");
-
+	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0)]->fSize.y *= 0.8f;
+	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_1)]->fSize.y *= 0.8f;
+	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_2)]->fSize.y *= 0.8f;
+	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_3)]->fSize.y *= 0.8f;
 
 	Off_ItemAction();
 

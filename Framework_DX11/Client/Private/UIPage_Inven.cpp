@@ -236,6 +236,9 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 		m_iNowCell = 0;
 
 		m_pScroll->DeActivate_Scroll_Y();
+
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = 0.f;
+		m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = m_fData_Adjust_Y_Origin;
 	}
 }
 

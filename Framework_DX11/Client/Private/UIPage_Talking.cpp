@@ -177,6 +177,24 @@ void CUIPage_Talking::Show_Select_Script(_wstring strLeft, _wstring strRight, _f
 
 }
 
+_bool CUIPage_Talking::IsTalking_WithNPC(NPC_SCRIPT eNPC)
+{
+	if (m_eNowNpc != eNPC)
+		return false;
+	else if (IsEndTalk_WithNPC(eNPC) == true)
+		return false;
+
+	return true;
+}
+
+_bool CUIPage_Talking::IsEndTalk_WithNPC(NPC_SCRIPT eNPC)
+{
+	if (m_vecNpc_ScriptInfo[_int(eNPC)]->iScript_Num == m_vecNpc_ScriptInfo[_int(eNPC)]->vecScript.size() - 1)
+		return true;
+
+	return false;
+}
+
 void CUIPage_Talking::Update_Script(_float fTimeDelta)
 {
 	if (m_eNowNpc == NPC_SCRIPT::SCR_END)

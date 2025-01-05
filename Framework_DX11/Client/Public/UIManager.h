@@ -354,10 +354,12 @@ public:
 
 	void Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
 	{ 
+		Mute_UI_Volume(false);
 		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
 	}
 	void Fade_In(_float fTime = 1.f)
 	{ 
+		Mute_UI_Volume(true);
 		m_pUIPage_Effect->Fade_In(fTime);
 	}
 	void UIPart_On()

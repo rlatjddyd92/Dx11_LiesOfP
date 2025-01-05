@@ -36,24 +36,33 @@ public:
 private:
 	void Switch_Weapon();
 	void Switch_Mode();
-	void Set_Fable();
 
 	void Start_WeaponCell_Change(_float fTimeDelta);
-	void Start_FableGauge_Change(_float fTimeDelta);
+	void Start_FableGauge_Use(_float fTimeDelta);
 
 	void Update_DurableGauge(_float fTimeDelta);
 	void Update_WeaponCell_Fx(_float fTimeDelta);
-	void Update_FableGauge(_float fTimeDelta);
+	void Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now);
 
 
 private:
-	const CItem_Manager::ITEM* m_pItem = { nullptr };
+	const CItem_Manager::ITEM* m_pItem_Blade = { nullptr };
+	const CItem_Manager::ITEM* m_pItem_Handle = { nullptr };
 	CPlayer::WEAPON_TYPE m_eType_Now = CPlayer::WEAPON_TYPE::WEP_END;
+
+	_int iNow_Fable_Count = 0;
+	_int iNow_SelectWeapon = 0;
+	_int m_iWeapon_Equip_Symbol = 0;
+
+	_bool m_bIsBladeWhite_Active = false;
+	_Vec2 m_vFableWhite_ActionTime = { 0.f,0.5f };
+
+
 
 	UPART* m_pSharedPointer_Center = { nullptr };
 	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;
 	UPART* m_pSharedPointer_DurableGauge_Fill = { nullptr };
-	
+
 	vector<UPART*> m_vecSharedPointer_NormalWeapon_Static;
 	vector<UPART*> m_vecSharedPointer_NormalWeapon_Fx;
 	UPART* m_pSharedPointer_NormalWeapon_Blade = { nullptr };

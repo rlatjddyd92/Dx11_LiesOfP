@@ -80,6 +80,9 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 		if (i == _int(PART_GROUP::GROUP_POTION_FILL))
 			continue;
 
+		/*if ((i >= _int(PART_GROUP::GROUP_WEAPON_DURABLE_FRAME)) && (i <= _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)))
+			continue;*/
+
 		__super::UpdatePart_ByControl(m_vec_Group_Ctrl[i]);
 	}
 
@@ -683,7 +686,7 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_NAME))->strText = pNow->strName;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_TEX))->iTexture_Index = pNow->iTexture_Index;
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_GAUGE_FILL))->fRatio = vGauge.x / vGauge.y;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ARM_GAUGE_FILL)]->fRatio = vGauge.x / vGauge.y;
 }
 
 void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
