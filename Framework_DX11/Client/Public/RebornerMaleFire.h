@@ -41,6 +41,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void		Resetting() override;
+
 private:
 	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };
 
@@ -54,11 +57,15 @@ private:
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
 
+
+private:
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
 	class CWeapon* m_pWeapon = { nullptr };
 
 	class CEffect_Container* m_pFireEffect = { nullptr };
+
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();

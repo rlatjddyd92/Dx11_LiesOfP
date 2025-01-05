@@ -55,12 +55,22 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
+	m_eStat.fHp = 1000.f;
+	m_eStat.fMaxHp = 1000.f;
+	m_eStat.fAtk = 200.f;
+	//m_eStat.fDefence = 2.f;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 210.f;
+
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
-	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
+	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
 
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 
@@ -72,24 +82,12 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-	//	XMVectorSet(0.f, 0.f, 0.f, 1.f));
-	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
-
-	//m_pRigidBodyCom->Set_GloblePose(_Vec3{ 0.f, -5.f, 0.f } + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 8);
-
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
-
-	m_eStat.fHp = 1000.f;
-	m_eStat.fAtk = 200.f;
-	//m_eStat.fDefence = 2.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 0.91f, 0.f };
 
 	m_bDiscover = false;
 
-	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 210.f;
 
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL, this);
 
@@ -167,13 +165,34 @@ HRESULT CCarcassTail::Render()
 	{
 		m_EXCollider[i]->Render();
 	}
-	//for (_uint i = 0; i < TYPE_END; ++i)
-	//{
-	//	//m_pColliderObject[i]->Active_Collider();
-	//	m_pColliderObject[i]->Render();
-	//}
 #endif
 	return S_OK;
+}
+
+void CCarcassTail::Resetting()
+{
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
+
+	m_eStat.fHp = 1000.f;
+	m_eStat.fMaxHp = 1000.f;
+	m_eStat.fAtk = 200.f;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 210.f;
+
+	m_eStat.bWeakness = false;
+
+	m_bDiscover = false;
+	m_bFirstMeetCheck = false;
+
+	m_bFatalAttacked = false;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
+
+	Change_State(CMonster::IDLE);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
 void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)

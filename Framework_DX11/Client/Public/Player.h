@@ -27,6 +27,10 @@ public:
 
 		EFFECT_CUTSCENE_ARM_OPENDOOR,
 
+		EFFECT_ARM_BUFF,
+
+		EFFECT_ITEM_PURIFICATION, EFFECT_ITEM_RESISTANCE,
+
 		EFFECT_END
 	};
 
@@ -106,7 +110,7 @@ public:
 		_int iPoint_Heal = 1;
 
 		// ´É·ÂÄ¡ 
-		_float iStat_Attack = 20.f;
+		_float iStat_Attack = 1000.f;
 		_float iStat_Defence = 20.f;
 
 
@@ -208,7 +212,10 @@ public:
 	void					Set_isPlayingCutscene(_bool isPlaying) { m_isPlayingCutscene = isPlaying; }
 
 	_float					Get_AttackBuffTime() { return m_fAttackBuffTime; }
-	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime; }
+	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime = fTime; }
+
+	_bool					Get_IsRespawnMonster() { return m_isRespawnMonster; }
+	void					Set_IsRespawnMonster(_bool isRespawn) { m_isRespawnMonster = isRespawn; }
 
 #pragma region PLAYER_STAT
 	STAT_INFO& Get_Player_Stat() { return *m_tPlayer_Stat; }
@@ -289,6 +296,7 @@ public:
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();
+	void			Increase_Region(_float fAmount);
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 	void			Recovery_HP(_float fAmount);
@@ -332,6 +340,7 @@ private:
 	_bool				m_isLadderEnd = { false };
 	_bool				m_isTeleport = { false };
 	_bool				m_isCollisionMonster = { false };
+	_bool				m_isRespawnMonster = { false };
 
 	_float				m_fGuardTime = {};
 	_float				m_fDebuffSpeedRatio = { 1.f };

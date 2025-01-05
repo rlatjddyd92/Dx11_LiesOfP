@@ -432,6 +432,15 @@ protected: // ItemAction
 protected: // Sound
 	class CSound* m_pSoundCom = { nullptr };
 
+protected: // FireEffect
+
+
+
+
+
+
+protected: // Shaking
+
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

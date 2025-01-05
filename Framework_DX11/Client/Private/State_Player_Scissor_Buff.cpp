@@ -73,6 +73,7 @@ void CState_Player_Scissor_Buff::Update(_float fTimeDelta)
     }
     else if (m_iCombineFrame == iFrame || m_iCombineFrame + 1 == iFrame)
     {
+        m_pPlayer->Set_AttackBuffTime(30.f);
         m_pPlayer->Combine_Scissor();
     }
 

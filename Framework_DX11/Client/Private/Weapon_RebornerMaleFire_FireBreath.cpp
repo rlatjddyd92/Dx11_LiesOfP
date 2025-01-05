@@ -136,22 +136,8 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionEnter(CGameObject* pOther)
 		{
 			return;
 		}
-		_bool bOverlapCheck = false;
-		for (auto& pObj : m_DamagedObjects)
-		{
-			if (pObj == pOther)
-			{
-				bOverlapCheck = true;
-				break;
-			}
-		}
 
-		if (!bOverlapCheck)
-		{
-			m_DamagedObjects.push_back(pOther);
-			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
-		}
+		static_cast<CPlayer*>(pOther)->Damaged(5.f);
 	}
 }
 
@@ -164,23 +150,9 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionStay(CGameObject* pOther)
 		{
 			return;
 		}
-		_bool bOverlapCheck = false;
-		for (auto& pObj : m_DamagedObjects)
-		{
-			if (pObj == pOther)
-			{
-				bOverlapCheck = true;
-				break;
-			}
-		}
 
-		if (!bOverlapCheck)
-		{
-			m_DamagedObjects.push_back(pOther);
-			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			//pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
-			static_cast<CPlayer*>(pOther)->DotDamaged(5.f);
-		}
+		static_cast<CPlayer*>(pOther)->Damaged(5.f);
+
 	}
 }
 

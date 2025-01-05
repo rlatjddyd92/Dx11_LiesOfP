@@ -50,28 +50,7 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
-
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
-
-	if (FAILED(Ready_Weapon()))
-		return E_FAIL;
-
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
-	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
-
-	m_pModelCom->SetUp_Animation(95, true);
-
-	if (FAILED(Ready_FSM()))
-		return E_FAIL;
-
-	m_strObjectTag = TEXT("Monster");
-
-	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
-
-
-	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
-
+	
 	m_eStat.fHp = 120.f;
 	m_eStat.fMaxHp = 120.f;
 	m_eStat.fAtk = 120.f;
@@ -82,12 +61,30 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 80.f;
 
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Weapon()))
+		return E_FAIL;
+
+	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
+
+	m_pModelCom->SetUp_Animation(95, true);
+
+	if (FAILED(Ready_FSM()))
+		return E_FAIL;
+
+	m_strObjectTag = TEXT("Monster");
+
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
+
 	m_vCenterOffset = _Vec3{ 0.f, 1.2f, 0.f };
 
 	m_bDiscover = false;
-	// 24-11-26 김성용
-	// 몬스터 직교 UI 접근 코드 
-	// 정식 코드  
+
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -166,6 +163,32 @@ HRESULT CCarcassNormal::Render()
 	}
 #endif
 	return S_OK;
+}
+
+void CCarcassNormal::Resetting()
+{
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
+
+	m_eStat.fHp = 120.f;
+	m_eStat.fMaxHp = 120.f;
+	m_eStat.fAtk = 120.f;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 80.f;
+
+	m_eStat.bWeakness = false;
+
+	m_bDiscover = false;
+	m_bFirstMeetCheck = false;
+
+	m_bFatalAttacked = false;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
+
+	Change_State(CMonster::IDLE);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
 void CCarcassNormal::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)

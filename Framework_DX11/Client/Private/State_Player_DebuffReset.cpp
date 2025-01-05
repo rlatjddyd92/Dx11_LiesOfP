@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Player.h"
 
+#include "Effect_Manager.h"
+
 CState_Player_DebuffReset::CState_Player_DebuffReset(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -37,6 +39,9 @@ HRESULT CState_Player_DebuffReset::Start_State(void* pArg)
 
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 
+    m_isCreateItem = false;
+    m_isActiveItem = false;
+
     return S_OK;
 }
 
@@ -46,11 +51,17 @@ void CState_Player_DebuffReset::Update(_float fTimeDelta)
 
     if (!m_isCreateItem && iFrame > 20)
     {
+        m_pPlayer->Active_Effect(CPlayer::EFFECT_ITEM_PURIFICATION);
         m_isCreateItem = true;
     }
-    else if ((iFrame == 65 || iFrame == 66))
+    else if (!m_isActiveItem && (iFrame == 65 || iFrame == 66))
     {
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Purification_Active"), 
+            (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+
         m_pPlayer->Use_DebuffResetItem();
+
+        m_isActiveItem = true;
     }
     else if (End_Check())
     {
@@ -65,8 +76,9 @@ void CState_Player_DebuffReset::Update(_float fTimeDelta)
 
 void CState_Player_DebuffReset::End_State()
 {
+    m_pPlayer->Appear_Weapon();
     m_pPlayer->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
-    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
+    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_ITEM_PURIFICATION);
 }
 
 _bool CState_Player_DebuffReset::End_Check()

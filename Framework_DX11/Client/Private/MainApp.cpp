@@ -61,6 +61,8 @@ void CMainApp::Update(_float fTimeDelta)
 	// UI 연출 관련 테스트 코드 
 	if (KEY_HOLD(KEY::CTRL))
 	{
+		if (KEY_TAP(KEY::NUM2))
+			GET_GAMEINTERFACE->Show_PlayerDead_UI();
 		if (KEY_TAP(KEY::NUM3))
 			GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다"));
 		if (KEY_TAP(KEY::NUM4))

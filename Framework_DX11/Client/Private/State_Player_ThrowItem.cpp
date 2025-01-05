@@ -44,6 +44,10 @@ HRESULT CState_Player_ThrowItem::Start_State(void* pArg)
     m_isPlaySound = false;
     m_isThrowItem = false;
 
+    // 25-01-04 김성용
+   // 포션, 투척물 락 풀기
+    GET_GAMEINTERFACE->Set_PotionThrow_Lock(false);
+
     return S_OK;
 }
 

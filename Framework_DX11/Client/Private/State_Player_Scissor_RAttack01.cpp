@@ -152,7 +152,10 @@ void CState_Player_Scissor_RAttack01::Control_Collider()
     {
         if (m_iColliderStartFrameLeft <= iFrame && iFrame <= m_iColliderEndFrameLeft)
         {
-            m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+            if (m_pPlayer->Active_CurrentWeaponCollider(3.f, 1))
+            {
+                m_pPlayer->Decrease_Stamina(45.f);
+            }
         }
         else
         {
@@ -161,7 +164,10 @@ void CState_Player_Scissor_RAttack01::Control_Collider()
 
         if (m_iColliderStartFrameRight <= iFrame && iFrame <= m_iColliderEndFrameRight)
         {
-            m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+            if (m_pPlayer->Active_CurrentWeaponCollider(3.f, 0))
+            {
+                m_pPlayer->Decrease_Stamina(45.f);
+            }
         }
         else
         {

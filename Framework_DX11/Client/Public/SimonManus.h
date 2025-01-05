@@ -111,6 +111,7 @@ public:
 
 	void On_Aura(_bool bAura, _bool bCutScene);
 
+	virtual void		Resetting() override;
 private:
 	CColliderObject* m_pColliderObject = { nullptr };
 	vector<CGameObject*>	CollObjRenderP{};

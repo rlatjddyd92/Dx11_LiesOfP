@@ -44,6 +44,11 @@ private:
 	_bool	m_isNormal = { false };
 	_bool	m_bUseWorldColor = { false };
 
+	_float	m_fRenderTime = { 0.f };
+	_float  m_fRenderTimer = { 0.f };
+	_float  m_fCurrentSize = { 0.f };
+	_float  m_fShrinkSpeed= { 0.f };
+
 	_tchar m_szTextureTag_Diffuse[MAX_PATH];
 	_tchar m_szTextureTag_Normal[MAX_PATH];
 

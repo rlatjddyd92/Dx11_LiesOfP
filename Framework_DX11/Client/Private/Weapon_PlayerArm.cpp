@@ -41,7 +41,7 @@ HRESULT CWeapon_PlayerArm::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_pColliderCom->Set_Owner(this);
-	m_fDamageAmount = 85.f;
+	m_fDamageAmount = 100.f;
 
 	m_pColliderCom->IsActive(false);
 

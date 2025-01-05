@@ -7,9 +7,10 @@
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
-// 24-12-06 김성용
-// 내구도 조정 함수 연결을 위한 헤더 추가 
 #include "GameInterface_Controller.h"
+
+#include "ObjectPool.h"
+#include "BloodTrail.h"
 
 CWeapon_Scissor::CWeapon_Scissor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
@@ -181,12 +182,15 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 			if (m_pBladeMatrix)
 				vHitPos = m_BladeWorldMatrix.Translation();
 
-			_float fFinalDamageAmount = m_fDamageAmount;
+			m_fFinalDamageAmount = m_fDamageAmount;
+			m_fFinalDamageAmount *= m_pPlayer->Get_Player_Stat().iStat_Attack * 0.005f * m_pGameInstance->Get_Random(0.97f, 1.05f);
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
-				fFinalDamageAmount *= 1.2f;
+				m_fFinalDamageAmount *= 1.2f;
 
-			if (pMonster->Calc_DamageGain(fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
+			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
+				m_pPlayer->Increase_Region(10.f);
+
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
 
@@ -221,8 +225,7 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
 
-				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Scissor"),
-					m_pParentMatrix, m_pSocketMatrix);
+				CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_SCISSOR_RIGHT, m_pSocketMatrix);
 
 				// 24-12-06 김성용
 				// 무기 사용 시, 내구도 감소 

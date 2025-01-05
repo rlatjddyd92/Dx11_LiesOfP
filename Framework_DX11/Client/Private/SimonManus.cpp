@@ -102,6 +102,16 @@ HRESULT CSimonManus::Initialize(void* pArg)
 		XMVectorSet(0.f, 0.f, 0.f, 1.f));
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
+	m_eStat.strName = TEXT("시몬 마누스");
+
+	m_eStat.fHp = 3000.f;
+	m_eStat.fMaxHp = 3000.f;
+	m_eStat.fAtk = 270.f;
+	//m_eStat.fDefence = 5.f;
+
+	m_eStat.bWeakness = false;
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 390.f;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -122,17 +132,6 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	{
 		m_EXCollider[i]->Set_Owner(this);
 	}
-
-	m_eStat.strName = TEXT("시몬 마누스");
-
-	m_eStat.fHp = 3000.f;
-	m_eStat.fMaxHp = 3000.f;
-	m_eStat.fAtk = 270.f;
-	//m_eStat.fDefence = 5.f;
-
-	m_eStat.bWeakness = false;
-	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 390.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.95f, 0.f };
 
@@ -564,6 +563,13 @@ void CSimonManus::On_Aura(_bool bAura, _bool bCutScene)
 {
 	m_DissolveEffects[DISSOLVE_AURA]->Set_On(bAura);
 	static_cast<CSimonManus_2P_Aura*>(m_DissolveEffects[DISSOLVE_AURA])->Set_CutScene(bCutScene);
+}
+
+void CSimonManus::Resetting()
+{
+	m_isDead = true;
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
 HRESULT CSimonManus::Ready_Components()

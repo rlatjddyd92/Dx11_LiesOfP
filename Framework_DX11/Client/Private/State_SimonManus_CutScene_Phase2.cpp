@@ -33,7 +33,22 @@ HRESULT CState_SimonManus_CutScene_Phase2::Start_State(void* pArg)
 
     m_pMonster->Change_Animation(m_iAnimation_Change, false, 0.f, 0);
 
-    m_isChangePhase2 = false;
+    m_isChangePhase2 = { false };
+    m_isCreatedHand = { false };
+    m_isCreateDome = { false };
+    m_isDistortionHand = { false };
+    m_bAnimationSpeedDown = { false };
+    m_bAnimationStop = { false };
+    m_bAnimationRestart = { false };
+    m_isFirstEmissive = { false };
+    m_isSecondEmissive = { false };
+    m_isMaxEmissive = false;
+    ZeroMemory(m_isShowDialog, sizeof(_bool) * 2);
+    ZeroMemory(m_isKneeDown, sizeof(_bool) * 2);
+    m_isHandSmoke = { false };
+    m_isAura = { false };
+    m_isParticle = { false };
+    m_fStopedTimer = 0.f;
 
     m_pMonster->Set_EmissiveMask(0.12f);
 

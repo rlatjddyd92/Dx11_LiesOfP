@@ -165,7 +165,10 @@ void CState_Player_Scissor_Charge00::Control_Collider()
         if (m_iColliderStartFrame_Left[i] <= iFrame && iFrame <= m_iColliderEndFrame_Left[i])
         {
             isOnLeftCollider[i] = true;
-            m_pPlayer->Active_CurrentWeaponCollider(1.f, 1);
+            if (m_pPlayer->Active_CurrentWeaponCollider(1.f, 1))
+            {
+                m_pPlayer->Decrease_Stamina(45.f);
+            }
         }
         else if(!isOnLeftCollider[0] && !isOnLeftCollider[1])
         {
@@ -175,7 +178,10 @@ void CState_Player_Scissor_Charge00::Control_Collider()
         if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
         {
             isOnRightCollider[i] = true;
-            m_pPlayer->Active_CurrentWeaponCollider(1.f, 0);
+            if (m_pPlayer->Active_CurrentWeaponCollider(1.f, 0))
+            {
+                m_pPlayer->Decrease_Stamina(45.f);
+            }
         }
         else if (!isOnRightCollider[0] && !isOnRightCollider[1])
         {

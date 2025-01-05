@@ -6,6 +6,7 @@
 #include "FreeCamera.h"
 #include "PlayerCamera.h"
 #include "GameInstance.h"
+#include "Layer.h"
 #include "GameInterface_Controller.h"
 
 #include "Effect_Container.h"
@@ -15,8 +16,14 @@
 #include "Player.h"
 #include "Ladder.h"
 #include "CutScene.h"
+#include "Monster.h"
 
-#include "CMoveBlockObj.h"
+#pragma region 풀링
+#include "ObjectPool.h"
+
+#include "BloodTrail.h"
+#include "Decal_Blood.h"
+#pragma endregion
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -52,12 +59,10 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_CutScene_Data()))
 		return E_FAIL;
 
+	if (FAILED(Ready_PoolingObject()))
+		return E_FAIL;
 
-
-	// 24-11-19 김성용
-	// 게임 인터페이스를 인게임 모드로 전환
 	GET_GAMEINTERFACE->SetIngame(true);
-
 
 	m_pGameInstance->Set_Listener(m_pPlayer);
 
@@ -87,6 +92,27 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 
 		tDesc->isOnHDR = !tDesc->isOnHDR;
 
+	}
+
+	if (m_pPlayer->Get_IsRespawnMonster())
+	{
+		// 몬스터 부활
+		vector<CGameObject*> ObjectVector = m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_ObjectList();
+
+		_uint iSize = ObjectVector.size();
+
+		for (_int i = 0; i < iSize; ++i)
+		{
+			static_cast<CMonster*>(ObjectVector[i])->Resetting();
+		}
+
+		if(m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia")))
+			static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList()[0])->Resetting();
+
+		if (m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus")))
+			static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList()[0])->Resetting();
+
+		m_pPlayer->Set_IsRespawnMonster(false);
 	}
 }
 
@@ -228,8 +254,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"))))	//**
 	//	return E_FAIL; 
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMaleFire"))))	//**
-		return E_FAIL; 
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMaleFire"))))	//**
+	//	return E_FAIL; 
 
 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))	//**
@@ -548,6 +574,24 @@ HRESULT CLevel_GamePlay::Ready_CutScene_Data()
 	return S_OK;
 }
 
+HRESULT CLevel_GamePlay::Ready_PoolingObject()
+{
+	CBloodTrail::BLOODTRAIL_DESC BloodTrailDesc{};
+	BloodTrailDesc.pParentMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr();
+	BloodTrailDesc.pSocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	for (_uint i = 0; i < 8; ++i)
+	{
+		CBloodTrail* pBloodTrail = dynamic_cast<CBloodTrail*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect_Polling"), TEXT("Prototype_GameObject_Effect_BloodTrail"), &BloodTrailDesc));
+		if (!pBloodTrail)
+			return E_FAIL;
+
+		CObjectPool<CBloodTrail>::Return_GameObject(pBloodTrail);
+	}
+
+	return S_OK;
+}
+
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CLevel_GamePlay*		pInstance = new CLevel_GamePlay(pDevice, pContext);
@@ -565,6 +609,7 @@ void CLevel_GamePlay::Free()
 {
 	__super::Free();
 
+	CObjectPool<CBloodTrail>::Clear();
 
 	m_pGameInstance->Set_Listener(nullptr);
 	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기

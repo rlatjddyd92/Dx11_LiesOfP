@@ -27,21 +27,15 @@ private:
     class CPlayer* m_pPlayer = { nullptr };
 
     _uint               m_iAnimation_Healing = {};
-    _uint               m_iAnimation_Walk[WALK_END] = {};
 
     _bool               m_isCreateItem = { false };
-
-    _Vec4               m_vMoveDir = {};
-
-    _float              m_fMoveSpeed = {};
+    _bool               m_isActiveItem = { false };
+    _bool               m_isItemEffect = { false };
 
     _double* m_pTrackPos = { nullptr };
 
 private:
     _bool               End_Check();
-
-private:
-    _bool               Move(_float fTimeDelta);
 
 public:
     static CState_Player_DebuffResistance* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

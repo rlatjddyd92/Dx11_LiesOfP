@@ -50,8 +50,8 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 50.f;
-	m_eStat.fMaxHp = 50.f;
+	m_eStat.fHp = 3000.f;
+	m_eStat.fMaxHp = 3000.f;
 	m_eStat.fAtk = 0.1f;
 	//m_eStat.fDefence = 3.f;
 	
@@ -59,6 +59,8 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
+
+	m_vCenterOffset = _Vec3(0.f, 1.5f, 0.f);
 
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK, this);
 
@@ -73,7 +75,10 @@ void CMonster_Training01::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
 
-	
+	if (m_eStat.fHp <= 0.f)
+	{
+		m_eStat.fHp = m_eStat.fMaxHp;
+	}
 
 	m_pColliderObject->Priority_Update(fTimeDelta);
 }
@@ -161,6 +166,27 @@ void CMonster_Training01::Active_CurrentWeaponCollider(_float fDamageRatio, _uin
 void CMonster_Training01::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
 	m_pColliderObject->DeActive_Collider();
+}
+
+_bool CMonster_Training01::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
+{
+	if (m_bDieState)
+	{
+		return false;
+	}
+
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_STRONG)
+	{
+		m_eStat.bFatalAttack = true;
+	}
+
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
+	{
+		m_eStat.bFatalAttack = false;
+		m_bFatalAttacked = true;
+	}
+
+	return true;
 }
 
 HRESULT CMonster_Training01::Ready_Components()

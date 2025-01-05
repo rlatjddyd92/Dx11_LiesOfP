@@ -310,9 +310,13 @@ ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 
 	if (m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 	{
+		if (m_bPotion_Throw_Lock == true)
+			return ITEM_RESULT::RESULT_INVALID;
+
 		if (Use_Potion())
 		{
 			m_bIsChange = true;
+			GET_GAMEINTERFACE->Set_PotionThrow_Lock(true);
 			Set_Item_Funtion(m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index);
 			return ITEM_RESULT::RESULT_SUCCESS;
 		}
@@ -321,8 +325,21 @@ ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 	}
 	else
 	{
-		Set_Item_Funtion(m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index);
-		return m_vecArray_Inven[_uint(eArray)]->Use_Item(iIndex, iCount);
+		_bool bIsThrow = false;
+		if (m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->eType_Index == ITEM_TYPE::ITEMTYPE_THROW)
+		{
+			if (m_bPotion_Throw_Lock == true)
+				return ITEM_RESULT::RESULT_INVALID;
+
+			bIsThrow = true;
+		}
+		
+		if (m_vecArray_Inven[_uint(eArray)]->Use_Item(iIndex, iCount) == ITEM_RESULT::RESULT_SUCCESS)
+		{
+			GET_GAMEINTERFACE->Set_PotionThrow_Lock(true);
+			Set_Item_Funtion(m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index);
+			return ITEM_RESULT::RESULT_SUCCESS;
+		}
 	}
 		
 }
@@ -334,9 +351,13 @@ ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, 
 
 	if (m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 	{
+		if (m_bPotion_Throw_Lock == true)
+			return ITEM_RESULT::RESULT_INVALID;
+
 		if (Use_Potion())
 		{
 			m_bIsChange = true;
+			GET_GAMEINTERFACE->Set_PotionThrow_Lock(true);
 			Set_Item_Funtion(m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index);
 			return ITEM_RESULT::RESULT_SUCCESS;
 		}
@@ -345,8 +366,21 @@ ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, 
 	}
 	else
 	{
-		Set_Item_Funtion(m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index);
-		return m_vecArray_Inven[_uint(eIndex)]->Use_Item(iIndex, iCount);
+		_bool bIsThrow = false;
+		if (m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->eType_Index == ITEM_TYPE::ITEMTYPE_THROW)
+		{
+			if (m_bPotion_Throw_Lock == true)
+				return ITEM_RESULT::RESULT_INVALID;
+
+			bIsThrow = true;
+		}
+		
+		if (m_vecArray_Inven[_uint(eIndex)]->Use_Item(iIndex, iCount) == ITEM_RESULT::RESULT_SUCCESS)
+		{
+			GET_GAMEINTERFACE->Set_PotionThrow_Lock(true);
+			Set_Item_Funtion(m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index);
+			return ITEM_RESULT::RESULT_SUCCESS;
+		}
 	}
 }
 
@@ -458,7 +492,6 @@ _bool CItem_Manager::Use_Potion()
 	for (_int i = 0; i < 5; ++i)
 		if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 			m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iCount = m_iNow_Potion_Count;
-
 	return true;
 }
 

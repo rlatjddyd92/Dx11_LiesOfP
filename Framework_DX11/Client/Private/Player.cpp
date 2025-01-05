@@ -153,14 +153,15 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
+	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
 	m_iRespawn_Cell_Num = 772;
 
@@ -175,6 +176,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	GET_GAMEINTERFACE->Input_Player_Pointer(this);
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
+
+	
 
 	return S_OK;
 }
@@ -288,17 +291,19 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		for (_uint i = 0; i < 30; ++i)
-		{
-			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
-			vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
+		//for (_uint i = 0; i < 30; ++i)
+		//{
+		//	_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		//	vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
+		//	vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
 
-			CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
-			DEsc.vPos = vPlayerPos;
-			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
-		}
+		//	CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
+		//	DEsc.vPos = vPlayerPos;
+		//	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
+		//}
 
+		// late call
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 		//Change_State(FLAME_FATAL);
 	}
@@ -814,14 +819,14 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				if (strObjecTag == TEXT("Monster"))
 				{
 					CMonster* pMonster = dynamic_cast<CMonster*>(pAttacker);
-					pMonster->Increase_GroggyPoint(10.f);
+					pMonster->Increase_GroggyPoint(50.f);
 
 				}
 				else if (strObjecTag == TEXT("MonsterWeapon"))
 				{
 					CWeapon* pWeapon = dynamic_cast<CWeapon*>(pAttacker);
 					CMonster* pMonster = pWeapon->Get_Monster();
-					pMonster->Increase_GroggyPoint(10.f);
+					pMonster->Increase_GroggyPoint(50.f);
 				}
 			}
 
@@ -829,6 +834,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
+
 
 			return false;
 		}
@@ -938,6 +944,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			{
 				Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
 				Decrease_Stamina(fAtkDmg * 0.23f);
+
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-12.f);
 			}
 		}
 
@@ -1001,7 +1009,7 @@ _bool CPlayer::Decrease_Stamina(_float fAmount)
 	}
 	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x;
 
-	m_fStaminaRecoveryTime = 0.3f;	// 0.3초 후에 회복
+	m_fStaminaRecoveryTime = 0.7f;	// 0.7초 후에 회복
 
 	return true;
 }
@@ -1036,6 +1044,11 @@ _bool CPlayer::Check_Region_Fable02()
 	return true;
 }
 
+void CPlayer::Increase_Region(_float fAmount)
+{
+	m_tPlayer_Stat->vGauge_Region.x = min(m_tPlayer_Stat->vGauge_Region.x + fAmount, m_tPlayer_Stat->vGauge_Region.z + m_tPlayer_Stat_Adjust->vGauge_Region.z);
+}
+
 void CPlayer::Decrease_Region(_uint iRegionCount)
 {
 	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
@@ -1047,8 +1060,8 @@ void CPlayer::Decrease_Region(_uint iRegionCount)
 			return;
 	}
 
-	//m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
-	//m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+	m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
+	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
 }
 
 void CPlayer::Recovery_Region(_float fAmount)
@@ -1075,7 +1088,7 @@ void CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 
 	GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
 	m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.3f);
 	if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
 		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.7f);
 
@@ -1090,6 +1103,9 @@ void CPlayer::DotDamaged(_float fAtkDmg)
 
 void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStrength)
 {
+	if (m_bDieState)
+		return;
+
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 	
@@ -1210,9 +1226,14 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 #pragma region 가위 공격력 버프
 	if (m_fAttackBuffTime > 0.f)
 	{
+		Active_Effect(EFFECT_ARM_BUFF);
+
 		m_fAttackBuffTime -= fTimeDelta;
 		if (m_fAttackBuffTime <= 0.f)
+		{
+			DeActive_Effect(EFFECT_ARM_BUFF);
 			m_fAttackBuffTime = 0.f;
+		}
 	}
 	
 }
@@ -1691,7 +1712,7 @@ void CPlayer::Check_FatalAttack()
 	_float fDirDot = vMonsterLook.Dot(vDir_MostertoPlayer);
 	_float fLookDot = vMonsterLook.Dot(vPlayerLook);
 
-	if (fDirDot >= 0.85f && fLookDot >= 0.8f)
+	if ((fDirDot >= 0.85f && fLookDot >= 0.8f) || m_pContactMonster->Get_Status()->bFatalAttack)
 	{
 		m_isFatalAttack = true;
 	}
@@ -1929,6 +1950,16 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_CUTSCENE_ARM_OPENDOOR] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Arm_Electric"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand");
+	m_Effects[EFFECT_ARM_BUFF] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Scissor_Aura"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 180.f));
+
+	m_Effects[EFFECT_ITEM_PURIFICATION] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Item_Purification_Use"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 0.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-Spine");
+	m_Effects[EFFECT_ITEM_RESISTANCE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Item_Resistance_Active"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_DissolveEffects.resize(DISSOLVE_END);
 

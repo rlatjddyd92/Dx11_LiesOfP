@@ -120,7 +120,12 @@ void CState_Player_Scissor_LAttack01::Control_Collider()
     _int iFrame = m_pPlayer->Get_Frame();
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
-        m_pPlayer->Active_CurrentWeaponCollider();
+    {
+        if (m_pPlayer->Active_CurrentWeaponCollider())
+        {
+            m_pPlayer->Decrease_Stamina(45.f);
+        }
+    }
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
 }

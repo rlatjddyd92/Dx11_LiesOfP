@@ -58,6 +58,7 @@ private:
 	CSound* m_pSoundCom = { nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };
 	CNavigation* m_pNavigationCom = { nullptr };
+	class CEffect_Container* m_Effect = { nullptr };
 
 private:
 	_bool			m_isThrow = { false };

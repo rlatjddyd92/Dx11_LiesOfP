@@ -29,13 +29,13 @@ HRESULT CMoveBlockObj::Initialize(void* pArg)
 	switch (pDesc->iTypeNum)
 	{
 	case 0:	//RAXASIA1
-		m_pTransformCom->Rotation(0.f, 60.f, 0.f);
+		m_pTransformCom->Rotation(0.f, 62.f, 0.f);
 		break;
 	case 1:	//RAXASIA2
-		m_pTransformCom->Rotation(0.f, 60.f, 0.f);
+		m_pTransformCom->Rotation(0.f, 61.f, 0.f);
 		break;
 	case 2:	//MANUS1
-		m_pTransformCom->Rotation(0.f, 133, 0.f);
+		m_pTransformCom->Rotation(0.f, 136.f, 0.f);
 		break;
 	default:
 		break;
@@ -46,6 +46,8 @@ HRESULT CMoveBlockObj::Initialize(void* pArg)
 
 	if (FAILED(Ready_Effect(pDesc)))
 		return E_FAIL;
+
+	m_strObjectTag = TEXT("MoveBlockObj");
 
 	return S_OK;
 }
@@ -137,13 +139,13 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 	switch (pDesc->iTypeNum)
 	{
 	case 0:	//RAXASIA1
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-137.541f, -97.816f, -68.452f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-138.27f, -97.816f, -69.188f));
 		break;
 	case 1:	//RAXASIA2
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-39.413f, -97.809f, -18.173f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-38.895f, -97.809f, -17.833f));
 		break;
 	case 2:	//MANUS1
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(16.641f, 0.069f, -16.234f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(16.4f, 0.069f, -16.234f));
 		break;
 	default:
 		break;
@@ -160,21 +162,23 @@ HRESULT CMoveBlockObj::Ready_Effect(MOVEBLOCK_DESC* pDesc)
 	DoorDesc.iLevelIndex = LEVEL_GAMEPLAY;
 	// 자기 걸로 채워야 함.
 	DoorDesc.vPos = (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	DoorDesc.vScale = _Vec3(1.f, 1.f, 1.f);
-
+	
 	switch (pDesc->iTypeNum)
 	{
 	case 0:	//RAXASIA1
 		DoorDesc.vPos.y += 4.f;
-		DoorDesc.vRotation = _Vec3(90.f, 60.f, 0.f);
+		DoorDesc.vRotation = _Vec3(90.f, 62.8f, 0.f);
+		DoorDesc.vScale = _Vec3(1.f, 1.f, 2.f);
 		break;
 	case 1:	//RAXASIA2
 		DoorDesc.vPos.y += 3.f;
-		DoorDesc.vRotation = _Vec3(90.f, 60.f, 0.f);
+		DoorDesc.vRotation = _Vec3(90.f, 61.f, 0.f);
+		DoorDesc.vScale = _Vec3(1.f, 1.f, 2.3f);
 		break;
 	case 2:	//MANUS1
-		DoorDesc.vPos.y += 3.f;
-		DoorDesc.vRotation = _Vec3(90.f, 133, 0.f);
+		DoorDesc.vPos.y += 3.3f;
+		DoorDesc.vRotation = _Vec3(90.f, 136.f, 0.f);
+		DoorDesc.vScale = _Vec3(1.f, 1.f, 1.2f);
 		break;
 	default:
 		break;

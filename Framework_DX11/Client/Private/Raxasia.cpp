@@ -96,6 +96,15 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 	
+	m_eStat.strName = TEXT("Raxasia");
+
+	m_eStat.fHp = 2000.f;
+	m_eStat.fMaxHp = 2000.f;
+	m_eStat.fAtk = 250.f;
+
+	m_eStat.bWeakness = false;
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 330.f;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -111,17 +120,6 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 	m_pColliderCom->Set_Owner(this);
-
-	m_eStat.strName = TEXT("Raxasia");
-
-	m_eStat.fHp = 2000.f;
-	m_eStat.fHp = 1.f;
-	m_eStat.fMaxHp = 2000.f;
-	m_eStat.fAtk = 250.f;
-
-	m_eStat.bWeakness = false;
-	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 330.f;
 
 	m_vCenterOffset = _Vec3{0.f, 1.85f, 0.f};
 
@@ -686,6 +684,13 @@ void CRaxasia::Change_Model(_uint iModelNum)
 	m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("helmet_01");
 }
 
+void CRaxasia::Resetting()
+{
+	m_isDead = true;
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+}
+
 HRESULT CRaxasia::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -1085,6 +1090,7 @@ HRESULT CRaxasia::Ready_Effects()
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P2_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 
+	m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(true);
 	return S_OK;
 }
 

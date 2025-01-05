@@ -37,6 +37,27 @@ public:
 		INFORM_Text_Back,
 		INFORM_Text_Front,
 
+		INFORM_PlayerDeath_Back,
+
+		INFORM_PlayerDeath_ClockFrame,
+
+		INFORM_PlayerDeath_XII,
+		INFORM_PlayerDeath_I,
+		INFORM_PlayerDeath_II,
+		INFORM_PlayerDeath_III,
+		INFORM_PlayerDeath_DebrisBig,
+		INFORM_PlayerDeath_DebrisSmall,
+
+		INFORM_PlayerDeath_ClockOuterRing,
+		INFORM_PlayerDeath_ClockInnerRing,
+
+		INFORM_PlayerDeath_HourNeedle,
+		INFORM_PlayerDeath_MinitueNeedle,
+		INFORM_PlayerDeath_ClockInGear,
+
+		INFORM_PlayerDeath_LieORDie,
+
+
 		GROUP_END
 	};
 
@@ -75,13 +96,24 @@ public:
 	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
 	void Show_Dead(_float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
 
+	void Show_PlayerDead_UI();
+
+	_bool IsPlayerDead_UI_NowEnd() { return m_bIsPlayerDead_UI_NowEnd; }
+	void SetPlayerDead_UI_NowEnd_False() { m_bIsPlayerDead_UI_NowEnd = false; }
+
 protected:
-
-
 	void Update_Region(_float fTimeDelta);
 	void Update_Inform(_float fTimeDelta);
 	void Update_Heart(_float fTimeDelta);
 	void Update_Dead(_float fTimeDelta);
+
+	void Update_PlayerDead_UI(_float fTimeDelta);
+
+	void Update_PlayerDead_Back(_float fTimeDelta, _int iPhase);
+	void Update_PlayerDead_Static(_float fTimeDelta, _int iPhase);
+	void Update_PlayerDead_Neddle(_float fTimeDelta, _int iPhase);
+	void Update_PlayerDead_Debris(_float fTimeDelta, _int iPhase);
+	void Update_PlayerDead_Message(_float fTimeDelta, _int iPhase);
 
 protected:
 	_float Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta);
@@ -89,6 +121,26 @@ protected:
 	_Vec3 m_vLifeTime_Region = { 0.f,0.f,0.f }; // now, emerge, show
 	_Vec3 m_vLifeTime_Inform = { 0.f,0.f,0.f };
 	_Vec3 m_vLifeTime_Heart = { 0.f,0.f,0.f };
+
+
+
+	// 플레이어 사망 
+	_Vec4 m_vPlayerDead_Time = { -1.f,0.f,0.f,0.f }; // <- 현재 Time, 등장하는 시간, 바늘과 중심기어를 빨강으로 변경하는 시간, 사라지는 시간
+
+	_int m_iPlayerDead_Phase = -1;
+	_bool m_bIsPlayerDead_UI_NowEnd = false; // <- 플레이어 사망 UI가 꺼지기 시작하는 타이밍에 단 한번만 true가 되는 변수 
+	_bool m_bCheckNowEnd = false;
+
+
+	_float m_fAngle_Clock_Hour_Start = 0.f;
+	_float m_fAngle_Clock_Minitue_Start = 0.f;
+
+	_float m_fAngle_Clock_Hour = m_fAngle_Clock_Hour_Start;
+	_float m_fAngle_Clock_Minitue = m_fAngle_Clock_Minitue_Start;
+	_float m_fAngle_Clock_Hour_Pos = m_fAngle_Clock_Hour_Start;
+	_float m_fAngle_Clock_Minitue_Pos = m_fAngle_Clock_Minitue_Start;
+	_float m_fAdjust_Clock_Angle = 90.f; // 우측 방향이 Direct의 0도 기준이므로 45도 회전하여 위 방향을 기준점으로 함 
+	_float m_fAdjustLength = 0.f; // <- 바늘의 Adjust_End.y 값, 구한 벡터 방향으로 이 길이만큼 가야 함 
 
 
 

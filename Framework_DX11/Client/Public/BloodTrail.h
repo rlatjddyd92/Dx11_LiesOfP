@@ -14,7 +14,7 @@ public:
 
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
-		WEAPON_TYPE eType = { WEAPON_END };			// 무기 타입
+		WEAPON_TYPE eStartType = { WEAPON_END };
 		const _Matrix* pParentMatrix = { nullptr };	// 플레이어
 		const _Matrix* pSocketMatrix = { nullptr };	// 손뼈
 	} BLOODTRAIL_DESC;
@@ -33,17 +33,23 @@ public:
 	virtual HRESULT Render();
 
 public:
+	void Set_Weapon(WEAPON_TYPE eType);
+	void	Active(WEAPON_TYPE eType, const _Matrix* pSocketMatrix);
+	void	DeActive();
+
+public:
 	const list<TWOPOINT>& Get_TrailPoses();
 	TWOPOINT Get_PointPos(_uint iIndex);
 
 private:
-	class CTrail_Effect_TP* m_Effect = { nullptr };
+	class CTrail_Effect_TP* m_Effect[WEAPON_END] = {nullptr};
+	WEAPON_TYPE m_eType = { WEAPON_END };
 	_Matrix m_WorldMatrix = {};
 	const _Matrix* m_pParentMatrix = { nullptr };
 	const _Matrix* m_pSocketMatrix = { nullptr };;
 
 private:
-	HRESULT Ready_Effect(WEAPON_TYPE eType);
+	HRESULT Ready_Effect();
 
 public:
 	static CBloodTrail* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

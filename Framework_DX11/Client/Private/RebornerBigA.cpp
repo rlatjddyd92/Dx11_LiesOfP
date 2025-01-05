@@ -54,6 +54,16 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
+	m_eStat.fHp = 600.f;
+	m_eStat.fMaxHp = 600.f;
+	m_eStat.fAtk = 180.f;
+	//m_eStat.fDefence = 3.f;
+
+	m_eStat.bWeakness = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 160.f;
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -63,8 +73,10 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
-	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
+	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
 
 	m_pModelCom->SetUp_Animation(51, true);
 
@@ -73,28 +85,11 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
-
-
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
-
-	m_eStat.fHp = 160.f;
-	m_eStat.fMaxHp = 160.f;
-	m_eStat.fAtk = 180.f;
-	//m_eStat.fDefence = 3.f;
-
-	m_eStat.bWeakness = false;
-
-	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 160.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
 	
 	m_bDiscover = false;
-
-	// 24-11-26 김성용
-	// 몬스터 직교 UI 접근 코드 
-	// 정식 코드  
 
 	m_pSoundCom[CPawn::PAWN_SOUND_VOICE]->Play2D_Repeat(TEXT("SE_NPC_Carcass_Horseman_MT_Tentacle_Movement_02"), &g_fVoiceVolume);
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG, this);
@@ -197,6 +192,32 @@ HRESULT CRebornerBigA::Render()
 
 #endif
 	return S_OK;
+}
+
+void CRebornerBigA::Resetting()
+{
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
+
+	m_eStat.fHp = 600.f;
+	m_eStat.fMaxHp = 600.f;
+	m_eStat.fAtk = 180.f;
+
+	m_eStat.bWeakness = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 160.f;
+
+	m_bDiscover = false;
+	m_bFirstMeetCheck = false;
+
+	m_bFatalAttacked = false;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
+
+	Change_State(CMonster::IDLE);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
 void CRebornerBigA::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)

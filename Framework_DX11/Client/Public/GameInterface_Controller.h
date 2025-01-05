@@ -170,6 +170,10 @@ public: // 외부에서 매니저 접근
 	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop) { m_pUIManager->Show_ItemUsePopup(strTitle, strDescA, bIsTop); }
 	void Show_TrueFalsePopup(_wstring strTitle, _wstring strDescA, _int* iResult) { m_pUIManager->Show_TrueFalsePopup(strTitle, strDescA, iResult); } // true,false,none 3개 상태 표현 위해 _int 사용
 
+	void Show_PlayerDead_UI() { m_pUIManager->Show_PlayerDead_UI(); }
+	_bool IsPlayerDead_UI_NowEnd() { return m_pUIManager->IsPlayerDead_UI_NowEnd(); }
+	void SetPlayerDead_UI_NowEnd_False() { m_pUIManager->SetPlayerDead_UI_NowEnd_False(); }
+
 	// 텔레포트
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIManager->Set_Now_Interact_Stargezer(iNaviIndex); }
 
@@ -228,6 +232,10 @@ public: // 외부에서 매니저 접근
 	const CItem_Manager::ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Item_Info(eSlot); } // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
 
 	const CItem_Manager::EQUIP* Get_Equip_Slot_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Slot_Info(eSlot); }
+
+	// 포션, 투척물 
+	void Set_PotionThrow_Lock(_bool bIsLock) { m_pItem_Manager->Set_PotionThrow_Lock(bIsLock); }
+
 
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext) { return m_pItem_Manager->Change_Potion_Select(bNext); }

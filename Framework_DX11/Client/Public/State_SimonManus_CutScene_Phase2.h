@@ -20,7 +20,7 @@ public:
     virtual void    End_State() override;
 
 private:
-    class CMonster* m_pMonster = { nullptr };
+    class CMonster*     m_pMonster = { nullptr };
 
     _uint               m_iAnimation_Change = {};
 
