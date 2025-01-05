@@ -106,9 +106,11 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 			static_cast<CMonster*>(ObjectVector[i])->Resetting();
 		}
 
-		static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList()[0])->Resetting();
+		if(m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia")))
+			static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList()[0])->Resetting();
 
-		static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList()[0])->Resetting();
+		if (m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus")))
+			static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList()[0])->Resetting();
 
 		m_pPlayer->Set_IsRespawnMonster(false);
 	}
