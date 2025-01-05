@@ -112,8 +112,8 @@ void CController_MapTool::Pick_Object()
 		return;
 
 	static _bool isPicking = false;
-	ImGui::Checkbox("Picking", &isPicking);
-	m_pGameInstance->Set_Is_Picking(isPicking);
+	//ImGui::Checkbox("Picking", &isPicking);
+	//m_pGameInstance->Set_Is_Picking(isPicking);
 
 	//오브젝트 피킹 작동
 	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
@@ -1506,7 +1506,7 @@ void CController_MapTool::Cell_Select_Point_Menu()
 		fPos[2] = vSelectVertexPos.z;
 	}
 
-	ImGui::DragFloat3("Rotation(X, Y, Z)", &fPos[0], 0.05f);
+	ImGui::DragFloat3("SelectedPos(X, Y, Z)", &fPos[0], 0.05f);
 
 	if (KEY_AWAY(KEY::C))
 	{
