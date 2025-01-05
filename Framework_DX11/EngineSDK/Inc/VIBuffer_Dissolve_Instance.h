@@ -36,7 +36,8 @@ public:
 
 public:
 	_bool DispatchCS(class CShader_Compute* pComputeShader, class CTexture* pTexture, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData);
-	_bool DispatchCS_NonTexture(class CShader_Compute* pComputeShader, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData);
+
+	void ResetCS(class CShader_Compute* pResetShader);
 
 private:
 	_bool m_bFirst = { false };

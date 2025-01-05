@@ -3,12 +3,12 @@
 #include "GameInstance.h"
 
 CDissolve_SimonManus_Dead::CDissolve_SimonManus_Dead(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CGameObject(pDevice, pContext)
+    : CDissolve_Effect(pDevice, pContext)
 {
 }
 
 CDissolve_SimonManus_Dead::CDissolve_SimonManus_Dead(const CDissolve_SimonManus_Dead& Prototype)
-    : CGameObject(Prototype)
+    : CDissolve_Effect(Prototype)
 {
 }
 
@@ -26,12 +26,6 @@ HRESULT CDissolve_SimonManus_Dead::Initialize(void* pArg)
         return E_FAIL;
 
     DISSOLVE_OBJECT_DESC* pDesc = static_cast<DISSOLVE_OBJECT_DESC*>(pArg);
-
-    m_pModelCom = pDesc->pModelCom;
-    Safe_AddRef(m_pModelCom);
-
-    m_pManusTransformCom = pDesc->pManusTransformCom;
-    Safe_AddRef(m_pManusTransformCom);
 
     m_pDissolveTextureCom = pDesc->pDissolveTextureCom;
     Safe_AddRef(m_pDissolveTextureCom);
@@ -68,14 +62,14 @@ void CDissolve_SimonManus_Dead::Update(_float fTimeDelta)
     Movement.fRandomRatio = 0.5f;
     Movement.fAccelLimit = 0.f;
     Movement.fAccelSpeed = 0.f;
-    Movement.WorldMatrix = m_pManusTransformCom->Get_WorldMatrix();
+    Movement.WorldMatrix = m_pTarget_TransformCom->Get_WorldMatrix();
 
     CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
     Data.fThreshold = 1.f - *m_pThreshold;
     Data.iModelType = CModel::TYPE_ANIM;
     Data.vTextureSize = m_vTextureSize;
 
-    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pDissolveTextureCom, m_pModelCom, Movement, Data))
+    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pDissolveTextureCom, m_pTarget_ModelCom, Movement, Data))
     {
         m_bOn = false;
     }
@@ -133,27 +127,8 @@ HRESULT CDissolve_SimonManus_Dead::Render()
     return S_OK;
 }
 
-void CDissolve_SimonManus_Dead::Reset()
-{
-    CVIBuffer_Instancing::PARTICLE_MOVEMENT Movement = {};
-    CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
-
-    m_pVIBufferCom->DispatchCS(m_pResetCS, m_pDissolveTextureCom, m_pModelCom, Movement, Data);
-    m_pVIBufferCom->Reset();
-}
-
 HRESULT CDissolve_SimonManus_Dead::Ready_Componet()
 {
-    /* FOR.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxDiffuseInstance"),
-        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-        return E_FAIL;
-
-    /* FOR.Com_Container */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManus_Dead"),
-        TEXT("Com_Container"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
-        return E_FAIL;
-
     /* FOR.Com_Texture */
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Shere_01_C_LGS"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
@@ -162,11 +137,6 @@ HRESULT CDissolve_SimonManus_Dead::Ready_Componet()
     /* FOR.Com_Compute_Move */
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move"),
         TEXT("Com_Compute_Move"), reinterpret_cast<CComponent**>(&m_pActionCS))))
-        return E_FAIL;
-
-    /* FOR.Com_Compute_Reset */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Reset"),
-        TEXT("Com_Compute_Reset"), reinterpret_cast<CComponent**>(&m_pResetCS))))
         return E_FAIL;
 
     return S_OK;
@@ -202,13 +172,7 @@ void CDissolve_SimonManus_Dead::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pShaderCom);
-    Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pActionCS);
-    Safe_Release(m_pResetCS);
-
-    Safe_Release(m_pModelCom);
-    Safe_Release(m_pManusTransformCom);
     Safe_Release(m_pDissolveTextureCom);
 }

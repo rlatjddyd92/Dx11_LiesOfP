@@ -71,6 +71,8 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
         m_fDissloveRatio = 1.f;
         m_vRimLightColor.z = 1.f;
         m_vRimLightColor.w = 0.1f;
+
+        m_pPlayer->SetUp_Die();
     }
     else
     {
@@ -93,8 +95,6 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
     m_isFadeOut = false;
 
     m_pPlayer->Disappear_Weapon();
-
-    m_pPlayer->Reset_Die();
 
     return S_OK;
 }
@@ -134,6 +134,8 @@ void CState_Player_Teleport::End_State()
     {
         Safe_Release(m_pSteppingStone);
     }
+
+    m_pPlayer->Reset_Die();
 }
 
 _bool CState_Player_Teleport::End_Check()
@@ -185,7 +187,7 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
             if (!m_isAppearStartEffect)
             {
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-                m_pPlayer->On_DissolveEffect(true);
+                m_pPlayer->On_DissolveEffect(CPlayer::DISSOLVE_DEAD, true);
                 m_isAppearStartEffect = true;
             }
         }
@@ -259,7 +261,7 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
             if (!m_isAppearStartEffect)
             {
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-                m_pPlayer->On_DissolveEffect(true);
+                m_pPlayer->On_DissolveEffect(CPlayer::DISSOLVE_DEAD, true);
                 m_isAppearStartEffect = true;
             }
         }
@@ -296,6 +298,7 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
     {
         m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.2f);
         Move_To_Stargazer();
+        GET_GAMEINTERFACE->SetPlayerDead_UI_NowEnd_False();
     }
 
     if (iCurAnim == m_iAnimation_TeleportEnd)

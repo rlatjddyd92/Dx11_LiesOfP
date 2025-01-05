@@ -26,6 +26,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     m_pContext = pContext;
     Safe_AddRef(m_pContext);
 
+    // BloodDrop -> 이거만.
     if(FAILED(Load_Textures(strTexturePath)))
         return E_FAIL;
 
@@ -38,7 +39,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     if(FAILED(Load_Objects()))
         return E_FAIL;
 
-    if (FAILED(Load_Effects(strEffectPath)))
+    if (FAILED(Load_Effects(strEffectPath, strTexturePath, strModelPath)))
         return E_FAIL;
 
     if (FAILED(Load_EffectContainers(strEffectPath)))
@@ -119,7 +120,7 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer_Rot(_uint iLevelID, const _wstring& 
     return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
 }
 
-HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
+HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath, const _wstring& strTexturePath, const _wstring& strModelPath)
 {
     _wstring searchPath = strEffectPath + L"\\*.*";
     WIN32_FIND_DATAW findFileData;
@@ -141,32 +142,32 @@ HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
 
             if (TEXT("PE") == strFileExtention)
             {
-                if (FAILED(Load_Particle_Effect(strResultPath)))
+                if (FAILED(Load_Particle_Effect(strResultPath, strTexturePath)))
                     return E_FAIL;
             }
             else if (TEXT("TE") == strFileExtention)
             {
-                if (FAILED(Load_Texture_Effect(strResultPath)))
+                if (FAILED(Load_Texture_Effect(strResultPath, strTexturePath)))
                     return E_FAIL;
             }
             else if (TEXT("ME") == strFileExtention)
             {
-                if (FAILED(Load_Mesh_Effect(strResultPath)))
+                if (FAILED(Load_Mesh_Effect(strResultPath, strTexturePath, strModelPath)))
                     return E_FAIL;
             }
             else if (TEXT("TOP") == strFileExtention)
             {
-                if (FAILED(Load_TrailOP_Effect(strResultPath)))
+                if (FAILED(Load_TrailOP_Effect(strResultPath, strTexturePath)))
                     return E_FAIL;
             }
             else if (TEXT("TTP") == strFileExtention)
             {
-                if (FAILED(Load_TrailTP_Effect(strResultPath)))
+                if (FAILED(Load_TrailTP_Effect(strResultPath, strTexturePath)))
                     return E_FAIL;
             }
             else if (TEXT("TMP") == strFileExtention)
             {
-                if (FAILED(Load_TrailMP_Effect(strResultPath)))
+                if (FAILED(Load_TrailMP_Effect(strResultPath, strTexturePath)))
                     return E_FAIL;
             }
         }
@@ -179,88 +180,154 @@ HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
 
 HRESULT CEffect_Manager::Load_Textures(const _wstring strTexturePath)
 {
-    _wstring searchPath = strTexturePath + L"\\*.*";
-    WIN32_FIND_DATAW findFileData;
-    HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
+#pragma region LOAD_EVERY_TEXTURE
+    //_wstring searchPath = strTexturePath + L"\\*.*";
+    //WIN32_FIND_DATAW findFileData;
+    //HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
 
-    if (hFind == INVALID_HANDLE_VALUE) {
-        MSG_BOX(TEXT("Folder Open Failed"));
+    //if (hFind == INVALID_HANDLE_VALUE) {
+    //    MSG_BOX(TEXT("Folder Open Failed"));
+    //    return E_FAIL;
+    //}
+
+    //while (FindNextFileW(hFind, &findFileData))
+    //{
+    //    if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+    //    {
+    //        _wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+    //        _wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
+    //        _wstring strFileBaseName = Get_FileName(strFileName);
+
+    //        _wstring strResultPath = strTexturePath + TEXT('/') + strFileName;
+
+    //        _wstring strPrototypeTag = TEXT("Prototype_Component_Texture_") + strFileBaseName;
+
+    //        if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+    //            CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+    //            return E_FAIL;
+    //    }
+    //}
+    //// 핸들 닫기
+    //FindClose(hFind);
+#pragma endregion
+
+    _wstring strPrototypeBase = TEXT("Prototype_Component_Texture_");
+
+    _wstring strResultPath = strTexturePath + TEXT("/T_BloodDrop_01_C_LGS.dds");
+    _wstring strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_01_C_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
         return E_FAIL;
-    }
 
-    while (FindNextFileW(hFind, &findFileData))
-    {
-        if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-        {
-            _wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
-            _wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
-            _wstring strFileBaseName = Get_FileName(strFileName);
+    strResultPath = strTexturePath + TEXT("/T_BloodDrop_01_N_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_01_N_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
 
-            _wstring strResultPath = strTexturePath + TEXT('/') + strFileName;
+    strResultPath = strTexturePath + TEXT("/T_BloodDrop_02_C_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_02_C_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
 
-            _wstring strPrototypeTag = TEXT("Prototype_Component_Texture_") + strFileBaseName;
+    strResultPath = strTexturePath + TEXT("/T_BloodDrop_02_N_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_02_N_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
 
-            if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
-                CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
-                return E_FAIL;
-        }
-    }
-    // 핸들 닫기
-    FindClose(hFind);
+    strResultPath = strTexturePath + TEXT("/T_BloodDrop_03_C_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_03_C_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
+
+    strResultPath = strTexturePath + TEXT("/T_BloodDrop_03_N_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_03_N_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
+
+    strResultPath = strTexturePath + TEXT("/T_BloodDrop_04_C_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_04_C_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
+
+    strResultPath = strTexturePath + TEXT("/T_BloodDrop_04_N_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_04_N_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
 
     return S_OK;
 }
 
 HRESULT CEffect_Manager::Load_Models(const _wstring& strEffectPath)
 {
-    _matrix		PreTransformMatrix = XMMatrixIdentity();
+#pragma region LOAD_EVERY_MODEL
+    //_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-    /* For. Prototype_Component_Model_Effect_Lily */
-    PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Lily"),
-        CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Lily.dat", PreTransformMatrix))))
+    ///* For. Prototype_Component_Model_Effect_Lily */
+    //PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+    //if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Lily"),
+    //    CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Lily.dat", PreTransformMatrix))))
+    //    return E_FAIL;
+
+
+    //_wstring searchPath = strEffectPath + L"\\*.dat";
+    //WIN32_FIND_DATAW findFileData;
+    //HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
+
+    //if (hFind == INVALID_HANDLE_VALUE) {
+    //    MSG_BOX(TEXT("Folder Open Failed"));
+    //    return E_FAIL;
+    //}
+
+    //while (FindNextFileW(hFind, &findFileData))
+    //{
+    //    if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+    //    {
+    //        _wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+    //        _wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
+    //        _wstring strFileBaseName = Remove_FileExtentin(strFileName);
+
+    //        _wstring strResultPath = strEffectPath + TEXT('/') + strFileName;
+
+    //        _wstring strPrototypeTag = TEXT("Prototype_Component_Model_Effect_") + strFileBaseName;
+
+    //        // 변환 후 필요한 버퍼 크기 계산
+    //        int bufferSize = WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    //        if (bufferSize == 0) {
+    //            throw std::runtime_error("WideCharToMultiByte failed.");
+    //        }
+
+    //        // 변환 결과를 저장할 std::string 생성
+    //        std::string str(bufferSize, '\0');
+    //        WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+
+    //        PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+    //        if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+    //            CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), PreTransformMatrix))))
+    //            return E_FAIL;
+    //    }
+    //}
+    //// 핸들 닫기
+    //FindClose(hFind);
+#pragma endregion
+
+    _wstring strPrototypeBase = TEXT("Prototype_Component_Model_Effect_");
+    string strModelBase = "../Bin/ModelData/NonAnim/Effect/";
+
+    _wstring strPrototypeTag = strPrototypeBase + TEXT("SM_plane_01_GDH");
+    string strModelPath = strModelBase + "SM_plane_01_GDH.dat";
+    _Matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, strModelPath.c_str(), PreTransformMatrix))))
         return E_FAIL;
 
-
-    _wstring searchPath = strEffectPath + L"\\*.dat";
-    WIN32_FIND_DATAW findFileData;
-    HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
-
-    if (hFind == INVALID_HANDLE_VALUE) {
-        MSG_BOX(TEXT("Folder Open Failed"));
-        return E_FAIL;
-    }
-
-    while (FindNextFileW(hFind, &findFileData))
-    {
-        if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-        {
-            _wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
-            _wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
-            _wstring strFileBaseName = Remove_FileExtentin(strFileName);
-
-            _wstring strResultPath = strEffectPath + TEXT('/') + strFileName;
-
-            _wstring strPrototypeTag = TEXT("Prototype_Component_Model_Effect_") + strFileBaseName;
-
-            // 변환 후 필요한 버퍼 크기 계산
-            int bufferSize = WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
-            if (bufferSize == 0) {
-                throw std::runtime_error("WideCharToMultiByte failed.");
-            }
-
-            // 변환 결과를 저장할 std::string 생성
-            std::string str(bufferSize, '\0');
-            WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
-
-            PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-            if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
-                CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), PreTransformMatrix))))
-                return E_FAIL;
-        }
-    }
-    // 핸들 닫기
-    FindClose(hFind);
 
     return S_OK;
 }
@@ -505,7 +572,7 @@ HRESULT CEffect_Manager::Load_EffectContainers(const _wstring& strEffectPath)
 
 }
 
-HRESULT CEffect_Manager::Load_Particle_Effect(const _wstring& strResultPath)
+HRESULT CEffect_Manager::Load_Particle_Effect(const _wstring& strResultPath, const _wstring& strTexturePath)
 {
     CParticle_Effect::PARTICLE_EFFECT_DESC TestDesc = {};
 
@@ -530,6 +597,15 @@ HRESULT CEffect_Manager::Load_Particle_Effect(const _wstring& strResultPath)
 
     infile.close();
 
+    if(FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szDiffuseTexturTag)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_1)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_2)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szNormalTextureTag)))
+        return E_FAIL;
+
     _wstring strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Point_Instance_");
     strVIBufferTag += strEffectName;
     
@@ -543,7 +619,7 @@ HRESULT CEffect_Manager::Load_Particle_Effect(const _wstring& strResultPath)
     return S_OK;
 }
 
-HRESULT CEffect_Manager::Load_Texture_Effect(const _wstring& strResultPath)
+HRESULT CEffect_Manager::Load_Texture_Effect(const _wstring& strResultPath, const _wstring& strTexturePath)
 {
     CTexture_Effect::TEXTURE_EFFECT_DESC TestDesc = {};
 
@@ -566,12 +642,21 @@ HRESULT CEffect_Manager::Load_Texture_Effect(const _wstring& strResultPath)
 
     infile.close();
 
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szDiffuseTexturTag)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_1)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_2)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szNormalTextureTag)))
+        return E_FAIL;
+
     m_TEDescs.emplace(strEffectName, TestDesc);
 
     return S_OK;
 }
 
-HRESULT CEffect_Manager::Load_Mesh_Effect(const _wstring& strResultPath)
+HRESULT CEffect_Manager::Load_Mesh_Effect(const _wstring& strResultPath, const _wstring& strTexturePath, const _wstring& strModelPath)
 {
     CMesh_Effect::MESH_EFFECT_DESC TestDesc = {};
 
@@ -594,12 +679,24 @@ HRESULT CEffect_Manager::Load_Mesh_Effect(const _wstring& strResultPath)
 
     infile.close();
 
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szDiffuseTexturTag)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_1)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_2)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szNormalTextureTag)))
+        return E_FAIL;
+
+    if (FAILED(Load_Moedl(strModelPath, TestDesc.TextDesc.szModelTag)))
+        return E_FAIL;
+
     m_MEDescs.emplace(strEffectName, TestDesc);
 
     return S_OK;
 }
 
-HRESULT CEffect_Manager::Load_TrailOP_Effect(const _wstring strResultPath)
+HRESULT CEffect_Manager::Load_TrailOP_Effect(const _wstring& strResultPath, const _wstring& strTexturePath)
 {
     CTrail_Effect_OP::TRAIL_OP_DESC TestDesc = {};
 
@@ -624,6 +721,15 @@ HRESULT CEffect_Manager::Load_TrailOP_Effect(const _wstring strResultPath)
 
     infile.close();
 
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szDiffuseTexturTag)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_1)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_2)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szNormalTextureTag)))
+        return E_FAIL;
+
     _wstring strVIBufferTag = TEXT("Prototype_Component_Trail_OnePoint_Instance_");
     strVIBufferTag += strEffectName;
 
@@ -642,7 +748,7 @@ HRESULT CEffect_Manager::Load_TrailOP_Effect(const _wstring strResultPath)
     return S_OK;
 }
 
-HRESULT CEffect_Manager::Load_TrailTP_Effect(const _wstring strResultPath)
+HRESULT CEffect_Manager::Load_TrailTP_Effect(const _wstring& strResultPath, const _wstring& strTexturePath)
 {
     CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
 
@@ -667,6 +773,15 @@ HRESULT CEffect_Manager::Load_TrailTP_Effect(const _wstring strResultPath)
 
     infile.close();
 
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szDiffuseTexturTag)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_1)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_2)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szNormalTextureTag)))
+        return E_FAIL;
+
     _wstring strVIBufferTag = TEXT("Prototype_Component_Trail_TwoPoint_Instance_");
     strVIBufferTag += strEffectName;
 
@@ -685,7 +800,7 @@ HRESULT CEffect_Manager::Load_TrailTP_Effect(const _wstring strResultPath)
     return S_OK;
 }
 
-HRESULT CEffect_Manager::Load_TrailMP_Effect(const _wstring strResultPath)
+HRESULT CEffect_Manager::Load_TrailMP_Effect(const _wstring& strResultPath, const _wstring& strTexturePath)
 {
     CTrail_Effect_MP::TRAIL_MP_DESC TestDesc = {};
 
@@ -709,6 +824,15 @@ HRESULT CEffect_Manager::Load_TrailMP_Effect(const _wstring strResultPath)
     infile.read(reinterpret_cast<_char*>(&BufferDesc), sizeof(BufferDesc));		// 이거 버퍼 초기화에 쓰고
 
     infile.close();
+
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szDiffuseTexturTag)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_1)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szMaskTextureTag_2)))
+        return E_FAIL;
+    if (FAILED(Load_Texture(strTexturePath, TestDesc.TextDesc.szNormalTextureTag)))
+        return E_FAIL;
 
     _wstring strVIBufferTag = TEXT("Prototype_Component_Trail_MultiPoint_Instance_");
     strVIBufferTag += strEffectName;
@@ -1031,6 +1155,65 @@ HRESULT CEffect_Manager::Effect_Pooling(const _wstring& strECTag, void* pArg, si
 
             iter->second.emplace_back(pContainer);
         }
+    }
+
+    return S_OK;
+}
+
+_wstring CEffect_Manager::Erase_Text(const _wstring& strText, const _wstring& strRemove)
+{
+    _wstring strResult = strText;
+
+    size_t iPos = strResult.find(strRemove);
+    if (iPos != _wstring::npos)
+    {
+        strResult.erase(iPos, strRemove.size());
+    }
+
+    return strResult;
+}
+
+HRESULT CEffect_Manager::Load_Texture(const _wstring& strTexturePath, const _wstring& strPrototypeTag)
+{
+    if (NONE_TEXT == strPrototypeTag)
+        return S_OK;
+
+    _wstring strResultTag = Erase_Text(strPrototypeTag, TEXT("Prototype_Component_Texture_"));
+    _wstring strResultPath = strTexturePath + TEXT('/') + strResultTag + TEXT(".dds");
+
+    if(nullptr == m_pGameInstance->Find_ComponentPrototype(LEVEL_GAMEPLAY, strPrototypeTag))
+    {
+        if(FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag, CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+            return E_FAIL;
+    }
+
+    return S_OK;
+}
+
+HRESULT CEffect_Manager::Load_Moedl(const _wstring& strModelPath, const _wstring& strPrototypeTag)
+{
+    if (NONE_TEXT == strPrototypeTag)
+        return S_OK;
+
+    _wstring strResultTag = Erase_Text(strPrototypeTag, TEXT("Prototype_Component_Model_Effect_"));
+    _wstring strResultPath = strModelPath + TEXT('/') + strResultTag + TEXT(".dat");
+
+    if (nullptr == m_pGameInstance->Find_ComponentPrototype(LEVEL_GAMEPLAY, strPrototypeTag))
+    {
+        // 변환 후 필요한 버퍼 크기 계산
+        int bufferSize = WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+        if (bufferSize == 0) {
+            MSG_BOX(TEXT("바이트 변경 실패"));
+        }
+
+        // 변환 결과를 저장할 string 생성
+        string str(bufferSize, '\0');
+        WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+
+        _Matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+        if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+            CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), PreTransformMatrix))))
+            return E_FAIL;
     }
 
     return S_OK;

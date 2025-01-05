@@ -34,7 +34,7 @@ public:
 
 public:
 	void Set_Weapon(WEAPON_TYPE eType);
-	void	Active(WEAPON_TYPE eType);
+	void	Active(WEAPON_TYPE eType, const _Matrix* pSocketMatrix);
 	void	DeActive();
 
 public:

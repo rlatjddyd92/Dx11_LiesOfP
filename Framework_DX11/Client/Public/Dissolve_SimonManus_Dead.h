@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "Dissolve_Effect.h"
 
 BEGIN(Engine)
 class CShader_NonVTX;
@@ -12,13 +12,11 @@ class CModel;
 END
 
 BEGIN(Client)
-class CDissolve_SimonManus_Dead final : public CGameObject
+class CDissolve_SimonManus_Dead final : public CDissolve_Effect
 {
 public:
-	typedef struct : public CGameObject::GAMEOBJECT_DESC
+	typedef struct : public CDissolve_Effect::DISSOLVE_EFFECT_DESC
 	{
-		class CModel*			pModelCom = { nullptr };
-		class CTransform*		pManusTransformCom = { nullptr };
 		class CTexture*			pDissolveTextureCom = { nullptr };
 		_float*					pThreshold = {};
 		_float2					vTextureSize = {};
@@ -37,28 +35,12 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
-public:
-	void Reset();
-
-	void Set_On(_bool bOn) {
-		Reset();
-		m_bOn = bOn;
-	}
 
 private:
-	class CShader_NonVTX* m_pShaderCom = { nullptr };
-	// 모델 만들 때 넣어준 테그 그대로 쓰고
-	class CVIBuffer_Dissolve_Instance* m_pVIBufferCom = { nullptr };
 	// 이건 뭐 알아서 하고
 	class CTexture* m_pTextureCom = nullptr;
 	// 디졸브 컴퓨트 셰이더
 	class CShader_Compute* m_pActionCS = { nullptr };
-	class CShader_Compute* m_pResetCS = { nullptr };
-
-	// 플레이어 모델
-	class CModel* m_pModelCom = { nullptr };
-	// 플레이어 트렌스폼
-	class CTransform* m_pManusTransformCom = { nullptr };
 	// 디졸브 텍스처
 	class CTexture* m_pDissolveTextureCom = { nullptr };
 
@@ -74,8 +56,6 @@ private:
 
 	_float* m_pThreshold = {};
 	_float2								m_vTextureSize = {};
-
-	_bool								m_bOn = { false };
 
 private:
 	HRESULT Ready_Componet();

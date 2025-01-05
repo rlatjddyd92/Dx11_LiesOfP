@@ -197,7 +197,7 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 				}
 
-				CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_RAPIER);
+				CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_RAPIER, m_pSocketMatrix);
 
 				//CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
 				//	m_pParentMatrix, m_pSocketMatrix);

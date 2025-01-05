@@ -105,10 +105,12 @@ void CBloodTrail::Set_Weapon(WEAPON_TYPE eType)
 	}
 }
 
-void CBloodTrail::Active(WEAPON_TYPE eType)
+void CBloodTrail::Active(WEAPON_TYPE eType, const _Matrix* pSocketMatrix)
 {
 	if (m_isActive)
 		return;
+
+	m_pSocketMatrix = pSocketMatrix;
 
 	Set_Weapon(eType);
 	m_isActive = true;

@@ -1,57 +1,50 @@
 #include "stdafx.h"
-#include "Dissolve_Raxasia_Dead.h"
+#include "Dissolve_PowerAttack.h"
 #include "GameInstance.h"
 
-CDissolve_Raxasia_Dead::CDissolve_Raxasia_Dead(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CDissolve_PowerAttack::CDissolve_PowerAttack(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CDissolve_Effect(pDevice, pContext)
 {
 }
 
-CDissolve_Raxasia_Dead::CDissolve_Raxasia_Dead(const CDissolve_Raxasia_Dead& Prototype)
+CDissolve_PowerAttack::CDissolve_PowerAttack(const CDissolve_PowerAttack& Prototype)
     : CDissolve_Effect(Prototype)
 {
 }
 
-HRESULT CDissolve_Raxasia_Dead::Initialize_Prototype()
+HRESULT CDissolve_PowerAttack::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CDissolve_Raxasia_Dead::Initialize(void* pArg)
+HRESULT CDissolve_PowerAttack::Initialize(void* pArg)
 {
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    if (FAILED(Ready_Componet()))
+    if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    DISSOLVE_OBJECT_DESC* pDesc = static_cast<DISSOLVE_OBJECT_DESC*>(pArg);
-
-    m_pDissolveTextureCom = pDesc->pDissolveTextureCom;
-    Safe_AddRef(m_pDissolveTextureCom);
-
-    m_pThreshold = pDesc->pThreshold;
-    m_vTextureSize = pDesc->vTextureSize;
-
     m_iShaderIndex = 16;
-
+    m_iState = CVIBuffer_Instancing::STATE_RANDOM | CVIBuffer_Instancing::STATE_LOOP;
     return S_OK;
 }
 
-void CDissolve_Raxasia_Dead::Priority_Update(_float fTimeDelta)
+void CDissolve_PowerAttack::Priority_Update(_float fTimeDelta)
 {
     if (false == m_bOn)
         return;
+
 }
 
-void CDissolve_Raxasia_Dead::Update(_float fTimeDelta)
+void CDissolve_PowerAttack::Update(_float fTimeDelta)
 {
     if (false == m_bOn)
         return;
 
     CVIBuffer_Instancing::PARTICLE_MOVEMENT Movement = {};
 
-    Movement.iState |= CVIBuffer_Instancing::STATE_RANDOM;
+    Movement.iState = m_iState;
     Movement.vPivot = _Vec4(0.f, 0.f, 0.f, 1.f);
     Movement.fGravity = 0.f;
     Movement.vMoveDir = _Vec4(0.f, 1.f, 0.f, 0.f);
@@ -59,23 +52,23 @@ void CDissolve_Raxasia_Dead::Update(_float fTimeDelta)
     Movement.vOrbitAxis = _Vec3(0.f, 1.f, 0.f);
     Movement.fOrbitAngle = 90.f;
     Movement.fTimeInterval = 1.f;
-    Movement.fRandomRatio = 0.5f;
+    Movement.fRandomRatio = 1.f;
     Movement.fAccelLimit = 0.f;
     Movement.fAccelSpeed = 0.f;
     Movement.WorldMatrix = m_pTarget_TransformCom->Get_WorldMatrix();
 
     CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
-    Data.fThreshold = 1.f - *m_pThreshold;
+    Data.fThreshold = 0.f;
     Data.iModelType = CModel::TYPE_ANIM;
-    Data.vTextureSize = m_vTextureSize;
+    Data.vTextureSize = {};
 
-    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pDissolveTextureCom, m_pTarget_ModelCom, Movement, Data))
+    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, nullptr, m_pTarget_ModelCom, Movement, Data))
     {
         m_bOn = false;
     }
 }
 
-void CDissolve_Raxasia_Dead::Late_Update(_float fTimeDelta)
+void CDissolve_PowerAttack::Late_Update(_float fTimeDelta)
 {
     if (false == m_bOn)
         return;
@@ -83,7 +76,7 @@ void CDissolve_Raxasia_Dead::Late_Update(_float fTimeDelta)
     m_pGameInstance->Add_RenderObject(CRenderer::RG_EFFECT, this);
 }
 
-HRESULT CDissolve_Raxasia_Dead::Render()
+HRESULT CDissolve_PowerAttack::Render()
 {
     _Matrix WorldMatrix = XMMatrixIdentity();
     if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
@@ -125,9 +118,21 @@ HRESULT CDissolve_Raxasia_Dead::Render()
         return E_FAIL;
 
     return S_OK;
+    return S_OK;
 }
 
-HRESULT CDissolve_Raxasia_Dead::Ready_Componet()
+void CDissolve_PowerAttack::Set_On(_bool bOn)
+{
+    if (true == bOn)
+    {
+        __super::Set_On(bOn);
+        m_iState |= CVIBuffer_Instancing::STATE_LOOP;
+    }
+    else
+        m_iState &= ~CVIBuffer_Instancing::STATE_LOOP;
+}
+
+HRESULT CDissolve_PowerAttack::Ready_Components()
 {
     /* FOR.Com_Texture */
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Shere_01_C_LGS"),
@@ -135,44 +140,41 @@ HRESULT CDissolve_Raxasia_Dead::Ready_Componet()
         return E_FAIL;
 
     /* FOR.Com_Compute_Move */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move_NonTexture"),
         TEXT("Com_Compute_Move"), reinterpret_cast<CComponent**>(&m_pActionCS))))
         return E_FAIL;
 
     return S_OK;
 }
 
-CDissolve_Raxasia_Dead* CDissolve_Raxasia_Dead::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CDissolve_PowerAttack* CDissolve_PowerAttack::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CDissolve_Raxasia_Dead* pInstance = new CDissolve_Raxasia_Dead(pDevice, pContext);
+    CDissolve_PowerAttack* pInstance = new CDissolve_PowerAttack(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Create Failed : CDissolve_Raxasia_Dead"));
+        MSG_BOX(TEXT("Create Failed : CDissolve_PowerAttack"));
         Safe_Release(pInstance);
     }
-
     return pInstance;
 }
 
-CGameObject* CDissolve_Raxasia_Dead::Clone(void* pArg)
+CDissolve_PowerAttack* CDissolve_PowerAttack::Clone(void* pArg)
 {
-    CDissolve_Raxasia_Dead* pInstance = new CDissolve_Raxasia_Dead(*this);
+    CDissolve_PowerAttack* pInstance = new CDissolve_PowerAttack(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Clone Failed : CDissolve_Raxasia_Dead"));
+        MSG_BOX(TEXT("Clone Failed : CDissolve_PowerAttack"));
         Safe_Release(pInstance);
     }
-
     return pInstance;
 }
 
-void CDissolve_Raxasia_Dead::Free()
+void CDissolve_PowerAttack::Free()
 {
     __super::Free();
 
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pActionCS);
-    Safe_Release(m_pDissolveTextureCom);
 }

@@ -63,6 +63,13 @@ public:
 		EFFECT_END
 	};
 
+	enum DISSOLVE_EFFECT
+	{
+		DISSOLVE_DEAD, DISSOLVE_AURA,
+		DISSOLVE_POWERATTACK_P1, DISSOLVE_POWERATTACK_P2,
+		DISSOLVE_END
+	};
+
 private:
 	CSimonManus(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CSimonManus(const CSimonManus& Prototype);
@@ -105,6 +112,7 @@ public:
 	void On_Aura(_bool bAura, _bool bCutScene);
 
 	virtual void		Resetting() override;
+	virtual void		On_PowerAttack(_bool bOn) override;
 private:
 	CColliderObject* m_pColliderObject = { nullptr };
 	vector<CGameObject*>	CollObjRenderP{};
@@ -127,11 +135,9 @@ private:
 
 	CTexture*				m_pDissloveTexture = { nullptr };
 
-	class CSimonManus_2P_Aura* m_pAuraEffect = { nullptr };
-	class CDissolve_SimonManus_Dead* m_pDissolveEffect = { nullptr };
+	vector<class CDissolve_Effect*> m_DissolveEffects;
 
 private:
-
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();

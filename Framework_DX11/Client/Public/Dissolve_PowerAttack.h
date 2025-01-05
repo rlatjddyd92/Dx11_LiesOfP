@@ -2,26 +2,12 @@
 
 #include "Dissolve_Effect.h"
 
-BEGIN(Engine)
-class CShader_NonVTX;
-class CVIBuffer_Dissolve_Instance;
-class CTexture;
-class CShader_Compute;
-class CModel;
-END
-
-BEGIN(Client)
-class CDissolve_Sophia_Death final : public CDissolve_Effect
+class CDissolve_PowerAttack final : public CDissolve_Effect
 {
-public:
-	typedef struct : public CDissolve_Effect::DISSOLVE_EFFECT_DESC
-	{
-	}DISSOLVE_OBJECT_DESC;
-
 private:
-	CDissolve_Sophia_Death(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CDissolve_Sophia_Death(const CDissolve_Sophia_Death& Prototype);
-	virtual ~CDissolve_Sophia_Death() = default;
+	CDissolve_PowerAttack(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CDissolve_PowerAttack(const CDissolve_PowerAttack& Prototype);
+	virtual ~CDissolve_PowerAttack() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -31,13 +17,13 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+public:
+	virtual void Set_On(_bool bOn) override;
+
 private:
+	// 이건 뭐 알아서 하고
 	class CTexture* m_pTextureCom = nullptr;
-	// 디졸브 컴퓨트 셰이더
 	class CShader_Compute* m_pActionCS = { nullptr };
-	
-	// 디졸브 텍스처
-	class CTexture* m_pDissolveTextureCom = { nullptr };
 
 	// 렌더 셰이더에 전달
 	_uint								m_iShaderIndex = { 0 };
@@ -49,16 +35,14 @@ private:
 	_float								m_fStartRotation = { 0.f };
 	_float								m_fRotationPerSecond = { 0.f };
 
-	_float								m_fThreshold = {};
-	_float2								m_vTextureSize = {};
+	_uint								m_iState = {};
 
 private:
-	HRESULT Ready_Componet();
+	HRESULT Ready_Components();
 
 public:
-	static CDissolve_Sophia_Death* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg);
+	static CDissolve_PowerAttack* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CDissolve_PowerAttack* Clone(void* pArg);
 	virtual void Free() override;
 };
 
-END

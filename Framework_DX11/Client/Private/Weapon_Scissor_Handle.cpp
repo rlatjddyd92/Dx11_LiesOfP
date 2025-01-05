@@ -10,6 +10,9 @@
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
+#include "ObjectPool.h"
+#include "BloodTrail.h"
+
 CWeapon_Scissor_Handle::CWeapon_Scissor_Handle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -188,9 +191,6 @@ void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_Normal"),
 					(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 
-				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Scissor"),
-					m_pParentMatrix, m_pSocketMatrix);
-
 
 				if (m_eAttackStrength == ATK_STRONG)
 				{
@@ -213,6 +213,10 @@ void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 					pMonster->Increase_GroggyPoint(m_fGrogyAmount * 0.8f);
 				}
 
+				if(m_eType == SCISSOR_RIGHT)
+					CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_SCISSOR_RIGHT, m_pSocketMatrix);
+				else
+					CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_SCISSOR_LEFT, m_pSocketMatrix);
 
 				// 24-12-06 김성용
 				// 무기 사용 시, 내구도 감소 

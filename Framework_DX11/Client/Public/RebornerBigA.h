@@ -45,6 +45,7 @@ public:
 
 public:
 	virtual void		Resetting() override;
+	virtual void		On_PowerAttack(_bool bOn) override;
 
 private:
 	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };
@@ -65,8 +66,8 @@ private:
 	class CWeapon* m_pWeapon = { nullptr };
 
 	class CEffect_Container* m_pSwingEffect = { nullptr };
-
-
+	class CDissolve_Effect* m_pDissolveEffect = { nullptr };
+	
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();

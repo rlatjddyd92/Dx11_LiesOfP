@@ -111,13 +111,14 @@
 #include "Dissolve_SimonManus_Dead.h"
 #include "Dissolve_Raxasia_Dead.h"
 #include "Dissolve_Sophia_Death.h"
-#include "SimonManus_2P_Aura.h"
-#pragma endregion
 
-#pragma region ADDITIONAL_EFFECT
+#include "SimonManus_2P_Aura.h"
+
 #include "BossDoor_Veli.h"
 #include "CMoveBlockObj.h"
 #include "BloodTrail.h"
+
+#include "Dissolve_PowerAttack.h"
 #pragma endregion
 
 #include "CMoveBlockObj.h"
@@ -1060,6 +1061,20 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassTail.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	DISSOLVE_INSTANCE_DESC DissolveInstanceDesc = {};
+	DissolveInstanceDesc.iNumInstance = 100;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 1.f, 2.f };
+	DissolveInstanceDesc.vMinColor = { 0.878f, 0.067f, 0.373f, 1.f };
+	DissolveInstanceDesc.vMaxColor = { 0.878f, 0.067f, 0.373f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.005f, 0.01f };
+	DissolveInstanceDesc.vSpeed = { 1.f, 2.f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_CarcassNormal
 	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassNormal"),
@@ -1070,6 +1085,11 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassBigA");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassBigA_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_CurruptedStrongArm
@@ -1102,6 +1122,11 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerBigA.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerBigA");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_Weapon_RebornerBigA_Stick
 	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationZ(XMConvertToRadians(90.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_RebornerBigA_Stick"),
@@ -1114,41 +1139,52 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_P1.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP1");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP1_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_SimonManusP2
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP2"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_P2.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
-	DISSOLVE_INSTANCE_DESC DissolveInstanceDesc = {};
-	DissolveInstanceDesc.iNumInstance = 150;
-	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
-	DissolveInstanceDesc.vLifeTime = { 2.f, 4.f };
-	DissolveInstanceDesc.vMinColor = { 2.f, 3.f, 3.f, 0.f };
-	DissolveInstanceDesc.vMaxColor = { 2.f, 3.f, 3.f, 1.f };
-	DissolveInstanceDesc.vSize = { 0.35f, 0.7f };
-	DissolveInstanceDesc.vSpeed = { 0.25f, 0.5f };
-	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
 	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP2");
-	DissolveInstanceDesc.iMeshIndex = 3;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_Aura"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_PowerAttack"),
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
-	DissolveInstanceDesc = {};
-	DissolveInstanceDesc.iNumInstance = 1000;
-	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
-	DissolveInstanceDesc.vLifeTime = { 3.f, 6.f };
-	DissolveInstanceDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
-	DissolveInstanceDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
-	DissolveInstanceDesc.vSize = { 0.005f, 0.01f };
-	DissolveInstanceDesc.vSpeed = { 0.25f, 0.5f };
-	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
-	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP2");
+	DISSOLVE_INSTANCE_DESC AuraDesc = {};
+	AuraDesc = {};
+	AuraDesc.iNumInstance = 150;
+	AuraDesc.vCenter = { 0.f, 0.f, 0.f };
+	AuraDesc.vLifeTime = { 2.f, 4.f };
+	AuraDesc.vMinColor = { 2.f, 3.f, 3.f, 0.f };
+	AuraDesc.vMaxColor = { 2.f, 3.f, 3.f, 1.f };
+	AuraDesc.vSize = { 0.35f, 0.7f };
+	AuraDesc.vSpeed = { 0.25f, 0.5f };
+	AuraDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	AuraDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP2");
+	AuraDesc.iMeshIndex = 3;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_Aura"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, AuraDesc))))
+		return E_FAIL;
+
+	AuraDesc = {};
+	AuraDesc.iNumInstance = 1000;
+	AuraDesc.vCenter = { 0.f, 0.f, 0.f };
+	AuraDesc.vLifeTime = { 3.f, 6.f };
+	AuraDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
+	AuraDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
+	AuraDesc.vSize = { 0.005f, 0.01f };
+	AuraDesc.vSpeed = { 0.25f, 0.5f };
+	AuraDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	AuraDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP2");
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManus_Dead"),
-		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, AuraDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_Weapon_SimonManus_Hammer
@@ -1169,10 +1205,20 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_P1.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_RaxasiaP1");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P1_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_RaxasiaP2
 	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP2"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_P2.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_RaxasiaP2");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P2_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_RaxasiaP1_Sword
@@ -1811,6 +1857,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura"),
 		CSimonManus_2P_Aura::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Dissolve_PowerAttack */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"),
+		CDissolve_PowerAttack::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

@@ -280,6 +280,7 @@ public:
 
 	void Show_PlayerDead_UI() { m_pUIPage_Inform->Show_PlayerDead_UI(); }
 	_bool IsPlayerDead_UI_NowEnd() { return m_pUIPage_Inform->IsPlayerDead_UI_NowEnd(); }
+	void SetPlayerDead_UI_NowEnd_False() { m_pUIPage_Inform->SetPlayerDead_UI_NowEnd_False(); }
 
 	_bool IsPopupOn() { return !m_pUIPage_Popup->GetPageAction(PAGEACTION::ACTION_INACTIVE); }
 
