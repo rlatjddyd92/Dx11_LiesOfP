@@ -119,6 +119,7 @@ void CUIPage_Tutorial::OpenAction()
 	__super::OpenAction();
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pSharedPonter_AttackMonster);
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pSharedPonter_NormalMonster);
+	m_iBeforeWeapon = _int(GET_GAMEINTERFACE->Get_Player()->Get_WeaponType());
 }
 
 void CUIPage_Tutorial::CloseAction()
@@ -361,19 +362,19 @@ void CUIPage_Tutorial::Check_Player_Move(_float fTimeDelta)
 
 	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 		if ((KEY_TAP(KEY::W)) || (KEY_HOLD(KEY::W)))
-			m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta * 3.f;
+			m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta * 5.f;
 
 	if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
 		if ((KEY_TAP(KEY::S)) || (KEY_HOLD(KEY::S)))
-			m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += fTimeDelta * 3.f;
+			m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += fTimeDelta * 5.f;
 
 	if (m_vecTutorial_MissionData[m_iNow_Index + 2]->bComplete == false)
 		if ((KEY_TAP(KEY::A)) || (KEY_HOLD(KEY::A)))
-			m_vecTutorial_MissionData[m_iNow_Index + 2]->fNow += fTimeDelta * 3.f;
+			m_vecTutorial_MissionData[m_iNow_Index + 2]->fNow += fTimeDelta * 5.f;
 
 	if (m_vecTutorial_MissionData[m_iNow_Index + 3]->bComplete == false)
 		if ((KEY_TAP(KEY::D)) || (KEY_HOLD(KEY::D)))
-			m_vecTutorial_MissionData[m_iNow_Index + 3]->fNow += fTimeDelta * 3.f;
+			m_vecTutorial_MissionData[m_iNow_Index + 3]->fNow += fTimeDelta * 5.f;
 }
 
 void CUIPage_Tutorial::Check_Player_Dash(_float fTimeDelta)
@@ -533,9 +534,7 @@ void CUIPage_Tutorial::Check_Player_Switch_Weapon()
 	if (m_bPlayer_StateChanged == false)
 		return;
 
-	if (m_iBeforeWeapon == -1)
-		m_iBeforeWeapon = _int(GET_GAMEINTERFACE->Get_Player()->Get_WeaponType());
-	else if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 	{
 		if (m_iBeforeWeapon != _int(GET_GAMEINTERFACE->Get_Player()->Get_WeaponType()))
 			m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;

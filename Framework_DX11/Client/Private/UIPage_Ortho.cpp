@@ -115,7 +115,7 @@ HRESULT CUIPage_Ortho::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[iGroup]->PartIndexlist.push_back(i);
 	}
 
-	m_vecPart[7]->iTexture_Index = -1;
+	//m_vecPart[7]->iTexture_Index = -1;
 
 	return S_OK;
 }
@@ -161,6 +161,9 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI()
 
 		for (auto& iter : m_vec_Group_Ctrl[_int(eType)]->PartIndexlist)
 		{
+			if (m_vecPart[iter]->bRender == false)
+				continue;
+
 			if ((eType == PART_GROUP::GROUP_HP_COUNT) || (eType == PART_GROUP::GROUP_HP_FILL))
 				m_vecPart[0]->fPosition = { m_fX, m_fY };
 
