@@ -41,6 +41,7 @@ public:
 public:
 	const list<TWOPOINT>& Get_TrailPoses();
 	TWOPOINT Get_PointPos(_uint iIndex);
+	_bool IsFalling();
 
 private:
 	class CNavigation* m_pNavigationCom = { nullptr };
