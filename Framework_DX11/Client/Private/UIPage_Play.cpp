@@ -62,9 +62,6 @@ void CUIPage_Play::Update(_float fTimeDelta)
 
 void CUIPage_Play::Late_Update(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::O))
-		GET_GAMEINTERFACE->Set_Potion_Count_Full();
-
 	LU_Gauge_Update(fTimeDelta);
 	LD_Potion_Tool_Update(fTimeDelta);
 	LD_Bag_Update(fTimeDelta);
@@ -78,6 +75,9 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	for (_int i = 0; i < m_vec_Group_Ctrl.size(); ++i)
 	{
 		if (i == _int(PART_GROUP::GROUP_POTION_FILL))
+			continue;
+
+		if ((i >= _int(PART_GROUP::GROUP_WEAPON_DURABLE_FRAME)) && (i >= _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)))
 			continue;
 
 		__super::UpdatePart_ByControl(m_vec_Group_Ctrl[i]);

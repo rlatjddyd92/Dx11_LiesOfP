@@ -1444,6 +1444,30 @@
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Dissolve_PowerAttack">
       <UniqueIdentifier>{cd666ff9-0da7-4a7c-b213-e17b0e825404}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\02.Belt">
+      <UniqueIdentifier>{666c8837-cdce-457f-ab36-06bb0481d455}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\03.Bag">
+      <UniqueIdentifier>{a44e624b-cc02-4104-92e5-a67e3243382c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\04.Arm">
+      <UniqueIdentifier>{f6e4bb88-59f7-4207-af7b-8ea1b7187829}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\01.Gauge">
+      <UniqueIdentifier>{10e30aa5-0d5e-4936-88cf-ae05fd17474b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\05.Ergo">
+      <UniqueIdentifier>{9644e9ce-0d78-488b-8f38-66d907b15e4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\06.CrtlGuide">
+      <UniqueIdentifier>{37e6de7d-ee86-4145-9f69-c97183024f37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\07.BossInfo">
+      <UniqueIdentifier>{f6bd0092-d5e1-430b-96b8-9cecaee35482}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\08.Debuff">
+      <UniqueIdentifier>{ac2dc9d1-9548-4beb-bc7b-fc8c089cfc15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

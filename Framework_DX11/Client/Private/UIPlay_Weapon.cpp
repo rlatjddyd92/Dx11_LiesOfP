@@ -144,15 +144,96 @@ void CUIPlay_Weapon::Initialize_Weapon_Component(vector<struct CUIPage::UIPART_I
 
 void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
 {
+	_int iWeapon = GET_GAMEINTERFACE->Get_Weapon();
 
+	if (iWeapon == 0)
+	{
+		m_pItem_Blade = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
+		m_pItem_Handle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0);
+		m_pSharedPointer_SelectNum->iTexture_Index
+	}
+	else if (iWeapon == 1)
+	{
+		m_pItem_Blade = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1);
+		m_pItem_Handle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1);
+	}
+
+	if (m_eType_Now != GET_GAMEINTERFACE->Get_Weapon_Model_Index())
+	{
+		Start_WeaponCell_Change(fTimeDelta);
+	}
+	
+	if (iNow_Fable_Count != iFable_Count_Now)
+	{
+		if (iNow_Fable_Count > iFable_Count_Now)
+			Start_FableGauge_Use(fTimeDelta);
+	}
+
+	Set_Fable();
+	Update_DurableGauge(fTimeDelta);
+	Update_WeaponCell_Fx(fTimeDelta);
+	Update_FableGauge(fTimeDelta);
 }
 
 void CUIPlay_Weapon::Switch_Weapon()
 {
+	if (m_eType_Now == CPlayer::WEP_SCISSOR)
+	{
+		m_pSharedPointer_SpecialWeapon->iTexture_Index = m_pItem_Blade->iTexture_Index;
+	}
+	else
+	{
+		m_pSharedPointer_NormalWeapon_Blade->iTexture_Index = m_pItem_Blade->iTexture_Index;
+		m_pSharedPointer_NormalWeapon_Handle->iTexture_Index = m_pItem_Handle->iTexture_Index;
+	}
+
+
+
+
+
+		UPART* m_pSharedPointer_Center = { nullptr };
+	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;
+	UPART* m_pSharedPointer_DurableGauge_Fill = { nullptr };
+
+	vector<UPART*> m_vecSharedPointer_NormalWeapon_Static;
+	vector<UPART*> m_vecSharedPointer_NormalWeapon_Fx;
+	UPART* m_pSharedPointer_NormalWeapon_Blade = { nullptr };
+	UPART* m_pSharedPointer_NormalWeapon_Handle = { nullptr };
+
+	vector<UPART*> m_vecSharedPointer_SpecialWeapon_Static;
+	UPART* m_pSharedPointer_SpecialWeapon = { nullptr };
+
+	UPART* m_pSharedPointer_SelectNum = { nullptr };
 }
 
 void CUIPlay_Weapon::Switch_Mode()
 {
+	if (m_eType_Now == CPlayer::WEP_SCISSOR)
+	{
+		for (auto& iter : m_vecSharedPointer_NormalWeapon_Static)
+			iter->bRender = false;
+
+		m_pSharedPointer_NormalWeapon_Blade->bRender = false;
+		m_pSharedPointer_NormalWeapon_Handle->bRender = false;
+
+		for (auto& iter : m_vecSharedPointer_SpecialWeapon_Static)
+			iter->bRender = true;
+
+		m_pSharedPointer_SpecialWeapon->bRender = true;
+	}
+	else
+	{
+		for (auto& iter : m_vecSharedPointer_NormalWeapon_Static)
+			iter->bRender = true;
+
+		m_pSharedPointer_NormalWeapon_Blade->bRender = true;
+		m_pSharedPointer_NormalWeapon_Handle->bRender = true;
+
+		for (auto& iter : m_vecSharedPointer_SpecialWeapon_Static)
+			iter->bRender = false;
+
+		m_pSharedPointer_SpecialWeapon->bRender = false;
+	}
 }
 
 void CUIPlay_Weapon::Set_Fable()
@@ -161,9 +242,20 @@ void CUIPlay_Weapon::Set_Fable()
 
 void CUIPlay_Weapon::Start_WeaponCell_Change(_float fTimeDelta)
 {
+	_bool bSwitchMode = false;
+
+	if ((m_eType_Now == CPlayer::WEP_SCISSOR) || (GET_GAMEINTERFACE->Get_Weapon_Model_Index() == CPlayer::WEP_SCISSOR))
+		bSwitchMode = true;
+
+	m_eType_Now = GET_GAMEINTERFACE->Get_Weapon_Model_Index();
+
+	if (bSwitchMode == true) 
+		Switch_Mode();
+
+	Switch_Weapon();
 }
 
-void CUIPlay_Weapon::Start_FableGauge_Change(_float fTimeDelta)
+void CUIPlay_Weapon::Start_FableGauge_Use(_float fTimeDelta)
 {
 }
 
