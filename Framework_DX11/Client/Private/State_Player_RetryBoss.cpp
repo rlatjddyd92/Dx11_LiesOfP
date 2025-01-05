@@ -34,7 +34,7 @@ HRESULT CState_Player_RetryBoss::Start_State(void* pArg)
     vBlockLook.Normalize();
 
     _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-    _Vec3 vInitPos = vBlockPos + vBlockLook * 0.5f;
+    _Vec3 vInitPos = vBlockPos + vBlockLook * 1.3f;
     vInitPos.y = vPlayerPos.y;
 
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
@@ -61,24 +61,17 @@ void CState_Player_RetryBoss::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 
-    if (!m_isPlaySound && (iFrame == 70 || iFrame == 71))
+    if (!m_isPlaySound && (iFrame == 0 || iFrame == 1))
     {
         m_pBlockObj->Open_Door();
 
         m_isPlaySound = true;
-        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_TreasureChest_Lock_Break_02.wav"));
-    }
-
-    if (!m_isPlaySound2 && iFrame == 170 || iFrame == 171)
-    {
-        m_isPlaySound2 = true;
-        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("Box_Open.wav"));
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_OJ_FX_Hidden_Item_Move_01.wav"));
     }
 }
 
 void CState_Player_RetryBoss::End_State()
 {
-    m_pBlockObj->Set_Dead(true);
     m_pBlockObj = nullptr;
 
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);

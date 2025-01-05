@@ -15,10 +15,9 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
   compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso
+  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(180,5-82): warning X3206: implicit truncation of vector type
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(201,27-49): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
@@ -30,6 +29,7 @@ C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(393,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(426,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
   
+  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
   compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso
