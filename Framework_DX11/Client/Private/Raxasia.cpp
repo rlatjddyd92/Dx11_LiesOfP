@@ -141,9 +141,6 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 void CRaxasia::Priority_Update(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::F9))
-		Set_Dead(true);
-
 	//if (m_bChanging)
 	//{
 	//	m_bChanging = false;

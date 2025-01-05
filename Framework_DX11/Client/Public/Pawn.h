@@ -53,9 +53,9 @@ public:
     void                Play_Animation() { m_isPlayAnimation = true; }
     void                Stop_Animation() { m_isPlayAnimation = false; }
 
-    void                SetUp_Die() { m_bDieState = true; }
-    void			    Reset_Die() { m_bDieState = false; }
-    _bool			    Get_IsDieState() { return m_bDieState; }
+    virtual void                SetUp_Die() { m_bDieState = true; }
+    virtual void			    Reset_Die() { m_bDieState = false; }
+    _bool			            Get_IsDieState() { return m_bDieState; }
 
     _float              Get_EmissiveMask() { return m_fEmissiveMask; }
     void                Set_EmissiveMask(_float fEmissive) { m_fEmissiveMask = fEmissive; }

@@ -202,6 +202,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	if (Key_Tab(KEY::WHEELBUTTON))
 		LockOnOff();
 
+	if (m_pTargetMonster && m_pTargetMonster->Get_IsDieState())
+		Safe_Release(m_pTargetMonster);
+
 	if(nullptr != m_pWeapon[m_eWeaponType])
 		m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 	if(nullptr != m_pWeapon_Arm)
@@ -455,6 +458,24 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 	}
 }
 
+void CPlayer::SetUp_Die()
+{
+	m_isLockOn = false;
+
+	if (m_pTargetMonster)
+	{
+		Safe_Release(m_pTargetMonster);
+		m_pTargetMonster = nullptr;
+	}
+
+	m_bDieState = true;
+}
+
+void CPlayer::Reset_Die()
+{
+	m_bDieState = false;
+}
+
 _bool CPlayer::Key_Tab(KEY eKey)
 {
 	if (GET_GAMEINTERFACE->IsGamePause() || m_isPlayingCutscene)
@@ -640,6 +661,8 @@ void CPlayer::LockOnOff()
 		}
 		else
 		{
+			Safe_AddRef(m_pTargetMonster);
+
 			_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
@@ -650,6 +673,7 @@ void CPlayer::LockOnOff()
 			}
 			else
 			{
+				Safe_Release(m_pTargetMonster);
 				m_pTargetMonster = nullptr;
 				m_isLockOn = false;
 			}
@@ -657,6 +681,7 @@ void CPlayer::LockOnOff()
 	}
 	else
 	{
+		Safe_Release(m_pTargetMonster);
 		m_pTargetMonster = nullptr;
 		m_isLockOn = false;
 	}
@@ -666,6 +691,7 @@ void CPlayer::LockOnOff()
 	{
 		if (m_pTargetMonster->Get_IsDieState() || m_pFsmCom->Get_CurrentState() == DIE)
 		{
+			Safe_Release(m_pTargetMonster);
 			m_pTargetMonster = nullptr;
 			m_isLockOn = false;
 		}
@@ -717,9 +743,11 @@ CMonster* CPlayer::Find_TargetMonster()
 		}
 	}
 
-	if (nullptr != m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia")))
+	CLayer* pRaxasiaLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"));
+	CLayer* pSimonLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"));
+	if (nullptr != pRaxasiaLayer && pRaxasiaLayer->Get_ObjectCount() > 0)
 	{
-		CGameObject* pRaxasia =  m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList().front();
+		CGameObject* pRaxasia = pRaxasiaLayer->Get_ObjectList().front();
 
 		_Vec3 vNearObjPos = pNearObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		_Vec3 vRaxasiaPos = pRaxasia->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -734,9 +762,9 @@ CMonster* CPlayer::Find_TargetMonster()
 			pNearObject = pRaxasia;
 		}
 	}
-	else if (nullptr != m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus")))
+	else if (nullptr != pSimonLayer && pSimonLayer->Get_ObjectCount() > 0)
 	{
-		CGameObject* pSimon = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList().front();
+		CGameObject* pSimon = pSimonLayer->Get_ObjectList().front();
 
 		_Vec3 vNearObjPos = pNearObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		_Vec3 vRaxasiaPos = pSimon->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -1319,7 +1347,7 @@ void CPlayer::Create_ThrowItem(SPECIAL_ITEM eItemType)
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	if (0/*m_pTargetMonster*/)
+	if (m_pTargetMonster)
 	{
 		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);

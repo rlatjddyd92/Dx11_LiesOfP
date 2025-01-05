@@ -246,6 +246,10 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 public:
+	virtual void                SetUp_Die() override;
+	virtual void			    Reset_Die() override;
+
+public:
 	_bool			Key_Tab(KEY eKey);
 	_bool			Key_Hold(KEY eKey);
 	_bool			Key_Away(KEY eKey);
