@@ -296,6 +296,7 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
     {
         m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.2f);
         Move_To_Stargazer();
+        GET_GAMEINTERFACE->SetPlayerDead_UI_NowEnd_False();
     }
 
     if (iCurAnim == m_iAnimation_TeleportEnd)

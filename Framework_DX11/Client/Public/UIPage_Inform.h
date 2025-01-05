@@ -99,6 +99,7 @@ public:
 	void Show_PlayerDead_UI();
 
 	_bool IsPlayerDead_UI_NowEnd() { return m_bIsPlayerDead_UI_NowEnd; }
+	void SetPlayerDead_UI_NowEnd_False() { m_bIsPlayerDead_UI_NowEnd = false; }
 
 protected:
 	void Update_Region(_float fTimeDelta);
@@ -128,6 +129,8 @@ protected:
 
 	_int m_iPlayerDead_Phase = -1;
 	_bool m_bIsPlayerDead_UI_NowEnd = false; // <- 플레이어 사망 UI가 꺼지기 시작하는 타이밍에 단 한번만 true가 되는 변수 
+	_bool m_bCheckNowEnd = false;
+
 
 	_float m_fAngle_Clock_Hour_Start = 0.f;
 	_float m_fAngle_Clock_Minitue_Start = 0.f;

@@ -172,6 +172,7 @@ public: // 외부에서 매니저 접근
 
 	void Show_PlayerDead_UI() { m_pUIManager->Show_PlayerDead_UI(); }
 	_bool IsPlayerDead_UI_NowEnd() { return m_pUIManager->IsPlayerDead_UI_NowEnd(); }
+	void SetPlayerDead_UI_NowEnd_False() { m_pUIManager->SetPlayerDead_UI_NowEnd_False(); }
 
 	// 텔레포트
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIManager->Set_Now_Interact_Stargezer(iNaviIndex); }
