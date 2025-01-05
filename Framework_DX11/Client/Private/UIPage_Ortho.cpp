@@ -125,6 +125,7 @@ void CUIPage_Ortho::Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, v
 	ORTHO_HOST* pNew = new ORTHO_HOST;
 	pNew->eType = eType;
 	pNew->pHost = static_cast<CGameObject*>(pObj);
+	pNew->pHost->AddRef();
 	m_Ortho_Host_list.push_back(pNew);
 
 	if (eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)
@@ -298,11 +299,12 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		
 		*/
 
-		if (((*iter)->pHost == nullptr) || ((*iter)->pHost->Get_Dead()))
+
+		if ((*iter)->pHost->Get_Dead())
 		{
-			// iter->pHost는 얕은 복사로 가져왔으며 addref 하지 않았음
-			Safe_Delete(*iter);
 			Set_OnOff_OrthoUI(false, (*iter)->pHost);
+			Safe_Release((*iter)->pHost);
+			Safe_Delete(*iter);
 			iter = m_Ortho_Host_list.erase(iter);
 			continue;
 		}
@@ -592,7 +594,10 @@ void CUIPage_Ortho::Free()
 	__super::Free();
 
 	for (auto& iter : m_Ortho_Host_list)
+	{
+		Safe_Release((*iter).pHost);
 		Safe_Delete(iter);
+	}
 
 	m_Ortho_Host_list.clear();
 

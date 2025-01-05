@@ -186,6 +186,7 @@ public: // 외부에서 매니저 접근
 	void Start_Tutorial() { return m_pUIManager->Start_Tutorial(); }
 	void End_Tutorial() { return m_pUIManager->End_Tutorial(); }
 
+	void Start_Tutorial_Talking() { m_pUIManager->Start_Tutorial_Talking(); } // 제미니 대화부터 시작 
 	_bool IsTutorial_Open() { return m_pUIManager->IsTutorial_Open(); } // <- 튜토리얼 진행 중인 지 확인 
 	_bool Get_TutorialPopup_Open() { return m_pUIManager->Get_TutorialPopup_Open(); } // <- 튜토리얼 중 안내 팝업이 떴는 지 확인
 	_int Get_NowChapter() { return m_pUIManager->Get_NowChapter(); } // <- 현재 진행 중인 챕터 확인

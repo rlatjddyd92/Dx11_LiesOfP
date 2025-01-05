@@ -181,6 +181,10 @@ protected:
 	// 무기 가드 확인용
 	_Vec2 m_vGuardTime = { 0.f,0.15f };
 	_bool m_bGuard = false;
+
+	// 게임 입장 
+	_bool m_bWaitStart = false; // <- 입장 대기 여부
+	_float m_fStartTime = 2.f; // <- 튜토리얼 종료 후 게임 입장까지 대기 시간 
 	
 	// 얕은 복사, 릴리즈 하지 말 것
 	class CMonster_Training01* m_pSharedPonter_AttackMonster = { nullptr };

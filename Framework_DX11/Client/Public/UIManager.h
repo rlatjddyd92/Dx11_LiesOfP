@@ -293,7 +293,12 @@ public:
 	// 튜토리얼
 	void Set_PlayerStateChange() { m_pUIPage_Tutorial->Set_PlayerStateChange(); }
 
-	void Start_Tutorial() 
+	void Start_Tutorial_Talking() // 제미니 대화부터 시작 
+	{
+		Show_Script_Npc_Talking(NPC_SCRIPT::SCR_ZEMINI);
+	}
+
+	void Start_Tutorial() // 튜토리얼 바로 진입
 	{ 
 		m_pUIPage_Tutorial->OpenAction();
 		m_pUIPage_Play->KeyGuideOnOff(false);
@@ -310,6 +315,7 @@ public:
 
 	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Attack(pPoiter); }
 	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Normal(pPoiter); }
+
 
 	// 게임 종료
 	void Exit_Program()
