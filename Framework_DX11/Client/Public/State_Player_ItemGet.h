@@ -27,6 +27,8 @@ private:
 
     _double* m_pTrackPos = { nullptr };
 
+    class CItem_Dropped* m_pDroppedItem = { nullptr };
+
 private:
     _bool               End_Check();
 

@@ -25,6 +25,7 @@ protected:
 
 public:
 	_bool	Get_IsOpend() { return m_isOpened; }
+	_bool	Get_IsClose() { return m_isClose; }
 	void	Start_Restore() { m_bStartRestore = true; }
 
 	_int	Get_CellNum() { return m_iCurrnetCellNum; }

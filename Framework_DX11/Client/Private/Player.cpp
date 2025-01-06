@@ -1551,7 +1551,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 				GET_GAMEINTERFACE->Set_Now_Interact_Stargezer(pStargazer->Get_CellNum());
 			}
 		}
-		else
+		else if(!pStargazer->Get_IsOpend() && !pStargazer->Get_IsClose())
 		{
 			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 복구시킨다")))
 			{
@@ -1588,7 +1588,6 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		if (!pTowerDoor->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
 		{
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
-			//m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
 		}
 	}
 	else if (pGameObject->Get_Tag() == TEXT("Item_Dropped"))
@@ -1596,7 +1595,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("아이템 획득")))
 		{
 			//pGameObject->Set_Dead(true);
-			m_pFsmCom->Change_State(ITEMGET);
+			m_pFsmCom->Change_State(ITEMGET,&pGameObject);
 		}
 	}
 	else if (pGameObject->Get_Tag() == TEXT("MoveBlockObj"))
