@@ -111,6 +111,7 @@
 #include "Dissolve_Player_Dead.h"
 #include "Dissolve_Fire.h"
 #include "Dissolve_Poison.h"
+#include "Dissolve_Electric.h"
 
 #include "ObjectPool.h"
 #include "Decal_Blood.h"
@@ -2119,8 +2120,9 @@ HRESULT CPlayer::Ready_Effect()
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Poison");
 	m_DissolveEffects[DISSOLVE_POISON] = static_cast<CDissolve_Poison*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Poison"), &DissolveDesc));
 
-	m_DissolveEffects[DISSOLVE_POISON]->Set_On(true);
-
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Electric");
+	m_DissolveEffects[DISSOLVE_ELECTRIC] = static_cast<CDissolve_Electric*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	m_DissolveEffects[DISSOLVE_ELECTRIC]->Set_On(true);
 	return S_OK;
 }
 
