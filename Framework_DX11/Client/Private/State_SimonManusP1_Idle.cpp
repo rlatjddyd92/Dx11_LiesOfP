@@ -15,7 +15,7 @@ CState_SimonManusP1_Idle::CState_SimonManusP1_Idle(CFsm* pFsm, CMonster* pMonste
 HRESULT CState_SimonManusP1_Idle::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-
+    m_pFirstMeetCheck = m_pMonster->Get_FirstMeetCheck();
 
     return S_OK;
 }
@@ -48,19 +48,9 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
     }
 
     _float fDist = m_pMonster->Calc_Distance_XZ();
-    if (!m_bFirstMeetCheck)
+    if (!(*m_pFirstMeetCheck))
     {
-        _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
-        _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-        if (fDist <= 25.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
-        {
-            GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
-            m_bFirstMeetCheck = true;
-        }
-        else
-        {
-            return;
-        }
+        return;
     }
     else if (m_fIdleEndDuration <= m_fIdleTime)
     {

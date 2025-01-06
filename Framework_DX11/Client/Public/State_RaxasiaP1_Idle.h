@@ -27,7 +27,7 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _bool               m_bFirstMeetCheck = { false };
+    _bool*              m_pFirstMeetCheck = { nullptr };
 
     _float              m_fIdleTime = { 0.f };
     _float              m_fIdleEndDuration = { 0.8f };
@@ -42,7 +42,7 @@ private:
 
     _uint               m_iAtkCnt{};
 
-    _int               m_iAtkTrack = {};
+    _int                m_iAtkTrack = {};
 
 private:
     void                Calc_Act_Attack();

@@ -2,6 +2,7 @@
 #include "Weapon_Raxasia_P1_Sword.h"
 
 #include "Monster.h"
+#include "Player.h"
 
 #include "GameInstance.h"
 
@@ -39,6 +40,9 @@ HRESULT CWeapon_Raxasia_P1_Sword::Initialize(void* pArg)
 	{
 		return E_FAIL;
 	}
+
+	m_fDebuffAmount = pDesc->fDebuffAmount;
+	m_iDebuffType = pDesc->iDebuffType;
 
 
 	m_strObjectTag = TEXT("MonsterWeapon");
@@ -121,6 +125,12 @@ void CWeapon_Raxasia_P1_Sword::OnCollisionEnter(CGameObject* pOther)
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
+
+			if (m_bDebuffAttack)
+			{
+				static_cast<CPlayer*>(pOther)->Calc_DebuffGain(m_iDebuffType, m_fDebuffRatio * m_fDebuffAmount);
+			}
+
 		}
 	}
 }

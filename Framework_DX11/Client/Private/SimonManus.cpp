@@ -212,12 +212,8 @@ void CSimonManus::Update(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::B))
 	{
-		ChangePhase();
+		SetUp_Act();
 	}
-	//if (KEY_TAP(KEY::Z))
-	//{
-	//	m_Effects[P2_JUMPMAGIC]->Set_Loop(true);
-	//}
 
 	if (m_isPlayAnimation)
 	{
@@ -807,7 +803,7 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects.resize(EFFECT_END);
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);
 
 	m_Effects[P1_CHARGEHAMMER] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Weapon_ChargeSwing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
@@ -1001,6 +997,9 @@ void CSimonManus::ChangePhase()
 	
 	Desc.vRotate = _Vec3{0.f, 0.f, 180.f};
 	m_Effects[SWING_DRAG_REVERSE]->Set_EffectDesc(Desc);
+
+	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
+	m_Effects[P1_CHARGEHAMMER]->Set_EffectDesc(Desc);
 
 	m_eStat.fHp = 4000.f;
 	m_eStat.fMaxHp = 4000.f;

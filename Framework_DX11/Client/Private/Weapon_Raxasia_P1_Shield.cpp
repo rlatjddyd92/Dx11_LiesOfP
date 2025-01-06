@@ -2,6 +2,7 @@
 #include "Weapon_Raxasia_P1_Shield.h"
 
 #include "Monster.h"
+#include "Player.h"
 
 #include "GameInstance.h"
 
@@ -41,6 +42,9 @@ HRESULT CWeapon_Raxasia_P1_Shield::Initialize(void* pArg)
 	{
 		return E_FAIL;
 	}
+
+	m_fDebuffAmount = pDesc->fDebuffAmount;
+	m_iDebuffType = pDesc->iDebuffType;
 
 	m_strObjectTag = TEXT("MonsterWeapon");
 
@@ -121,6 +125,11 @@ void CWeapon_Raxasia_P1_Shield::OnCollisionEnter(CGameObject* pOther)
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
+
+			if (m_bDebuffAttack)
+			{
+				static_cast<CPlayer*>(pOther)->Calc_DebuffGain(m_iDebuffType, m_fDebuffRatio * m_fDebuffAmount);
+			}
 
 			CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Shield_Impact"),
 				vPos, _Vec3{ m_pMonster->Get_TargetDir() });

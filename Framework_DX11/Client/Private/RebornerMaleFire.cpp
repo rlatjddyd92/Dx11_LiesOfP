@@ -404,6 +404,10 @@ HRESULT CRebornerMaleFire::Ready_Weapon()
 
 	WeaponDesc.pMonster = this;
 
+	WeaponDesc.iDebuffType = CPlayer::DEBUFF_FIRE;
+	WeaponDesc.fDebuffAmount = 5.f;
+
+
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_RebornerMaleFire_FireBreath"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
 		return E_FAIL;

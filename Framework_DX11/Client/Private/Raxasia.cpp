@@ -207,12 +207,8 @@ void CRaxasia::Update(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::B))
 	{
-		ChangePhase();
+		SetUp_Act();
 	}
-	//if (KEY_TAP(KEY::Z))
-	//{
-	//	m_Effects[P2_JUMPMAGIC]->Set_Loop(true);
-	//}
 
 
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta * m_isPlayAnimation), m_pTransformCom->Get_WorldMatrix());

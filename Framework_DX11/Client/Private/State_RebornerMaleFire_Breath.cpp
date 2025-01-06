@@ -75,7 +75,9 @@ void CState_RebornerMaleFire_Breath::Update(_float fTimeDelta)
 
 void CState_RebornerMaleFire_Breath::End_State()
 {
+
     m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_Debuff(0);
 }
 
 _bool CState_RebornerMaleFire_Breath::End_Check()
@@ -100,10 +102,12 @@ void CState_RebornerMaleFire_Breath::Collider_Check(_double CurTrackPos)
         if (CurTrackPos >= 60.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1.0f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_Debuff(0, 1.f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_Debuff(0);
         }
     }
     else

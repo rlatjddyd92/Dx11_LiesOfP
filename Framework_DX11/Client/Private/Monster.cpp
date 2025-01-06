@@ -278,6 +278,12 @@ void CMonster::Start_Fatal()
 	m_pFsmCom->Change_State(HITFATAL);
 }
 
+void CMonster::SetUp_Act()
+{
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, this);
+	m_bFirstMeetCheck = true;
+}
+
 HRESULT CMonster::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

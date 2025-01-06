@@ -27,11 +27,11 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _bool               m_bFirstMeetCheck = { false };
+    _bool               m_bActCtrl = { false };
     _bool               m_bFirstAct = { true };
 
     _float              m_fIdleTime = { 0.f };
-    _float              m_fIdleEndDuration = { 0.8f };
+    _float              m_fIdleEndDuration = { 3.f };
 
     _bool               m_bRunning = { false };
     _bool               m_bWalk = { false };

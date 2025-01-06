@@ -35,6 +35,9 @@ HRESULT CColliderObject::Initialize(void* pArg)
 	if(FAILED(Ready_Components(pDesc->pBoundingDesc, pDesc->eType)))
 		return E_FAIL;
 
+	m_fDebuffAmount = pDesc->fDebuffAmount;
+	m_iDebuffType = pDesc->iDebuffType;
+
 	m_fDamageAmount = pDesc->fDamageAmount;
 	m_pColliderCom->IsActive(false);
 	m_pColliderCom->Set_Owner(this);

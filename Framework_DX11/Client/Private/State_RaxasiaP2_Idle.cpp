@@ -47,8 +47,20 @@ void CState_RaxasiaP2_Idle::Update(_float fTimeDelta)
     }
 
     _float fDist = m_pMonster->Calc_Distance_XZ();
-
-    if (m_fIdleEndDuration <= m_fIdleTime)
+    if (!m_bActCtrl)
+    {
+        if (m_fIdleTime >= m_fIdleEndDuration)
+        {
+            m_bActCtrl = true;
+            m_fIdleTime = 0.f;
+            m_fIdleEndDuration = 0.8f;
+        }
+        else
+        {
+            m_fIdleTime += fTimeDelta;
+        }
+    }
+    else if (m_fIdleEndDuration <= m_fIdleTime)
     {
         if (m_bFirstAct)
         {
