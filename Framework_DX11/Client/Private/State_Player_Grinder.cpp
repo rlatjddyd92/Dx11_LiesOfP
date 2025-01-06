@@ -36,7 +36,7 @@ HRESULT CState_Player_Grinder::Start_State(void* pArg)
     if (m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
         m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], false, 0.05f, 0, true);
 
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Grinder[0], true);
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Grinder[0], false);
 
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 

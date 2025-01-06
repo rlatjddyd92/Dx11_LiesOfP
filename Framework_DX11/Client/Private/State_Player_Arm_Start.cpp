@@ -35,7 +35,7 @@ HRESULT CState_Player_Arm_Start::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_Arm_Start::Start_State(void* pArg)
 {
     if (m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_ArmStart, false, 0.1f, 0, false);
+        m_pPlayer->Change_Animation(m_iAnimation_ArmStart, false, 0.1f, 0, true);
 
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmStart, false);
 
