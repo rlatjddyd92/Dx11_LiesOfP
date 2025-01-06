@@ -140,6 +140,8 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ChargeRush::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
 
@@ -191,7 +193,7 @@ void CState_RaxasiaP2_ChargeRush::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

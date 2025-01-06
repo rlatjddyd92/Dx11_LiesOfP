@@ -90,6 +90,7 @@ void CState_CarcassBigA_AttackRoute_2::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_AttackRoute_2::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
     m_iRouteTrack = 0;
 }
 
@@ -128,7 +129,7 @@ void CState_CarcassBigA_AttackRoute_2::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -139,7 +140,7 @@ void CState_CarcassBigA_AttackRoute_2::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
     else
@@ -150,7 +151,7 @@ void CState_CarcassBigA_AttackRoute_2::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

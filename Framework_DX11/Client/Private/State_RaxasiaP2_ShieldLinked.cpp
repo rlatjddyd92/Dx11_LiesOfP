@@ -113,6 +113,8 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ShieldLinked::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+ 
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
 }
@@ -169,7 +171,7 @@ void CState_RaxasiaP2_ShieldLinked::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
     else if (m_iRouteTrack == 2)
@@ -180,7 +182,7 @@ void CState_RaxasiaP2_ShieldLinked::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

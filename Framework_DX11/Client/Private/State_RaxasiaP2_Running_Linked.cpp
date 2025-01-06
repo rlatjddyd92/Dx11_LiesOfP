@@ -252,6 +252,9 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Running_Linked::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
 }
 
@@ -299,7 +302,7 @@ void CState_RaxasiaP2_Running_Linked::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -310,7 +313,7 @@ void CState_RaxasiaP2_Running_Linked::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     

@@ -88,6 +88,9 @@ void CState_CarcassNormal_HeadingMultiple::Update(_float fTimeDelta)
 
 void CState_CarcassNormal_HeadingMultiple::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+    m_pMonster->DeActive_CurrentWeaponCollider(2);
 }
 
 _bool CState_CarcassNormal_HeadingMultiple::End_Check()
@@ -114,22 +117,22 @@ void CState_CarcassNormal_HeadingMultiple::Collider_Check(_double CurTrackPos)
             (CurTrackPos >= 108.f && CurTrackPos <= 123.f) ||
             (CurTrackPos >= 165.f && CurTrackPos <= 177.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.4f, 2, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.4f, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(2);
+            m_pMonster->DeActive_CurrentWeaponCollider(2);
         }
         //양손
         if (CurTrackPos >= 164.f && CurTrackPos <= 183.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
-            m_pMonster->Active_CurrentWeaponCollider(1.2f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(0);
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
     else
@@ -139,22 +142,22 @@ void CState_CarcassNormal_HeadingMultiple::Collider_Check(_double CurTrackPos)
             (CurTrackPos >= 103.f && CurTrackPos <= 118.f) ||
             (CurTrackPos >= 160.f && CurTrackPos <= 170.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 2, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(2);
+            m_pMonster->DeActive_CurrentWeaponCollider(2);
         }
         //양손
         if (CurTrackPos >= 157.f && CurTrackPos <= 175.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
-            m_pMonster->Active_CurrentWeaponCollider(1.2f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(0);
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 

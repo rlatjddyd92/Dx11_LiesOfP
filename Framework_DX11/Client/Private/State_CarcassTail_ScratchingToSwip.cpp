@@ -81,6 +81,10 @@ void CState_CarcassTail_ScratchingToSwip::Update(_float fTimeDelta)
 
 void CState_CarcassTail_ScratchingToSwip::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+    m_pMonster->DeActive_CurrentWeaponCollider(2);
+    m_pMonster->DeActive_CurrentWeaponCollider(4);
     m_iRouteTrack = 0;
 }
 
@@ -130,11 +134,11 @@ void CState_CarcassTail_ScratchingToSwip::Collider_Check(_double CurTrackPos)
         {
             if (m_iFirstAnim == AN_ROUTE_FIRST_L)
             {
-                m_pMonster->DeActive_CurretnWeaponCollider(0);
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
             }
             else
             {
-                m_pMonster->DeActive_CurretnWeaponCollider(1);
+                m_pMonster->DeActive_CurrentWeaponCollider(1);
             }
         }
     }
@@ -147,7 +151,8 @@ void CState_CarcassTail_ScratchingToSwip::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(2);
+            m_pMonster->DeActive_CurrentWeaponCollider(2);
+            m_pMonster->DeActive_CurrentWeaponCollider(4);
         }
     }
 }

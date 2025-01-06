@@ -5,6 +5,8 @@
 
 #include "Effect_Manager.h"
 
+#include "Pawn.h"
+
 CAObj_ThunderCalling::CAObj_ThunderCalling(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
@@ -32,6 +34,9 @@ HRESULT CAObj_ThunderCalling::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
+    Safe_AddRef(m_pOwner);
 
     m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));
 
@@ -89,6 +94,11 @@ void CAObj_ThunderCalling::Update(_float fTimeDelta)
 
 void CAObj_ThunderCalling::Late_Update(_float fTimeDelta)
 {
+    if (m_pOwner->Get_Dead())
+    {
+        m_isDead = true;
+    }
+
     m_pEffect->Late_Update(fTimeDelta);
 }
 
@@ -164,6 +174,8 @@ CGameObject* CAObj_ThunderCalling::Clone(void* pArg)
 
 void CAObj_ThunderCalling::Free()
 {
+    Safe_Release(m_pOwner);
+
     __super::Free();
 
     if (true == m_isCloned)

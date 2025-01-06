@@ -176,7 +176,7 @@ void CCarcassBigA::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iColl
 	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
-void CCarcassBigA::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CCarcassBigA::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 {
 	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }
@@ -251,6 +251,11 @@ HRESULT CCarcassBigA::Ready_Components()
 		return E_FAIL;
 	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
 
+
+	for (_int i = 0; i< CT_END - 1; ++i)
+	{
+		m_EXCollider[i]->Set_Owner(this);
+	}
 
 	//유사 웨폰
 	/* FOR.Com_Collider_OBB */

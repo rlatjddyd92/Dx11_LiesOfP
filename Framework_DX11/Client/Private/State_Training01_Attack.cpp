@@ -79,6 +79,8 @@ void CState_Training01_Attack::End_State()
 {
     dynamic_cast<CMonster_Training01*>(m_pMonster)->Change_AttackType();
 
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
    // m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
    // m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
@@ -93,7 +95,7 @@ void CState_Training01_Attack::Control_Collider()
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 }
 

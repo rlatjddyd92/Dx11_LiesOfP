@@ -188,7 +188,7 @@ void CCurruptedStrongArm_Puppet::Active_CurrentWeaponCollider(_float fDamageRati
 	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, eHitType, eAtkStrength);
 }
 
-void CCurruptedStrongArm_Puppet::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CCurruptedStrongArm_Puppet::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 {
 	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }

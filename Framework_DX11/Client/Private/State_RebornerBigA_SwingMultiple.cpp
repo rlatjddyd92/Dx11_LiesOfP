@@ -113,6 +113,8 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
 
 void CState_RebornerBigA_SwingMultiple::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
     m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
@@ -133,7 +135,7 @@ void CState_RebornerBigA_SwingMultiple::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -145,7 +147,7 @@ void CState_RebornerBigA_SwingMultiple::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else
@@ -157,7 +159,7 @@ void CState_RebornerBigA_SwingMultiple::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 

@@ -189,6 +189,9 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Running_Fury::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
     m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
@@ -230,7 +233,7 @@ void CState_RaxasiaP2_Running_Fury::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
 
         if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
@@ -239,7 +242,7 @@ void CState_RaxasiaP2_Running_Fury::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -250,7 +253,7 @@ void CState_RaxasiaP2_Running_Fury::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

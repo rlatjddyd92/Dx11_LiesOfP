@@ -186,6 +186,8 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Running::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
 }
 
 _bool CState_RaxasiaP2_Running::End_Check()
@@ -225,7 +227,7 @@ void CState_RaxasiaP2_Running::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
 
         if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
@@ -234,7 +236,7 @@ void CState_RaxasiaP2_Running::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

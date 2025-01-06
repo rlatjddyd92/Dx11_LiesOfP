@@ -47,6 +47,8 @@ void CState_CarcassTail_TailSwipMultiple::Update(_float fTimeDelta)
 
 void CState_CarcassTail_TailSwipMultiple::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(2);
+    m_pMonster->DeActive_CurrentWeaponCollider(4);
 }
 
 _bool CState_CarcassTail_TailSwipMultiple::End_Check()
@@ -62,10 +64,12 @@ void CState_CarcassTail_TailSwipMultiple::Collider_Check(_double CurTrackPos)
         (CurTrackPos >= 185.f && CurTrackPos <= 210.f))
     {
         m_pMonster->Active_CurrentWeaponCollider(0.9f, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(0.9f, 4, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(2);
+        m_pMonster->DeActive_CurrentWeaponCollider(2);
+        m_pMonster->DeActive_CurrentWeaponCollider(4);
     }
 }
 

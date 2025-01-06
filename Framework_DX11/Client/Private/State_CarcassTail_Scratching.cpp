@@ -51,6 +51,8 @@ void CState_CarcassTail_Scratching::Update(_float fTimeDelta)
 
 void CState_CarcassTail_Scratching::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
 }
 
 _bool CState_CarcassTail_Scratching::End_Check()
@@ -75,11 +77,11 @@ void CState_CarcassTail_Scratching::Collider_Check(_double CurTrackPos)
     {
         if (m_iCurAnim == AN_SCRATCHING_L)
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(0);
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

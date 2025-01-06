@@ -47,6 +47,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_RepetUpperSlash::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_RaxasiaP1_RepetUpperSlash::End_Check()
@@ -269,7 +270,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 5)
@@ -281,7 +282,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 6)
@@ -293,7 +294,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

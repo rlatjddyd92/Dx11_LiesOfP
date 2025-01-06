@@ -79,6 +79,8 @@ void CState_SimonManusP1_Stamp::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_Stamp::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
     m_pMonster->Change_WeaponAnimation(0, false, 0.1f);
     m_bWeaponSpin = false;
     m_bStamp = false;
@@ -123,7 +125,7 @@ void CState_SimonManusP1_Stamp::Collider_Check(_double CurTrackPos)
             }
             else
             {
-                m_pMonster->DeActive_CurretnWeaponCollider();
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
             }
         }
         else
@@ -134,7 +136,7 @@ void CState_SimonManusP1_Stamp::Collider_Check(_double CurTrackPos)
             }
             else
             {
-                m_pMonster->DeActive_CurretnWeaponCollider();
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
             }
         }
         

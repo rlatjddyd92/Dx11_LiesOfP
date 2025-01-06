@@ -215,7 +215,7 @@ void CRebornerMaleFire::Active_CurrentWeaponCollider(_float fDamageRatio, _uint 
 	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
-void CRebornerMaleFire::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CRebornerMaleFire::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 {
 	m_pWeapon->DeActive_Collider();
 }

@@ -104,6 +104,8 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_Discharge::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
 
@@ -127,7 +129,7 @@ void CState_RaxasiaP1_Discharge::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -138,7 +140,7 @@ void CState_RaxasiaP1_Discharge::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

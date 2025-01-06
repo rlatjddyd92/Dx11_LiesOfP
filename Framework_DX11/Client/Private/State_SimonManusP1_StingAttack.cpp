@@ -43,7 +43,7 @@ void CState_SimonManusP1_StingAttack::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_StingAttack::End_State()
 {
-
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_SimonManusP1_StingAttack::End_Check()
@@ -60,7 +60,7 @@ void CState_SimonManusP1_StingAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 }
 

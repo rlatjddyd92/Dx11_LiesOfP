@@ -165,7 +165,7 @@ void CMonster_Training01::Active_CurrentWeaponCollider(_float fDamageRatio, _uin
 	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
-void CMonster_Training01::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CMonster_Training01::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 {
 	m_pColliderObject->DeActive_Collider();
 }

@@ -48,6 +48,8 @@ void CState_CarcassTail_MultyHittingDown::Update(_float fTimeDelta)
 
 void CState_CarcassTail_MultyHittingDown::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
 }
 
 _bool CState_CarcassTail_MultyHittingDown::End_Check()
@@ -64,7 +66,7 @@ void CState_CarcassTail_MultyHittingDown::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(0);
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 
     if ((CurTrackPos >= 120.f && CurTrackPos <= 129.f) ||
@@ -74,7 +76,7 @@ void CState_CarcassTail_MultyHittingDown::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(1);
+        m_pMonster->DeActive_CurrentWeaponCollider(1);
     }
 }
 

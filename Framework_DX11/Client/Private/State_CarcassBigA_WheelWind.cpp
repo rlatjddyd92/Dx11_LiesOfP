@@ -45,6 +45,8 @@ void CState_CarcassBigA_WheelWind::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_WheelWind::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+
 }
 
 _bool CState_CarcassBigA_WheelWind::End_Check()
@@ -60,7 +62,7 @@ void CState_CarcassBigA_WheelWind::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(1);
+        m_pMonster->DeActive_CurrentWeaponCollider(1);
     }
 }
 

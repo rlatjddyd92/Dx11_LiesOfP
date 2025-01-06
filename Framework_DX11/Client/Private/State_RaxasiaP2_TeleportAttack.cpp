@@ -114,6 +114,8 @@ void CState_RaxasiaP2_TeleportAttack::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_TeleportAttack::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
 }
 
 _bool CState_RaxasiaP2_TeleportAttack::End_Check()
@@ -154,7 +156,7 @@ void CState_RaxasiaP2_TeleportAttack::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
 
         if ((CurTrackPos >= 75.f && CurTrackPos <= 100.f))
@@ -163,7 +165,7 @@ void CState_RaxasiaP2_TeleportAttack::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

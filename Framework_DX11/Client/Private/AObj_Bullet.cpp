@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
+#include "Pawn.h"
 
 #include "EffectObject.h"
 
@@ -37,6 +38,8 @@ HRESULT CAObj_Bullet::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
 
     m_fDamageAmount = 40.f;
     m_fLifeDuration = 2.5f;
@@ -130,6 +133,11 @@ HRESULT CAObj_Bullet::Render_LightDepth()
 
 void CAObj_Bullet::OnCollisionEnter(CGameObject* pOther)
 {
+    if (m_pOwner->Get_IsDieState())
+    {
+        return;
+    }
+
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {

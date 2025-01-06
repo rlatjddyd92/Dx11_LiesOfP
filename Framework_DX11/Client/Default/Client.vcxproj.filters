@@ -178,18 +178,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ChargeSwing">
       <UniqueIdentifier>{8f3085a2-11c3-46f3-b3de-5e5066470893}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\13.EffectObject">
-      <UniqueIdentifier>{edc44b0e-2a87-427c-9788-298454cb51b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\13.EffectObject\Common">
-      <UniqueIdentifier>{9999be0d-53c1-4783-a8a5-2f222899217d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\13.EffectObject\Common\Followed">
-      <UniqueIdentifier>{0b287421-643e-4431-a7b3-666a04b38b65}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\13.EffectObject\Common\Spot">
-      <UniqueIdentifier>{957b368e-ccf5-46ea-bbbb-d448a699bfa9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\BlackBall">
       <UniqueIdentifier>{39713752-8c79-4b97-957c-30f68e5c7e25}</UniqueIdentifier>
     </Filter>
@@ -382,9 +370,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark">
       <UniqueIdentifier>{77dace17-07fa-459c-8365-865c87cf129f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\13.EffectObject\Machine">
-      <UniqueIdentifier>{c1cd3960-691f-4b1d-9d51-6ee5614afa74}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\06.Weapon\03.RebornerBigA">
       <UniqueIdentifier>{5f8abec3-18b0-4b92-8a40-fb6f85898890}</UniqueIdentifier>
     </Filter>
@@ -528,9 +513,6 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead">
       <UniqueIdentifier>{3d3c022c-e525-4921-b9ff-31c7628b841b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\13.EffectObject\Butterfly">
-      <UniqueIdentifier>{862e0e30-3183-4d04-8eaa-00bc69ea82f2}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death">
       <UniqueIdentifier>{da95df1b-1675-49d1-9f2b-2f18db97b9bc}</UniqueIdentifier>
@@ -1117,24 +1099,6 @@
     <Filter Include="04.Fsm\Monster\RebornerMale\HitFatal">
       <UniqueIdentifier>{4b49c61e-47e0-4637-a061-00aebb8b7c2d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Fsm\Monster\RebornerMale\Attack">
-      <UniqueIdentifier>{ce09b9ba-7cfe-48ca-a752-5500d6683265}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Route">
-      <UniqueIdentifier>{ef4cb7f6-e1a1-45c1-aa32-d4426029a883}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Route\RapidFire">
-      <UniqueIdentifier>{7f174b03-435c-43cb-9761-cb50655df9e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Route\Reload">
-      <UniqueIdentifier>{046e9495-1cea-4eb2-8f65-1bb11f7d5734}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Single">
-      <UniqueIdentifier>{7eb647ec-ba82-4a9d-a0a1-246b6331abf9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Single\Kick">
-      <UniqueIdentifier>{5752f73c-350b-4bd7-8b03-0c04d4687c97}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.Fsm\Monster\RebornerMaleFire">
       <UniqueIdentifier>{09de5958-f767-47d0-9a97-6671d0f88a77}</UniqueIdentifier>
     </Filter>
@@ -1455,6 +1419,42 @@
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningImpact">
       <UniqueIdentifier>{4aa89830-467a-4bc1-a51e-7ee244b7e790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\RebornerMale\Attack">
+      <UniqueIdentifier>{ce09b9ba-7cfe-48ca-a752-5500d6683265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Route">
+      <UniqueIdentifier>{ef4cb7f6-e1a1-45c1-aa32-d4426029a883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Route\RapidFire">
+      <UniqueIdentifier>{7f174b03-435c-43cb-9761-cb50655df9e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Route\Reload">
+      <UniqueIdentifier>{046e9495-1cea-4eb2-8f65-1bb11f7d5734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Single">
+      <UniqueIdentifier>{7eb647ec-ba82-4a9d-a0a1-246b6331abf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\RebornerMale\Attack\Single\Kick">
+      <UniqueIdentifier>{5752f73c-350b-4bd7-8b03-0c04d4687c97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject">
+      <UniqueIdentifier>{edc44b0e-2a87-427c-9788-298454cb51b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Common">
+      <UniqueIdentifier>{9999be0d-53c1-4783-a8a5-2f222899217d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Common\Followed">
+      <UniqueIdentifier>{0b287421-643e-4431-a7b3-666a04b38b65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Common\Spot">
+      <UniqueIdentifier>{957b368e-ccf5-46ea-bbbb-d448a699bfa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Machine">
+      <UniqueIdentifier>{c1cd3960-691f-4b1d-9d51-6ee5614afa74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Butterfly">
+      <UniqueIdentifier>{862e0e30-3183-4d04-8eaa-00bc69ea82f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2535,9 +2535,6 @@
     <ClInclude Include="..\Public\Statistic_Data.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClInclude>
@@ -2688,6 +2685,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_LightningImpact.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningImpact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
+      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3738,9 +3738,6 @@
     <ClCompile Include="..\Private\Statistic_Data.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClCompile>
@@ -3888,6 +3885,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_LightningImpact.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningImpact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
+      <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

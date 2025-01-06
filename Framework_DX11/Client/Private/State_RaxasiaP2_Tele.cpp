@@ -118,6 +118,8 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Tele::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
 }
@@ -137,7 +139,7 @@ void CState_RaxasiaP2_Tele::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

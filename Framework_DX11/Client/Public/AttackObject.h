@@ -26,7 +26,7 @@ public:
 		_int	iTrack_State{};
 		_bool	bSoundControl = { true };
 
-		CGameObject* pOwner = { nullptr };
+		class CPawn* pOwner = { nullptr };
 	}ATKOBJ_DESC;
 
 public:
@@ -81,6 +81,8 @@ protected:
 	_float			m_fLifeDuration = {};
 
 	list<CGameObject*>		m_DamagedObjects;
+	
+	class CPawn*	m_pOwner = { nullptr };
 
 protected:
 	HRESULT Ready_Components();

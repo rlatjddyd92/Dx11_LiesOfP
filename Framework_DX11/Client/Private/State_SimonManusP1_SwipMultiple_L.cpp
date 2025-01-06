@@ -69,6 +69,7 @@ void CState_SimonManusP1_SwipMultiple_L::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_SwipMultiple_L::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
     m_iRouteTrack = 0;
 }
 
@@ -105,22 +106,22 @@ void CState_SimonManusP1_SwipMultiple_L::Collider_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 80.f && CurTrackPos <= 205.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else
     {
         if (CurTrackPos >= 20.f && CurTrackPos <= 80.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.2f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

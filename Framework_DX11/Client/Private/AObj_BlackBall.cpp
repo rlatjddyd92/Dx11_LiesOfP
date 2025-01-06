@@ -2,6 +2,7 @@
 #include "AObj_BlackBall.h"
 
 #include "GameInstance.h"
+#include "Pawn.h"
 
 #include "Effect_Manager.h"
 
@@ -32,6 +33,9 @@ HRESULT CAObj_BlackBall::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
+    Safe_AddRef(m_pOwner);
 
     m_bSoundControl = pDesc->bSoundControl;
 
@@ -155,6 +159,11 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
 
 void CAObj_BlackBall::Late_Update(_float fTimeDelta)
 {
+    if (m_pOwner->Get_Dead())
+    {
+        m_isDead = true;
+    }
+
     for (auto& pEffect : m_pEffects)
     {
         if (!pEffect->Get_Dead())
@@ -241,6 +250,8 @@ CGameObject* CAObj_BlackBall::Clone(void* pArg)
 
 void CAObj_BlackBall::Free()
 {
+    Safe_Release(m_pOwner);
+
     __super::Free();
 
     if (true == m_isCloned)

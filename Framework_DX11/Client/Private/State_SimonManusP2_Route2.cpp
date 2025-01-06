@@ -107,6 +107,8 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
 
 void CState_SimonManusP2_Route2::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
     m_pMonster->On_PowerAttack(false);
     m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
     m_iRouteTrack = 0;
@@ -145,11 +147,11 @@ void CState_SimonManusP2_Route2::Collider_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else        //하이점프 폴
@@ -160,7 +162,7 @@ void CState_SimonManusP2_Route2::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

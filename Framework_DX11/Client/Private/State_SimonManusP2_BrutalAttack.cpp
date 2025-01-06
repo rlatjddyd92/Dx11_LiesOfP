@@ -59,7 +59,7 @@ void CState_SimonManusP2_BrutalAttack::Update(_float fTimeDelta)
 
 void CState_SimonManusP2_BrutalAttack::End_State()
 {
-
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
 }
 
 _bool CState_SimonManusP2_BrutalAttack::End_Check()
@@ -80,7 +80,7 @@ void CState_SimonManusP2_BrutalAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider(1);
     }
 
     if (m_iColliderResetCheckCnt == 0)

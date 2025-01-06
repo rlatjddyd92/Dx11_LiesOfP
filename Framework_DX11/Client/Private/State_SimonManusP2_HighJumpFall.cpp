@@ -98,6 +98,7 @@ void CState_SimonManusP2_HighJumpFall::End_State()
 
 _bool CState_SimonManusP2_HighJumpFall::End_Check()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
     return m_pMonster->Get_EndAnim(AN_HIGHJUMPFALL);
 }
 
@@ -109,7 +110,7 @@ void CState_SimonManusP2_HighJumpFall::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 
     if (!m_bStompAttack)

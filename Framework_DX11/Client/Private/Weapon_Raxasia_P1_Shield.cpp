@@ -99,6 +99,11 @@ HRESULT CWeapon_Raxasia_P1_Shield::Render_LightDepth()
 
 void CWeapon_Raxasia_P1_Shield::OnCollisionEnter(CGameObject* pOther)
 {
+	if (m_pMonster->Get_IsDieState())
+	{
+		return;
+	}
+
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;

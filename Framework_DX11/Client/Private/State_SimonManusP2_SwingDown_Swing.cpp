@@ -86,6 +86,7 @@ void CState_SimonManusP2_SwingDown_Swing::Update(_float fTimeDelta)
 
 void CState_SimonManusP2_SwingDown_Swing::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
     m_iRouteTrack = 0;
 }
 
@@ -124,11 +125,11 @@ void CState_SimonManusP2_SwingDown_Swing::Collider_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 45.f && CurTrackPos <= 95.f)
             {
-                m_pMonster->Active_CurrentWeaponCollider(1.4f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
             }
             else
             {
-                m_pMonster->DeActive_CurretnWeaponCollider();
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
             }
         }
         else    //루트 R일때
@@ -139,7 +140,7 @@ void CState_SimonManusP2_SwingDown_Swing::Collider_Check(_double CurTrackPos)
             }
             else
             {
-                m_pMonster->DeActive_CurretnWeaponCollider();
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
             }
         }
     }
@@ -147,11 +148,11 @@ void CState_SimonManusP2_SwingDown_Swing::Collider_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 60.f && CurTrackPos <= 75.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1);
+            m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

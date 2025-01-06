@@ -56,6 +56,8 @@ void CState_CarcassNormal_ClawMultiple::Update(_float fTimeDelta)
 
 void CState_CarcassNormal_ClawMultiple::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
 }
 
 _bool CState_CarcassNormal_ClawMultiple::End_Check()
@@ -69,11 +71,11 @@ void CState_CarcassNormal_ClawMultiple::Collider_Check(_double CurTrackPos)
     if ((CurTrackPos >= 110.f && CurTrackPos <= 125.f) ||
         (CurTrackPos >= 155.f && CurTrackPos <= 170.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(0.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.3f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider();
     }
 
     //¿À¸¥¼Õ
@@ -81,11 +83,11 @@ void CState_CarcassNormal_ClawMultiple::Collider_Check(_double CurTrackPos)
         (CurTrackPos >= 130.f && CurTrackPos <= 145.f) ||
         (CurTrackPos >= 175.f && CurTrackPos <= 190.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(0.35f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(0.35f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(1);
+        m_pMonster->DeActive_CurrentWeaponCollider(1);
     }
 }
 

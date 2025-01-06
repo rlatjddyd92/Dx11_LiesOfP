@@ -69,6 +69,8 @@ void CState_CarcassTail_ScratchingMultiple::Update(_float fTimeDelta)
 
 void CState_CarcassTail_ScratchingMultiple::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
     m_iRouteTrack = 0;
 }
 
@@ -116,11 +118,11 @@ void CState_CarcassTail_ScratchingMultiple::Collider_Check(_double CurTrackPos)
     {
         if (m_iRouteTrack == 0)
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(0);
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

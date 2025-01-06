@@ -2,6 +2,7 @@
 #include "AObj_LightningBall.h"
 
 #include "GameInstance.h"
+#include "Pawn.h"
 
 #include "Effect_Manager.h"
 
@@ -32,6 +33,9 @@ HRESULT CAObj_LightningBall::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
+    Safe_AddRef(m_pOwner);
 
     m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));
 
@@ -101,6 +105,7 @@ void CAObj_LightningBall::Update(_float fTimeDelta)
                 Desc.vDir = _Vec3{ vTargetPos } - Desc.vPos;
                 Desc.vDir.Normalize();
 
+                Desc.pOwner = m_pOwner;
                 Desc.vTargetPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) };
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_LightningSpear"), &Desc);
@@ -141,6 +146,11 @@ void CAObj_LightningBall::Update(_float fTimeDelta)
 
 void CAObj_LightningBall::Late_Update(_float fTimeDelta)
 {
+    if (m_pOwner->Get_Dead())
+    {
+        m_isDead = true;
+    }
+
     for (auto& pEffect : m_pEffects)
     {
         if (!pEffect->Get_Dead())
@@ -231,6 +241,8 @@ CGameObject* CAObj_LightningBall::Clone(void* pArg)
 
 void CAObj_LightningBall::Free()
 {
+    Safe_Release(m_pOwner);
+
     __super::Free();
 
     if (true == m_isCloned)

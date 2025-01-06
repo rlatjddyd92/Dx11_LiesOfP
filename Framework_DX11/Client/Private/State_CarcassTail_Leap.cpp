@@ -45,6 +45,7 @@ void CState_CarcassTail_Leap::Update(_float fTimeDelta)
 
 void CState_CarcassTail_Leap::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(3);
 }
 
 _bool CState_CarcassTail_Leap::End_Check()
@@ -60,7 +61,7 @@ void CState_CarcassTail_Leap::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(3);
+        m_pMonster->DeActive_CurrentWeaponCollider(3);
     }
 }
 
