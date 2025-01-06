@@ -152,10 +152,10 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
@@ -163,7 +163,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
 	m_iRespawn_Cell_Num = 772;
@@ -1154,21 +1154,19 @@ void CPlayer::Recovery_Region(_float fAmount)
 
 void CPlayer::Damaged(_float fAtkDmg)
 {
-	_float fDecreaseDmg = fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f);
-	fAtkDmg = fAtkDmg - fDecreaseDmg;
+	_float fFinalDmg = fAtkDmg - (fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f));
 
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fFinalDmg);
 	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
-		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg);
+		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fFinalDmg);
 
 }
 
 _bool CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 {
-	_float fDecreaseDmg = fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f);
-	fAtkDmg = fAtkDmg - fDecreaseDmg;
+	_float fFinalDmg = fAtkDmg - (fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f));
 
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.15f);
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fFinalDmg * 0.15f);
 
 	if (m_tPlayer_Stat->vGauge_Hp.x <= 0.f)
 	{
@@ -1177,7 +1175,7 @@ _bool CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 	}
 
 	if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 150.f)
-		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.15f);
+		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fFinalDmg * 0.15f);
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
@@ -1235,6 +1233,12 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 		m_isDotDamage = false;
 	}
 	
+	// 회복 아뮬렛
+	if (m_tPlayer_Stat_Adjust->fHeal > 0.f)
+	{
+		Recovery_HP(1.5f * fTimeDelta);
+	}
+
 #pragma region 스테미나
 	if (m_fStaminaRecoveryTime > 0.f)
 	{

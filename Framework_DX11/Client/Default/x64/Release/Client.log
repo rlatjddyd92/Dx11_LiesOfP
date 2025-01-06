@@ -27,9 +27,12 @@ D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia.cpp(144,52): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
   (소스 파일 '/x64/Release/unity_MUKWKH5ADXCHENGF.cpp'을(를) 컴파일하는 중)
   
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp(971,30): warning C4244: '=': 'Engine::_int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_MUKWKH5ADXCHENGF.cpp'을(를) 컴파일하는 중)
+  
   코드를 생성하고 있습니다.
-  2 of 11686 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 11686 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    39 functions had inline decision re-evaluated but remain unchanged
+    34 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

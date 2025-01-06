@@ -610,7 +610,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pWeaponShield->DeActive_Collider();
 #pragma endregion
 
-		if (!m_isFirstCreate)
+		if (m_isFirstCreate)
 		{
 			m_pCutSceneFsmCom->Change_State(STATE_P2);
 		}
