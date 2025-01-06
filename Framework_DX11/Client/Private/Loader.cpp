@@ -1095,18 +1095,19 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
-	DissolveInstanceDesc.iNumInstance = 10;
-	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
-	DissolveInstanceDesc.vLifeTime = { 1.f, 2.f };
-	DissolveInstanceDesc.vMinColor = { 1.f, 1.f, 1.f, 0.f };
-	DissolveInstanceDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
-	DissolveInstanceDesc.vSize = { 0.25f, 0.5f };
-	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
-	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
-	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
+	DISSOLVE_INSTANCE_DESC FireDesc = {};
+	FireDesc.iNumInstance = 10;
+	FireDesc.vCenter = { 0.f, 0.f, 0.f };
+	FireDesc.vLifeTime = { 1.f, 2.f };
+	FireDesc.vMinColor = { 1.f, 1.f, 1.f, 0.f };
+	FireDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
+	FireDesc.vSize = { 0.25f, 0.5f };
+	FireDesc.vSpeed = { 0.5f, 1.f };
+	FireDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	FireDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_Fire"),
-		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_CarcassNormal
