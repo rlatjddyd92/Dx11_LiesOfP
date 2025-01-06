@@ -54,6 +54,11 @@ void CSound_Manager::Play_BGM(const TCHAR* pSoundKey, _float* fVolume)
 	if (iter == m_Sounds.end())
 		return;
 
+	_bool isPlaying;
+	m_pBGMChannel->isPlaying(&isPlaying);
+	if (isPlaying)
+		m_pBGMChannel->stop();
+
 	//FMOD_System_PlaySound(m_pSystem, FMOD_CHANNEL_FREE, iter->second, FALSE, &m_pChannelArr[SOUND_BGM]);
 	m_pSystem->playSound(iter->second, 0, false, &m_pBGMChannel);
 
@@ -102,6 +107,11 @@ void CSound_Manager::Play_ENV(const TCHAR* pSoundKey, _float* fVolume)
 	if (iter == m_Sounds.end())
 		return;
 
+	_bool isPlaying;
+	m_pENVChannel->isPlaying(&isPlaying);
+	if (isPlaying)
+		m_pENVChannel->stop();
+
 	m_pSystem->playSound(iter->second, 0, false, &m_pENVChannel);
 
 	m_pENVChannel->setMode(FMOD_LOOP_NORMAL | FMOD_2D);
@@ -120,6 +130,38 @@ void CSound_Manager::Pause_ENV()
 	_bool isPause;
 	m_pBGMChannel->getPaused(&isPause);
 	m_pBGMChannel->setPaused(!isPause);
+}
+
+void CSound_Manager::Play_Cinematic(const TCHAR* pSoundKey, _float* fVolume)
+{
+	auto iter = Find_Sound(pSoundKey);
+
+	if (iter == m_Sounds.end())
+		return;
+
+	_bool isPlaying;
+	m_pCinemticChannel->isPlaying(&isPlaying);
+	if (isPlaying)
+		m_pCinemticChannel->stop();
+
+	m_pSystem->playSound(iter->second, 0, false, &m_pCinemticChannel);
+
+	m_pCinemticChannel->setMode(FMOD_2D);
+	m_pCinemticChannel->setVolume(*fVolume);
+
+	m_pEnvVolume = fVolume;
+}
+
+void CSound_Manager::Stop_Cinematic()
+{
+	m_pCinemticChannel->stop();
+}
+
+void CSound_Manager::Pause_Cinematic()
+{
+	_bool isPause;
+	m_pCinemticChannel->getPaused(&isPause);
+	m_pCinemticChannel->setPaused(!isPause);
 }
 
 void CSound_Manager::LoadSoundFile(const char* pFolderName)

@@ -43,6 +43,11 @@ public:
 	void Pause_ENV();
 
 public:
+	void Play_Cinematic(const TCHAR* pSoundKey, _float* fVolume);
+	void Stop_Cinematic();
+	void Pause_Cinematic();
+
+public:
 	void LoadSoundFile(const char* pFolderName);
 	void Clear();
 
@@ -58,6 +63,7 @@ private:
 	FMOD::Channel* m_pBGMChannel;
 	FMOD::Channel* m_pEffectChannel;
 	FMOD::Channel* m_pENVChannel;
+	FMOD::Channel* m_pCinemticChannel;
 
 	// 사운드 ,채널 객체 및 장치를 관리하는 객체 
 	//FMOD::System* m_pSystem;

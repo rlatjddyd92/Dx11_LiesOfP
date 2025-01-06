@@ -907,6 +907,21 @@ void CGameInstance::Pause_ENV()
 	m_pSound_Manager->Pause_ENV();
 }
 
+void CGameInstance::Play_Cinematic(const TCHAR* pSoundKey, _float* fVolume)
+{
+	m_pSound_Manager->Play_Cinematic(pSoundKey, fVolume);
+}
+
+void CGameInstance::Stop_Cinematic()
+{
+	m_pSound_Manager->Stop_Cinematic();
+}
+
+void CGameInstance::Pause_Cinematic()
+{
+	m_pSound_Manager->Pause_Cinematic();
+}
+
 void CGameInstance::Set_Listener(CGameObject* pListener)
 {
 	m_pSound_Manager->Set_Listener(pListener);

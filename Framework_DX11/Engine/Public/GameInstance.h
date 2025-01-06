@@ -271,6 +271,10 @@ public:
 		void Stop_ENV();
 		void Pause_ENV();
 
+		void Play_Cinematic(const TCHAR* pSoundKey, _float* fVolume);
+		void Stop_Cinematic();
+		void Pause_Cinematic();
+
 		void	Set_Listener(class CGameObject* pListener);
 		FMOD::System* Get_SoundSystem();
 		map<TCHAR*, FMOD::Sound*>& Get_Sounds();

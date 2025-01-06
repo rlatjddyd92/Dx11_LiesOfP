@@ -202,7 +202,7 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {	
 	if (pCutSceneDesc->Sound_Desc.bStopBGM)
-		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Pause_BGM();
 
 	if(pCutSceneDesc->Sound_Desc.bChangeBGM)
 	{
@@ -215,24 +215,26 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 			m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
 			break;
 		case BOSS1_MEET2:
-			m_pGameInstance->Play_BGM(TEXT("CutScene_Raxasia_Meet2.wav"), &g_fCutSceneVolume);
+			m_pGameInstance->Play_Cinematic(TEXT("CutScene_Raxasia_Meet2.wav"), &g_fCutSceneVolume);
 			break;
 		case BOSS1_DEAD:
-			m_pGameInstance->Play_BGM(TEXT("CutScene_Raxasia_Dead.wav"), &g_fCutSceneVolume);
+			m_pGameInstance->Play_Cinematic(TEXT("CutScene_Raxasia_Dead.wav"), &g_fCutSceneVolume);
 			break;
 		case BOSS2_MEET:
-			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Meet.wav"), &g_fCutSceneVolume);
+			m_pGameInstance->Play_Cinematic(TEXT("CutScene_SimonManus_Meet.wav"), &g_fCutSceneVolume);
 			break;
 		case BOSS2_PHASE2:
-			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Phase2.wav"), &g_fCutSceneVolume);
+			m_pGameInstance->Play_Cinematic(TEXT("CutScene_SimonManus_Phase2.wav"), &g_fCutSceneVolume);
 			break;
 		case BOSS2_DEFEAT:
-			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Defeat.wav"), &g_fCutSceneVolume);
+			m_pGameInstance->Play_Cinematic(TEXT("CutScene_SimonManus_Defeat.wav"), &g_fCutSceneVolume);
 			break;
 		default:
 			break;
 		}
 	}
+
+	m_pGameInstance->Stop_ENV();
 }
 
 void CCutScene::First_Setting()
@@ -318,6 +320,7 @@ void CCutScene::First_Setting()
 void CCutScene::End_Setting()
 {
 	m_bFinishe_Setting = true;
+	m_pGameInstance->Stop_Cinematic();
 
 	//UI 살려야 함
 	GET_GAMEINTERFACE->Fade_In(0.f);
@@ -336,6 +339,11 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		pPlayer->Init_PlayerCamera();
 		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
+
+		//m_pGameInstance->Stop_BGM();
+		//m_pGameInstance->Play_BGM(TEXT("MU_MS_MonasteryA_YK1_Fix.wav"), &g_fBGMVolume);	// 어울리는거 찾아보기
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Inside_01.wav"), &g_fEnvVolume);
+
 		break;
 	case SOPHIA_DEAD:
 	{
@@ -354,6 +362,8 @@ void CCutScene::End_Setting()
 		{
 			m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), i)->Set_Dead(true);
 		}
+
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Inside_02.wav"), &g_fEnvVolume);
 	}
 		break;	
 	case BOSS1_MEET1:
@@ -373,7 +383,9 @@ void CCutScene::End_Setting()
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
 		desc.iTypeNum = CMoveBlockObj::RAXASIA2;
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
-		m_pGameInstance->Stop_BGM();
+
+		m_pGameInstance->Play_BGM(TEXT("MU_MS_Rocksasia_PH1.wav"), &g_fBGMVolume);
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_Middle.wav"), &g_fEnvVolume);
 	}
 		break;
 	case BOSS1_PHASE2:
@@ -384,12 +396,18 @@ void CCutScene::End_Setting()
 		m_fTrackPosition = 0.f;
 		m_bFirstStart = true;
 		m_bFinished = false;
-		m_pGameInstance->Stop_BGM();
+
+		m_pGameInstance->Play_BGM(TEXT("MU_MS_Raxasia_PH2_Ver2.wav"), &g_fBGMVolume);
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_Middle.wav"), &g_fEnvVolume);
+
 		break;	
 	case BOSS1_DEAD:
 		m_pObjects[BOSS1]->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
+
 		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
+
 		break;	
 	case BOSS2_MEET:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
@@ -409,7 +427,10 @@ void CCutScene::End_Setting()
 		CMoveBlockObj::MOVEBLOCK_DESC desc = {};
 		desc.iTypeNum = CMoveBlockObj::MANUS1;
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
+
 		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Play_BGM(TEXT("MU_MS_Simon_PH1.wav"), &g_fBGMVolume);
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
 	}
 		break;	
 	case BOSS2_PHASE2:
@@ -424,7 +445,10 @@ void CCutScene::End_Setting()
 		m_fTrackPosition = 0.f;
 		m_bFirstStart = true;
 		m_bFinished = false;
+
 		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Play_BGM(TEXT("MU_MS_Simon_PH2.wav"), &g_fBGMVolume);
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
 	}
 		break;
 	case BOSS2_DEFEAT:
@@ -433,8 +457,10 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Transform()->LookAt_NoHeight(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
-		m_pGameInstance->Stop_BGM();
 		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
+
+		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
 		break;
 	default:
 		break;

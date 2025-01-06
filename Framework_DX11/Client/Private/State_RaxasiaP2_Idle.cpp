@@ -24,6 +24,7 @@ HRESULT CState_RaxasiaP2_Idle::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
     m_bRunning = false;
     m_bWalk = false;
+    m_bFirstAct = false;
 
     if (pArg != nullptr)
     {
