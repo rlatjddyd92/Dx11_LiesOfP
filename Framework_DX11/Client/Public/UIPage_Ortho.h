@@ -29,6 +29,9 @@ public:
 		CGameObject* pHost = { nullptr };
 		_bool bIsActive = true;
 
+		_bool bDamegeCount = true;
+		_float fAngleFor_Weakness_Alpha = 360.f;
+
 	}OR_HOST;
 
 	
@@ -39,6 +42,7 @@ public:
 		_Vec2 fPosition = { 0.f,0.f };
 		PART_GROUP eType = PART_GROUP::GROUP_END;
 		_float fRatio = 0.f;
+		_float fWeaknessRatio = 0.f;
 		_wstring strText = {};
 		_int iTexture = -1;
 		_bool bIsWeakness = false;
@@ -93,7 +97,7 @@ private:
 	void CheckHost(_float fTimeDelta); // <- 모든 객체를 돌면서 그려야 하는 것이 있는 지 체크 
 
 	// 나중을 위해 직교 UI 종류 별로 함수 나눌 것 
-	void Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType);
+	void Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType, _float* WeakRatio);
 	void Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType);
 	void Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType);
 

@@ -73,6 +73,13 @@ void CUIPage_Chest::Update(_float fTimeDelta)
 
 void CUIPage_Chest::Late_Update(_float fTimeDelta)
 {
+	m_vec_Group_Ctrl[_int(PART_GROUP::CHEST_Weight_UnderLine)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::CHEST_Weight_Status_Frame)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::CHEST_Weight_Status_Text)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::CHEST_Weight_Symbol)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::CHEST_Weight_Stat)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::CHEST_Weight_Ratio)]->bRender = false;
+	
 	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
 		m_fTopPartMove -= m_fTopPartMove_Excel * fTimeDelta;

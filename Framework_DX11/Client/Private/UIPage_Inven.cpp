@@ -57,6 +57,10 @@ void CUIPage_Inven::Update(_float fTimeDelta)
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEIGHT_TEXT)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEIGHT_STAT)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEIGHT_RATIO)]->bRender = false;
+
 	if (m_pScroll == nullptr)
 	{
 		m_pScroll = new SCROLL;
@@ -176,6 +180,8 @@ HRESULT CUIPage_Inven::Ready_UIPart_Group_Control()
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = 0.f;
 	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fRatio = 0.f;
 	UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)), 1.f);
+
+	
 	
 	return S_OK;
 }
