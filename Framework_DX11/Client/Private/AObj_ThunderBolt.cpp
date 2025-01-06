@@ -49,7 +49,7 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 
     m_pOwner = pDesc->pOwner;
 
-    m_fDamageAmount = 250.f;
+    m_fDamageAmount = 120.f;
 
     m_fLifeDuration = 0.3f;
     m_fSpeed = 20.f;
@@ -311,7 +311,7 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 Safe_Release(m_pEffects[STATE_IMPACT]);
 
                 //m_fHeightGap *= -1.f;
-                m_fDamageAmount = 5.f;
+                m_fDamageAmount = 60.f;
                 m_strObjectTag = TEXT("PlayerWeapon");
                 m_fLifeTime = 0.f;
                 m_pEffects[STATE_NORMAL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Counter"), m_pTransformCom->Get_WorldMatrix_Ptr(),
