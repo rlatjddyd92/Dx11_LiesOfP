@@ -16,6 +16,7 @@ public:
 	typedef struct
 	{
 		_Vec4		vParentPos = {};
+		_int		iItemIndex = { -1 };
 	}ITEM_DROPPED_DESC;
 private:
 	CItem_Dropped(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -35,9 +36,15 @@ public:
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
+public:
+	_int	Get_ItemIndex() { return m_iItemIndex; };
+
 private:
 	CCollider* m_pColliderCom = { nullptr };
 	class CEffect_Container* m_Effect = { nullptr };
+
+private:
+	_int	m_iItemIndex = { -1 };
 
 private:
 	HRESULT Ready_Components();

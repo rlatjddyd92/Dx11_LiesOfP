@@ -29,6 +29,7 @@ HRESULT CItem_Dropped::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+    m_iItemIndex = pDesc->iItemIndex;
 	m_strObjectTag = TEXT("Item_Dropped");
     _Vec3 vPos = { pDesc->vParentPos.x,pDesc->vParentPos.y, pDesc->vParentPos.z };
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
