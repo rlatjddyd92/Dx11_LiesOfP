@@ -63,6 +63,8 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 210.f;
 
+	m_iErgoPoint = 400;
+
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -100,14 +102,6 @@ void CCarcassTail::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
-	if (!m_bDieState && m_eStat.fHp <= 0.f)
-	{
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-		m_bDieState = true;
-		m_pFsmCom->Change_State(DIE);
-
-		m_pRigidBodyCom->Set_Kinematic(false);
-	}
 	m_pDissolveEffect->Priority_Update(fTimeDelta);
 }
 

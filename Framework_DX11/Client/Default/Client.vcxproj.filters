@@ -1453,6 +1453,9 @@
     <Filter Include="04.Fsm\Monster\Training\HitFatal">
       <UniqueIdentifier>{57b88088-8a84-46a1-bbc7-7dfd8384afd1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningImpact">
+      <UniqueIdentifier>{4aa89830-467a-4bc1-a51e-7ee244b7e790}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2683,6 +2686,9 @@
     <ClInclude Include="..\Public\State_Training_HitFatal.h">
       <Filter>04.Fsm\Monster\Training\HitFatal</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AObj_LightningImpact.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningImpact</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3879,6 +3885,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Training_HitFatal.cpp">
       <Filter>04.Fsm\Monster\Training\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_LightningImpact.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningImpact</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

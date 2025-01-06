@@ -91,8 +91,8 @@ public:
 	virtual void		Resetting() {};
 
 protected:
-	_Vec4		m_vRootMoveStack{};
-	_Vec3		m_vCurRootMove{};
+	_Vec4				m_vRootMoveStack{};
+	_Vec3				m_vCurRootMove{};
 
 	_bool               m_bDiscover = { false };
 	_bool               m_bFirstMeetCheck = { false };
@@ -109,6 +109,10 @@ protected:
 	_int		m_iOriginCellNum = {0};
 
 	_Vec4		m_vPosTarget{};
+
+	_bool               m_isBoss = { false };
+
+	_int		m_iErgoPoint = { 0 };
 
 protected:
 	HRESULT		Ready_Components();

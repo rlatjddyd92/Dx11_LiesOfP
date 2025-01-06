@@ -25,6 +25,7 @@ HRESULT CState_SimonManusP1_Charge_SwingDown::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_CHARGESWINGDOWN, false, 0.1f, 0);
 
     m_bChargeSwing = true;
+    m_bCharging = true;
     m_bStampSound = false;
     return S_OK;
 }
@@ -79,7 +80,7 @@ void CState_SimonManusP1_Charge_SwingDown::Effect_Check(_double CurTrackPos)
             m_bCharging = false;
         }
     }
-    else if (CurTrackPos >= 220.f)
+    else if (CurTrackPos >= 190.f)
     {
         m_pMonster->DeActive_Effect(CSimonManus::P1_CHARGEHAMMER);
     }
