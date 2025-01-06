@@ -365,7 +365,6 @@ HRESULT CRaxasia::Render()
 
 	for (_int i = 0; i < COLLTYPE_END; ++i)
 	{
-		m_EXCollider[i]->IsActive(true);
 		m_EXCollider[i]->Render();
 	}
 #endif
@@ -569,6 +568,8 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pWeaponShield->Appear();
+
+		m_pWeaponShield->DeActive_Collider();
 #pragma endregion
 
 		m_pCutSceneFsmCom->Set_State(STATE_P2);
