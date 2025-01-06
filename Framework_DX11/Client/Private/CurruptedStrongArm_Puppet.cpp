@@ -21,6 +21,8 @@
 #include "State_CurruptedStrongArm_StingTwice.h"
 #include "State_CurruptedStrongArm_SwipAttack.h"
 
+#include "Dissolve_Effect.h"
+
 CCurruptedStrongArm_Puppet::CCurruptedStrongArm_Puppet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
 {
@@ -72,6 +74,9 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effects()))
+		return E_FAIL;
+
 	m_strObjectTag = TEXT("Monster");
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
@@ -90,6 +95,9 @@ void CCurruptedStrongArm_Puppet::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Priority_Update(fTimeDelta);
+
 }
 
 void CCurruptedStrongArm_Puppet::Update(_float fTimeDelta)
@@ -106,6 +114,10 @@ void CCurruptedStrongArm_Puppet::Update(_float fTimeDelta)
 	Update_Collider();
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Update(fTimeDelta);
+
 }
 
 void CCurruptedStrongArm_Puppet::Late_Update(_float fTimeDelta)
@@ -117,6 +129,10 @@ void CCurruptedStrongArm_Puppet::Late_Update(_float fTimeDelta)
 			__super::Late_Update(fTimeDelta);
 
 			m_pRigidBodyCom->Update(fTimeDelta);
+
+			for (auto& Effect : m_DissolveEffect)
+				Effect->Late_Update(fTimeDelta);
+
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 			for (_uint i = 0; i < TYPE_END; ++i)
@@ -398,9 +414,33 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_FSM()
 	m_pFsmCom->Set_State(IDLE);
 
 	return S_OK;
+}
 
+HRESULT CCurruptedStrongArm_Puppet::Ready_Effects()
+{
+	m_DissolveEffect.resize(SURFACE_END);
 
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pTarget_ModelCom = m_pModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Horesman_Fire");
+	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
+		return E_FAIL;
 
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Horesman_Electric");
+	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+		return E_FAIL;
+
+	On_PowerAttack(true);
+	On_SurfaceEffect(SURFACE_FIRE, true);
+	On_SurfaceEffect(SURFACE_ELECTRIC, true);
+
+	return S_OK;
 }
 
 void CCurruptedStrongArm_Puppet::Update_Collider()

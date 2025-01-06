@@ -2,6 +2,7 @@
 
 #include "Dissolve_Effect.h"
 
+BEGIN(Client)
 class CDissolve_PowerAttack final : public CDissolve_Effect
 {
 private:
@@ -45,4 +46,4 @@ public:
 	virtual CDissolve_PowerAttack* Clone(void* pArg);
 	virtual void Free() override;
 };
-
+END

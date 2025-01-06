@@ -27,6 +27,7 @@
 #include "Effect_Container.h"
 
 #include "Dissolve_PowerAttack.h"
+#include "Dissolve_Effect.h"
 
 CRebornerBigA::CRebornerBigA(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -110,7 +111,11 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 	{
 		m_pSwingEffect->Priority_Update(fTimeDelta);
 	}
-	m_pDissolveEffect->Priority_Update(fTimeDelta);
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Priority_Update(fTimeDelta);
+
+	m_pPowerAttackEffect->Priority_Update(fTimeDelta);
+
 
 }
 
@@ -141,10 +146,15 @@ void CRebornerBigA::Update(_float fTimeDelta)
 	{
 		m_pSwingEffect->Update(fTimeDelta);
 	}
-	m_pDissolveEffect->Update(fTimeDelta);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Update(fTimeDelta);
+	m_pPowerAttackEffect->Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
+
+
 }
 
 void CRebornerBigA::Late_Update(_float fTimeDelta)
@@ -162,7 +172,9 @@ void CRebornerBigA::Late_Update(_float fTimeDelta)
 			{
 				m_pSwingEffect->Late_Update(fTimeDelta);
 			}
-			m_pDissolveEffect->Late_Update(fTimeDelta);
+			for (auto& Effect : m_DissolveEffect)
+				Effect->Late_Update(fTimeDelta);
+			m_pPowerAttackEffect->Late_Update(fTimeDelta);
 
 			m_pGameInstance->Add_ColliderList(m_pColliderCom);
 			for (_int i = 0; i < CT_END - 1; ++i)
@@ -221,8 +233,8 @@ void CRebornerBigA::Resetting()
 
 void CRebornerBigA::On_PowerAttack(_bool bOn)
 {
-	if (bOn != m_pDissolveEffect->Get_On())
-		m_pDissolveEffect->Set_On(bOn);
+	if (bOn != m_pPowerAttackEffect->Get_On())
+		m_pPowerAttackEffect->Set_On(bOn);
 }
 
 void CRebornerBigA::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
@@ -452,9 +464,25 @@ HRESULT CRebornerBigA::Ready_Effect()
 	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_PowerAttack");
 
-	m_pDissolveEffect = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
-	if (nullptr == m_pDissolveEffect)
+	m_pPowerAttackEffect = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
+	if (nullptr == m_pPowerAttackEffect)
 		return E_FAIL;
+
+	m_DissolveEffect.resize(SURFACE_END);
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_Fire");
+	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
+		return E_FAIL;
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_Electric");
+	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+		return E_FAIL;
+
+	On_PowerAttack(true);
+	On_SurfaceEffect(SURFACE_FIRE, true);
+	On_SurfaceEffect(SURFACE_ELECTRIC, true);
 
 	return S_OK;
 }
@@ -547,5 +575,5 @@ void CRebornerBigA::Free()
 	__super::Free();
 
 	Safe_Release(m_pWeapon);
-	Safe_Release(m_pDissolveEffect);
+	Safe_Release(m_pPowerAttackEffect);
 }

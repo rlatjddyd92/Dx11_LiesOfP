@@ -19,6 +19,13 @@ public:
 		MONSTER_STATE_END
 	};
 
+	enum SURFACE_EFFECT
+	{
+		SURFACE_FIRE,
+		SURFACE_ELECTRIC,
+		SURFACE_END
+	};
+
 protected:
 	CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMonster(const CMonster& Prototype);
@@ -93,6 +100,9 @@ public:
 	virtual void		On_PowerAttack(_bool bOn) {};
 	virtual void		Resetting() {};
 
+	void				On_SurfaceEffect(_uint iIndex, _bool bOn);
+
+
 protected:
 	_Vec4				m_vRootMoveStack{};
 	_Vec3				m_vCurRootMove{};
@@ -117,6 +127,8 @@ protected:
 	_bool		m_isFirstCreate = { false };
 
 	_int		m_iErgoPoint = { 0 };
+
+	vector<class CDissolve_Effect*> m_DissolveEffect;
 
 protected:
 	HRESULT		Ready_Components();

@@ -29,7 +29,7 @@ HRESULT CDissolve_Electric::Initialize(void* pArg)
 
     m_iShaderIndex = 18;
     m_vTexDevide = { 5.f, 4.f };
-    m_fSpriteSpeed = 4.f;
+    m_fSpriteSpeed = 1.f;
     m_vStartScaling = { 2.f, 1.f };
     m_vScalingRatio = { 8.f, 4.f };
 
@@ -60,7 +60,7 @@ void CDissolve_Electric::Update(_float fTimeDelta)
     Movement.fTimeDelta = fTimeDelta;
     Movement.vOrbitAxis = _Vec3(0.f, 1.f, 0.f);
     Movement.fOrbitAngle = 90.f;
-    Movement.fTimeInterval = 1.f;
+    Movement.fTimeInterval = 10000.f;
     Movement.fRandomRatio = 2.f;
     Movement.fAccelLimit = 0.f;
     Movement.fAccelSpeed = 1.f;

@@ -65,6 +65,7 @@ private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();
+	HRESULT Ready_Effect();
 
 	void	Update_Collider();
 

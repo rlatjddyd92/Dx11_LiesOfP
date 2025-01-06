@@ -20,6 +20,8 @@
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
+#include "Dissolve_Effect.h"
+
 
 CRebornerMaleFire::CRebornerMaleFire(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -103,6 +105,10 @@ void CRebornerMaleFire::Priority_Update(_float fTimeDelta)
 	}
 
 	m_pWeapon->Priority_Update(fTimeDelta);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Priority_Update(fTimeDelta);
+
 }
 
 void CRebornerMaleFire::Update(_float fTimeDelta)
@@ -136,6 +142,10 @@ void CRebornerMaleFire::Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Update(fTimeDelta);
+
 }
 
 void CRebornerMaleFire::Late_Update(_float fTimeDelta)
@@ -147,6 +157,10 @@ void CRebornerMaleFire::Late_Update(_float fTimeDelta)
 			__super::Late_Update(fTimeDelta);
 
 			m_pRigidBodyCom->Update(fTimeDelta);
+
+			for (auto& Effect : m_DissolveEffect)
+				Effect->Late_Update(fTimeDelta);
+
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 			if (!m_pFireEffect->Get_Dead())
@@ -423,6 +437,28 @@ HRESULT CRebornerMaleFire::Ready_Effect()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3{270.f, 0.f, 0.f});
 
 	m_pFireEffect->Set_Loop(false);
+
+	m_DissolveEffect.resize(SURFACE_END);
+
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pTarget_ModelCom = m_pModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMaleFire_Fire");
+	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
+		return E_FAIL;
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMaleFire_Electric");
+	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+		return E_FAIL;
+
+	On_PowerAttack(true);
+	On_SurfaceEffect(SURFACE_FIRE, true);
+	On_SurfaceEffect(SURFACE_ELECTRIC, true);
 
 	return S_OK;
 }
