@@ -210,7 +210,7 @@ HRESULT CEffect_Manager::Load_Textures(const _wstring strTexturePath)
     //// ÇÚµé ´Ý±â
     //FindClose(hFind);
 #pragma endregion
-
+    
     _wstring strPrototypeBase = TEXT("Prototype_Component_Texture_");
 
     _wstring strResultPath = strTexturePath + TEXT("/T_BloodDrop_01_C_LGS.dds");
@@ -257,6 +257,12 @@ HRESULT CEffect_Manager::Load_Textures(const _wstring strTexturePath)
 
     strResultPath = strTexturePath + TEXT("/T_BloodDrop_04_N_LGS.dds");
     strPrototypeTag = strPrototypeBase + TEXT("T_BloodDrop_04_N_LGS");
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+        CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+        return E_FAIL;
+
+    strResultPath = strTexturePath + TEXT("/T_SubUV_Fire_17_ECD_8x8_SC_LGS.dds");
+    strPrototypeTag = strPrototypeBase + TEXT("T_SubUV_Fire_17_ECD_8x8_SC_LGS");
     if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
         CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
         return E_FAIL;
@@ -449,6 +455,11 @@ HRESULT CEffect_Manager::Load_Shaders()
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_DissolveCompute.hlsl"), "CS_MOVE_NONTEXTURE_MAIN"))))
         return E_FAIL;
 
+    /* For. Prototype_Component_Shader_Compute_Dissolve_Move_Local */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move_Local"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_DissolveCompute.hlsl"), "CS_MOVE_LOCAL_MAIN"))))
+        return E_FAIL;
+    
     /* For. Prototype_Component_Shader_Compute_Dissolve_Reset */
     if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Reset"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_DissolveCompute.hlsl"), "CS_RESET_MAIN"))))

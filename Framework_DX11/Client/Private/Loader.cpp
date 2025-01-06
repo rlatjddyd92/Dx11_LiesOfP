@@ -119,6 +119,7 @@
 #include "BloodTrail.h"
 
 #include "Dissolve_PowerAttack.h"
+#include "Dissolve_Fire.h"
 #pragma endregion
 
 #include "CMoveBlockObj.h"
@@ -1048,6 +1049,18 @@ HRESULT CLoader::Ready_Resources_For_Player()
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
+	DissolveInstanceDesc.iNumInstance = 10;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 1.f, 2.f };
+	DissolveInstanceDesc.vMinColor = { 1.f, 1.f, 1.f, 0.f };
+	DissolveInstanceDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.25f, 0.5f };
+	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Fire"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1863,6 +1876,12 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"),
 		CDissolve_PowerAttack::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Dissolve_Fire */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"),
+		CDissolve_Fire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
 #pragma endregion
 
 	/* For. Prototype_GameObject_Effect_BossDoor_Veli */

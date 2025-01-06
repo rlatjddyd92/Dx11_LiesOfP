@@ -58,6 +58,18 @@ void CDissolve_Effect::Reset()
     m_pVIBufferCom->ResetCS(m_pResetCS);
 }
 
+void CDissolve_Effect::Set_On(_bool bOn)
+{
+    if (m_bOn != bOn)
+    {
+        m_bOn = bOn;
+        if (true == m_bOn)
+        {
+            Reset();
+        }
+    }
+}
+
 HRESULT CDissolve_Effect::Ready_Components(const DISSOLVE_EFFECT_DESC& Desc)
 {
     /* FOR.Com_VIBuffer */

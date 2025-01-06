@@ -63,6 +63,7 @@ public:
 	enum DISSOLVE_EFFECT
 	{
 		DISSOLVE_DEAD,
+		DISSOLVE_FIRE,
 		DISSOLVE_END
 	};
 

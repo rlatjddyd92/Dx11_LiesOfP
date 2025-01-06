@@ -813,6 +813,34 @@ PS_OUT PS_WATERALPHA_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_FIRE_RGBTOA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+	/* 현재 이펙트 픽셀을 그릴려고하는 위치의 화면기준의 공간에서의 깊이를 얻어온다. */
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    Out.vColor.a = Out.vColor.r;
+    
+    Out.vColor.rgb *= In.vColor.rgb;
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+    
+    return Out;
+}
+
 
 technique11	DefaultTechnique
 {
@@ -1056,6 +1084,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_DIR_MAIN();
         PixelShader = compile ps_5_0 PS_WATERALPHA_MAIN();
+    }
+
+    pass PARTICLE_FIRE_RGBTOA // 22
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_FIRE_RGBTOA_MAIN();
     }
 
 }
