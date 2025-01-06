@@ -65,9 +65,13 @@ void CCutScene::Update(_float fTimeDelta)
 	{
 		m_bPlay = false;
 		m_bFinished = true;
+		for (auto& iter : m_KeyFrames)
+		{
+			iter->bActived = false;
+		}
 	}
 	
-	if(m_bFinished && m_bFinishe_Setting == false)
+	if(m_bFinished && m_bFinished_Setting == false)
 	{
 		End_Setting();
 	}
@@ -299,7 +303,7 @@ void CCutScene::First_Setting()
 		m_pGameInstance->Stop_BGM();
 		break;
 	case BOSS2_PHASE2:
-		m_bDeactivePlayer = true;
+		pPlayer->IsActive(false);
 		static_cast<CSimonManus*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Start_CutScene(1);
 		m_pGameInstance->Stop_BGM();
 		break;
@@ -319,7 +323,7 @@ void CCutScene::First_Setting()
 
 void CCutScene::End_Setting()
 {
-	m_bFinishe_Setting = true;
+	m_bFinished_Setting = true;
 
 	//UI 살려야 함
 	GET_GAMEINTERFACE->Fade_In(0.f);
@@ -504,6 +508,7 @@ void CCutScene::Start_Play()
 	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"), true);
 	m_isActive = true;
 	m_bPlay = true;
+	m_bFinished_Setting = false;
 }
 
 CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
