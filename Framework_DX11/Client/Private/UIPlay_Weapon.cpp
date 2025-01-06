@@ -152,6 +152,16 @@ void CUIPlay_Weapon::Initialize_Weapon_Component(vector<struct CUIPage::UIPART_I
 		iter->bRender = false;
 	for (auto& iter : m_vecSharedPointer_HandleFable_KeySet_Combine)
 		iter->bRender = true;
+
+	_int iIndex = -1;
+
+	for (auto& iter : m_vecSharedPointer_NormalWeapon_Fx)
+	{
+		++iIndex;
+		m_fNormal_CellFx_Alpha_Origin[iIndex] = iter->fTextureColor.w;
+		m_vNormal_CellFx_Size_Origin[iIndex] = iter->fSize;
+	}
+
 }
 
 void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
@@ -201,6 +211,8 @@ void CUIPlay_Weapon::Switch_Weapon()
 	}
 
 	m_pSharedPointer_SelectNum->iTexture_Index = m_iWeapon_Equip_Symbol + iNow_SelectWeapon;
+
+	m_vCellFx_ActionTime.x = m_vCellFx_ActionTime.y;
 }
 
 void CUIPlay_Weapon::Switch_Mode()
@@ -267,6 +279,30 @@ void CUIPlay_Weapon::Update_DurableGauge(_float fTimeDelta)
 
 void CUIPlay_Weapon::Update_WeaponCell_Fx(_float fTimeDelta)
 {
+	if (m_vCellFx_ActionTime.x > 0.f)
+		m_vCellFx_ActionTime.x -= fTimeDelta;
+
+	if (m_vCellFx_ActionTime.x < 0.f)
+		m_vCellFx_ActionTime.x = 0.f;
+
+	if (m_vCellFx_ActionTime.x > 0.f)
+	{
+		_float fRatio = 1.f - (m_vCellFx_ActionTime.x / m_vCellFx_ActionTime.y);
+		for (auto& iter : m_vecSharedPointer_BladeFable_Side_Frame)
+			iter->bRender = true;
+		_int iCount = -1;
+		for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist)
+		{
+			++iCount;
+			m_vecPart[iter]->fTextureColor.w = m_fNormal_CellFx_Alpha_Origin[iCount] * (0.5f + fRatio);
+			if (iCount % 2 == 0) m_vecPart[iter]->fSize = m_vNormal_CellFx_Size_Origin[iCount] * (0.5f + fRatio);
+		}
+	}
+	else
+	{
+		for (auto& iter : m_vecSharedPointer_BladeFable_Side_Frame)
+			iter->bRender = false;
+	}
 }
 
 void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)

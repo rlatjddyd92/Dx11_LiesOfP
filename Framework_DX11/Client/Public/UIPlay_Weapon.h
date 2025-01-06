@@ -56,8 +56,9 @@ private:
 
 	_bool m_bIsBladeWhite_Active = false;
 	_Vec2 m_vFableWhite_ActionTime = { 0.f,0.5f };
-
-
+	_Vec2 m_vCellFx_ActionTime = { 0.f,0.25f };
+	_float m_fNormal_CellFx_Alpha_Origin[4] = { 0.f, };
+	_Vec2 m_vNormal_CellFx_Size_Origin[4] = { {0.f,0.f}, };
 
 	UPART* m_pSharedPointer_Center = { nullptr };
 	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;
