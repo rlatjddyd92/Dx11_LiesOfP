@@ -278,6 +278,17 @@ void CWeapon::DeActive_AllEffect(_uint iHandIndex)
 	}
 }
 
+void CWeapon::Active_Debuff(_float fDebuffRatio)
+{
+	m_bDebuffAttack = true;
+	m_fDamageRatio = fDebuffRatio;
+}
+
+void CWeapon::DeActive_Debuff()
+{
+	m_bDebuffAttack = false;
+}
+
 void CWeapon::Appear()
 {
 	if (m_pModelCom != nullptr)

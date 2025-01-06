@@ -5,6 +5,8 @@
 #include "ColliderObject.h"
 #include "Pawn.h"
 
+#include "Player.h"
+
 CColliderObject::CColliderObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -100,6 +102,11 @@ void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_eHitType, m_eAttackStrength, (CGameObject*)m_pOwner);
+
+			if (m_bDebuffAttack)
+			{
+				static_cast<CPlayer*>(pOther)->Calc_DebuffGain(m_iDebuffType, m_fDebuffRatio * m_fDebuffAmount);
+			}
 		}
 	}
 }

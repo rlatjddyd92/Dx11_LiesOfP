@@ -142,6 +142,8 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
 
             Desc.bSoundControl = m_bSoundControl;
 
+            Desc.pOwner = m_pOwner;
+
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
             
             m_bEnd = true;
