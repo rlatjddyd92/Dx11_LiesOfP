@@ -546,6 +546,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
+		m_pCutSceneWeapon->Change_SocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
 		m_pCutSceneWeapon->IsActive(true);
 
 		m_pRigidBodyCom->Set_IsLockCell(false);

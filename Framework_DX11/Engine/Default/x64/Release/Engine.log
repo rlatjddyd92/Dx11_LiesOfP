@@ -48,10 +48,9 @@ D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hls
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(188,12-68): warning X3206: implicit truncation of vector type
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(112,33-78): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(148,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(172,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
   
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Unity.targets(190,5): warning : 'C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\unity_66FL2B5TRC64SCEO.cpp' 경로의 일부를 찾을 수 없습니다.
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
   unity_9CDJ00FE6ZXK395S.cpp
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,1): warning C4005: 'PX_ALLOC': 매크로 재정의
   (소스 파일 'x64/Release/unity_9CDJ00FE6ZXK395S.cpp'을(를) 컴파일하는 중)

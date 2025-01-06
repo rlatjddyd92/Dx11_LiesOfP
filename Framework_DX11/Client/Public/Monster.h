@@ -26,7 +26,7 @@ protected:
 
 public:
 	void			Reset_Hp() { m_eStat.fHp = m_eStat.fMaxHp; }
-	_bool			Get_IsBoss() { return m_isBoss };
+	_bool			Get_IsBoss() { return m_isBoss; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
