@@ -308,7 +308,6 @@ void CController_AnimationTool::ListUp_Anim()
 					m_iSelected_Index_Anim = i;
 				}
 
-
 				if (!is_selected)
 					ImGui::SetItemDefaultFocus();
 				is_selected = false;
