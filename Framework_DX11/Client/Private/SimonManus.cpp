@@ -557,7 +557,6 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 		m_isStartDisslove = true;
 		m_pWeapon->IsActive(false);
 		Change_State(CSimonManus::DIE_TALKING);
-		m_DissolveEffects[DISSOLVE_DEAD]->Set_On(true);
 	}
 
 	m_isCutScene = false;
