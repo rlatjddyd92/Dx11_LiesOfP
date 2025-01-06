@@ -49,6 +49,7 @@ void CState_RebornerMale_Kick::Update(_float fTimeDelta)
 
 void CState_RebornerMale_Kick::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_RebornerMale_Kick::End_Check()
@@ -64,7 +65,7 @@ void CState_RebornerMale_Kick::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 }
 

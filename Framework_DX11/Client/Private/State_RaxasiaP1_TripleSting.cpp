@@ -174,6 +174,8 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_TripleSting::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
 }
 
@@ -214,7 +216,7 @@ void CState_RaxasiaP1_TripleSting::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
 
     }

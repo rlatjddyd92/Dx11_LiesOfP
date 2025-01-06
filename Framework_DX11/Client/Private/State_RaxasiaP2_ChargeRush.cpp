@@ -42,6 +42,11 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
     {
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bCharge = false;
@@ -57,6 +62,11 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
     {
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bCharge = false;
@@ -80,6 +90,12 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 165.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bRush = false;
@@ -140,6 +156,8 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ChargeRush::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
 
@@ -191,7 +209,7 @@ void CState_RaxasiaP2_ChargeRush::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

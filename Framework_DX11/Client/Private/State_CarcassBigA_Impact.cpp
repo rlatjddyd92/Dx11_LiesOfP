@@ -48,7 +48,7 @@ void CState_CarcassBigA_Impact::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_Impact::End_State()
 {
-
+    m_pMonster->DeActive_CurrentWeaponCollider(2);
 }
 
 _bool CState_CarcassBigA_Impact::End_Check()
@@ -64,7 +64,7 @@ void CState_CarcassBigA_Impact::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(2);
+        m_pMonster->DeActive_CurrentWeaponCollider(2);
     }
 }
 

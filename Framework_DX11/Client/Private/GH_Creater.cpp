@@ -27,6 +27,8 @@ HRESULT CGH_Creater::Initialize(void* pArg)
 {
 	CREATER_DESC* pDesc = static_cast<CREATER_DESC*>(pArg);
 	m_pManus = pDesc->pManus;
+	Safe_AddRef(m_pManus);
+
 	m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));
 	m_fGodHandsDelay = 5.f;
 	return S_OK;
@@ -63,6 +65,11 @@ void CGH_Creater::Update(_float fTimeDelta)
 
 void CGH_Creater::Late_Update(_float fTimeDelta)
 {
+	if (m_pManus->Get_Dead())	//사망상태인지 확인
+	{
+		m_isDead = true;
+		return;
+	}
 }
 
 HRESULT CGH_Creater::Render()
@@ -103,5 +110,6 @@ CGameObject* CGH_Creater::Clone(void* pArg)
 
 void CGH_Creater::Free()
 {
+	Safe_Release(m_pManus);
 	__super::Free();
 }

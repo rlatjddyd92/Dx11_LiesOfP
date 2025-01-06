@@ -2,6 +2,7 @@
 #include "AObj_StampBlast.h"
 
 #include "GameInstance.h"
+#include "Pawn.h"
 
 #include "Effect_Manager.h"
 
@@ -32,6 +33,9 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
     
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
+    Safe_AddRef(m_pOwner);
 
     m_fDamageAmount = 270.f;
 
@@ -76,6 +80,11 @@ void CAObj_StampBlast::Update(_float fTimeDelta)
 
 void CAObj_StampBlast::Late_Update(_float fTimeDelta)
 {
+    if (m_pOwner->Get_Dead())
+    {
+        m_isDead = true;
+    }
+
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
     {
@@ -104,6 +113,10 @@ HRESULT CAObj_StampBlast::Render_LightDepth()
 
 void CAObj_StampBlast::OnCollisionEnter(CGameObject* pOther)
 {
+    if (m_pOwner->Get_IsDieState())
+    {
+        return;
+    }
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -186,6 +199,8 @@ CGameObject* CAObj_StampBlast::Clone(void* pArg)
 
 void CAObj_StampBlast::Free()
 {
+    Safe_Release(m_pOwner);
+
     __super::Free();
 
     if (true == m_isCloned)

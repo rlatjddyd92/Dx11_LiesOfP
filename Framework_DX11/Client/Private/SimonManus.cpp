@@ -426,7 +426,7 @@ void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollI
 	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);
 }
 
-void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CSimonManus::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 {
 	m_pWeapon->DeActive_Collider();
 }

@@ -75,6 +75,7 @@ void CState_RebornerMaleFire_Breath::Update(_float fTimeDelta)
 
 void CState_RebornerMaleFire_Breath::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_RebornerMaleFire_Breath::End_Check()
@@ -102,7 +103,7 @@ void CState_RebornerMaleFire_Breath::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else
@@ -113,7 +114,7 @@ void CState_RebornerMaleFire_Breath::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 

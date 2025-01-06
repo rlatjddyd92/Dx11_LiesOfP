@@ -95,6 +95,7 @@ void CState_SimonManusP1_JumpToSwing::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_JumpToSwing::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
     m_bJump = false;
 }
 
@@ -139,7 +140,7 @@ void CState_SimonManusP1_JumpToSwing::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

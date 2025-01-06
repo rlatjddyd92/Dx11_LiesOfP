@@ -46,6 +46,8 @@ void CState_CarcassTail_TailSwip::Update(_float fTimeDelta)
 
 void CState_CarcassTail_TailSwip::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(2);
+    m_pMonster->DeActive_CurrentWeaponCollider(4);
 }
 
 _bool CState_CarcassTail_TailSwip::End_Check()
@@ -62,7 +64,8 @@ void CState_CarcassTail_TailSwip::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(2);
+        m_pMonster->DeActive_CurrentWeaponCollider(2);
+        m_pMonster->DeActive_CurrentWeaponCollider(4);
     }
 }
 

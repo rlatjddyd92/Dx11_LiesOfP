@@ -405,7 +405,7 @@ void CRaxasia::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollInde
 	}
 }
 
-void CRaxasia::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CRaxasia::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 {
 	if (!m_isChanged)
 	{

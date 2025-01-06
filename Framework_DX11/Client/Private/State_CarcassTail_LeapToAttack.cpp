@@ -102,6 +102,8 @@ void CState_CarcassTail_LeapToAttack::Update(_float fTimeDelta)
 
 void CState_CarcassTail_LeapToAttack::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+    m_pMonster->DeActive_CurrentWeaponCollider(3);
     m_iRouteTrack = 0;
 }
 
@@ -142,7 +144,7 @@ void CState_CarcassTail_LeapToAttack::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(3);
+            m_pMonster->DeActive_CurrentWeaponCollider(3);
         }
     }
     else
@@ -153,7 +155,7 @@ void CState_CarcassTail_LeapToAttack::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

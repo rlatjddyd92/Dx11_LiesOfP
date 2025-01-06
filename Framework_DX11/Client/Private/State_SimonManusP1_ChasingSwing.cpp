@@ -89,6 +89,7 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_ChasingSwing::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_SimonManusP1_ChasingSwing::End_Check()
@@ -135,7 +136,7 @@ void CState_SimonManusP1_ChasingSwing::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 2)
@@ -146,7 +147,7 @@ void CState_SimonManusP1_ChasingSwing::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

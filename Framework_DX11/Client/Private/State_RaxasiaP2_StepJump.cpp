@@ -52,6 +52,11 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
     case 0:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
@@ -60,6 +65,11 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
     case 1:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
@@ -126,6 +136,7 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_StepJump::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_RaxasiaP2_StepJump::End_Check()
@@ -172,7 +183,7 @@ void CState_RaxasiaP2_StepJump::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 2)
@@ -185,7 +196,7 @@ void CState_RaxasiaP2_StepJump::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

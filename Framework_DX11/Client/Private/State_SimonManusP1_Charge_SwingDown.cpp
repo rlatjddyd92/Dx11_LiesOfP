@@ -48,7 +48,7 @@ void CState_SimonManusP1_Charge_SwingDown::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_Charge_SwingDown::End_State()
 {
-
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_SimonManusP1_Charge_SwingDown::End_Check()
@@ -64,7 +64,7 @@ void CState_SimonManusP1_Charge_SwingDown::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 }
 

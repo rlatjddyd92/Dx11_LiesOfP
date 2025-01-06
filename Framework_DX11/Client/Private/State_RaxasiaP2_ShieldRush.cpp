@@ -74,6 +74,8 @@ void CState_RaxasiaP2_ShieldRush::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ShieldRush::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
 }
@@ -115,7 +117,7 @@ void CState_RaxasiaP2_ShieldRush::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

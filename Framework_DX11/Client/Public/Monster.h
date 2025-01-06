@@ -55,7 +55,7 @@ public:
 	virtual void		Deactiave_Weapon() {};
 
 	virtual void		Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) {};
-	virtual void		DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) {};
+	virtual void		DeActive_CurrentWeaponCollider(_uint iCollIndex = 0) {};
 
 	void				Set_RimLightColor(_Vec4 vColor) { m_vRimLightColor = vColor; }
 

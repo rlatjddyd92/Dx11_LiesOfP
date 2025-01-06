@@ -46,6 +46,7 @@ HRESULT CState_RaxasiaP2_Declare_War::Start_State(void* pArg)
     m_iThunderCnt = 0;
     m_fTimeStack_ThunderBolt = 0.f;
     m_fTimeStack_Lightning = 0.f;
+    m_fHoveringTimeStack = 0.f;
 
     m_vFogSpot = {};
     m_fHeight = {};
@@ -62,6 +63,11 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
     case 0:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStart = false;
@@ -325,7 +331,14 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
                 }
                 else
                 {
-                    m_bEndFire = true;
+                    if (m_fHoveringTimeStack >= m_fHoveringDuration)
+                    {
+                        m_bEndFire = true;
+                    }
+                    else
+                    {
+                        m_fHoveringTimeStack += fTimeDelta;
+                    }
                 }
             }
         }

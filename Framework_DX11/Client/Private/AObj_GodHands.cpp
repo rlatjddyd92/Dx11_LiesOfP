@@ -2,6 +2,7 @@
 #include "AObj_GodHands.h"
 
 #include "GameInstance.h"
+#include "Pawn.h"
 
 #include "Effect_Manager.h"
 
@@ -34,6 +35,9 @@ HRESULT CAObj_GodHands::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
+    Safe_AddRef(m_pOwner);
 
     m_fDamageAmount = 270.f;
 
@@ -146,6 +150,11 @@ void CAObj_GodHands::Update(_float fTimeDelta)
 
 void CAObj_GodHands::Late_Update(_float fTimeDelta)
 {
+    if (m_pOwner->Get_Dead())
+    {
+        m_isDead = true;
+    }
+
     for (auto& pEffect : m_pEffects)
     {
         if (!pEffect->Get_Dead())
@@ -248,6 +257,10 @@ HRESULT CAObj_GodHands::Render_LightDepth()
 
 void CAObj_GodHands::OnCollisionEnter(CGameObject* pOther)
 {
+    if (m_pOwner->Get_IsDieState())
+    {
+        return;
+    }
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -343,6 +356,8 @@ CGameObject* CAObj_GodHands::Clone(void* pArg)
 
 void CAObj_GodHands::Free()
 {
+    Safe_Release(m_pOwner);
+
     __super::Free();
 
     if (true == m_isCloned)

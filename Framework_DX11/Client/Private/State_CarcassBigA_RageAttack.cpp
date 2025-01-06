@@ -43,6 +43,9 @@ void CState_CarcassBigA_RageAttack::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_RageAttack::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+
 }
 
 _bool CState_CarcassBigA_RageAttack::End_Check()
@@ -61,7 +64,7 @@ void CState_CarcassBigA_RageAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(0);
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 
     if ((CurTrackPos >= 82.f && CurTrackPos <= 100.f) ||
@@ -73,7 +76,7 @@ void CState_CarcassBigA_RageAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(1);
+        m_pMonster->DeActive_CurrentWeaponCollider(1);
     }
 }
 

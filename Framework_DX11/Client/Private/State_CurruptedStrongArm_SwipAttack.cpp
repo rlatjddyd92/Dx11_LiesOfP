@@ -54,6 +54,11 @@ void CState_CurruptedStrongArm_SwipAttack::Update(_float fTimeDelta)
 
 void CState_CurruptedStrongArm_SwipAttack::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_ARM_RIGHT);
+    m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL);
+    m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR);
+    m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BL);
+    m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BR);
 }
 
 _bool CState_CurruptedStrongArm_SwipAttack::End_Check()
@@ -70,7 +75,7 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL);
+        m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL);
     }
 
     //오른수염, 오른손
@@ -81,8 +86,8 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_ARM_RIGHT);
-        m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR);
+        m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_ARM_RIGHT);
+        m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR);
     }
 
     //뒤 오른 수염
@@ -92,7 +97,7 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BR);
+        m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BR);
     }
 
     //뒤 오른 수염
@@ -102,7 +107,7 @@ void CState_CurruptedStrongArm_SwipAttack::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BL);
+        m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_BL);
     }
 }
 

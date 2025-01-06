@@ -2,6 +2,7 @@
 #include "AObj_ThunderStampMark.h"
 
 #include "GameInstance.h"
+#include "Pawn.h"
 
 #include "Effect_Manager.h"
 
@@ -32,6 +33,9 @@ HRESULT CAObj_ThunderStampMark::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
+    Safe_AddRef(m_pOwner);
 
     if (pDesc->iTrack_State == 1)
     {
@@ -115,6 +119,10 @@ void CAObj_ThunderStampMark::Update(_float fTimeDelta)
 
 void CAObj_ThunderStampMark::Late_Update(_float fTimeDelta)
 {
+    if (m_pOwner->Get_Dead())
+    {
+        m_isDead = true;
+    }
     if (!m_bExplosive)
     {
         m_pEffect->Late_Update(fTimeDelta);
@@ -152,6 +160,10 @@ HRESULT CAObj_ThunderStampMark::Render_LightDepth()
 
 void CAObj_ThunderStampMark::OnCollisionEnter(CGameObject* pOther)
 {
+    if (m_pOwner->Get_IsDieState())
+    {
+        return;
+    }
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -235,6 +247,8 @@ CGameObject* CAObj_ThunderStampMark::Clone(void* pArg)
 
 void CAObj_ThunderStampMark::Free()
 {
+    Safe_Release(m_pOwner);
+
     __super::Free();
 
     if (true == m_isCloned)

@@ -103,6 +103,11 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
     case 1:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -175,6 +180,7 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Tele_LinkedTel::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_RaxasiaP2_Tele_LinkedTel::End_Check()
@@ -221,7 +227,7 @@ void CState_RaxasiaP2_Tele_LinkedTel::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -232,7 +238,7 @@ void CState_RaxasiaP2_Tele_LinkedTel::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else
@@ -243,7 +249,7 @@ void CState_RaxasiaP2_Tele_LinkedTel::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

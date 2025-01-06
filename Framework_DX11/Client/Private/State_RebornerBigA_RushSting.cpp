@@ -85,6 +85,7 @@ void CState_RebornerBigA_RushSting::Update(_float fTimeDelta)
 
 void CState_RebornerBigA_RushSting::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_RebornerBigA_RushSting::End_Check()
@@ -103,7 +104,7 @@ void CState_RebornerBigA_RushSting::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
     else
@@ -114,7 +115,7 @@ void CState_RebornerBigA_RushSting::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 

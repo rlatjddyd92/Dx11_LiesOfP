@@ -98,6 +98,11 @@ HRESULT CWeapon_RebornerBigA_Stick::Render_LightDepth()
 
 void CWeapon_RebornerBigA_Stick::OnCollisionEnter(CGameObject* pOther)
 {
+	if (m_pMonster->Get_IsDieState())
+	{
+		return;
+	}
+
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;

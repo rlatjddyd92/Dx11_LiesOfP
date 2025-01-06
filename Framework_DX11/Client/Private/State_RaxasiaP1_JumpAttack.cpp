@@ -116,6 +116,7 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_JumpAttack::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
 }
 
 _bool CState_RaxasiaP1_JumpAttack::End_Check()
@@ -135,7 +136,7 @@ void CState_RaxasiaP1_JumpAttack::Collider_Check(_double CurTrackPos)
             }
             else
             {
-                m_pMonster->DeActive_CurretnWeaponCollider();
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
             }
         }
         else
@@ -146,7 +147,7 @@ void CState_RaxasiaP1_JumpAttack::Collider_Check(_double CurTrackPos)
             }
             else
             {
-                m_pMonster->DeActive_CurretnWeaponCollider();
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
             }
         }
     }
@@ -158,7 +159,7 @@ void CState_RaxasiaP1_JumpAttack::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

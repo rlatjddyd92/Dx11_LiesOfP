@@ -44,6 +44,12 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
     case 0:
         if (CurTrackPos >= 255)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -63,6 +69,11 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
     case 1:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -76,6 +87,11 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
     case 2:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
@@ -113,6 +129,8 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ShieldLinked::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(1);
+ 
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
 }
@@ -169,7 +187,7 @@ void CState_RaxasiaP2_ShieldLinked::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
     else if (m_iRouteTrack == 2)
@@ -180,7 +198,7 @@ void CState_RaxasiaP2_ShieldLinked::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurrentWeaponCollider(1);
         }
     }
 }

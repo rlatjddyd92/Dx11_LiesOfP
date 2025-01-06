@@ -91,6 +91,7 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_HighJumpFall::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
     m_vFlyMoveStack = _vector{0, 0, 0, 0};
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
     m_pMonster->On_PowerAttack(false);
@@ -111,7 +112,7 @@ void CState_SimonManusP1_HighJumpFall::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider();
+        m_pMonster->DeActive_CurrentWeaponCollider(0);
     }
 
     if (!m_bStompAttack)

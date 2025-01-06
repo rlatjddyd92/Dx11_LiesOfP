@@ -3,6 +3,7 @@
 
 #include "Raxasia.h"
 #include "GameInstance.h"
+#include "Pawn.h"
 
 #include "Effect_Manager.h"
 
@@ -32,6 +33,7 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
 
     m_pCopyRaxasia = static_cast<CRaxasia*>(pDesc->pOwner);
+    Safe_AddRef(m_pCopyRaxasia);
 
     m_vMoveDir = pDesc->vDir;
     m_vTargetPos = pDesc->vTargetPos;
@@ -44,7 +46,9 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
-    
+
+    m_pOwner = pDesc->pOwner;
+
     m_fDamageAmount = 250.f;
 
     m_fLifeDuration = 0.3f;
@@ -209,6 +213,11 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
 
 void CAObj_ThunderBolt::Late_Update(_float fTimeDelta)
 {
+    if (m_pCopyRaxasia->Get_Dead())
+    {
+        m_isDead = true;
+    }
+
     for (auto& pEffect : m_pEffects)
     {
         if (!pEffect->Get_Dead())
@@ -239,6 +248,10 @@ HRESULT CAObj_ThunderBolt::Render_LightDepth()
 
 void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
 {
+    if (m_pCopyRaxasia->Get_IsDieState() || m_pCopyRaxasia->Get_TargetDead())
+    {
+        return;
+    }
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player") || (m_bCounter && pOther->Get_Tag() == TEXT("Monster")))
     {
@@ -409,6 +422,7 @@ CGameObject* CAObj_ThunderBolt::Clone(void* pArg)
 void CAObj_ThunderBolt::Free()
 {
     __super::Free();
+    Safe_Release(m_pCopyRaxasia);
 
     if (true == m_isCloned)
     {

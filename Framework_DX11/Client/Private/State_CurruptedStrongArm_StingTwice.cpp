@@ -54,6 +54,8 @@ void CState_CurruptedStrongArm_StingTwice::Update(_float fTimeDelta)
 
 void CState_CurruptedStrongArm_StingTwice::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL);
+    m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR);
 }
 
 _bool CState_CurruptedStrongArm_StingTwice::End_Check()
@@ -70,7 +72,7 @@ void CState_CurruptedStrongArm_StingTwice::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR);
+        m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR);
     }
     //¿Þ¼ö¿°
     if (CurTrackPos >= 52.f && CurTrackPos <= 58.f)
@@ -79,7 +81,7 @@ void CState_CurruptedStrongArm_StingTwice::Collider_Check(_double CurTrackPos)
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL);
+        m_pMonster->DeActive_CurrentWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL);
     }
 
 }

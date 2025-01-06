@@ -194,7 +194,7 @@ void CCarcassNormal::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCo
 	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, eHitType, eAtkStrength);
 }
 
-void CCarcassNormal::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CCarcassNormal::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 {
 	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }

@@ -74,6 +74,12 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
 
         if (CurTrackPos >= 19.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_UPPERSLASH, false, 0.1f, 0);
@@ -118,6 +124,8 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Tele::End_State()
 {
+    m_pMonster->DeActive_CurrentWeaponCollider(0);
+
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
     m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
 }
@@ -137,7 +145,7 @@ void CState_RaxasiaP2_Tele::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
         }
     }
 }

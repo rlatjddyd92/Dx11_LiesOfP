@@ -129,6 +129,11 @@ HRESULT CWeapon_RebornerMaleFire_FireBreath::Render_LightDepth()
 
 void CWeapon_RebornerMaleFire_FireBreath::OnCollisionEnter(CGameObject* pOther)
 {
+	if (m_pMonster->Get_IsDieState())
+	{
+		return;
+	}
+
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_float fTemp = m_pMonster->Calc_Distance_XZ();
@@ -143,6 +148,11 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionEnter(CGameObject* pOther)
 
 void CWeapon_RebornerMaleFire_FireBreath::OnCollisionStay(CGameObject* pOther)
 {
+	if (m_pMonster->Get_IsDieState())
+	{
+		return;
+	}
+
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_float fTemp = m_pMonster->Calc_Distance_XZ();

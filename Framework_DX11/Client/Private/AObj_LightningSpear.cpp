@@ -2,6 +2,7 @@
 #include "AObj_LightningSpear.h"
 
 #include "GameInstance.h"
+#include "Pawn.h"
 
 #include "Effect_Manager.h"
 
@@ -39,6 +40,9 @@ HRESULT CAObj_LightningSpear::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
+
+    m_pOwner = pDesc->pOwner;
+    Safe_AddRef(m_pOwner);
 
     m_fDamageAmount = 270.f;
 
@@ -103,6 +107,11 @@ void CAObj_LightningSpear::Update(_float fTimeDelta)
 
 void CAObj_LightningSpear::Late_Update(_float fTimeDelta)
 {
+    if (m_pOwner->Get_Dead())
+    {
+        m_isDead = true;
+    }
+
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
     {
@@ -135,6 +144,10 @@ HRESULT CAObj_LightningSpear::Render_LightDepth()
 
 void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
 {
+    if (m_pOwner->Get_IsDieState())
+    {
+        return;
+    }
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -230,6 +243,8 @@ CGameObject* CAObj_LightningSpear::Clone(void* pArg)
 
 void CAObj_LightningSpear::Free()
 {
+    Safe_Release(m_pOwner);
+
     __super::Free();
 
     if (true == m_isCloned)

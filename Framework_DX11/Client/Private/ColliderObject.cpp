@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Client_Defines.h"
 #include "ColliderObject.h"
+#include "Pawn.h"
 
 CColliderObject::CColliderObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
@@ -78,6 +79,11 @@ HRESULT CColliderObject::Render()
 
 void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 {
+	if (m_pOwner->Get_IsDieState())
+	{
+		return;
+	}
+
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;

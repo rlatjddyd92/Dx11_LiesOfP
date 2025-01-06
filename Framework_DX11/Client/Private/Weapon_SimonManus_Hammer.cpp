@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Weapon_SimonManus_Hammer.h"
 
-#include "Player.h"
+#include "Monster.h"
 
 #include "GameInstance.h"
 
@@ -113,6 +113,11 @@ HRESULT CWeapon_SimonManus_Hammer::Render_LightDepth()
 
 void CWeapon_SimonManus_Hammer::OnCollisionEnter(CGameObject* pOther)
 {
+	if (m_pMonster->Get_IsDieState())
+	{
+		return;
+	}
+
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;
