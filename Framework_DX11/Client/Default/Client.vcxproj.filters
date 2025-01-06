@@ -1456,6 +1456,15 @@
     <Filter Include="02.GameObjects\13.EffectObject\Butterfly">
       <UniqueIdentifier>{862e0e30-3183-4d04-8eaa-00bc69ea82f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Fire">
+      <UniqueIdentifier>{238b917b-c1f0-4710-946d-a5196f579fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Electric">
+      <UniqueIdentifier>{3b533bf5-0bf5-4ef5-b2ed-f8a1af38120e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Poison">
+      <UniqueIdentifier>{d807996c-88f6-4b87-96c7-df6395264345}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2689,6 +2698,9 @@
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
       <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Dissolve_Fire.h">
+      <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Fire</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3888,6 +3900,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
       <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dissolve_Fire.cpp">
+      <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Fire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

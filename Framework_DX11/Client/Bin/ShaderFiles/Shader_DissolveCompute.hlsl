@@ -323,6 +323,106 @@ void CS_MOVE_NONTEXTURE_MAIN(uint3 DTid : SV_DispatchThreadID)
 }
 
 [numthreads(256, 1, 1)]
+void CS_MOVE_LOCAL_MAIN(uint3 DTid : SV_DispatchThreadID)
+{
+    int iIndex = DTid.x;
+    
+    if (iIndex >= iNumInstance)
+        return;
+
+    Dissolve_Particle DissolveParticle = particles[iIndex];
+
+    if (TYPE_ANIM == iModelType && 0.f == pad_1.x)
+    {
+        float fWeightW = saturate(1.f - (DissolveParticle.vBlendWeights.x + DissolveParticle.vBlendWeights.y + DissolveParticle.vBlendWeights.z));
+
+        matrix BoneMatrix = BoneMatrices[DissolveParticle.vBlendIndices.x] * DissolveParticle.vBlendWeights.x +
+		        BoneMatrices[DissolveParticle.vBlendIndices.y] * DissolveParticle.vBlendWeights.y +
+		        BoneMatrices[DissolveParticle.vBlendIndices.z] * DissolveParticle.vBlendWeights.z +
+		        BoneMatrices[DissolveParticle.vBlendIndices.w] * fWeightW;
+        
+        DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, BoneMatrix);
+    }
+    
+    float4 vDir = vMoveDir;
+    
+    vDir = normalize(vDir);
+    DissolveParticle.Particle.vLifeTime.y += fTimeDelta;
+    
+    if (iState & STATE_RANDOM)
+    {
+        float fTime = fmod(DissolveParticle.Particle.vLifeTime.y, fTimeInterval);
+        if (fTime < fTimeDelta)
+        {
+            DissolveParticle.Particle.vCurrenrRandomDir = DissolveParticle.Particle.vNextRandomDir;
+            
+            DissolveParticle.Particle.vNextRandomDir.x = rand(DissolveParticle.Particle.vTranslation.x);
+            DissolveParticle.Particle.vNextRandomDir.y = rand(DissolveParticle.Particle.vTranslation.y);
+            DissolveParticle.Particle.vNextRandomDir.z = rand(DissolveParticle.Particle.vTranslation.z);
+            
+            DissolveParticle.Particle.vNextRandomDir = normalize(DissolveParticle.Particle.vNextRandomDir);
+        }
+        vDir += float4(lerp(DissolveParticle.Particle.vCurrenrRandomDir.xyz, DissolveParticle.Particle.vNextRandomDir.xyz, fTime / fTimeInterval) * fRandomRatio, 0.f);
+        vDir = normalize(vDir);
+    }
+    
+    float4 vRotateDir = (float4) 0;
+    if (iState & STATE_ORBIT)
+    {
+        float4 vTargetDir = vPivot - DissolveParticle.Particle.vTranslation;
+        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vOrbitAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
+        vRotateDir = vTargetDir - vRotateDir;
+    }
+    
+    float fAddSpeed = 1.f;
+    if (iState & STATE_ACCEL)
+    {
+        fAddSpeed *= DissolveParticle.Particle.vLifeTime.y / DissolveParticle.Particle.vLifeTime.x * fAccelSpeed;
+        if (fAddSpeed < fAccelLimit)
+            fAddSpeed = fAccelLimit;
+    }
+    else if (iState & STATE_DECEL)
+    {
+        fAddSpeed *= 1.f - (DissolveParticle.Particle.vLifeTime.y / DissolveParticle.Particle.vLifeTime.x) * fAccelSpeed;
+        if (fAddSpeed < 0.f)
+            fAddSpeed = 0.f;
+        if (fAddSpeed < fAccelLimit)
+            fAddSpeed = fAccelLimit;
+    }
+    
+    float4 vMoveDir = vDir * DissolveParticle.Particle.fSpeed;
+    
+    float4 vGravityDir = float4(0.f, -1.f, 0.f, 0.f);
+    vGravityDir = mul(vGravityDir, WorldMatrix);
+    vMoveDir += normalize(vGravityDir) * fGravity * DissolveParticle.Particle.vLifeTime.y;
+    
+    DissolveParticle.Particle.vTranslation = DissolveParticle.Particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
+    DissolveParticle.Particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
+
+    if ((iState & STATE_LOOP) && (DissolveParticle.Particle.vLifeTime.y >= DissolveParticle.Particle.vLifeTime.x))
+    {
+        DissolveParticle.Particle = InitParticles[iIndex].Particle;
+        
+        if (TYPE_ANIM == iModelType)
+        {
+            float fWeightW = saturate(1.f - (DissolveParticle.vBlendWeights.x + DissolveParticle.vBlendWeights.y + DissolveParticle.vBlendWeights.z));
+
+            matrix BoneMatrix = BoneMatrices[DissolveParticle.vBlendIndices.x] * DissolveParticle.vBlendWeights.x +
+		        BoneMatrices[DissolveParticle.vBlendIndices.y] * DissolveParticle.vBlendWeights.y +
+		        BoneMatrices[DissolveParticle.vBlendIndices.z] * DissolveParticle.vBlendWeights.z +
+		        BoneMatrices[DissolveParticle.vBlendIndices.w] * fWeightW;
+        
+            DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, BoneMatrix);
+        }
+        
+        DissolveParticle.Particle.vLifeTime.y = 0.f;
+        DissolveParticle.Particle.vLook = DissolveParticle.Particle.vTranslation - vPivot;
+    }
+    
+    particles[iIndex] = DissolveParticle;
+}
+
+[numthreads(256, 1, 1)]
 void CS_RESET_MAIN(uint3 DTid : SV_DispatchThreadID)
 {
     uint iIndex = DTid.x;

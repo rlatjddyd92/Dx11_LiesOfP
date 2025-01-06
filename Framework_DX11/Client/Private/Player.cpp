@@ -109,6 +109,7 @@
 #include "GameInterface_Controller.h"
 
 #include "Dissolve_Player_Dead.h"
+#include "Dissolve_Fire.h"
 
 #include "ObjectPool.h"
 #include "Decal_Blood.h"
@@ -2104,7 +2105,7 @@ HRESULT CPlayer::Ready_Effect()
 	m_DissolveEffects.resize(DISSOLVE_END);
 
 	CDissolve_Player_Dead::DISSOLVE_OBJECT_DESC TestDesc = {};
-	TestDesc.fRotationPerSec = 90.f;
+	TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	TestDesc.fSpeedPerSec = 1.f;
 	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
 	TestDesc.pTarget_ModelCom = m_pModelCom;
@@ -2113,10 +2114,22 @@ HRESULT CPlayer::Ready_Effect()
 	TestDesc.pThreshold = &m_fDissloveRatio;
 	TestDesc.vTextureSize = _float2(2048.f, 2048.f);
 	TestDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Dead");	// 여기 추가.
-
 	m_DissolveEffects[DISSOLVE_DEAD] = static_cast<CDissolve_Player_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Player_Dead"), &TestDesc));
 	if (nullptr == m_DissolveEffects[DISSOLVE_DEAD])
 		return E_FAIL;
+
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pTarget_ModelCom = m_pModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Fire");
+	m_DissolveEffects[DISSOLVE_FIRE] = static_cast<CDissolve_Fire*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffects[DISSOLVE_FIRE])
+		return E_FAIL;
+	
+	m_DissolveEffects[DISSOLVE_FIRE]->Set_On(true);
 
 	return S_OK;
 }

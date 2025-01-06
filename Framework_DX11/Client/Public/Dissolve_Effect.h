@@ -38,10 +38,7 @@ public:
 
 public:
 	virtual void Reset();
-	virtual void Set_On(_bool bOn) {
-		m_bOn = bOn;
-		Reset();
-	}
+	virtual void Set_On(_bool bOn);
 	_bool Get_On() {
 		return m_bOn;
 	}
