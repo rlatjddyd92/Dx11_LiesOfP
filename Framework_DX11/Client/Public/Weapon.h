@@ -34,9 +34,9 @@ public:
 	{
 		class CMonster* pMonster = { nullptr };
 
-		// 속성 이넘, 기본 속성 스탯 받아오고, 속성 배율을 포함해서 키고 끌 수 있도록
-
-		//
+		// 속성 이넘, 기본 속성 스탯 받아오고,
+		_uint	iDebuffType = {};
+		_float	fDebuffAmount = {};
 
 	}MONSTER_WAPON_DESC;
 
@@ -94,6 +94,9 @@ public:
 	virtual void		DeActive_Effect(_uint iType, _uint iHandIndex = 0);
 	virtual void		DeActive_AllEffect(_uint iHandIndex = 0);
 
+	virtual void		Active_Debuff(_float fDebuffRatio = 1.f);
+	virtual void		DeActive_Debuff();
+
 public:
 	void Appear();
 	void Disappear();
@@ -137,6 +140,13 @@ protected:
 	_float					m_fDamageAmount = {};
 	_float					m_fDamageRatio = { 1.f };
 	_float					m_fFinalDamageAmount = {};
+
+
+	_float					m_fDebuffAmount = {0.f};
+	_float					m_fDebuffRatio = {1.f};
+	_uint					m_iDebuffType = {0};
+
+	_bool					m_bDebuffAttack = { false };
 
 	_bool					m_isUpdatePos = { true };
 

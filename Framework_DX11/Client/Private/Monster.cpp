@@ -190,6 +190,14 @@ _float CMonster::Calc_Distance_XZ()
 	return fDist;
 }
 
+void CMonster::Active_Debuff(_int iIndex, _float fDebuffRatio)
+{
+}
+
+void CMonster::DeActive_Debuff(_int iIndex)
+{
+}
+
 void CMonster::OnCollisionEnter(CGameObject* pOther)
 {
 	//if (pOther->Get_Tag() == TEXT("PlayerWeapon"))

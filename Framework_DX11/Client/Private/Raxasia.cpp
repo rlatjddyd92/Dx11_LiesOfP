@@ -424,6 +424,30 @@ void CRaxasia::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 	}
 }
 
+void CRaxasia::Active_Debuff(_int iIndex, _float fDebuffRatio)
+{
+	if (iIndex == 0)
+	{
+		m_pWeapon->Active_Debuff(fDebuffRatio);
+	}
+	else
+	{
+		m_pWeaponShield->Active_Debuff(fDebuffRatio);
+	}
+}
+
+void CRaxasia::DeActive_Debuff(_int iIndex)
+{
+	if (iIndex == 0)
+	{
+		m_pWeapon->DeActive_Debuff();
+	}
+	else
+	{
+		m_pWeaponShield->DeActive_Debuff();
+	}
+}
+
 void CRaxasia::Active_Effect(const _uint eType, _bool isLoop)
 {
 	if (isLoop)

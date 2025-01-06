@@ -1035,26 +1035,26 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	return true;
 }
 
-void CPlayer::Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount)
+void CPlayer::Calc_DebuffGain(_uint iDebuffType, _float fAmount)
 {
 	if (m_fDebuffReduceTime > 0.f)
 		fAmount *= 0.4f;
 
-	switch (eDebuffType)
+	switch (iDebuffType)
 	{
 	case Client::CPlayer::DEBUFF_FIRE:
 		m_tPlayer_Stat->fDebuff_Fire.x = min(m_tPlayer_Stat->fDebuff_Fire.x + fAmount, m_tPlayer_Stat->fDebuff_Fire.y);
-		m_fDebuffRecoveryTime[eDebuffType] = 0.15f;
+		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
 
 	case Client::CPlayer::DEBUFF_ELEC:
 		m_tPlayer_Stat->fDebuff_Electric.x = min(m_tPlayer_Stat->fDebuff_Electric.x + fAmount, m_tPlayer_Stat->fDebuff_Electric.y);
-		m_fDebuffRecoveryTime[eDebuffType] = 0.15f;
+		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
 
 	case Client::CPlayer::DEBUFF_ACID:
 		m_tPlayer_Stat->fDebuff_Acid.x = min(m_tPlayer_Stat->fDebuff_Acid.x + fAmount, m_tPlayer_Stat->fDebuff_Acid.y);
-		m_fDebuffRecoveryTime[eDebuffType] = 0.15f;
+		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
 	}
 }
