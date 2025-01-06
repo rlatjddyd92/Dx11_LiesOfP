@@ -152,6 +152,7 @@ void CState_RaxasiaP1_GroundSlash::Effect_Check(_double CurTrackPos)
             vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
             Desc.vPos = vPos;
+            Desc.pOwner = m_pMonster;
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderMark"), &Desc);
         }

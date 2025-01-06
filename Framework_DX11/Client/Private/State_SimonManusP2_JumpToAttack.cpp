@@ -211,6 +211,8 @@ void CState_SimonManusP2_JumpToAttack::Effect_Check(_double CurTrackPos)
                     _Vec3 vMainDir = vTargetPos - Desc.vPos;
                     vMainDir.Normalize();
 
+                    Desc.pOwner = m_pMonster;
+
                     Desc.vDir = _Vec3{ vMainDir - vRight * 5 };
 
                     m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);

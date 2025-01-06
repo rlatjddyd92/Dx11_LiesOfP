@@ -301,6 +301,7 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
                 _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
                 vRight.Normalize();
 
+                Desc.pOwner = m_pMonster;
 
                 Desc.vPos = vPos;
                 Desc.vDir = vTargetDir;

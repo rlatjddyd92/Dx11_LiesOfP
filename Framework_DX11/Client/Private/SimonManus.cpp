@@ -169,6 +169,7 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
 		m_bDieState = true;
+		m_pWeapon->DeActive_Collider();
 
 		if(m_isChanged)
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_DEFEAT))->Start_Play();

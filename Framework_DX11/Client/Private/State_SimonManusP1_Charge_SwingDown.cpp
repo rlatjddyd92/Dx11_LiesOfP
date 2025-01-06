@@ -95,6 +95,8 @@ void CState_SimonManusP1_Charge_SwingDown::Effect_Check(_double CurTrackPos)
             XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
             Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
 
+            Desc.pOwner = m_pMonster;
+
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ChargeSwing"), &Desc);
         }
     }

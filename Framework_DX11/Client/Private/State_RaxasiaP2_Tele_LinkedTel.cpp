@@ -38,6 +38,12 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
     case 0:
         if (CurTrackPos >= 120)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bAccel = false;
