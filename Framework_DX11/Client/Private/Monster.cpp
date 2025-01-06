@@ -339,9 +339,9 @@ void CMonster::Update_Debuff(_float fTimeDelta)
 				m_fDebuffDuration[i] = 0.f;
 			}
 			 
-			//이펙트 업데이트
-
 		}
+		//이펙트 업데이트
+
 	}
 }
 

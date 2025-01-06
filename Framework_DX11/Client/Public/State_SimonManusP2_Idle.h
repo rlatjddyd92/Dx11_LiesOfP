@@ -46,7 +46,7 @@ private:
 
     _uint               m_iAtkTrack = {11 };
 private:
-    void                Calc_Act_Attack();
+    void                Calc_Act_Attack(_float fTimeDelta, _float fDist);
 
 public:
     static CState_SimonManusP2_Idle* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

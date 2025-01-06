@@ -694,9 +694,6 @@
     <Filter Include="04.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack">
       <UniqueIdentifier>{e534a47a-1113-4d6c-848d-832d77482ffa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave">
-      <UniqueIdentifier>{36fc1f37-9fa8-4bcb-9bd8-eb43b4acc6b1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
       <UniqueIdentifier>{6467109c-1f2c-49c7-99be-29881975b050}</UniqueIdentifier>
     </Filter>
@@ -1465,6 +1462,9 @@
     <Filter Include="02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Poison">
       <UniqueIdentifier>{d807996c-88f6-4b87-96c7-df6395264345}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04.Fsm\Monster\SimonManus\P2\Attack\Single\BackLightning">
+      <UniqueIdentifier>{f92493e6-ff9b-4739-88a7-94debd002e54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1865,9 +1865,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_JumpToAttack.h">
       <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP2_LightningToWave.h">
-      <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Route1.h">
       <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Route\Route1</Filter>
@@ -2704,6 +2701,9 @@
     <ClInclude Include="..\public\Dissolve_Poison.h">
       <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Poison</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_BackLightning.h">
+      <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Single\BackLightning</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3077,9 +3077,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_JumpToAttack.cpp">
       <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP2_LightningToWave.cpp">
-      <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp">
       <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Route\Route1</Filter>
@@ -3909,6 +3906,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Dissolve_Poison.cpp">
       <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Poison</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_BackLightning.cpp">
+      <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Single\BackLightning</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

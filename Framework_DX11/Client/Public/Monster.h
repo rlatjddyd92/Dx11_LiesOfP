@@ -135,7 +135,7 @@ protected:
 	_bool				m_bDebuffed[DEBUFF_END] = {};
 
 protected:
-	void				Update_Debuff(_float fTimeDelta);
+	virtual void		Update_Debuff(_float fTimeDelta);
 	void				Reset_Debuff();
 
 	HRESULT		Ready_Components();

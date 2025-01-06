@@ -69,6 +69,8 @@ private:
 	class CDissolve_Effect* m_pDissolveEffect = { nullptr };
 	
 private:
+	virtual void		Update_Debuff(_float fTimeDelta) override;
+
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();
