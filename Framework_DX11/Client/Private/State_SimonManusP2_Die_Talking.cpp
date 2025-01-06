@@ -30,6 +30,11 @@ HRESULT CState_SimonManusP2_Die_Talking::Start_State(void* pArg)
 
 void CState_SimonManusP2_Die_Talking::Update(_float fTimeDelta)
 {
+    if (GET_GAMEINTERFACE->IsEndTalk_WithNPC(NPC_SCRIPT::SCR_MANUS) && m_bStartDissolve == false)
+    {
+        m_bStartDissolve = true;
+        m_pMonster->Start_StartDisslove();
+    }
 }
 
 void CState_SimonManusP2_Die_Talking::End_State()

@@ -326,9 +326,11 @@ public:
 
 	void			SetUp_Monster_Fatal();
 
+	void			Active_CutScene();
 private:
 	_bool					m_bActivated_ManusCutScene = { false };
 	_bool					m_isPlayingCutscene = { false };
+	_bool					m_isPlayingCutscene_SophiaDead = { false };
 
 private:
 	vector<class CEffect_Container*> m_Effects;

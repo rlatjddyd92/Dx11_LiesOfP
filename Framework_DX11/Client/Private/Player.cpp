@@ -282,6 +282,9 @@ void CPlayer::Update(_float fTimeDelta)
 		pEffect->Update(fTimeDelta);
 	}
 
+	Active_CutScene();
+
+
 #pragma region 디버그 확인용
 	if (KEY_TAP(KEY::L))
 	{
@@ -295,12 +298,7 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 
 
-	//마누스 컷신 실행부분
-	if (m_pNavigationCom->Get_CurrentCellIndex() == 208 && m_bActivated_ManusCutScene == false)
-	{
-		m_bActivated_ManusCutScene = true;
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Start_Play();
-	}
+
 
 	if (KEY_TAP(KEY::Q))
 	{
@@ -1386,6 +1384,22 @@ void CPlayer::SetUp_Monster_Fatal()
 		return;
 
 	m_pContactMonster->Start_Fatal();
+}
+
+void CPlayer::Active_CutScene()
+{
+	//마누스 컷신 실행부분
+	if (m_pNavigationCom->Get_CurrentCellIndex() == 208 && m_bActivated_ManusCutScene == false)
+	{
+		m_bActivated_ManusCutScene = true;
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Start_Play();
+	}
+
+	if (GET_GAMEINTERFACE->IsEndTalk_WithNPC(NPC_SCRIPT::SCR_SOPIA_DIE) && m_isPlayingCutscene_SophiaDead == false)
+	{
+		m_isPlayingCutscene_SophiaDead = true;
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
+	}
 }
 
 CStargazer* CPlayer::Find_Stargazer(_int iCellNumber)

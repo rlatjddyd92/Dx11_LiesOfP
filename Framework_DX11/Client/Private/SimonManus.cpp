@@ -193,6 +193,9 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 			m_isDead = true;
 			CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 			pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+			pPlayer->Get_Navigation()->Move_to_Cell(m_pRigidBodyCom, 1178);
+			pPlayer->Get_Transform()->LookAt(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"),0)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
 		}
 	}
 

@@ -22,6 +22,8 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+private:
+    _bool           m_bStartDissolve = { false };
 public:
     static CState_SimonManusP2_Die_Talking* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
