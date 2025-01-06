@@ -166,6 +166,7 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 				vPlayerLook.Normalize();
 
 				m_pPlayer->Increase_Region(10.f);
+				m_pPlayer->Recovery_HP_Hit(m_fDamageAmount * 2.f);
 
 				if (m_eAttackStrength == ATK_STRONG)
 				{

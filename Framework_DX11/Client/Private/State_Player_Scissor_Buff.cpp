@@ -47,7 +47,7 @@ void CState_Player_Scissor_Buff::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (iFrame < m_iChangeFrame)
+    if (iFrame < m_iChangeFrame && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
     {
         if (m_pPlayer->Key_Tab(KEY::LBUTTON))
         {

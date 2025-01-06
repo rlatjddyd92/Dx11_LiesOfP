@@ -69,20 +69,20 @@ void CState_Player_Scissor_Fable1::Update(_float fTimeDelta)
 
     if (iFrame < m_iChangeFrame)
     {
-        if (m_pPlayer->Key_Tab(KEY::LBUTTON))
+        if (m_pPlayer->Key_Tab(KEY::LBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
         {
             m_isInputLButton = true;
             m_isInputRButton = false;
             m_isInputFButton = false;
         }
-        else if (m_pPlayer->Key_Tab(KEY::RBUTTON))
+        else if (m_pPlayer->Key_Tab(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
         {
             m_isInputRButton = true;
             m_isInputLButton = false;
             m_isInputFButton = false;
             m_fRButtonTime = 0.f;
         }
-        else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
+        else if (m_pPlayer->Key_Hold(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
         {
             m_fRButtonTime += fTimeDelta;
         }

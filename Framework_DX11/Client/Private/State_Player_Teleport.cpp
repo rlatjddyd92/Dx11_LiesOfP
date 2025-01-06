@@ -124,15 +124,18 @@ void CState_Player_Teleport::End_State()
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
     m_pPlayer->Set_DissloveRatio(m_fDissloveRatio);
     m_pPlayer->Set_RimLightColor(m_vRimLightColor);
+    m_pPlayer->Appear_Weapon();
 
     if (m_pStarGazer)
     {
         Safe_Release(m_pStarGazer);
+        m_pStarGazer = nullptr;
     }
 
     if (m_pSteppingStone)
     {
         Safe_Release(m_pSteppingStone);
+        m_pSteppingStone = nullptr;
     }
 
     m_pPlayer->Reset_Die();
@@ -140,7 +143,6 @@ void CState_Player_Teleport::End_State()
 
 _bool CState_Player_Teleport::End_Check()
 {
-    m_pPlayer->Appear_Weapon();
     return m_pPlayer->Get_EndAnim(m_iAnimation_TeleportEnd);
 }
 

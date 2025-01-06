@@ -111,7 +111,7 @@ public:
 
 		// 능력치 
 		_float iStat_Attack = 1000.f;
-		_float iStat_Defence = 20.f;
+		_float iStat_Defence = 1000.f;
 
 
 		// 게이지 수치 
@@ -299,7 +299,7 @@ public:
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 	void			Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount);
 	void			Damaged(_float fAtkDmg);
-	void			Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix = nullptr);
+	_bool			Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix = nullptr);
 	void			DotDamaged(_float fDamageAmount);
 	void			Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStrength);
 	_bool			Decrease_Stamina(_float fAmount);
@@ -309,6 +309,7 @@ public:
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 	void			Recovery_HP(_float fAmount);
+	void			Recovery_HP_Hit(_float fAmount);
 	void			Decrease_Arm(_float fAmount = 0.1f);
 
 	class CStargazer* Find_Stargazer(_int iCellNumber = -1);

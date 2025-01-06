@@ -156,12 +156,12 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
@@ -879,7 +879,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			{
 				m_pFsmCom->Change_State(ARM_GURAD_WEAK);
 			}
-			else 
+			else
 			{
 				m_pFsmCom->Change_State(ARM_GURAD_HARD);
 			}
@@ -887,8 +887,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			m_fGuardTime = 0.8f;	// 퍼펙트 가드 성공하면 다시 0.8초동안
 			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
-	
-			if(m_isGuardSlow)
+
+			if (m_isGuardSlow)
 				m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 
 			return false;
@@ -904,47 +904,59 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			Decrease_Arm(15.f);
 			m_pFsmCom->Change_State(ARM_BOMB);
 		}
-		else if (ATK_WEAK == iAttackStrength)
+		else
 		{
-			if (0)
+			_bool isHPZero = false;
+
+			isHPZero = !Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
+			if (isHPZero)
 			{
-				if (nullptr != pAttackerMonster)
+				CState_Player_Die::DIE_DESC DieDesc{};
+				DieDesc.vHitPos = vHitPos;
+
+				m_pFsmCom->Change_State(DIE, &DieDesc);
+			}
+			else if (ATK_WEAK == iAttackStrength)
+			{
+				if (0)
 				{
-					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
-					pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
-				}
+					if (nullptr != pAttackerMonster)
+					{
+						m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
+						pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
+					}
 
-				m_pFsmCom->Change_State(ARM_BOMB);
-			}
-			else
-			{
-				m_pFsmCom->Change_State(ARM_GURAD_WEAK);
-			}
-		}
-		else if (ATK_NORMAL == iAttackStrength)
-		{
-			if (0)
-			{
-				if (nullptr != pAttackerMonster)
+					m_pFsmCom->Change_State(ARM_BOMB);
+				}
+				else
 				{
-					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
-					pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
+					m_pFsmCom->Change_State(ARM_GURAD_WEAK);
 				}
-
-				m_pFsmCom->Change_State(ARM_BOMB);
 			}
-			else
+			else if (ATK_NORMAL == iAttackStrength)
 			{
-				m_pFsmCom->Change_State(ARM_GURAD_HARD);
-			}
-		}
-		else if (ATK_STRONG == iAttackStrength)
-		{
-			m_pFsmCom->Change_State(ARM_GURAD_HEAVY);
-		}
+				if (0)
+				{
+					if (nullptr != pAttackerMonster)
+					{
+						m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
+						pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
+					}
 
-		Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
-		return false;
+					m_pFsmCom->Change_State(ARM_BOMB);
+				}
+				else
+				{
+					m_pFsmCom->Change_State(ARM_GURAD_HARD);
+				}
+			}
+			else if (ATK_STRONG == iAttackStrength)
+			{
+				m_pFsmCom->Change_State(ARM_GURAD_HEAVY);
+			}
+
+			return false;
+		}
 	}
 	else if (m_isParry) // 패링 상태
 	{
@@ -963,6 +975,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	}
 	else if (m_isGuard)	// 가드 상태
 	{
+		_bool isHPZero = false;
+
 		//퍼펙트 가드
 		if (m_fGuardTime < 0.18f)
 		{
@@ -1002,7 +1016,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			}
 			else
 			{
-				Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
+				isHPZero = !Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
 				Decrease_Stamina(fAtkDmg * 0.23f);
 
 				GET_GAMEINTERFACE->Add_Durable_Weapon(-17.f);
@@ -1017,7 +1031,14 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			else
 				isStrong = false;
 
-			if (m_eWeaponType < 2)
+			if (isHPZero)
+			{
+				CState_Player_Die::DIE_DESC DieDesc{};
+				DieDesc.vHitPos = vHitPos;
+
+				m_pFsmCom->Change_State(DIE, &DieDesc);
+			}
+			else if (m_eWeaponType < 2)
 				m_pFsmCom->Change_State(OH_GUARDHIT, &isStrong);
 			else
 				m_pFsmCom->Change_State(TH_GUARDHIT, &isStrong);
@@ -1139,20 +1160,28 @@ void CPlayer::Damaged(_float fAtkDmg)
 
 }
 
-void CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
+_bool CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 {
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.15f);
+
+	if (m_tPlayer_Stat->vGauge_Hp.x <= 0.f)
+	{
+		m_tPlayer_Stat->vGauge_Hp.x = m_tPlayer_Stat->vGauge_Hp.y = 0.f;
+		return false;
+	}
+
+	if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 150.f)
+		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.15f);
+
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-	if(nullptr == pSocketBoneMatrix)
+	if (nullptr == pSocketBoneMatrix)
 		pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
 	m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
-
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.1f);
-	if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
-		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.7f);
-
 	Decrease_Stamina(fAtkDmg * 0.23f);
+
+	return true;
 }
 
 void CPlayer::DotDamaged(_float fAtkDmg)
@@ -1309,6 +1338,15 @@ void CPlayer::Recovery_HP(_float fAmount)
 
 	if (m_tPlayer_Stat->vGauge_Hp.x > m_tPlayer_Stat->vGauge_Hp.y)
 		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
+}
+
+void CPlayer::Recovery_HP_Hit(_float fAmount)
+{
+	m_tPlayer_Stat->vGauge_Hp.x = m_tPlayer_Stat->vGauge_Hp.x + fAmount;
+	if (m_tPlayer_Stat->vGauge_Hp.x >= m_tPlayer_Stat->vGauge_Hp.y)
+	{
+		m_tPlayer_Stat->vGauge_Hp.x = m_tPlayer_Stat->vGauge_Hp.y;
+	}
 }
 
 void CPlayer::Decrease_Arm(_float fAmount)

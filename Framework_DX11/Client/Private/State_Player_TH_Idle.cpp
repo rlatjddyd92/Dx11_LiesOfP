@@ -47,7 +47,7 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_DASH);
     }
-    else if (m_pPlayer->Key_Tab(KEY::LBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 5.f)
+    else if (m_pPlayer->Key_Tab(KEY::LBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
     {
         if (!m_pPlayer->Get_IsFatal())
         {
@@ -58,7 +58,7 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::FLAME_FATAL);
         }
     }
-    else if (m_pPlayer->Key_Hold(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 15.f)
+    else if (m_pPlayer->Key_Hold(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 45.f)
     {
         m_fRButtonTime += fTimeDelta;
         if (m_fRButtonTime > 0.15f)
@@ -123,7 +123,7 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::ARM_START);
     }
 
-    if (m_pPlayer->Key_Away(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 5.f)
+    if (m_pPlayer->Key_Away(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
     {
         m_fRButtonTime = 0.f;
         m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);

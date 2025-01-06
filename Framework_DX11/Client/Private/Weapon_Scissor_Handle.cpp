@@ -185,6 +185,7 @@ void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				m_pPlayer->Increase_Region(10.f);
+				m_pPlayer->Recovery_HP_Hit(m_fDamageAmount * 2.f);
 
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
