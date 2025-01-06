@@ -45,7 +45,7 @@ HRESULT CState_Player_Arm_Loop::Start_State(void* pArg)
 {
     //m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.f, 0, true);
 
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.f);
+    m_pPlayer->SetUp_Animation_Boundry(m_iAnimation_ArmLoop, true, 0);
 
     m_pPlayer->Set_IsArm(true);
 
@@ -70,14 +70,12 @@ void CState_Player_Arm_Loop::Update(_float fTimeDelta)
 
         if (!Move(fTimeDelta))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.15f);
+            m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.15f, 0, false);
         }
         else
         {
             Control_Sound();
         }
-
-        m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.05f);
 
         if (m_pPlayer->Key_Tab(KEY::LBUTTON))
         {
@@ -162,11 +160,11 @@ _bool CState_Player_Arm_Loop::Move(_float fTimeDelta)
         // 캐릭터의 전방 벡터와 이동 방향의 Dot값을 기반으로 전후 이동 처리
         if (fForwardDirDot > 0.7f) // 전진
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f, 0, false);
         }
         else if (fForwardDirDot < -0.7f) // 후진
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f, 0, false);
         }
         else
         {
@@ -177,13 +175,13 @@ _bool CState_Player_Arm_Loop::Move(_float fTimeDelta)
             if (isLeft)
             {
                 m_pPlayer->Change_Animation(
-                    m_iAnimation_Walk[isCameraAlignedForward ? WALK_L : WALK_R], true, 0.2f
+                    m_iAnimation_Walk[isCameraAlignedForward ? WALK_L : WALK_R], true, 0.2f, 0, false
                 );
             }
             else if (isRight)
             {
                 m_pPlayer->Change_Animation(
-                    m_iAnimation_Walk[isCameraAlignedForward ? WALK_R : WALK_L], true, 0.2f
+                    m_iAnimation_Walk[isCameraAlignedForward ? WALK_R : WALK_L], true, 0.2f, 0, false
                 );
             }
             else
@@ -195,13 +193,13 @@ _bool CState_Player_Arm_Loop::Move(_float fTimeDelta)
                 if (isForward)
                 {
                     m_pPlayer->Change_Animation(
-                        m_iAnimation_Walk[isCameraAlignedRight ? WALK_R : WALK_L], true, 0.2f
+                        m_iAnimation_Walk[isCameraAlignedRight ? WALK_R : WALK_L], true, 0.2f, 0, false
                     );
                 }
                 else if (isBackward)
                 {
                     m_pPlayer->Change_Animation(
-                        m_iAnimation_Walk[isCameraAlignedRight ? WALK_L : WALK_R], true, 0.2f
+                        m_iAnimation_Walk[isCameraAlignedRight ? WALK_L : WALK_R], true, 0.2f, 0, false
                     );
                 }
             }
