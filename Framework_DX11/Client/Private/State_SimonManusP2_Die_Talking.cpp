@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "SimonManus.h"
+#include "GameInterface_Controller.h"
 
 CState_SimonManusP2_Die_Talking::CState_SimonManusP2_Die_Talking(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -23,7 +24,7 @@ HRESULT CState_SimonManusP2_Die_Talking::Start_State(void* pArg)
     _uint iAnimation_Change = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Die_Idle", 0.5f);
 
     m_pMonster->Change_Animation(iAnimation_Change, true, 0.1f, 0);
-
+    GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
     return S_OK;
 }
 

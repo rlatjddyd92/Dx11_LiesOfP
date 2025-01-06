@@ -153,7 +153,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	//Start_CutScene(CUTSCENE_MEET);
+	Start_CutScene(CUTSCENE_MEET);
 
 	//m_pNavigationCom->Set_ExceptCellNum(99);
 
