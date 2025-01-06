@@ -245,6 +245,7 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
                 Desc.vPos.z += fvariableZ;
                 Desc.pOwner = m_pMonster;
 
+                Desc.pOwner = m_pMonster;
                 //vPos로 드래그 마크
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderMark"), &Desc);
 
@@ -332,15 +333,24 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
                 }
                 else
                 {
-                    if (m_fHoveringTimeStack >= m_fHoveringDuration)
-                    {
-                        m_bEndFire = true;
-                    }
-                    else
-                    {
-                        m_fHoveringTimeStack += fTimeDelta;
-                    }
+                    m_bEndFire = true;
                 }
+            }
+        }
+        else if (m_bHovering)
+        {
+            if (m_fHoveringTimeStack >= m_fHoveringDuration)
+            {
+                m_bHovering = false;
+            }
+            else
+            {
+                if (CurTrackPos >= 250.f)
+                {
+                    m_pMonster->Get_Model()->Set_CurrentTrackPosition((_double)170.f);
+                    m_pMonster->Get_Model()->Set_CurrentTrackPosition_Boundary((_double)170.f);
+                }
+                m_fHoveringTimeStack += fTimeDelta;
             }
         }
 
