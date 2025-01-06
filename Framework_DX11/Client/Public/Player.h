@@ -151,9 +151,9 @@ public:
 
 		_float fHeal = 0.f; // 지속적으로 HP 증가 -> 재충전의 아뮬렛
 
-		_float fResist_Fire = 0.f;
-		_float fResist_Electric = 0.f;
-		_float fResist_Acid = 0.f;
+		_float fResist_Fire = 100.f;
+		_float fResist_Electric = 100.f;
+		_float fResist_Acid = 100.f;
 
 	}STAT_INFO;
 #pragma endregion

@@ -45,6 +45,14 @@ private:
     _int                m_iSwishL_SoundFrame = { };
     _bool               m_isSwishL_PlaySound = {};
 
+private:
+    _int                m_iEffectStartFrame = {};
+    _int                m_iEffectEndFrame = {};
+    _bool               m_isActiveEffect = {};
+    _bool               m_isDeActiveEffect = {};
+
+    void                Control_Effect(_int iFrame);
+
 public:
     static CState_Player_Flame_ParryAttack* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

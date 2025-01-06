@@ -1071,19 +1071,25 @@ void CPlayer::Calc_DebuffGain(_uint iDebuffType, _float fAmount)
 	switch (iDebuffType)
 	{
 	case Client::CPlayer::DEBUFF_FIRE:
-		fAmount = fAmount * ((m_tPlayer_Stat->fDebuff_Fire.x + m_tPlayer_Stat_Adjust->fDebuff_Fire.x) / 1000.f);
+		if (m_tPlayer_Stat_Adjust->fResist_Fire > 0.f)
+			fAmount = fAmount * (m_tPlayer_Stat_Adjust->fResist_Fire / 100.f);
+
 		m_tPlayer_Stat->fDebuff_Fire.x = min(m_tPlayer_Stat->fDebuff_Fire.x + fAmount, m_tPlayer_Stat->fDebuff_Fire.y);
 		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
 
 	case Client::CPlayer::DEBUFF_ELEC:
-		fAmount = fAmount * ((m_tPlayer_Stat->fDebuff_Electric.x + m_tPlayer_Stat_Adjust->fDebuff_Electric.x) / 1000.f);
+		if (m_tPlayer_Stat_Adjust->fResist_Electric > 0.f)
+			fAmount = fAmount * (m_tPlayer_Stat_Adjust->fResist_Electric / 100.f);
+
 		m_tPlayer_Stat->fDebuff_Electric.x = min(m_tPlayer_Stat->fDebuff_Electric.x + fAmount, m_tPlayer_Stat->fDebuff_Electric.y);
 		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
 
 	case Client::CPlayer::DEBUFF_ACID:
-		fAmount = fAmount * ((m_tPlayer_Stat->fDebuff_Acid.x + m_tPlayer_Stat_Adjust->fDebuff_Acid.x) / 1000.f);
+		if (m_tPlayer_Stat_Adjust->fResist_Acid > 0.f)
+			fAmount = fAmount * (m_tPlayer_Stat_Adjust->fResist_Acid / 100.f);
+
 		m_tPlayer_Stat->fDebuff_Acid.x = min(m_tPlayer_Stat->fDebuff_Acid.x + fAmount, m_tPlayer_Stat->fDebuff_Acid.y);
 		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
@@ -1890,7 +1896,6 @@ void CPlayer::Check_FatalAttack()
 	}
 	else
 	{
-		m_pContactMonster->Get_Status()->bFatalAttack = false;
 		m_isFatalAttack = false;
 	}
 }

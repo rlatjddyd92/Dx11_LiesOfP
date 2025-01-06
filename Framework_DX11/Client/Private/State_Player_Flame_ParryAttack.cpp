@@ -25,6 +25,9 @@ HRESULT CState_Player_Flame_ParryAttack::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 30;
     m_iColliderEndFrame = 35;
 
+    m_iEffectStartFrame = 15;
+    m_iEffectEndFrame = 50;
+
     m_iSwishL_SoundFrame = 25;
 
     return S_OK;
@@ -42,6 +45,9 @@ HRESULT CState_Player_Flame_ParryAttack::Start_State(void* pArg)
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
     m_pPlayer->Get_CurrentWeapon()->Set_DamageAmount(130.f);
+
+    m_isActiveEffect = false;
+    m_isDeActiveEffect = false;
 
     return S_OK;
 }
@@ -93,6 +99,7 @@ void CState_Player_Flame_ParryAttack::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Flame_ParryAttack::End_State()
@@ -112,6 +119,20 @@ void CState_Player_Flame_ParryAttack::Control_Collider()
         m_pPlayer->Active_CurrentWeaponCollider();
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
+}
+
+void CState_Player_Flame_ParryAttack::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && m_iEffectStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
+        m_isActiveEffect = true;
+    }
+    else if (m_isActiveEffect && !m_isDeActiveEffect && m_iEffectEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
+        m_isDeActiveEffect = true;
+    }
 }
 
 CState_Player_Flame_ParryAttack* CState_Player_Flame_ParryAttack::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
