@@ -133,12 +133,17 @@ private:
 
 	_bool					m_isChanged = { false };
 	_bool					m_isCutScene = { false };
+	_bool					m_isDeadFadeOut = { false };
+	_bool					m_isDeadFadeIn = { false };
+	_bool					m_isDeadFadeOutSet = { false };
 	
 	const _Matrix*			m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr};
 
 	CTexture*				m_pDissloveTexture = { nullptr };
 
 	vector<class CDissolve_Effect*> m_DissolveEffects;
+	_float					m_fDeadFadeOutTimer = {0.f};
+	_float					m_fDeadFadeInTimer = {0.f};
 
 private:
 	HRESULT Ready_Components();
