@@ -62,6 +62,11 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
     case 0:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStart = false;

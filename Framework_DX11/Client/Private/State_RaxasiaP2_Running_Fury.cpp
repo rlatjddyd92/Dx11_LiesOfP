@@ -56,6 +56,11 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
     {
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bLockOn = false;

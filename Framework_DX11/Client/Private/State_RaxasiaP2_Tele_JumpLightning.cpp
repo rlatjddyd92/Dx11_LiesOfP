@@ -42,6 +42,12 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
     case 0:
         if (CurTrackPos >= 95.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             //m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.5f, 55);
@@ -57,6 +63,12 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
     case 1:
         if (CurTrackPos >= 120.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             //m_pMonster->Change_Animation(AN_LINKED_FIRST, false, 0.5f, 50);
@@ -71,11 +83,15 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
     case 2:
         if (CurTrackPos >= 130.f)
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPLIGHTNING, false, 0.5f, 0);
-
-            //m_pMonster->SetUp_Animation(AN_JUMPLIGHTNING, false, 55);
             return;
         }
 

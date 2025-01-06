@@ -248,7 +248,7 @@ HRESULT CAObj_ThunderBolt::Render_LightDepth()
 
 void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
 {
-    if (m_pCopyRaxasia->Get_IsDieState())
+    if (m_pCopyRaxasia->Get_IsDieState() || m_pCopyRaxasia->Get_TargetDead())
     {
         return;
     }

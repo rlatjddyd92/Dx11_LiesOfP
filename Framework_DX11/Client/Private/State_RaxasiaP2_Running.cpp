@@ -95,6 +95,12 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
         {
             if (CurTrackPos >= 225.f)
             {
+                if (m_pMonster->Get_TargetDead())
+                {
+                    m_pMonster->Change_Animation(8, true, 0.5f, 0, true);
+                    m_pMonster->Change_State(CMonster::IDLE);
+                    return;
+                }
                 m_pMonster->Change_State(CRaxasia::ATKP2_RUNNING_FURY, &m_bRunningWise);
                 return;
             }

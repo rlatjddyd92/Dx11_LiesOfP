@@ -103,6 +103,11 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
     case 1:
         if (End_Check())
         {
+            if (m_pMonster->Get_TargetDead())
+            {
+                m_pMonster->Change_State(CMonster::IDLE);
+                return;
+            }
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bSwingSound = false;
