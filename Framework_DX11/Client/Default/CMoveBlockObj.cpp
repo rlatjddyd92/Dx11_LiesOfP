@@ -26,6 +26,7 @@ HRESULT CMoveBlockObj::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
+	m_iType = pDesc->iTypeNum;
 	switch (pDesc->iTypeNum)
 	{
 	case 0:	//RAXASIA1
@@ -92,12 +93,7 @@ void CMoveBlockObj::OnCollisionStay(CGameObject* pOther)
 
 void CMoveBlockObj::OnCollisionExit(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Player") && m_bOpened)
-	{
-		m_bOpened = false;
-		m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_CLOSE);
-		m_pRigidBodyCom->Set_Kinematic(false);
-	}
+
 }
 
 void CMoveBlockObj::Open_Door()
@@ -105,6 +101,13 @@ void CMoveBlockObj::Open_Door()
 	m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_OPEN);
 	m_pRigidBodyCom->Set_Kinematic(true);
 	m_bOpened = true;
+}
+
+void CMoveBlockObj::Close_Door()
+{
+	m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_CLOSE);
+	m_pRigidBodyCom->Set_Kinematic(false);
+	m_bOpened = false;
 }
 
 HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)

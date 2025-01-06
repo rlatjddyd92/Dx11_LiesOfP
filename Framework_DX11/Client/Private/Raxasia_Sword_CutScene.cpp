@@ -41,9 +41,12 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_iAnimation_Phase1Index = m_pModelCom->Find_AnimationIndex("AS_WP_MOB_Raxasia_01_Sword_Cine_Change__Anim", 1.f);
-	m_pModelCom->SetUp_NextAnimation(m_iAnimation_Phase1Index, false, 0.f, 1);
-
 	m_iAnimation_Phase2Index = m_pModelCom->Find_AnimationIndex("AS_Sword_Raxasia_Phase2_C06_CINE", 1.f);
+
+	if (!pDesc->isPhase2)
+		m_pModelCom->SetUp_NextAnimation(m_iAnimation_Phase1Index, false, 0.f, 1);
+	else
+		m_pModelCom->SetUp_NextAnimation(m_iAnimation_Phase2Index, false, 0.f, 1);
 
 	m_pModelCom->Play_Animation(1.f);
 	m_isPlayAnimation = false;

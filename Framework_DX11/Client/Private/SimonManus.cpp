@@ -145,15 +145,19 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	m_pTransformCom->Rotation(0.f, 50.f, 0.f);
 
-	//m_pModelCom->SetUp_NextAnimation(12);
-	// 24-11-26 김성용
-	// 몬스터 직교 UI 접근 코드 
-	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	//Start_CutScene(CUTSCENE_MEET);
+	if (dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Get_bHavePlayed())
+	{
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-59.119f, -97.78, -27.848f));
+		m_pTransformCom->LookAt_NoHeight(static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY))->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+	}
+	else
+	{
+		Start_CutScene(CUTSCENE_MEET);
+	}
 
 	//m_pNavigationCom->Set_ExceptCellNum(99);
 

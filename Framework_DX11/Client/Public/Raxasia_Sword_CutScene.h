@@ -15,8 +15,9 @@ class CRaxasia_Sword_CutScene final : public CGameObject
 public:
 	typedef struct
 	{
-		const _Matrix* pParentWorldMatrix = { nullptr };
-		const _Matrix* pSocketBoneMatrix = { nullptr };
+		const _Matrix*	pParentWorldMatrix = { nullptr };
+		const _Matrix*	pSocketBoneMatrix = { nullptr };
+		_bool			isPhase2 = { false };
 	}WEAPON_DESC;
 
 	enum EFFECT_TYPE 

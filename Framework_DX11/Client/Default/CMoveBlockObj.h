@@ -26,6 +26,9 @@ private:
 	virtual ~CMoveBlockObj() = default;
 
 public:
+	_int	Get_Type() { return m_iType; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -40,6 +43,7 @@ public:
 
 public:
 	void		Open_Door();
+	void		Close_Door();
 
 private:
 	CCollider* m_pColliderCom = { nullptr };
@@ -48,6 +52,7 @@ private:
 
 private:
 	_bool		m_bOpened = { false };
+	_int		m_iType = {};
 
 private:
 	HRESULT Ready_Components(MOVEBLOCK_DESC* pDesc);

@@ -14,12 +14,12 @@ CState_Player_Hit::CState_Player_Hit(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_Hit::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Hit[HIT_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_B", 2.6f);
-    m_iAnimation_Hit[HIT_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_L", 2.6f);
-    m_iAnimation_Hit[HIT_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_R", 2.6f);
-    m_iAnimation_Hit[HIT_FB] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_FtoB", 2.6f);
-    m_iAnimation_Hit[HIT_LR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_LtoR", 2.6f);
-    m_iAnimation_Hit[HIT_RL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_RtoL", 2.6f);
+    m_iAnimation_Hit[HIT_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_B", 2.8f);
+    m_iAnimation_Hit[HIT_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_L", 2.8f);
+    m_iAnimation_Hit[HIT_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_R", 2.8f);
+    m_iAnimation_Hit[HIT_FB] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_FtoB", 2.8f);
+    m_iAnimation_Hit[HIT_LR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_LtoR", 2.8f);
+    m_iAnimation_Hit[HIT_RL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_RtoL", 2.8f);
 
     m_iAnimation_Down[DOWN_DRAG_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_B", 2.3f);
     m_iAnimation_Down[DOWN_STAMP_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_B", 2.3f);
@@ -60,7 +60,7 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
             m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.05f);
 
         m_eHitType = eType;
-        m_iChangeFrame = m_pPlayer->Get_Model()->Get_LastFrame_CurrentAnim(m_iAnimation_Hit[m_eHitType]) - 30;
+        m_iChangeFrame = m_pPlayer->Get_Model()->Get_LastFrame_CurrentAnim(m_iAnimation_Hit[m_eHitType]) - 35;
     }
 
     

@@ -46,7 +46,7 @@ private:
 	_float						m_fPlayerSetDelayTimer = { 0.f };
 	_bool						m_bPlay = { false };
 	_bool						m_bFinished = { false };
-	_bool						m_bHavePlayed = { false };				//재생된적 있는 지
+	_bool						m_bHavePlayed = {};				//재생된적 있는 지
 	_bool						m_bFinishe_Setting = { false };
 	_bool						m_bFirstStart = { true };
 	_bool						m_bDeactivePlayer = { false };

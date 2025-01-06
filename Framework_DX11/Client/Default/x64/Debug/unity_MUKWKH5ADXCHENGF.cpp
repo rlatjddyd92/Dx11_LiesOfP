@@ -24,6 +24,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_Bullet.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_LightningImpact.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_StampBlast.cpp"
 
 

@@ -44,6 +44,17 @@ HRESULT CState_Player_RetryBoss::Start_State(void* pArg)
     m_isPlaySound = false;
     m_isPlaySound2 = false;
 
+    if (m_pBlockObj->Get_Type() == 0)
+    {
+        if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
+            return E_FAIL;
+    }
+    else if (m_pBlockObj->Get_Type() == 2)
+    {
+        if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
+        	return E_FAIL;
+    }
+
     return S_OK;
 }
 
@@ -72,6 +83,7 @@ void CState_Player_RetryBoss::Update(_float fTimeDelta)
 
 void CState_Player_RetryBoss::End_State()
 {
+    m_pBlockObj->Close_Door();
     m_pBlockObj = nullptr;
 
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);

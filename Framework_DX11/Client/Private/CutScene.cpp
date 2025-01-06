@@ -45,11 +45,11 @@ void CCutScene::Priority_Update(_float fTimeDelta)
 
 void CCutScene::Update(_float fTimeDelta)
 {
-	if (m_bFirstStart)
-		First_Setting();
-
 	if (m_bPlay && m_fTrackPosition < m_fMaxFrame)
 	{
+		if (m_bFirstStart)
+			First_Setting();
+
 		m_fTrackPosition += fTimeDelta;
 		Play_Keyframes(fTimeDelta);
 
@@ -242,7 +242,6 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 void CCutScene::First_Setting()
 {
 	m_bFirstStart = false;
-	m_bHavePlayed = true;
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 
@@ -384,7 +383,6 @@ void CCutScene::End_Setting()
 		m_pObjects[BOSS1]->End_CutScene(1);
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
-		pPlayer->IsActive(true);
 		pPlayer->Init_PlayerCamera();
 		m_fTrackPosition = 0.f;
 		m_bFirstStart = true;
@@ -443,6 +441,9 @@ void CCutScene::End_Setting()
 	m_pCamera->Reset_Zoom();
 
 	pPlayer->Set_isPlayingCutscene(false);
+
+	// 이미 플레이 한 적이 있음
+	m_bHavePlayed = true;
 }
 
 void CCutScene::Delay_Set_Player()

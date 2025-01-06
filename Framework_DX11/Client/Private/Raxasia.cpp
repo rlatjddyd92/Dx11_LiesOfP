@@ -136,6 +136,12 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
+	if (dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Get_bHavePlayed())
+	{
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-59.119f, -97.78, -27.848f));
+		m_pTransformCom->LookAt_NoHeight(static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY))->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+	}
+
 	return S_OK;
 }
 
@@ -496,6 +502,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
 		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
+		Desc.isPhase2 = false;
 		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
 			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
@@ -527,15 +534,18 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
 
-		//CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
-		//Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		//Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
-		//m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
-		//	TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
+		if (!m_pCutSceneWeapon)
+		{
+			CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
+			Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+			Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r");
+			Desc.isPhase2 = true;
+			m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
+				TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
+		}
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
-		m_pCutSceneWeapon->Change_SocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
 		m_pCutSceneWeapon->IsActive(true);
 
 		m_pRigidBodyCom->Set_IsLockCell(false);
@@ -860,10 +870,6 @@ HRESULT CRaxasia::Ready_Components()
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
-
-	physX::GeometryTriangleMesh TriangleDesc;
-	TriangleDesc.pModel = m_pModelCom;
-	RigidBodyDesc.pGeometry = &TriangleDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

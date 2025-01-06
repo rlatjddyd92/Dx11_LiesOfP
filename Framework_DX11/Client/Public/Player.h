@@ -208,7 +208,12 @@ public:
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
-	void					Set_isPlayingCutscene(_bool isPlaying) { m_isPlayingCutscene = isPlaying; }
+	void					Set_isPlayingCutscene(_bool isPlaying) {
+		m_isPlayingCutscene = isPlaying;
+
+		int a = 0;
+
+	}
 
 	_float					Get_AttackBuffTime() { return m_fAttackBuffTime; }
 	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime = fTime; }
