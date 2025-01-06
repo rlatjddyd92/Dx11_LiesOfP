@@ -197,12 +197,12 @@ void CState_SimonManus_CutScene_Phase2::Control_Dialog(_int iFrame)
     {
         if (!m_isShowDialog[0] && iFrame >= 283)
         {
-            GET_GAMEINTERFACE->Show_Script(TEXT("흐흐흐, 이것이 진화다."), TEXT("none"), 12.f);
+            GET_GAMEINTERFACE->Show_Script(TEXT("흐흐흐, 이것이 진화다."), TEXT("none"), 13.f);
             m_isShowDialog[0] = true;
         }
         else if (!m_isShowDialog[1] && iFrame >= 628)
         {
-            GET_GAMEINTERFACE->Show_Script(TEXT("이 약한 육신을 벗어나..."), TEXT("진정한 신의 힘을 얻는 나를 목도하라!"), 30.f);
+            GET_GAMEINTERFACE->Show_Script(TEXT("이 약한 육신을 벗어나..."), TEXT("진정한 신의 힘을 얻는 나를 목도하라!"), 47.f);
             m_isShowDialog[1] = true;
         }
     }

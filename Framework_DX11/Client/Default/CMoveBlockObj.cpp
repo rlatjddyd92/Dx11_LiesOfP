@@ -155,7 +155,7 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 	switch (pDesc->iTypeNum)
 	{
 	case 0:	//RAXASIA1
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-138.27f, -97.816f, -69.188f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-137.3f, -97.816f, -69.188f));
 		break;
 	case 1:	//RAXASIA2
 		m_pRigidBodyCom->Set_GloblePose(_Vec3(-38.895f, -97.809f, -17.833f));
