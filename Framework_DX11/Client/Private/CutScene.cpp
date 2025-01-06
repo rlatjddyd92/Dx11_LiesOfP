@@ -33,8 +33,6 @@ HRESULT CCutScene::Initialize(void* pArg)
 	m_pCamera = CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"));
 
 	m_pObjects[PLAYER] = static_cast<CPawn*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
-//	m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
-	
 
 	return S_OK;
 }
@@ -73,8 +71,6 @@ void CCutScene::Update(_float fTimeDelta)
 	{
 		End_Setting();
 	}
-
-
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)
@@ -298,6 +294,7 @@ void CCutScene::First_Setting()
 		pPlayer->Get_Navigation()->Research_Cell(vInitPos);
 		pPlayer->Get_Transform()->Rotation(0.f, -45.f, 0.f);
 		pPlayer->Disappear_Weapon();
+		m_pGameInstance->Stop_BGM();
 		break;
 	case BOSS2_PHASE2:
 		m_bDeactivePlayer = true;
@@ -321,7 +318,6 @@ void CCutScene::First_Setting()
 void CCutScene::End_Setting()
 {
 	m_bFinishe_Setting = true;
-	m_pGameInstance->Stop_BGM();
 
 	//UI 살려야 함
 	GET_GAMEINTERFACE->Fade_In(0.f);
@@ -377,6 +373,7 @@ void CCutScene::End_Setting()
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
 		desc.iTypeNum = CMoveBlockObj::RAXASIA2;
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
+		m_pGameInstance->Stop_BGM();
 	}
 		break;
 	case BOSS1_PHASE2:
@@ -387,10 +384,12 @@ void CCutScene::End_Setting()
 		m_fTrackPosition = 0.f;
 		m_bFirstStart = true;
 		m_bFinished = false;
+		m_pGameInstance->Stop_BGM();
 		break;	
 	case BOSS1_DEAD:
 		m_pObjects[BOSS1]->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
+		m_pGameInstance->Stop_BGM();
 		break;	
 	case BOSS2_MEET:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
@@ -410,6 +409,7 @@ void CCutScene::End_Setting()
 		CMoveBlockObj::MOVEBLOCK_DESC desc = {};
 		desc.iTypeNum = CMoveBlockObj::MANUS1;
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
+		m_pGameInstance->Stop_BGM();
 	}
 		break;	
 	case BOSS2_PHASE2:
@@ -424,13 +424,16 @@ void CCutScene::End_Setting()
 		m_fTrackPosition = 0.f;
 		m_bFirstStart = true;
 		m_bFinished = false;
+		m_pGameInstance->Stop_BGM();
 	}
 		break;
 	case BOSS2_DEFEAT:
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 40);
+		pPlayer->Get_Transform()->LookAt_NoHeight(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
+		m_pGameInstance->Stop_BGM();
 		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
 		break;
 	default:

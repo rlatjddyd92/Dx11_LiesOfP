@@ -48,9 +48,9 @@ C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(188,12-68): warning X3206: implicit truncation of vector type
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(112,33-78): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(148,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(172,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
   unity_66FL2B5TRC64SCEO.cpp
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,9): warning C4005: 'PX_ALLOC': 매크로 재정의
   (소스 파일 'x64/Release/unity_66FL2B5TRC64SCEO.cpp'을(를) 컴파일하는 중)

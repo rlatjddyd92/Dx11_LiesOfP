@@ -143,27 +143,27 @@ void CState_SimonManus_CutScene_Meet::Control_Dialog(_int iFrame)
 
     if ( !m_isShowDialog[0] && iCurAnimIndex == m_iAnimation_Turn && iFrame >= 1010)
     {
-        GET_GAMEINTERFACE->Show_Script(TEXT("보라, 이것이 바로 에르고다. 실로 장엄하지 않은가!"), TEXT("none"), 11.f);
+        GET_GAMEINTERFACE->Show_Script(TEXT("보라, 이것이 바로 에르고다. 실로 장엄하지 않은가!"), TEXT("none"), 18.f);
         m_isShowDialog[0] = true;
     }
     else  if (!m_isShowDialog[1] && iCurAnimIndex == m_iAnimation_Talk && iFrame >= 245)
     {
-        GET_GAMEINTERFACE->Show_Script(TEXT("불멸하는 존재, 거짓없는 세계를 이루는 열쇠지"), TEXT("none"), 11.f);
+        GET_GAMEINTERFACE->Show_Script(TEXT("불멸하는 존재, 거짓없는 세계를 이루는 열쇠지"), TEXT("none"), 18.f);
         m_isShowDialog[1] = true;
     }
     else  if (!m_isShowDialog[2] && iCurAnimIndex == m_iAnimation_Talk && iFrame >= 570)
     {
-        GET_GAMEINTERFACE->Show_Script(TEXT("이제 그 진화의 문을 열 때가 되었다."), TEXT("none"), 6.f);
+        GET_GAMEINTERFACE->Show_Script(TEXT("이제 그 진화의 문을 열 때가 되었다."), TEXT("none"), 10.f);
         m_isShowDialog[2] = true;
     }
     else  if (!m_isShowDialog[3] && iCurAnimIndex == m_iAnimation_Hand && iFrame >= 255)
     {
-        GET_GAMEINTERFACE->Show_Script(TEXT("감사하라! 이것이 신조차 삼킬 자, 나 시몬 마누스가 주는 선물이다."), TEXT("none"), 13.f);
+        GET_GAMEINTERFACE->Show_Script(TEXT("감사하라! 이것이 신조차 삼킬 자, 나 시몬 마누스가 주는 선물이다."), TEXT("none"), 18.f);
         m_isShowDialog[3] = true;
     }
     else  if (!m_isShowDialog[4] && iCurAnimIndex == m_iAnimation_End && iFrame >= 100)
     {
-        GET_GAMEINTERFACE->Show_Script(TEXT("이제 태어날 너희의 신을 경배하라!"), TEXT("none"), 8.f);
+        GET_GAMEINTERFACE->Show_Script(TEXT("이제 태어날 너희의 신을 경배하라!"), TEXT("none"), 15.f);
         m_isShowDialog[4] = true;
     }
 }
