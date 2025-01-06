@@ -99,6 +99,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eStat.strName = TEXT("Raxasia");
 
 	m_eStat.fHp = 2000.f;
+	m_eStat.fHp = 1.f;
 	m_eStat.fMaxHp = 2000.f;
 	m_eStat.fAtk = 250.f;
 
@@ -1118,7 +1119,8 @@ HRESULT CRaxasia::Ready_Effects()
 	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_P2_PowerAttack");
 	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
 
-	m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(true);
+	//m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(true);
+
 	return S_OK;
 }
 

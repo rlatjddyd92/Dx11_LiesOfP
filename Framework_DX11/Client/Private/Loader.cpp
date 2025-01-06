@@ -1062,13 +1062,13 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		return E_FAIL;
 
 	DISSOLVE_INSTANCE_DESC DissolveInstanceDesc = {};
-	DissolveInstanceDesc.iNumInstance = 100;
+	DissolveInstanceDesc.iNumInstance = 50;
 	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
 	DissolveInstanceDesc.vLifeTime = { 1.f, 2.f };
-	DissolveInstanceDesc.vMinColor = { 0.878f, 0.067f, 0.373f, 1.f };
-	DissolveInstanceDesc.vMaxColor = { 0.878f, 0.067f, 0.373f, 1.f };
-	DissolveInstanceDesc.vSize = { 0.005f, 0.01f };
-	DissolveInstanceDesc.vSpeed = { 1.f, 2.f };
+	DissolveInstanceDesc.vMinColor = { 0.9f, 0.1f, 0.1f, 1.f };
+	DissolveInstanceDesc.vMaxColor = { 0.9f, 0.1f, 0.1f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.01f, 0.02f };
+	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
 	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
 	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_PowerAttack"),

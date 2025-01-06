@@ -49,9 +49,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 	//	return E_FAIL;
 
-	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_SimonManus_Weapon");
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
-		return E_FAIL;
+	//strcpy_s(Desc.szModelTag, "Prototype_AnimModel_SimonManus_Weapon");
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+	//	return E_FAIL;
 
 	//strcpy_s(Desc.szModelTag, "Prototype_AnimModel_SimonManus_Weapon");
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
