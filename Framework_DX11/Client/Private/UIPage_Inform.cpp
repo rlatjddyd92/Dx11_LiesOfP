@@ -215,6 +215,8 @@ void CUIPage_Inform::Show_PlayerDead_UI()
 	m_bIsPlayerDead_UI_NowEnd = false;
 	m_bCheckNowEnd = false;
 
+	GET_GAMEINTERFACE->UIPart_Off();
+
 	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_Back); i <= _int(PART_GROUP::INFORM_PlayerDeath_LieORDie); ++i)
 	{
 		m_vecPart[i]->bRender = true;
@@ -321,7 +323,7 @@ void CUIPage_Inform::Update_PlayerDead_UI(_float fTimeDelta)
 			m_vecPart[i]->fRatio = 0.f;
 		}
 
-
+		GET_GAMEINTERFACE->UIPart_On();
 		return;
 	}
 

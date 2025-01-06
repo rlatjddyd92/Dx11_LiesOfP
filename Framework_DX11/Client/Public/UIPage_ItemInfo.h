@@ -60,13 +60,28 @@ public:
 		TOOLTIP_Item_ChestInfo_Frame,
 		TOOLTIP_Item_ChestInfo_Desc,
 
+		DROP_Frame,
+		DROP_Item_Fx,
+		DROP_Frame_Stripe,
+		DROP_W0,
+		DROP_W1,
+		DROP_Item_Icon,
+		DROP_Item_Type_Frame,
+		DROP_Item_Type_Symbol,
+		DROP_Item_H0,
+		DROP_Item_Name,
 
 
 
 		GROUP_END
 	};
 
-
+	typedef struct DROP_ITEM_INFO
+	{
+		_int iIndex = -1;
+		_int iCount = 0;
+		_float fLifeTime = 0.f;
+	}DROP;
 
 
 
@@ -126,7 +141,20 @@ public:
 	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex);
 	void Show_Tooltip(EQUIP_SLOT eSlot);
 
-
+	void Input_Drop_Item_Info(_int iIndex, _int iCount)
+	{
+		DROP_ITEM_INFO* pNew = new DROP_ITEM_INFO;
+		pNew->iIndex = iIndex;
+		pNew->iCount = iCount;
+		pNew->fLifeTime = m_fDrop_Item_ShowTime;
+		m_DropItem_Index_list.push_back(pNew);
+		if (m_DropItem_Index_list.size() > m_iDrop_Item_Render_Limit)
+			while (m_DropItem_Index_list.size() > m_iDrop_Item_Render_Limit)
+			{
+				Safe_Delete(m_DropItem_Index_list.front());
+				m_DropItem_Index_list.pop_front();
+			}
+	}
 
 
 protected:
@@ -153,7 +181,16 @@ protected:
 	// Tooltip
 	_Vec2 m_vToolTip_Pos = { 1000.f,360.f };
 
-	
+	// µå¶ø
+	void Add_Render_Info_DropInfo(_float fTimeDelta);
+
+	list<DROP_ITEM_INFO*> m_DropItem_Index_list;
+	_int m_iDrop_Item_Render_Limit = 3;
+	_float m_fEmerge_Effect_Time = 1.f;
+	_float m_fDrop_Item_ShowTime = 3.f;
+
+
+
 
 
 public:

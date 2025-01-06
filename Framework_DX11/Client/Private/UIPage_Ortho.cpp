@@ -154,7 +154,7 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI()
 		if (eType == PART_GROUP::GROUP_HP_FILL)
 		{
 			m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->fRatio = pRender->fRatio;
-			if (pRender->bIsWeakness)
+			if (pRender->bIsWeakness == true)
 			{
 				m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.back()]->bRender = true;
 				m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.back()]->fTextureColor.w = pRender->fWeaknessRatio;
@@ -260,11 +260,11 @@ void CUIPage_Ortho::Initialize_Ortho_Info()
 	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_BIG)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,2.15f,0.f }; // 몬스터 특수공격
 
 	// Carcass_Tail
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,1.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,1.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,1.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,0.5f,0.f }; // 몬스터 포커싱
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,0.5f,0.f }; // 몬스터 특수공격
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,4.5f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,4.5f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,4.5f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.1f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.1f,0.f }; // 몬스터 특수공격
 
 	// Carcass_Normal
 	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.5f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
@@ -274,11 +274,11 @@ void CUIPage_Ortho::Initialize_Ortho_Info()
 	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.1f,0.f }; // 몬스터 특수공격
 
 	// Currupted_Puppet
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.5f,0.f }; // 몬스터 포커싱
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,4.3f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,4.3f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,4.3f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.8f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.8f,0.f }; // 몬스터 특수공격
 
 	// Reboner_Big
 	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
@@ -469,7 +469,7 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(OR_HOST* pHost, _float fTimeDelta, _floa
 			pHost->fAngleFor_Weakness_Alpha -= 360.f;
 	}
 	else 
-		pHost->fAngleFor_Weakness_Alpha = 360.f;
+		pHost->fAngleFor_Weakness_Alpha = 90.f;
 
 	pRender_HP_Fill->fWeaknessRatio = abs(sin(XMConvertToRadians(pHost->fAngleFor_Weakness_Alpha)));
 

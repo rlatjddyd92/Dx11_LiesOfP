@@ -386,6 +386,10 @@ public:
 			if (i == _int(UIPAGE::PAGE_EFFECT))
 				continue;
 
+			if (i == _int(UIPAGE::PAGE_INFORM))
+				if (m_pUIPage_Inform->IsPlayerDead_UI_Show() == true)
+					continue;
+
 			m_vecPage[i]->CloseAction();
 		}
 

@@ -99,6 +99,7 @@ public:
 	void Show_PlayerDead_UI();
 
 	_bool IsPlayerDead_UI_NowEnd() { return m_bIsPlayerDead_UI_NowEnd; }
+	_bool IsPlayerDead_UI_Show() { return m_vPlayerDead_Time.x >= 0.f; }
 	void SetPlayerDead_UI_NowEnd_False() { m_bIsPlayerDead_UI_NowEnd = false; }
 
 protected:

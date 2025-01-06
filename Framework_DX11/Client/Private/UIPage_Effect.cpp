@@ -218,7 +218,7 @@ void CUIPage_Effect::Show_Script(_wstring strScript0, _wstring strScript1, _floa
 
 	m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Back)]->fSize.x = fFontX * 1.5f;
 
-	m_vTime_Script = { 0.f,fTime / 4.f, fTime / 2.f };
+	m_vTime_Script = { 0.f,fTime / 8.f, fTime / 2.f };
 
 	m_fTime_Script_Now = 0.f;
 	m_fTime_Script_Max = fTime;
