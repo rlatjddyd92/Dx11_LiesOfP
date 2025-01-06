@@ -454,7 +454,7 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 
-	m_fStarChart_NowStat_Dest[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 100.f;
+	m_fStarChart_NowStat_Dest[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 1000.f;
 	m_fStarChart_NowStat_Dest[1] = _float(pAdjust->iStat_Defence + pOrigin.iStat_Defence) / 100.f;
 	m_fStarChart_NowStat_Dest[2] = _float(pAdjust->fHeal + pOrigin.fHeal) / 20.f;
 	m_fStarChart_NowStat_Dest[3] = (pAdjust->fResist_Fire + pOrigin.fResist_Fire) / 100.f;

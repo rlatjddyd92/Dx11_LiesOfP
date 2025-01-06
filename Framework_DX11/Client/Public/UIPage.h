@@ -93,7 +93,7 @@ public:
 		// 텍스쳐 관련
 		_int iTexture_Index = -1;
 		_bool bIsItem = false; // <- 아이템 아이콘 표시 여부 
-		_float4 fTextureColor = { -1.f,-1.f ,-1.f ,-1.f };
+		_Vec4 fTextureColor = { -1.f,-1.f ,-1.f ,-1.f };
 
 		// 텍스트 관련
 		_int iFontIndex = _int(UI_FONT::FONT_END);

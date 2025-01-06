@@ -79,9 +79,6 @@ CHECK_MOUSE CUIPlay_Weapon::Check_Page_Action(_float fTimeDelta)
 
 void CUIPlay_Weapon::Initialize_Weapon_Component(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
-	m_vecPart = vecOrigin;
-
-
 	for (auto& iter : vecOrigin)
 	{
 		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_WEAPON_CENTER))
@@ -252,6 +249,9 @@ void CUIPlay_Weapon::Start_WeaponCell_Change(_float fTimeDelta)
 	if ((m_eType_Now == CPlayer::WEP_SCISSOR) || (GET_GAMEINTERFACE->Get_Weapon_Model_Index() == CPlayer::WEP_SCISSOR))
 		bSwitchMode = true;
 
+	if (m_eType_Now == CPlayer::WEP_END)
+		bSwitchMode = true;
+
 	m_eType_Now = GET_GAMEINTERFACE->Get_Weapon_Model_Index();
 
 	if (bSwitchMode == true)
@@ -322,43 +322,57 @@ void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)
 			iter->bRender = false;
 	}
 
-	if (iFable_Count_Now >= 1)
-	{
-		for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
-			iter->bRender = true;
-		for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
-			iter->bRender = true;
-	}
-	else
-	{
-		for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
-			iter->bRender = false;
-		for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
-			iter->bRender = false;
-	}
+	for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+		iter->bRender = false;
+	for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+		iter->bRender = false;
 
 	for (auto& iter : m_vecSharedPointer_BladeFable_Side_Fill)
 		iter->bRender = false;
 	for (auto& iter : m_vecSharedPointer_HandleFable_Side_Fill)
 		iter->bRender = false;
 
-	if (iFable_Count_Now >= 3)
+	if (m_eType_Now != CPlayer::WEP_SCISSOR)
 	{
-		if (m_eType_Now != CPlayer::WEP_SCISSOR)
+		if (iFable_Count_Now >= 1)
 		{
+			for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+				iter->bRender = true;
+		}
+		
+		if (iFable_Count_Now >= 3)
+		{
+			for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+				iter->bRender = true;
 			for (auto& iter : m_vecSharedPointer_BladeFable_Side_Fill)
 				iter->bRender = true;
 		}
-		else
+	}
+	else
+	{
+		if (iFable_Count_Now >= 1)
 		{
+			for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+				iter->bRender = true;
+		}
+
+		if (iFable_Count_Now >= 3)
+		{
+			for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+				iter->bRender = true;
 			for (auto& iter : m_vecSharedPointer_HandleFable_Side_Fill)
 				iter->bRender = true;
 		}
 	}
-	
+
+	Update_FableUseAction(fTimeDelta, iFable_Count_Now);
+}
+
+void CUIPlay_Weapon::Update_FableUseAction(_float fTimeDelta, _int iFable_Count_Now)
+{
 	if (m_vFableWhite_ActionTime.x > 0.f)
 		m_vFableWhite_ActionTime.x -= fTimeDelta;
-		
+
 	if (m_vFableWhite_ActionTime.x < 0.f)
 		m_vFableWhite_ActionTime.x = 0.f;
 
@@ -371,6 +385,16 @@ void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)
 	for (auto& iter : m_vecSharedPointer_HandleFable_Center_White)
 		iter->bRender = false;
 
+	for (auto& iter : m_vecSharedPointer_BladeFable_Side_Fill)
+		iter->fTextureColor = { 1.f,1.f,1.f,1.f };
+	for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+		iter->fTextureColor = { 1.f,1.f,1.f,1.f };
+	for (auto& iter : m_vecSharedPointer_HandleFable_Side_Fill)
+		iter->fTextureColor = { 1.f,1.f,1.f,1.f };
+	for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+		iter->fTextureColor = { 1.f,1.f,1.f,1.f };
+
+
 	if (m_vFableWhite_ActionTime.x > 0.f)
 	{
 		_float fRatio = 1.f - (m_vFableWhite_ActionTime.x / m_vFableWhite_ActionTime.y);
@@ -381,6 +405,11 @@ void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)
 			{
 				iter->bRender = true;
 				iter->fRatio = fRatio;
+			}
+			for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+			{
+				iter->bRender = true;
+				iter->fTextureColor *= ((fRatio*2.f) + 1.f);
 			}
 		}
 		else if ((m_eType_Now == CPlayer::WEP_SCISSOR) && (m_bIsBladeWhite_Active == false))
@@ -395,6 +424,18 @@ void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)
 				iter->bRender = true;
 				iter->fRatio = fRatio;
 			}
+
+			for (auto& iter : m_vecSharedPointer_HandleFable_Side_Fill)
+			{
+				iter->bRender = true;
+				iter->fTextureColor *= ((fRatio * 2.f) + 1.f);
+			}
+			for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+			{
+				iter->bRender = true;
+				iter->fTextureColor *= ((fRatio * 2.f) + 1.f);
+			}
+
 		}
 		else if ((m_eType_Now != CPlayer::WEP_SCISSOR) && (m_bIsBladeWhite_Active == true))
 		{
@@ -408,6 +449,17 @@ void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)
 				iter->bRender = true;
 				iter->fRatio = fRatio;
 			}
+
+			for (auto& iter : m_vecSharedPointer_BladeFable_Side_Fill)
+			{
+				iter->bRender = true;
+				iter->fTextureColor *= ((fRatio * 2.f) + 1.f);
+			}
+			for (auto& iter : m_vecSharedPointer_BladeFable_Center_Fill)
+			{
+				iter->bRender = true;
+				iter->fTextureColor *= ((fRatio * 2.f) + 1.f);
+			}
 		}
 		if ((m_eType_Now != CPlayer::WEP_SCISSOR) && (m_bIsBladeWhite_Active == false))
 		{
@@ -415,6 +467,12 @@ void CUIPlay_Weapon::Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now)
 			{
 				iter->bRender = true;
 				iter->fRatio = fRatio;
+			}
+
+			for (auto& iter : m_vecSharedPointer_HandleFable_Center_Fill)
+			{
+				iter->bRender = true;
+				iter->fTextureColor *= ((fRatio * 2.f) + 1.f);
 			}
 		}
 	}
