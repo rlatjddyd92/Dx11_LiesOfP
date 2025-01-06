@@ -968,7 +968,7 @@ void CItem_Manager::Adjust_Spec()
 	else
 		pAdjust->iStat_Defence = 0;
 
-	pAdjust->iStat_Defence += _int(fDefence[0]);
+	pAdjust->iStat_Attack = _int(fDefence[0]);
 	pAdjust->fResist_Fire = fDefence[1];
 	pAdjust->bDebuff_Electric_Ignore = fDefence[2];
 	pAdjust->bDebuff_Acid_Ignore = fDefence[3];

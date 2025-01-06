@@ -126,6 +126,7 @@ void CUIPage_Ortho::Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, v
 	pNew->eType = eType;
 	pNew->pHost = static_cast<CGameObject*>(pObj);
 	pNew->pHost->AddRef();
+	pNew->fBeforeHp = static_cast<CMonster*>(pObj)->Get_Status()->fHp;
 	m_Ortho_Host_list.push_back(pNew);
 
 	if (eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)
@@ -287,15 +288,20 @@ void CUIPage_Ortho::Initialize_Ortho_Info()
 	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격
 
 	// Reboner_Male
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.5f,0.f }; // 몬스터 포커싱
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,3.15f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,3.15f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,3.15f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨) // 3.15
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.5f,0.f }; // 몬스터 포커싱 // 1.5
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격 
 }
 
 void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 {
+	_bool bPlayerDead = false;
+
+	if (GET_GAMEINTERFACE->Get_Player()->Get_IsDieState())
+		bPlayerDead = true;
+
 	for (list<CUIPage_Ortho::OR_HOST*>::iterator iter = m_Ortho_Host_list.begin(); iter!= m_Ortho_Host_list.end();)
 	{
 		// Host 정보 제거 논리 
@@ -315,6 +321,13 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 			continue;
 		}
 
+		if (bPlayerDead == true)
+		{
+			const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>((*iter)->pHost)->Get_Status();
+			(*iter)->bDamegeCount = false;
+			(*iter)->fBeforeHp = pStat->fHp;
+		}
+
 		if (!(*iter)->bIsActive)
 		{
 			++iter;
@@ -325,7 +338,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -358,7 +371,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -367,7 +380,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -376,7 +389,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -385,7 +398,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -394,7 +407,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -403,7 +416,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -412,7 +425,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -421,7 +434,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
+			Make_Monster_HP_Bar((*iter), fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -429,18 +442,18 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 	}
 }
 
-void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType, _float* WeakRatio)
+void CUIPage_Ortho::Make_Monster_HP_Bar(OR_HOST* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType)
 {
 	// 여기에 HP 바를 띄우는 논리가 필요함 
 
 	// 테스트 수치 
-	const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>(pHost)->Get_Status();
+	const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>(pHost->pHost)->Get_Status();
 
 	_float fRatio = pStat->fHp / pStat->fMaxHp;
 	_float fDamege = pStat->fAtkDmg;
 
 	_Vec2 fPosition = { 0.f,0.f };
-	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_HP_FRAME, &fPosition, eType))
+	if (!Make_OrthoGraphy_Position(pHost->pHost, PART_GROUP::GROUP_HP_FRAME, &fPosition, eType))
 		return;
 
 	OR_RENDER* pRender_HP_Frame = new OR_RENDER;
@@ -451,19 +464,25 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 
 	if (pStat->bWeakness == true)
 	{
-		*WeakRatio += fTimeDelta * (360.f/2.f);
-		if (*WeakRatio > 360.f)
-			*WeakRatio -= 360.f;
+		pHost->fAngleFor_Weakness_Alpha += fTimeDelta * (360.f/2.f);
+		if (pHost->fAngleFor_Weakness_Alpha > 360.f)
+			pHost->fAngleFor_Weakness_Alpha -= 360.f;
 	}
 	else 
-		*WeakRatio = 360.f;
+		pHost->fAngleFor_Weakness_Alpha = 360.f;
 
-	pRender_HP_Fill->fWeaknessRatio = abs(sin(XMConvertToRadians(*WeakRatio)));
+	pRender_HP_Fill->fWeaknessRatio = abs(sin(XMConvertToRadians(pHost->fAngleFor_Weakness_Alpha)));
 
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Frame);
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Fill);
 
-	if (fDamege > 0.f)
+	if (pHost->fBeforeHp > pStat->fHp)
+	{
+		pHost->bDamegeCount = true;
+		pHost->fBeforeHp = pStat->fHp;
+	}
+
+	if ((fDamege > 0.f) && (pHost->bDamegeCount == true))
 	{
 		OR_RENDER* pRender_HP_Demege = new OR_RENDER;
 		*pRender_HP_Demege = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_COUNT, fRatio, 0.f, to_wstring(_int(fDamege)), -1 };
