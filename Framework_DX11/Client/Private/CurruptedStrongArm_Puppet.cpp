@@ -104,6 +104,12 @@ void CCurruptedStrongArm_Puppet::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 	
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
+
+	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
+	{
+		m_pSoundCom[i]->Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }

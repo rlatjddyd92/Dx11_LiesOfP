@@ -310,10 +310,12 @@ void CState_RaxasiaP2_Running_Linked::Collider_Check(_double CurTrackPos)
         if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_Debuff(0, 0.1f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_Debuff(0);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -321,10 +323,12 @@ void CState_RaxasiaP2_Running_Linked::Collider_Check(_double CurTrackPos)
         if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_Debuff(0, 0.1f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_Debuff(0);
         }
     }
     

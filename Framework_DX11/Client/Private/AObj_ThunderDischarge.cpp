@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Pawn.h"
+#include "Player.h"
 
 #include "Effect_Manager.h"
 
@@ -126,6 +127,8 @@ void CAObj_ThunderDischarge::OnCollisionEnter(CGameObject* pOther)
         {
             m_DamagedObjects.push_back(pOther);
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+
+            static_cast<CPlayer*>(pOther)->Calc_DebuffGain(CPawn::DEBUFF_ELEC, 15.f);
         }
     }
 }

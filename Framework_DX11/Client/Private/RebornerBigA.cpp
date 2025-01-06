@@ -131,6 +131,7 @@ void CRebornerBigA::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{

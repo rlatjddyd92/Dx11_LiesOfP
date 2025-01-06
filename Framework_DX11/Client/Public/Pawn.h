@@ -10,6 +10,8 @@ class CPawn abstract : public CGameObject
 public:
     enum PAWN_SOUND_TYPE { PAWN_SOUND_VOICE, PAWN_SOUND_EFFECT1, PAWN_SOUND_EFFECT2, PAWN_SOUND_END };
 
+    enum DEBUFF_TYPE { DEBUFF_FIRE, DEBUFF_ELEC, DEBUFF_ACID, DEBUFF_END };
+
 public:
     struct PAWN_STATUS
     {

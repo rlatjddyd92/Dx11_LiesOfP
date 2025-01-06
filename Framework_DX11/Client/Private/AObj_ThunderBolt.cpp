@@ -3,7 +3,7 @@
 
 #include "Raxasia.h"
 #include "GameInstance.h"
-#include "Pawn.h"
+#include "Player.h"
 
 #include "Effect_Manager.h"
 
@@ -280,6 +280,15 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
                 {
                     m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Hit_03.wav"), &g_fEffectVolume);
+                }
+
+                if (m_bCounter)
+                {
+                    static_cast<CPlayer*>(pOther)->Calc_DebuffGain(CPawn::DEBUFF_ELEC, 5.f);
+                }
+                else
+                {
+                    //몬스터 감전 락사시아 한테 부여
                 }
 
             }

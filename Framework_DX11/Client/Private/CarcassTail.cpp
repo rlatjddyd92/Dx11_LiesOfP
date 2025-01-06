@@ -120,6 +120,7 @@ void CCarcassTail::Update(_float fTimeDelta)
 	XMStoreFloat4x4(&WorldMat , m_pModelCom->Get_BoneCombindTransformationMatrix(7) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
 
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
 }
 
 void CCarcassTail::Late_Update(_float fTimeDelta)
@@ -342,6 +343,9 @@ HRESULT CCarcassTail::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
 	Desc.fDamageAmount = m_eStat.fAtk;
 
+	Desc.iDebuffType = CPlayer::DEBUFF_ACID;
+	Desc.fDebuffAmount = 15.f;
+
 	m_pColliderObject[TYPE_TAIL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 
@@ -353,6 +357,9 @@ HRESULT CCarcassTail::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
 	Desc.fDamageAmount = m_eStat.fAtk;
 
+	Desc.iDebuffType = CPlayer::DEBUFF_END;
+	Desc.fDebuffAmount = 0.f;
+
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	//167
@@ -362,6 +369,9 @@ HRESULT CCarcassTail::Ready_Components()
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(167);
 	Desc.fDamageAmount = m_eStat.fAtk;
+
+	Desc.iDebuffType = CPlayer::DEBUFF_ACID;
+	Desc.fDebuffAmount = 5.f;
 
 	m_pColliderObject[TYPE_TAIL_2] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

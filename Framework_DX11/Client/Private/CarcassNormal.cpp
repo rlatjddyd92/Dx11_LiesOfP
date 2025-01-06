@@ -110,6 +110,7 @@ void CCarcassNormal::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
@@ -398,6 +399,9 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	Desc.fDamageAmount = m_eStat.fAtk;
 	Desc.pOWner = this;
 
+	Desc.iDebuffType = CPlayer::DEBUFF_ACID;
+	Desc.fDebuffAmount = 7.f;
+
 	m_pColliderObject[TYPE_HAND_LEFT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
@@ -423,6 +427,9 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = m_eStat.fAtk;
+
+	Desc.iDebuffType = CPlayer::DEBUFF_END;
+	Desc.fDebuffAmount = 0.f;
 
 	m_pColliderObject[TYPE_HEAD] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

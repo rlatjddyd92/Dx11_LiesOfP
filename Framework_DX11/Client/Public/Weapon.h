@@ -35,8 +35,8 @@ public:
 		class CMonster* pMonster = { nullptr };
 
 		// 속성 이넘, 기본 속성 스탯 받아오고,
-		_uint	iDebuffType = {};
-		_float	fDebuffAmount = {};
+		_uint	iDebuffType = { 3 };
+		_float	fDebuffAmount = { 0.f };
 
 	}MONSTER_WAPON_DESC;
 
@@ -144,7 +144,7 @@ protected:
 
 	_float					m_fDebuffAmount = {0.f};
 	_float					m_fDebuffRatio = {1.f};
-	_uint					m_iDebuffType = {0};
+	_uint					m_iDebuffType = { 3 };
 
 	_bool					m_bDebuffAttack = { false };
 

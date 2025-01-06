@@ -123,6 +123,7 @@ void CRebornerMaleFire::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{
@@ -403,6 +404,10 @@ HRESULT CRebornerMaleFire::Ready_Weapon()
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
 	WeaponDesc.pMonster = this;
+
+	WeaponDesc.iDebuffType = CPlayer::DEBUFF_FIRE;
+	WeaponDesc.fDebuffAmount = 5.f;
+
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_RebornerMaleFire_FireBreath"), &WeaponDesc));
 	if (nullptr == m_pWeapon)

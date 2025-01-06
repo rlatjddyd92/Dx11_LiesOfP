@@ -87,11 +87,16 @@ public:
 	_bool*				Get_bDicover() { return &m_bDiscover; };
 	_bool				Get_TargetDead() { return m_bTargetDead; }
 	_bool*				Get_FirstMeetCheck() { return &m_bFirstMeetCheck; };
+
+	void				SetUp_Act();
+
 	_Vec3				Get_Look() { return XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)); }
 	_bool				Get_IsWeakness() { return m_eStat.bWeakness; }//해당 위크니스는 각각 몹에서 그로기 양 비교하도록 만들기
 	
 	virtual void		On_PowerAttack(_bool bOn) {};
 	virtual void		Resetting() {};
+
+	void				Calc_DebuffGain(_uint iDebuffType, _float fDebuffDuration);
 
 protected:
 	_Vec4				m_vRootMoveStack{};
@@ -100,27 +105,35 @@ protected:
 	_bool               m_bDiscover = { false };
 	_bool               m_bFirstMeetCheck = { false };
 
-	_bool		m_bEndAnim = { false };
-	_bool		m_bResetRootMove = { true };
-	_bool		m_bRootMoveCtr = { true };
+	_bool				m_bEndAnim = { false };
+	_bool				m_bResetRootMove = { true };
+	_bool				m_bRootMoveCtr = { true };
 
-	_bool		m_bFatalAttacked = { false };
-	_bool		m_bTargetDead = { false };
+	_bool				m_bFatalAttacked = { false };
+	_bool				m_bTargetDead = { false };
 
-	_float		m_fPrevTrackPos{};
+	_float				m_fPrevTrackPos{};
 
-	_int		m_iOriginCellNum = {0};
+	_int				m_iOriginCellNum = {0};
 
-	_Vec4		m_vPosTarget{};
+	_Vec4				m_vPosTarget{};
 
-	_bool       m_isBoss = { false };
-	_bool		m_isFirstCreate = { false };
+	_bool				m_isBoss = { false };
+	_bool				m_isFirstCreate = { false };
 
-	_int		m_iErgoPoint = { 0 };
+	_int				m_iErgoPoint = { 0 };
+
+	//디버프
+	_float				m_fDebuffDuration[DEBUFF_END] = {};
+	_bool				m_bDebuffed[DEBUFF_END] = {};
 
 protected:
+	void				Update_Debuff(_float fTimeDelta);
+	void				Reset_Debuff();
+
 	HRESULT		Ready_Components();
 	HRESULT		Ready_FSM();
+
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

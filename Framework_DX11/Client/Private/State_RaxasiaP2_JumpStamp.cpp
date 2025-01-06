@@ -261,6 +261,19 @@ _bool CState_RaxasiaP2_JumpStamp::End_Check()
 
 void CState_RaxasiaP2_JumpStamp::Collider_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 3)
+    {
+        if (CurTrackPos <= 18.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_METAL, ATK_NORMAL);
+            m_pMonster->Active_Debuff(0, 0.8f);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_Debuff(0);
+        }
+    }
 }
 
 void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)

@@ -141,7 +141,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	if (dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Get_bHavePlayed())
 	{
 		m_isFirstCreate = false;
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-59.119f, -97.78, -27.848f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-59.119f, -97.78f, -27.848f));
 		m_pTransformCom->LookAt_NoHeight(static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY))->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 	}
 
@@ -207,12 +207,8 @@ void CRaxasia::Update(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::B))
 	{
-		ChangePhase();
+		SetUp_Act();
 	}
-	//if (KEY_TAP(KEY::Z))
-	//{
-	//	m_Effects[P2_JUMPMAGIC]->Set_Loop(true);
-	//}
 
 
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta * m_isPlayAnimation), m_pTransformCom->Get_WorldMatrix());
@@ -243,6 +239,7 @@ void CRaxasia::Update(_float fTimeDelta)
 	if (!m_isCutScene)
 	{
 		Update_Collider();
+		Update_Debuff(fTimeDelta);
 	}
 
 	m_pWeapon->Update(fTimeDelta);
@@ -1010,6 +1007,10 @@ HRESULT CRaxasia::Ready_Weapon()
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
 	WeaponDesc.pMonster = this;
+
+	WeaponDesc.fDebuffAmount = 10.f;
+
+	WeaponDesc.iDebuffType = CPlayer::DEBUFF_ELEC;
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Sword"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
