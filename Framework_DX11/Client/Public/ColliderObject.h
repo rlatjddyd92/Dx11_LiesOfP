@@ -6,7 +6,7 @@
 class CColliderObject	final : public CWeapon
 {
 public:
-	typedef struct : CWeapon::WEAPON_DESC
+	typedef struct : CWeapon::MONSTER_WAPON_DESC
 	{
 		CBounding::BOUNDING_DESC* pBoundingDesc;
 		CCollider::TYPE		eType;

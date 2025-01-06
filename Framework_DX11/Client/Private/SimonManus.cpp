@@ -779,11 +779,13 @@ HRESULT CSimonManus::Ready_FSM()
 
 HRESULT CSimonManus::Ready_Weapon()
 {
-	CWeapon::WEAPON_DESC		WeaponDesc{};
+	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);	//Weapon_R 66
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
+
+	WeaponDesc.pMonster = this;
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
