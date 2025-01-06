@@ -179,7 +179,8 @@ protected:
 	_int m_iBeforeWeapon = -1;
 
 	// 무기 가드 확인용
-	_Vec2 m_vGuardTime = { 0.f,0.15f };
+	_Vec2 m_vGuardTime_Normal = { 0.f,0.17f };
+	_Vec2 m_vGuardTime_Arm = { 0.f,0.15f };
 	_bool m_bGuard = false;
 
 	// 게임 입장 

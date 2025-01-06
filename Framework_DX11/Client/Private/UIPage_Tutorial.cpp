@@ -513,7 +513,7 @@ void CUIPage_Tutorial::Check_Dummy_Weakness()
 {
 	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 	{
-		if (_int(m_pSharedPonter_AttackMonster->Get_Status()->bWeakness) + _int(m_pSharedPonter_NormalMonster->Get_Status()->bWeakness) == 0)
+		if (_int(m_pSharedPonter_AttackMonster->Get_Status()->bFatalAttack) + _int(m_pSharedPonter_NormalMonster->Get_Status()->bFatalAttack) == 0)
 			return;
 
 		m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;
@@ -550,22 +550,22 @@ void CUIPage_Tutorial::Check_Player_Guard(_float fTimeDelta)
 
 	if ((iPlayerState == _int(CPlayer::PLAYER_STATE::OH_GUARD)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::TH_GUARD)))
 	{
-		if (m_vGuardTime.x == 0.f)
+		if (m_vGuardTime_Normal.x == 0.f)
 			ShowTiming(KEY::LSHIFT, 0.17f); // <- 일반 막기 퍼펙트 시간
 
-		m_vGuardTime.x += fTimeDelta;
+		m_vGuardTime_Normal.x += fTimeDelta;
 		m_bGuard = true;
 	}
 	else if ((iPlayerState == _int(CPlayer::PLAYER_STATE::OH_GUARDHIT)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::TH_GUARDHIT)))
 	{
 		m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;
 
-		if (m_vGuardTime.x <= m_vGuardTime.y)
+		if (m_vGuardTime_Normal.x <= m_vGuardTime_Normal.y)
 			m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
 	}
 	else
 	{
-		m_vGuardTime.x = 0.f;
+		m_vGuardTime_Normal.x = 0.f;
 		m_bGuard = false;
 	}
 }

@@ -125,6 +125,8 @@ public:
 
 		_bool bIsActive = false;
 
+		_bool bIsEnded = false;
+
 		vector<SCRIPT*> vecScript;
 	}NPC;
 

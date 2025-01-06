@@ -189,7 +189,7 @@ _bool CUIPage_Talking::IsTalking_WithNPC(NPC_SCRIPT eNPC)
 
 _bool CUIPage_Talking::IsEndTalk_WithNPC(NPC_SCRIPT eNPC)
 {
-	if (m_vecNpc_ScriptInfo[_int(eNPC)]->iScript_Num == m_vecNpc_ScriptInfo[_int(eNPC)]->vecScript.size() - 1)
+	if (m_vecNpc_ScriptInfo[_int(eNPC)]->bIsEnded == true)
 		return true;
 
 	return false;
@@ -211,6 +211,8 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 			if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
 			{
 				CloseAction();
+
+				m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->bIsEnded = true;
 
 				if (m_eNowNpc == NPC_SCRIPT::SCR_ZEMINI)
 				{

@@ -132,6 +132,8 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 		}
 	}
 
+	Add_Render_Info_DropInfo(fTimeDelta);
+
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
 	__super::Array_Control(_int(PART_GROUP::TOOLTIP_Back), _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc), CTRL_COMMAND::COM_RENDER, false);
 }
@@ -465,6 +467,50 @@ void CUIPage_ItemInfo::Make_TooltipPage(const CItem_Manager::ITEM* Item, _bool b
 }
 
 
+void CUIPage_ItemInfo::Add_Render_Info_DropInfo(_float fTimeDelta)
+{
+	_float fAlpha_Ratio_Origin = m_fTopPartMove;
+	_float fHeight = __super::Get_Front_Part_In_Control(_int(PART_GROUP::DROP_Frame))->fSize.y * 1.1f;
+
+	for (list<DROP_ITEM_INFO*>::iterator iter = m_DropItem_Index_list.begin(); iter != m_DropItem_Index_list.end(); )
+	{
+		(*iter)->fLifeTime -= fTimeDelta;
+
+		if ((*iter)->fLifeTime <= 0.f)
+		{
+			Safe_Delete(*iter);
+			iter = m_DropItem_Index_list.erase(iter);
+		}
+		else
+		{
+			for (_int i = _int(PART_GROUP::DROP_Frame); i <= _int(PART_GROUP::DROP_Item_Name); ++i)
+			{
+				if (i == _int(PART_GROUP::DROP_Item_Icon))
+					m_vecPart[_int(PART_GROUP::DROP_Item_Icon)]->iTexture_Index = GET_GAMEINTERFACE->Get_Item_Origin_Spec((*iter)->iIndex)->iTexture_Index;
+
+				if (i == _int(PART_GROUP::DROP_Item_Name))
+					m_vecPart[_int(PART_GROUP::DROP_Item_Name)]->strText = GET_GAMEINTERFACE->Get_Item_Origin_Spec((*iter)->iIndex)->strName;
+
+				if (m_fDrop_Item_ShowTime - (*iter)->fLifeTime < m_fEmerge_Effect_Time)
+					m_fTopPartMove = (m_fDrop_Item_ShowTime - (*iter)->fLifeTime) / m_fEmerge_Effect_Time;
+				else if ((*iter)->fLifeTime < m_fEmerge_Effect_Time)
+					m_fTopPartMove = (*iter)->fLifeTime / m_fEmerge_Effect_Time;
+
+
+				for (auto& iterIndex : m_vec_Group_Ctrl[i]->PartIndexlist)
+				{
+					__super::Input_Render_Info(*m_vecPart[iterIndex]);
+					m_vecPart[iterIndex]->fPosition.y -= fHeight;
+				}
+			}
+
+			++iter;
+		}
+	}
+
+	m_fTopPartMove = fAlpha_Ratio_Origin;
+}
+
 CUIPage_ItemInfo* CUIPage_ItemInfo::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIPage_ItemInfo* pInstance = new CUIPage_ItemInfo(pDevice, pContext);
@@ -501,4 +547,9 @@ void CUIPage_ItemInfo::Free()
 	}
 
 	m_vecPart.clear();
+
+	for (auto& iter : m_DropItem_Index_list)
+		Safe_Delete(iter);
+
+	m_DropItem_Index_list.clear();
 }
