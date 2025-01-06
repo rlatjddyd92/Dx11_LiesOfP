@@ -379,11 +379,9 @@ private:
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
 
-	// 24-11-27 김성용
-	// 플레이어 스탯 구조체 변수 
 #pragma region PLAYER_STAT
 	STAT_INFO* m_tPlayer_Stat = { nullptr };
-	STAT_INFO* m_tPlayer_Stat_Adjust = { nullptr };	// 
+	STAT_INFO* m_tPlayer_Stat_Adjust = { nullptr };
 #pragma endregion
 
 private:

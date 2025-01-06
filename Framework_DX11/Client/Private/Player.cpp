@@ -1793,9 +1793,14 @@ void CPlayer::Check_FatalAttack()
 	_float fDirDot = vMonsterLook.Dot(vDir_MostertoPlayer);
 	_float fLookDot = vMonsterLook.Dot(vPlayerLook);
 
-	if ((fDirDot >= 0.85f && fLookDot >= 0.8f) || m_pContactMonster->Get_Status()->bFatalAttack)
+	if (m_pContactMonster->Get_Status()->bFatalAttack)
 	{
 		m_isFatalAttack = true;
+	}
+	else if ((fDirDot >= 0.85f && fLookDot >= 0.8f))
+	{
+		if(!m_pContactMonster->Get_IsBoss())
+			m_isFatalAttack = true;
 	}
 	else
 	{
