@@ -8,6 +8,7 @@ BEGIN(Engine)
 END
 
 BEGIN(Client)
+class CUIPlay_Weapon;
 
 class CUIPage_Play : public CUIPage
 {
@@ -294,6 +295,12 @@ private:
 	// 키 가이드 
 	_bool m_bIsKeyGuideOn = true;
 	_Vec2 m_vKeyGuideTime = { 0.f,1.f };
+
+private:
+	class CUIPlay_Weapon* m_pPlayCom_Weapon = { nullptr };
+
+
+
 
 private: // 테스트 변수
 	_bool m_bWeapon_Top = true;

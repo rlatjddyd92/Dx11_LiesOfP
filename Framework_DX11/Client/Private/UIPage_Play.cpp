@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
+#include "UIPlay_Weapon.h"
 
 CUIPage_Play::CUIPage_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -80,8 +81,8 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 		if (i == _int(PART_GROUP::GROUP_POTION_FILL))
 			continue;
 
-		/*if ((i >= _int(PART_GROUP::GROUP_WEAPON_DURABLE_FRAME)) && (i <= _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)))
-			continue;*/
+		if ((i >= _int(PART_GROUP::GROUP_WEAPON_DURABLE_FRAME)) && (i <= _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)))
+			continue;
 
 		__super::UpdatePart_ByControl(m_vec_Group_Ctrl[i]);
 	}
@@ -165,6 +166,9 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->iParentPart_Index = -1;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->fAdjust = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->fPosition - _Vec2{ 640,360 };
+
+	m_pPlayCom_Weapon = CUIPlay_Weapon::Create(m_pDevice, m_pContext);
+	m_pPlayCom_Weapon->Initialize_Weapon_Component(m_vecPart);
 
 	return S_OK;
 }
@@ -397,7 +401,7 @@ void CUIPage_Play::Action_Weapon(_float fTimeDelta)
 			pNow = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1);
 			bIsNormal = pNow->bModule_Weapon;
 		}
-
+		
 		m_vSwitch_Time.x = 0.01f;
 	}
 
@@ -696,74 +700,7 @@ void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
 
 void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 {
-	if (m_vSwitch_Time.x > 0.f)
-		m_vSwitch_Time.x += fTimeDelta;
-
-	if (m_vSwitch_Time.x >= m_vSwitch_Time.y)
-		m_vSwitch_Time.x = 0.f;
-
-	const CItem_Manager::ITEM* pNowBlade = GET_GAMEINTERFACE->Get_Now_Equip_Weapon_Blade();
-	const CItem_Manager::ITEM* pNowHandle = GET_GAMEINTERFACE->Get_Now_Equip_Weapon_Handle();
-
-	_bool bIsEnmpty = false;
-
-	if (pNowBlade == nullptr)
-		bIsEnmpty = true;
-	else if ((pNowHandle == nullptr) && (pNowBlade->bModule_Weapon))
-		bIsEnmpty = true;
-
-	if (bIsEnmpty)
-	{
-		__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK), _int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE), CTRL_COMMAND::COM_RENDER, true);
-		__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK), _int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX), CTRL_COMMAND::COM_RENDER, false);
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index = -1;
-		__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SYMBOL), _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B), CTRL_COMMAND::COM_RENDER, false);
-
-		return;
-	}
-
-
-	_float fDurable = pNowBlade->fDurable_Now / pNowBlade->fDurable_Max;
-
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio = fDurable;
-
-	_int iSelect = GET_GAMEINTERFACE->Get_Weapon();
-	_bool bNormal = pNowBlade->bModule_Weapon;
-
-	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK), _int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE), CTRL_COMMAND::COM_RENDER, bNormal);
-	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK), _int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX), CTRL_COMMAND::COM_RENDER, !bNormal);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index = m_iWeapon_Equip_0_Symbol + iSelect;
-
-	Switch_Weapon_UI_Action(fTimeDelta);
-
-	if (bNormal)
-	{
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BLADE)]->PartIndexlist.front()]->iTexture_Index = pNowBlade->iTexture_Index;
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE)]->PartIndexlist.front()]->iTexture_Index = pNowHandle->iTexture_Index;
-	}
-	else
-	{
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX)]->PartIndexlist.front()]->iTexture_Index = pNowBlade->iTexture_Index;
-	}
-
-	_bool bSingle_Cell_Blade = pNowBlade->iFable_Art_Cost ? 1 : true;
-
-	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME), _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FILL), CTRL_COMMAND::COM_RENDER, !bSingle_Cell_Blade);
-	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME), _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL), CTRL_COMMAND::COM_RENDER, bSingle_Cell_Blade);
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_A)]->bRender = bSingle_Cell_Blade;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B)]->bRender = !bSingle_Cell_Blade;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = !bSingle_Cell_Blade;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = bSingle_Cell_Blade;
-
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->fRatio = 0.f;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->fRatio = 0.f;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->fRatio = 0.f;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->fRatio = 0.f;
-
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->bRender = false;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->bRender = false;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->bRender = false;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->bRender = false;
+	m_pPlayCom_Weapon->Update_WeaponInfo(m_iFable_Art_Cell_Now, fTimeDelta);
 }
 
 void CUIPage_Play::STAT_Page_Update(_float fTimeDelta)
@@ -1164,4 +1101,6 @@ void CUIPage_Play::Free()
 	m_DropItem_Index_list.clear();
 
 	m_vecPart.clear();
+
+	Safe_Release(m_pPlayCom_Weapon);
 }

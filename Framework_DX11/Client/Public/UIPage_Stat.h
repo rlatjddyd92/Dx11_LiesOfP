@@ -108,6 +108,7 @@ private:
 	_int m_iLevelUp_Buffer_Point[5] = { 0, };
 	_float m_iLevelUp_Buffer_Stat[9] = { 0.f, };
 	_int m_iUsing_Point_Now = 0;
+	_int m_iUsing_Ergo_Now = 0; 
 
 	_float m_fStarChart_LevelUp_Now[8] = { 0.f, };
 	_float m_fStarChart_NowStat_Now[8] = { 0.f, };
