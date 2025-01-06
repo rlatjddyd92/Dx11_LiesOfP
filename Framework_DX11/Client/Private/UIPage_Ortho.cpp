@@ -115,7 +115,7 @@ HRESULT CUIPage_Ortho::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[iGroup]->PartIndexlist.push_back(i);
 	}
 
-	m_vecPart[7]->iTexture_Index = -1;
+	//m_vecPart[7]->iTexture_Index = -1;
 
 	return S_OK;
 }
@@ -154,13 +154,19 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI()
 		{
 			m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->fRatio = pRender->fRatio;
 			if (pRender->bIsWeakness)
+			{
 				m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.back()]->bRender = true;
+				m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.back()]->fTextureColor.w = pRender->fWeaknessRatio;
+			}
 			else 
 				m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.back()]->bRender = false;
 		}
 
 		for (auto& iter : m_vec_Group_Ctrl[_int(eType)]->PartIndexlist)
 		{
+			if (m_vecPart[iter]->bRender == false)
+				continue;
+
 			if ((eType == PART_GROUP::GROUP_HP_COUNT) || (eType == PART_GROUP::GROUP_HP_FILL))
 				m_vecPart[0]->fPosition = { m_fX, m_fY };
 
@@ -319,7 +325,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -352,7 +358,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -361,7 +367,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -370,7 +376,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -379,7 +385,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -388,7 +394,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -397,7 +403,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -406,7 +412,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -415,7 +421,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType, &(*iter)->fAngleFor_Weakness_Alpha);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
@@ -423,7 +429,7 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 	}
 }
 
-void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType)
+void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType, _float* WeakRatio)
 {
 	// 여기에 HP 바를 띄우는 논리가 필요함 
 
@@ -438,10 +444,21 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 		return;
 
 	OR_RENDER* pRender_HP_Frame = new OR_RENDER;
-	*pRender_HP_Frame = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FRAME, fRatio, {}, -1 };
+	*pRender_HP_Frame = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FRAME, fRatio, 0.f, {}, -1 };
 	OR_RENDER* pRender_HP_Fill = new OR_RENDER;
-	*pRender_HP_Fill = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FILL, fRatio, {}, -1 };
+	*pRender_HP_Fill = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FILL, fRatio, 0.f, {}, -1 };
 	pRender_HP_Fill->bIsWeakness = pStat->bWeakness;
+
+	if (pStat->bWeakness == true)
+	{
+		*WeakRatio += fTimeDelta * (360.f/2.f);
+		if (*WeakRatio > 360.f)
+			*WeakRatio -= 360.f;
+	}
+	else 
+		*WeakRatio = 360.f;
+
+	pRender_HP_Fill->fWeaknessRatio = abs(sin(XMConvertToRadians(*WeakRatio)));
 
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Frame);
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Fill);
@@ -449,7 +466,7 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 	if (fDamege > 0.f)
 	{
 		OR_RENDER* pRender_HP_Demege = new OR_RENDER;
-		*pRender_HP_Demege = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_COUNT, fRatio, to_wstring(_int(fDamege)), -1 };
+		*pRender_HP_Demege = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_COUNT, fRatio, 0.f, to_wstring(_int(fDamege)), -1 };
 		m_queue_Ortho_Render_Ctrl.push(pRender_HP_Demege);
 	}
 }
@@ -498,7 +515,7 @@ void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta,
 		return;
 
 	OR_RENDER* pRender_Focusing = new OR_RENDER;
-	*pRender_Focusing = { fDistance ,fPosition,  PART_GROUP::GROUP_FOCUS,1.f, {}, -1 };
+	*pRender_Focusing = { fDistance ,fPosition,  PART_GROUP::GROUP_FOCUS,1.f, 0.f, {}, -1 };
 
 	m_queue_Ortho_Render_Ctrl.push(pRender_Focusing);
 }
@@ -513,7 +530,7 @@ void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelt
 		return;
 
 	OR_RENDER* pRender_Special = new OR_RENDER;
-	*pRender_Special = { fDistance ,fPosition,  PART_GROUP::GROUP_SPECIAL_HIT,1.f, {}, -1 };
+	*pRender_Special = { fDistance ,fPosition,  PART_GROUP::GROUP_SPECIAL_HIT,1.f,0.f, {}, -1 };
 
 	m_queue_Ortho_Render_Ctrl.push(pRender_Special);
 }

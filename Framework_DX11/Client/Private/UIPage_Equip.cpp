@@ -57,6 +57,10 @@ void CUIPage_Equip::Update(_float fTimeDelta)
 
 void CUIPage_Equip::Late_Update(_float fTimeDelta)
 {
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_WEIGHT_STATUS)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_WEIGHT_STAT)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_WEIGHT_RATIO)]->bRender = false;
+
 	Update_Equip_Page(fTimeDelta);
 	Update_ToolTip(fTimeDelta);
 

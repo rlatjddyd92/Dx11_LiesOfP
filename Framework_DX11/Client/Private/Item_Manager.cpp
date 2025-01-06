@@ -964,7 +964,7 @@ void CItem_Manager::Adjust_Spec()
 		pAdjust->fHeal = 0.f;
 
 	if ((iAmulet[0] == 113) || (iAmulet[1] == 113))
-		pAdjust->iStat_Defence = 30;
+		pAdjust->iStat_Defence = 300;
 	else
 		pAdjust->iStat_Defence = 0;
 

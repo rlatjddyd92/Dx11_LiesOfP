@@ -231,7 +231,7 @@ HRESULT CUIRender_Batching::Render()
 				pNow->iTwoPolygon_Buffer_Num = (_int)max(pNow->iTwoPolygon_Buffer_Num, 0);
 				pNow->iTwoPolygon_Buffer_Num = (_int)min(pNow->iTwoPolygon_Buffer_Num, m_vecVIBuffer_2DPolygon_Com.size() - 1);
 
-				for (_int i = 0; i < 7; ++i)
+				for (_int i = 0; i < 8; ++i)
 				{
 					m_vecVIBuffer_2DPolygon_Com[pNow->iTwoPolygon_Buffer_Num]->Set_Point_Ratio(pNow->fRatio_TwoDPolygon[i], i);
 				}

@@ -137,9 +137,14 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 
 	m_iUsing_Point_Now = 0;
+	m_iUsing_Ergo_Now = 0;
 
 	for (_int i = 0; i < 5; ++i)
+	{
 		m_iUsing_Point_Now += m_iLevelUp_Buffer_Point[i];
+		m_iUsing_Ergo_Now += (m_iLevelUp_Buffer_Point[i] * pOrigin.iErgo_LevelUp) + (((m_iLevelUp_Buffer_Point[i] * (m_iLevelUp_Buffer_Point[i] - 1)) / 2) * 10);
+	}
+		
 
 	for (_int i = 0; i < 5; ++i)
 	{
@@ -155,6 +160,8 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 					m_pSoundCom->Play2D(TEXT("SE_UI_QuickSlotChange_03.wav"), &g_fUIVolume);
 					--m_iLevelUp_Buffer_Point[i];
 					--m_iUsing_Point_Now;
+
+					m_iUsing_Ergo_Now -= pOrigin.iErgo_LevelUp + (m_iLevelUp_Buffer_Point[i] * 10);
 				}	
 		}
 
@@ -166,6 +173,8 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 				m_pSoundCom->Play2D(TEXT("SE_UI_QuickSlotChange_03.wav"), &g_fUIVolume);
 				++m_iLevelUp_Buffer_Point[i];
 				++m_iUsing_Point_Now;
+
+				m_iUsing_Ergo_Now += pOrigin.iErgo_LevelUp + ((m_iLevelUp_Buffer_Point[i] - 1) * 10);
 			}
 		}
 	}
@@ -178,7 +187,7 @@ void CUIPage_Stat::Action_LevelUp(_float fTimeDelta)
 
 	_int iErgo = pOrigin.iErgo + pAdjust->iErgo;
 
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NEED))->strText = to_wstring(pOrigin.iErgo_LevelUp * m_iUsing_Point_Now);
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NEED))->strText = to_wstring(m_iUsing_Ergo_Now);
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NOW))->strText = to_wstring(iErgo);
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_DEPOSIT_NUM_0))->strText = to_wstring(iErgo);
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_DEPOSIT_NUM_1))->strText = TEXT("0");
@@ -186,7 +195,7 @@ void CUIPage_Stat::Action_LevelUp(_float fTimeDelta)
 	m_bActive_LevelUp_Button = false;
 
 	if (m_iUsing_Point_Now > 0)
-		if (iErgo >= pOrigin.iErgo_LevelUp * m_iUsing_Point_Now)
+		if (iErgo >= m_iUsing_Ergo_Now)
 			m_bActive_LevelUp_Button = true;
 
 	if (m_bActive_LevelUp_Button)
@@ -194,7 +203,7 @@ void CUIPage_Stat::Action_LevelUp(_float fTimeDelta)
 		if (KEY_TAP(KEY::LBUTTON))
 			if (GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fSize).x != -1.f)
 			{
-				if (iErgo < pOrigin.iErgo_LevelUp)
+				if (iErgo < m_iUsing_Ergo_Now)
 					GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("에르고가 부족합니다."));
 				else
 					Input_LevelUp_Stat();
@@ -445,7 +454,7 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 
-	m_fStarChart_NowStat_Dest[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 100.f;
+	m_fStarChart_NowStat_Dest[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 1000.f;
 	m_fStarChart_NowStat_Dest[1] = _float(pAdjust->iStat_Defence + pOrigin.iStat_Defence) / 100.f;
 	m_fStarChart_NowStat_Dest[2] = _float(pAdjust->fHeal + pOrigin.fHeal) / 20.f;
 	m_fStarChart_NowStat_Dest[3] = (pAdjust->fResist_Fire + pOrigin.fResist_Fire) / 100.f;
@@ -487,7 +496,7 @@ void CUIPage_Stat::Input_LevelUp_Stat()
 {
 	GET_GAMEINTERFACE->Get_Player()->Input_Level_UP_Stat(m_iLevelUp_Buffer_Point, m_iLevelUp_Buffer_Stat);
 	_int iCost = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo_LevelUp;
-	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_iUsing_Point_Now * iCost;
+	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_iUsing_Ergo_Now;
 
 	for (_int i = 0; i < 5; ++i)
 		m_iLevelUp_Buffer_Point[i] = 0;
@@ -495,7 +504,7 @@ void CUIPage_Stat::Input_LevelUp_Stat()
 	for (_int i = 0; i < 9; ++i)
 		m_iLevelUp_Buffer_Stat[i] = 0.f;
 	
-	GET_GAMEINTERFACE->Input_Achievment_Data(0, m_iUsing_Point_Now * iCost);
+	GET_GAMEINTERFACE->Input_Achievment_Data(0, m_iUsing_Ergo_Now);
 	GET_GAMEINTERFACE->Input_Achievment_Data(10, 1);
 
 	_float fHp = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().vGauge_Hp.z;
@@ -511,6 +520,7 @@ void CUIPage_Stat::Input_LevelUp_Stat()
 	//GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 성공"), strErgo_Spend_Inform);
 
 	m_iUsing_Point_Now = 0;
+	m_iUsing_Ergo_Now = 0;
 }
 
 CUIPage_Stat* CUIPage_Stat::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -349,7 +349,9 @@ void CUIPage_Inform::Update_PlayerDead_Back(_float fTimeDelta, _int iPhase)
 	_float fAlpha = 1.f;
 
 	if (iPhase == 0)
-		fAlpha = m_vPlayerDead_Time.x / m_vPlayerDead_Time.y;
+		fAlpha = 0.f;
+	else if (iPhase == 1)
+		fAlpha = ((m_vPlayerDead_Time.x - m_vPlayerDead_Time.y) / m_vPlayerDead_Time.z);
 	else if (iPhase == 2)
 		fAlpha = (m_vPlayerDead_Time.w - (m_vPlayerDead_Time.x - (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))) / m_vPlayerDead_Time.w;
 

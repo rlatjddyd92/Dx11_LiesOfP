@@ -43,21 +43,22 @@ private:
 	void Update_DurableGauge(_float fTimeDelta);
 	void Update_WeaponCell_Fx(_float fTimeDelta);
 	void Update_FableGauge(_float fTimeDelta, _int iFable_Count_Now);
-
+	void Update_FableUseAction(_float fTimeDelta, _int iFable_Count_Now);
 
 private:
 	const CItem_Manager::ITEM* m_pItem_Blade = { nullptr };
 	const CItem_Manager::ITEM* m_pItem_Handle = { nullptr };
 	CPlayer::WEAPON_TYPE m_eType_Now = CPlayer::WEAPON_TYPE::WEP_END;
 
-	_int iNow_Fable_Count = 0;
+	_int iNow_Fable_Count = -1;
 	_int iNow_SelectWeapon = 0;
 	_int m_iWeapon_Equip_Symbol = 0;
 
 	_bool m_bIsBladeWhite_Active = false;
 	_Vec2 m_vFableWhite_ActionTime = { 0.f,0.5f };
-
-
+	_Vec2 m_vCellFx_ActionTime = { 0.f,0.25f };
+	_float m_fNormal_CellFx_Alpha_Origin[4] = { 0.f, };
+	_Vec2 m_vNormal_CellFx_Size_Origin[4] = { {0.f,0.f}, };
 
 	UPART* m_pSharedPointer_Center = { nullptr };
 	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;

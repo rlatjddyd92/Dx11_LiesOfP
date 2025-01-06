@@ -103,11 +103,11 @@ public:
 		_int iPlayer_Level = 1;
 
 		// 스탯 포인트 (레벨 업 때 찍는 포인트)
-		_int iPoint_HP = 1;
-		_int iPoint_Stamina = 1;
-		_int iPoint_Attack = 1;
-		_int iPoint_Defence = 1;
-		_int iPoint_Heal = 1;
+		_int iPoint_HP = 0;
+		_int iPoint_Stamina = 0;
+		_int iPoint_Attack = 0;
+		_int iPoint_Defence = 0;
+		_int iPoint_Heal = 0;
 
 		// 능력치 
 		_float iStat_Attack = 1000.f;

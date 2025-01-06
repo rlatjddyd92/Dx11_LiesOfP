@@ -64,6 +64,10 @@ void CUIPage_Shop::Update(_float fTimeDelta)
 
 void CUIPage_Shop::Late_Update(_float fTimeDelta)
 {
+	m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Weight_Status_Text)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Weight_Stat)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Weight_Ratio)]->bRender = false;
+
 	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
 		m_fTopPartMove -= m_fTopPartMove_Excel * fTimeDelta;

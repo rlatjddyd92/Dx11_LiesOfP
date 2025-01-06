@@ -146,6 +146,8 @@ public: // 외부에서 매니저 접근
 	void Show_Script_Npc_Talking(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }
 	_bool IsTalking_WithNPC() { return m_pUIManager->IsTalking_WithNPC(); }
 	_bool IsTalking_SelectPage() { return m_pUIManager->IsTalking_SelectPage(); }
+	_bool IsTalking_WithNPC(NPC_SCRIPT eNPC) { return m_pUIManager->IsTalking_WithNPC(eNPC); } // 대화가 진행 중일 때 
+	_bool IsEndTalk_WithNPC(NPC_SCRIPT eNPC) { return m_pUIManager->IsEndTalk_WithNPC(eNPC); } // 대화가 끝난 경우
 	void Next_Script() { m_pUIManager->Next_Script(); }
 	void OFF_Script() { m_pUIManager->OFF_Script(); }
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIManager->Show_Select_Script(strLeft, strRight, fTime); }
