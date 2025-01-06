@@ -432,6 +432,12 @@ void CSimonManus::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 	m_pWeapon->DeActive_Collider();
 }
 
+void CSimonManus::Start_StartDisslove()
+{
+	m_isStartDisslove = true;
+	m_DissolveEffects[DISSOLVE_DEAD]->Set_On(true);
+}
+
 void CSimonManus::Active_Effect(const _uint eType, _bool isLoop)
 {
 	if (isLoop)
@@ -554,10 +560,8 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 	}
 	else if (iCutSceneNum == STATE_DIE)
 	{
-		m_isStartDisslove = true;
 		m_pWeapon->IsActive(false);
 		Change_State(CSimonManus::DIE_TALKING);
-		m_DissolveEffects[DISSOLVE_DEAD]->Set_On(true);
 	}
 
 	m_isCutScene = false;

@@ -92,6 +92,8 @@ public:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) override;
 	virtual void	DeActive_CurrentWeaponCollider(_uint iCollIndex = 0) override;
 
+	virtual void    Start_StartDisslove();
+
 	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) override;
 	virtual void		DeActive_Effect(const _uint eType) override;
 	virtual void		DeActive_AllEffect() override;

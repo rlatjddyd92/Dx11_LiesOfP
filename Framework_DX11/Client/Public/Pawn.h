@@ -80,6 +80,8 @@ public:
     virtual void    End_CutScene(_uint iCutSceneNum) {};
     virtual void    Change_Model(_uint iModelNum) {};
 
+    virtual void    Start_StartDisslove() {};
+
 public:
     virtual void OnCollisionEnter(CGameObject* pOther) override;
     virtual void OnCollisionStay(CGameObject* pOther) override;
