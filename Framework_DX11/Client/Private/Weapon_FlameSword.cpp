@@ -234,7 +234,8 @@ void CWeapon_FlameSword::Play_HitSound(HIT_TYPE eType)
 
 	_int iRand = rand() % 3 + 1;
 	
-	if (ATK_STRONG == m_eAttackStrength)
+	if (ATK_STRONG == m_eAttackStrength
+		|| ATK_LAST == m_eAttackStrength)
 	{
 		_itow_s(iRand, szBuffer, 10);
 		strSoundKey = TEXT("SE_PC_SK_Hit_Fire_Common_0");

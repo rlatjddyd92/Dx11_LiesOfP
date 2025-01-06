@@ -47,7 +47,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_DASH);
     }
-    else if (m_pPlayer->Key_Tab(KEY::LBUTTON))
+    else if (m_pPlayer->Key_Tab(KEY::LBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 5.f)
     {
         if (!m_pPlayer->Get_IsFatal())
         {
@@ -64,7 +64,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::SCISSOR_FATAL);
         }
     }
-    else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
+    else if (m_pPlayer->Key_Hold(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 15.f)
     {
         m_fRButtonTime += fTimeDelta;
         if (m_fRButtonTime > 0.15f)
@@ -122,7 +122,6 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
         }
         else if (SPECIAL_ITEM::SP_DEAD == eNow)
         {
-            //UI¸¦ ¶ç¿ìÀÚ
             m_pPlayer->Change_State(CPlayer::DIE);
         }
     }
@@ -136,7 +135,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::ARM_START);
     }
     
-    if (m_pPlayer->Key_Away(KEY::RBUTTON))
+    if (m_pPlayer->Key_Away(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 5.f)
     {
         m_fRButtonTime = 0.f;
         if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)

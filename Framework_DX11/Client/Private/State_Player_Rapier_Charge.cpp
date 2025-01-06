@@ -56,6 +56,25 @@ void CState_Player_Rapier_Charge::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
+    if (iFrame < m_iChangeFrame && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
+    {
+        if (m_pPlayer->Key_Tab(KEY::LBUTTON))
+        {
+            m_isInputLButton = true;
+            m_isInputRButton = false;
+        }
+        else if (m_pPlayer->Key_Tab(KEY::RBUTTON))
+        {
+            m_isInputRButton = true;
+            m_isInputLButton = false;
+            m_fRButtonTime = 0.f;
+        }
+        else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
+        {
+            m_fRButtonTime += fTimeDelta;
+        }
+    }
+
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
         if (m_pPlayer->Key_Hold(KEY::LSHIFT))

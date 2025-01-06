@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Player.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Player_TH_Idle::CState_Player_TH_Idle(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -45,7 +47,7 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_DASH);
     }
-    else if (m_pPlayer->Key_Tab(KEY::LBUTTON))
+    else if (m_pPlayer->Key_Tab(KEY::LBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 5.f)
     {
         if (!m_pPlayer->Get_IsFatal())
         {
@@ -56,7 +58,7 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::FLAME_FATAL);
         }
     }
-    else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
+    else if (m_pPlayer->Key_Hold(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 15.f)
     {
         m_fRButtonTime += fTimeDelta;
         if (m_fRButtonTime > 0.15f)
@@ -74,28 +76,40 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     else if (m_pPlayer->Key_Tab(KEY::R))
     {
         SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
-        if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+        _uint iItemCount = GET_GAMEINTERFACE->Get_Now_Select_Item_Count();
+
+        if (iItemCount > 0)
         {
-            m_pPlayer->Change_State(CPlayer::HEAL);
+            if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::HEAL);
+            }
+            else if (SPECIAL_ITEM::SP_GRANADE == eNow
+                || SPECIAL_ITEM::SP_THERMITE == eNow
+                || SPECIAL_ITEM::SP_THROW_BATTERY == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::THROW_ITEM);
+            }
+            else if (SPECIAL_ITEM::SP_RESISTANCE == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::DEBUFF_RESISTANCE);
+            }
+            else if (SPECIAL_ITEM::SP_PURIFICATION == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::DEBUFF_RESET);
+            }
+        }
+
+        if (SPECIAL_ITEM::SP_TELEPOT == eNow)
+        {
+            GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), true);
         }
         else if (SPECIAL_ITEM::SP_GRINDER == eNow)
         {
             m_pPlayer->Change_State(CPlayer::GRINDER);
         }
-        else if (SPECIAL_ITEM::SP_GRANADE == eNow
-            || SPECIAL_ITEM::SP_THERMITE == eNow
-            || SPECIAL_ITEM::SP_THROW_BATTERY == eNow)
-        {
-            m_pPlayer->Change_State(CPlayer::THROW_ITEM);
-        }
-        else if (SPECIAL_ITEM::SP_TELEPOT == eNow)
-        {
-            //UI를 띄우자
-            m_pPlayer->Change_State(CPlayer::TELEPORT);
-        }
         else if (SPECIAL_ITEM::SP_DEAD == eNow)
         {
-            //UI를 띄우자
             m_pPlayer->Change_State(CPlayer::DIE);
         }
     }
@@ -109,7 +123,7 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::ARM_START);
     }
 
-    if (m_pPlayer->Key_Away(KEY::RBUTTON))
+    if (m_pPlayer->Key_Away(KEY::RBUTTON) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 5.f)
     {
         m_fRButtonTime = 0.f;
         m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);

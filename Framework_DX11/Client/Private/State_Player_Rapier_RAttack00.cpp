@@ -63,7 +63,7 @@ void CState_Player_Rapier_RAttack00::Update(_float fTimeDelta)
         CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_Normal"), vPos, vRot, vScale);
     }
 
-    if (iFrame < m_iChangeFrame)
+    if (iFrame < m_iChangeFrame && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
     {
         if (m_pPlayer->Key_Tab(KEY::LBUTTON))
         {

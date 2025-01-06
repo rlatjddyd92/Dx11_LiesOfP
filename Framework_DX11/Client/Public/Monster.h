@@ -110,7 +110,8 @@ protected:
 
 	_Vec4		m_vPosTarget{};
 
-	_bool               m_isBoss = { false };
+	_bool       m_isBoss = { false };
+	_bool		m_isFirstCreate = { false };
 
 	_int		m_iErgoPoint = { 0 };
 

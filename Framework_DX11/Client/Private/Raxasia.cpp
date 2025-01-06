@@ -136,8 +136,10 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
+	m_isFirstCreate = true;
 	if (dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Get_bHavePlayed())
 	{
+		m_isFirstCreate = false;
 		m_pRigidBodyCom->Set_GloblePose(_Vec3(-59.119f, -97.78, -27.848f));
 		m_pTransformCom->LookAt_NoHeight(static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY))->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 	}
@@ -579,7 +581,14 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pWeaponShield->Appear();
 #pragma endregion
 
-		m_pCutSceneFsmCom->Set_State(STATE_P2);
+		if (!m_isFirstCreate)
+		{
+			m_pCutSceneFsmCom->Change_State(STATE_P2);
+		}
+		else
+		{
+			m_pCutSceneFsmCom->Set_State(STATE_P2);
+		}
 
 		break;
 	}
@@ -1318,15 +1327,14 @@ void CRaxasia::Free()
 	Safe_Release(m_pWeaponShield);
 	Safe_Release(m_pKickCollObj);
 
-	if (m_pModelCom != m_pP1ModelCom)
+	if (m_pModelCom != m_pP1ModelCom && m_pP1ModelCom)
 		Safe_Release(m_pP1ModelCom);
-	if (m_pModelCom != m_pExtraModelCom)
+	if (m_pModelCom != m_pExtraModelCom && m_pExtraModelCom)
 		Safe_Release(m_pExtraModelCom);
-	if(m_pModelCom != m_pCutSceneModelCom[0])
+	if(m_pModelCom != m_pCutSceneModelCom[0] && m_pCutSceneModelCom[0])
 		Safe_Release(m_pCutSceneModelCom[0]);
-	if (m_pModelCom != m_pCutSceneModelCom[1])
+	if (m_pModelCom != m_pCutSceneModelCom[1] && m_pCutSceneModelCom[1])
 		Safe_Release(m_pCutSceneModelCom[1]);
-
 
 	Safe_Release(m_pDouTexture);
 
@@ -1340,11 +1348,11 @@ void CRaxasia::Free()
 		m_Effects.clear();
 	}
 
-	if (m_pExtraFsmCom != nullptr)
+	if (m_pFsmCom != m_pExtraFsmCom && m_pExtraFsmCom != nullptr)
 	{
 		m_pExtraFsmCom->Release_States();
+		Safe_Release(m_pExtraFsmCom);
 	}
-	Safe_Release(m_pExtraFsmCom);
 
 	if (m_pCutSceneFsmCom != nullptr)
 	{

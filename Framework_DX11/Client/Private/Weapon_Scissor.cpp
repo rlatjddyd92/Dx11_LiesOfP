@@ -315,7 +315,8 @@ void CWeapon_Scissor::Play_HitSound(HIT_TYPE eType)
 
 	_int iRand = rand() % 3 + 1;
 
-	if (ATK_STRONG == m_eAttackStrength)
+	if (ATK_STRONG == m_eAttackStrength
+		|| ATK_LAST == m_eAttackStrength)
 	{
 		switch (eType)
 		{
