@@ -120,6 +120,7 @@
 
 #include "Dissolve_PowerAttack.h"
 #include "Dissolve_Fire.h"
+#include "Dissolve_Poison.h"
 #pragma endregion
 
 #include "CMoveBlockObj.h"
@@ -1061,6 +1062,12 @@ HRESULT CLoader::Ready_Resources_For_Player()
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
+	DissolveInstanceDesc.vMinColor = { 0.2f, 0.4f, 0.1f, 0.f };
+	DissolveInstanceDesc.vMaxColor = { 0.2f, 0.4f, 0.1f, 0.f };
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Poison"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1085,6 +1092,20 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
 	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
+	DissolveInstanceDesc.iNumInstance = 10;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 1.f, 2.f };
+	DissolveInstanceDesc.vMinColor = { 1.f, 1.f, 1.f, 0.f };
+	DissolveInstanceDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.25f, 0.5f };
+	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_Fire"),
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
@@ -1880,6 +1901,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Effect_Dissolve_Fire */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"),
 		CDissolve_Fire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Dissolve_Poison */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Poison"),
+		CDissolve_Poison::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 #pragma endregion

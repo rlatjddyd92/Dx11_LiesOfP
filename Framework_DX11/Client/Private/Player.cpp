@@ -110,6 +110,7 @@
 
 #include "Dissolve_Player_Dead.h"
 #include "Dissolve_Fire.h"
+#include "Dissolve_Poison.h"
 
 #include "ObjectPool.h"
 #include "Decal_Blood.h"
@@ -1302,6 +1303,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	
 	if (m_fDebuffRecoveryTime[DEBUFF_ELEC] <= 0.f)
 	{
+		m_DissolveEffects[DISSOLVE_POISON]->Set_On(false);
 		m_tPlayer_Stat->fDebuff_Electric.x = max(m_tPlayer_Stat->fDebuff_Electric.x - 2.f * fTimeDelta, 0.f);
 	}
 	
@@ -1330,6 +1332,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	// 독 상태면 일정 시간마다 데미지
 	if (m_tPlayer_Stat->fDebuff_Acid.x > m_tPlayer_Stat->fDebuff_Acid.y * 0.5f)
 	{
+		m_DissolveEffects[DISSOLVE_POISON]->Set_On(true);
 		m_fDebuffAcidDamageTime -= fTimeDelta;
 		if (m_fDebuffAcidDamageTime <= 0.f)
 		{
@@ -2162,6 +2165,9 @@ HRESULT CPlayer::Ready_Effect()
 	m_DissolveEffects[DISSOLVE_FIRE] = static_cast<CDissolve_Fire*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
 	if (nullptr == m_DissolveEffects[DISSOLVE_FIRE])
 		return E_FAIL;
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Poison");
+	m_DissolveEffects[DISSOLVE_POISON] = static_cast<CDissolve_Poison*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Poison"), &DissolveDesc));
 
 	return S_OK;
 }
