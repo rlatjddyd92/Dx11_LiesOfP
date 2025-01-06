@@ -25,12 +25,16 @@ HRESULT CState_Player_ItemGet::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iItemGetFrame = 50;
+
     return S_OK;
 }
 
 HRESULT CState_Player_ItemGet::Start_State(void* pArg)
 {
     m_pDroppedItem = static_cast<CItem_Dropped*>(pArg);
+    if (!m_pDroppedItem)
+        return E_FAIL;
 
     _uint iWeponType = m_pPlayer->Get_WeaponType();
 
@@ -41,12 +45,26 @@ HRESULT CState_Player_ItemGet::Start_State(void* pArg)
 
     m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_OJ_FX_Hidden_Item_Move_01.wav"));
 
+    m_isItemGet = false;
+
     return S_OK;
 }
 
 void CState_Player_ItemGet::Update(_float fTimeDelta)
 {
-    if (End_Check())
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (!m_isItemGet && iFrame >= m_iItemGetFrame)
+    {    
+        // 아이템을 획득하여 인벤에 넣는 함수 
+        GET_GAMEINTERFACE->AddNewItem_Inven(m_pDroppedItem->Get_ItemIndex(), 1);
+        // 아이템의 인덱스는 아래 문서 참조 
+        // Client/Bin/DataFiles/Item_Spec_Data.xlsx
+
+        m_pDroppedItem->Set_Dead(true);
+        m_isItemGet = true;
+    }
+    else if (End_Check())
     {
         _uint iWeponType = m_pPlayer->Get_WeaponType();
 
@@ -59,15 +77,6 @@ void CState_Player_ItemGet::Update(_float fTimeDelta)
 
 void CState_Player_ItemGet::End_State()
 {
-    m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
-
-    // 아이템을 획득하여 인벤에 넣는 함수 
-    GET_GAMEINTERFACE->AddNewItem_Inven(m_pDroppedItem->Get_ItemIndex(), 1);
-    // 아이템의 인덱스는 아래 문서 참조 
-    // Client/Bin/DataFiles/Item_Spec_Data.xlsx
-    // 문서의 0번째 열의 숫자 사용하기 
-
-    m_pDroppedItem->Set_Dead(true);
     m_pDroppedItem = nullptr;
 }
 

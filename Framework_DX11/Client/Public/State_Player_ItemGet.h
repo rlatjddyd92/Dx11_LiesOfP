@@ -25,6 +25,9 @@ private:
     _uint               m_iAnimation_OH_ItemGet = {};
     _uint               m_iAnimation_TH_ItemGet = {};
 
+    _int                m_iItemGetFrame = {};
+    _bool               m_isItemGet = {};
+
     _double* m_pTrackPos = { nullptr };
 
     class CItem_Dropped* m_pDroppedItem = { nullptr };

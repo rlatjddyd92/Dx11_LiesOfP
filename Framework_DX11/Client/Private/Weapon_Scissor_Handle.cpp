@@ -177,7 +177,7 @@ void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 				vHitPos = m_BladeWorldMatrix.Translation();
 
 			m_fFinalDamageAmount = m_fDamageAmount;
-			_float fPlayerAttack = (m_pPlayer->Get_Player_Stat().iStat_Attack + m_pPlayer->Get_Player_Stat_Adjust()->iStat_Attack) * 0.0005f;
+			_float fPlayerAttack = (m_pPlayer->Get_Player_Stat().iStat_Attack + m_pPlayer->Get_Player_Stat_Adjust()->iStat_Attack) / 950.f;
 			m_fFinalDamageAmount *= fPlayerAttack * m_pGameInstance->Get_Random(0.97f, 1.05f);
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				m_fFinalDamageAmount *= 1.2f;

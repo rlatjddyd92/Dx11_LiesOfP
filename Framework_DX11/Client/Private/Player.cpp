@@ -1154,6 +1154,7 @@ void CPlayer::Recovery_Region(_float fAmount)
 
 void CPlayer::Damaged(_float fAtkDmg)
 {
+	fAtkDmg *= ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 970.f);
 	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
 	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
 		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg);
@@ -1162,6 +1163,8 @@ void CPlayer::Damaged(_float fAtkDmg)
 
 _bool CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 {
+	fAtkDmg *= ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 970.f);
+
 	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.15f);
 
 	if (m_tPlayer_Stat->vGauge_Hp.x <= 0.f)
@@ -1595,7 +1598,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("¾ÆÀÌÅÛ È¹µæ")))
 		{
 			//pGameObject->Set_Dead(true);
-			m_pFsmCom->Change_State(ITEMGET,&pGameObject);
+			m_pFsmCom->Change_State(ITEMGET,pGameObject);
 		}
 	}
 	else if (pGameObject->Get_Tag() == TEXT("MoveBlockObj"))
