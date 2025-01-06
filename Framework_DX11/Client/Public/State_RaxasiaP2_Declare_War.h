@@ -32,7 +32,7 @@ private:
     _float              m_fLightningTime = { 0.6f };
     _float              m_fTimeStack_Lightning = { 0.f };
 
-    _float              m_fHoveringDuration = { 3.f };
+    _float              m_fHoveringDuration = { 8.f };
     _float              m_fHoveringTimeStack = { 0.f };
 
     _float              m_fHeight = {};

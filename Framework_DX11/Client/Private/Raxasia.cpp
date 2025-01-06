@@ -1182,7 +1182,7 @@ void CRaxasia::ChangePhase()
 
 	m_pFsmCom->Release_States();
 
-	Safe_Release(m_pModelCom);
+	//Safe_Release(m_pModelCom);
 	Safe_Release(m_pFsmCom);
 
 	m_pModelCom = m_pExtraModelCom;

@@ -269,12 +269,12 @@ void CState_Raxasia_CutScene_Phase2::Control_Dialog(_int iFrame)
 {
     if (!m_isShowDialog[0] && iFrame >= 650)
     {
-        GET_GAMEINTERFACE->Show_Script(TEXT("아, 시몬 님."), TEXT("none"), 2.1f);
+        GET_GAMEINTERFACE->Show_Script(TEXT("아, 시몬 님."), TEXT("none"), 4.1f);
         m_isShowDialog[0] = true;
     }
-    else if (!m_isShowDialog[1] && iFrame >= 1370)
+    else if (!m_isShowDialog[1] && iFrame >= 1390)
     {
-        GET_GAMEINTERFACE->Show_Script(TEXT("당신의 검인 락사시아가 맹세코"), TEXT("이 탑을 수호할지니."), 6.1f);
+        GET_GAMEINTERFACE->Show_Script(TEXT("당신의 검인 락사시아가 맹세코"), TEXT("이 탑을 수호할지니."), 12.1f);
         m_isShowDialog[1] = true;
     }
 }
