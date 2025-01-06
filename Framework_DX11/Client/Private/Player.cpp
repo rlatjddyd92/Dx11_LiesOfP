@@ -110,6 +110,7 @@
 
 #include "Dissolve_Player_Dead.h"
 #include "Dissolve_Fire.h"
+#include "Dissolve_Poison.h"
 
 #include "ObjectPool.h"
 #include "Decal_Blood.h"
@@ -155,8 +156,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
@@ -2114,8 +2115,11 @@ HRESULT CPlayer::Ready_Effect()
 	m_DissolveEffects[DISSOLVE_FIRE] = static_cast<CDissolve_Fire*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
 	if (nullptr == m_DissolveEffects[DISSOLVE_FIRE])
 		return E_FAIL;
-	
-	m_DissolveEffects[DISSOLVE_FIRE]->Set_On(true);
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Poison");
+	m_DissolveEffects[DISSOLVE_POISON] = static_cast<CDissolve_Poison*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Poison"), &DissolveDesc));
+
+	m_DissolveEffects[DISSOLVE_POISON]->Set_On(true);
 
 	return S_OK;
 }

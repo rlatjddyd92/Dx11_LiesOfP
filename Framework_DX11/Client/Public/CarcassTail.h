@@ -33,6 +33,13 @@ public:
 		, CT_BODY_UPPER, CT_END
 	};
 
+	enum DISSOLVE_EFFECT
+	{
+		DISSOLVE_POWERATTACK,
+		DISSOLVE_FIRE,
+		DISSOLVE_END
+	};
+
 private:
 	CCarcassTail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCarcassTail(const CCarcassTail& Prototype);
@@ -49,6 +56,7 @@ public:
 public:
 	virtual void		Resetting() override;
 	virtual void		On_PowerAttack(_bool bOn) override;
+	void				On_DissolveEffect(_uint iIndex, _bool bOn);
 
 private:
 	CColliderObject* m_pColliderObject[TYPE_END] = { nullptr, nullptr, nullptr };
@@ -56,7 +64,7 @@ private:
 
 	const _Matrix*		m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
-	class CDissolve_Effect* m_pDissolveEffect = { nullptr };
+	vector<class CDissolve_Effect*> m_DissolveEffect;
 
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) override;

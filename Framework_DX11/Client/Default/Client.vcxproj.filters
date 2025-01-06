@@ -2701,6 +2701,9 @@
     <ClInclude Include="..\Public\Dissolve_Fire.h">
       <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Fire</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Dissolve_Poison.h">
+      <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Poison</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3903,6 +3906,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Dissolve_Fire.cpp">
       <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Fire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dissolve_Poison.cpp">
+      <Filter>02.GameObjects\05.Effect\Dissolve_Effect\Dissolve_Poison</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -209,6 +209,7 @@
     <ClInclude Include="..\public\Dissolve_Effect.h" />
     <ClInclude Include="..\Public\Dissolve_Fire.h" />
     <ClInclude Include="..\Public\Dissolve_Player_Dead.h" />
+    <ClInclude Include="..\public\Dissolve_Poison.h" />
     <ClInclude Include="..\public\Dissolve_PowerAttack.h" />
     <ClInclude Include="..\public\Dissolve_Raxasia_Dead.h" />
     <ClInclude Include="..\Public\Dissolve_SimonManus_Dead.h" />
@@ -610,6 +611,7 @@
     <ClCompile Include="..\private\Dissolve_Effect.cpp" />
     <ClCompile Include="..\Private\Dissolve_Fire.cpp" />
     <ClCompile Include="..\Private\Dissolve_Player_Dead.cpp" />
+    <ClCompile Include="..\private\Dissolve_Poison.cpp" />
     <ClCompile Include="..\private\Dissolve_PowerAttack.cpp" />
     <ClCompile Include="..\private\Dissolve_Raxasia_Dead.cpp" />
     <ClCompile Include="..\Private\Dissolve_SimonManus_Dead.cpp" />
