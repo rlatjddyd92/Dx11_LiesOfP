@@ -111,7 +111,7 @@ public:
 
 		// 능력치 
 		_float iStat_Attack = 1000.f;
-		_float iStat_Defence = 1000.f;
+		_float iStat_Defence = 100;
 
 
 		// 게이지 수치 

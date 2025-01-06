@@ -1154,7 +1154,9 @@ void CPlayer::Recovery_Region(_float fAmount)
 
 void CPlayer::Damaged(_float fAtkDmg)
 {
-	fAtkDmg *= ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 970.f);
+	_float fDecreaseDmg = fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f);
+	fAtkDmg = fAtkDmg - fDecreaseDmg;
+
 	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
 	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
 		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg);
@@ -1163,7 +1165,8 @@ void CPlayer::Damaged(_float fAtkDmg)
 
 _bool CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 {
-	fAtkDmg *= ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 970.f);
+	_float fDecreaseDmg = fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f);
+	fAtkDmg = fAtkDmg - fDecreaseDmg;
 
 	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.15f);
 
@@ -1554,7 +1557,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 				GET_GAMEINTERFACE->Set_Now_Interact_Stargezer(pStargazer->Get_CellNum());
 			}
 		}
-		else if(!pStargazer->Get_IsOpend() && !pStargazer->Get_IsClose())
+		else if(!pStargazer->Get_IsOpend() && pStargazer->Get_IsClose())
 		{
 			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 복구시킨다")))
 			{
