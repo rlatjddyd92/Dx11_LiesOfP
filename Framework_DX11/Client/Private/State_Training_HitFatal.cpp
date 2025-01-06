@@ -45,6 +45,8 @@ void CState_Training_HitFatal::Update(_float fTimeDelta)
     {
         m_pMonster->Set_IsInvicible(true);
         m_pMonster->Change_Animation(m_iAnimation_HitFatal[2], false, 0.1f);
+        m_pMonster->Get_Status()->bFatalAttack = false;
+        m_pMonster->Get_Status()->bWeakness = false;
         *m_pFatalAttacked = false;
     }
 
@@ -59,8 +61,6 @@ void CState_Training_HitFatal::End_State()
 {
     m_pMonster->Set_IsInvicible(false);
     (*m_pFatalAttacked) = false;
-    m_pMonster->Get_Status()->bFatalAttack = false;
-    m_pMonster->Get_Status()->bWeakness = false;
     m_pMonster->Reset_GroggyPoint();
 }
 

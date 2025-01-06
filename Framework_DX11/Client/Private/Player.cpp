@@ -1893,7 +1893,6 @@ void CPlayer::Check_FatalAttack()
 		}
 		else
 		{
-			m_pContactMonster->Get_Status()->bFatalAttack = false;
 			m_isFatalAttack = false;
 		}
 	}

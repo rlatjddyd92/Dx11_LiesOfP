@@ -110,8 +110,11 @@ void CPlayerCollider_Fatal::OnCollisionExit(CGameObject* pOther)
 	{
 		if (m_pContactMonster)
 		{
-			m_pContactMonster->Get_Status()->bFatalAttack = false;
-			m_pContactMonster = dynamic_cast<CMonster*>(pOther);
+			if (m_pContactMonster->Get_IsDieState() || m_pContactMonster->Get_Status()->fGrogyPoint < m_pContactMonster->Get_Status()->fMaxGrogyPoint)
+			{
+				m_pContactMonster->Get_Status()->bFatalAttack = false;
+			}
+			m_pContactMonster = nullptr;
 		}
 	}
 }
