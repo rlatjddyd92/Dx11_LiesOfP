@@ -5,6 +5,8 @@
 #include "Effect_Container.h"
 #include "Effect_Manager.h"
 
+_int CTreasureBox::iBoxIndex = 0;
+
 CTreasureBox::CTreasureBox(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -44,6 +46,8 @@ HRESULT CTreasureBox::Initialize(void* pArg)
 	m_pModelCom->SetUp_Animation(m_iAnim_Close_Idle, true);
 
 	m_strObjectTag = TEXT("TreasureBox");
+	m_iBoxIndex = iBoxIndex;
+	++iBoxIndex;
 
 	m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("ItemBox_Closed"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr);
 	m_pEffect->Set_Loop(true);
@@ -70,6 +74,19 @@ void CTreasureBox::Update(_float fTimeDelta)
 			m_bAddItem = true;
 			CItem_Dropped::ITEM_DROPPED_DESC pDesc = {};
 			pDesc.vParentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			switch (m_iBoxIndex)
+			{case 0:
+				pDesc.iItemIndex = 101;
+				break;
+			case 1:
+				pDesc.iItemIndex = 88;
+				break;
+			case 2:
+				pDesc.iItemIndex = 137;
+				break;
+			default:
+				break;
+			}
 			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Item_Dropped"), TEXT("Prototype_GameObject_Item_Dropped"), &pDesc);
 		}
 	}

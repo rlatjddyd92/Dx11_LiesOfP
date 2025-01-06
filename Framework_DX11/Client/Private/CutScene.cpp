@@ -320,7 +320,6 @@ void CCutScene::First_Setting()
 void CCutScene::End_Setting()
 {
 	m_bFinishe_Setting = true;
-	m_pGameInstance->Stop_Cinematic();
 
 	//UI 살려야 함
 	GET_GAMEINTERFACE->Fade_In(0.f);
@@ -405,7 +404,7 @@ void CCutScene::End_Setting()
 		m_pObjects[BOSS1]->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
 
-		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Stop_Cinematic();
 		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
 
 		break;	
@@ -428,7 +427,7 @@ void CCutScene::End_Setting()
 		desc.iTypeNum = CMoveBlockObj::MANUS1;
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
 
-		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Stop_Cinematic();
 		m_pGameInstance->Play_BGM(TEXT("MU_MS_Simon_PH1.wav"), &g_fBGMVolume);
 		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
 	}
@@ -446,7 +445,7 @@ void CCutScene::End_Setting()
 		m_bFirstStart = true;
 		m_bFinished = false;
 
-		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Stop_Cinematic();
 		m_pGameInstance->Play_BGM(TEXT("MU_MS_Simon_PH2.wav"), &g_fBGMVolume);
 		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
 	}
@@ -459,7 +458,7 @@ void CCutScene::End_Setting()
 		pPlayer->Init_PlayerCamera();
 		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
 
-		m_pGameInstance->Stop_BGM();
+		m_pGameInstance->Stop_Cinematic();
 		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_High.wav"), &g_fEnvVolume);
 		break;
 	default:

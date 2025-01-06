@@ -54,6 +54,9 @@ private:
 	_int m_iAnim_Open = { 0 };
 	_int m_iAnim_Open_Idle = { 0 };
 
+	static _int iBoxIndex;
+	 _int m_iBoxIndex;
+	
 private:
 	HRESULT Ready_Components(OBJECT_DEFAULT_DESC* pDesc);
 
