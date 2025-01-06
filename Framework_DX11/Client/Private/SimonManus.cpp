@@ -151,7 +151,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	if (dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Get_bHavePlayed())
 	{
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-59.119f, -97.78, -27.848f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(0.f, 0.f, 0.f));
 		m_pTransformCom->LookAt_NoHeight(static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY))->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 	}
 	else
