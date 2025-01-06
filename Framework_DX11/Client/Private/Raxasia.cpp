@@ -164,6 +164,9 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 	{
 		m_bDieState = true;
 		//m_pFsmCom->Set_State(DIE);
+		DeActive_CurrentWeaponCollider(0);
+		DeActive_CurrentWeaponCollider(1);
+
 		if (m_isChanged)
 		{
 			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);

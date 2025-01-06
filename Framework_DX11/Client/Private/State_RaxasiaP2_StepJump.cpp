@@ -248,6 +248,8 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
 
                 Desc.vPos = vPos;
                 Desc.vDir = vTargetDir;
+                Desc.pOwner = m_pMonster;
+
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
 
             }
@@ -318,6 +320,7 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
                 _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
                 vRight.Normalize();
 
+                Desc.pOwner = m_pMonster;
 
                 Desc.vPos = vPos;
                 Desc.vDir = vTargetDir;

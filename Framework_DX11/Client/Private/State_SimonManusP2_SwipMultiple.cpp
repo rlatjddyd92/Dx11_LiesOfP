@@ -83,7 +83,6 @@ void CState_SimonManusP2_SwipMultiple::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
-
 }
 
 void CState_SimonManusP2_SwipMultiple::End_State()

@@ -345,6 +345,7 @@ void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
                 CAttackObject::ATKOBJ_DESC Desc;
 
                 Desc.vPos = vPos;
+                Desc.pOwner = m_pMonster;
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderMark"), &Desc);
                 ++m_iTestCnt;

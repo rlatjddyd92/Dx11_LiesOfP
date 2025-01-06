@@ -77,6 +77,8 @@ void CAObj_ThunderCalling::Update(_float fTimeDelta)
             CAttackObject::ATKOBJ_DESC Desc{};
             Desc.vPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) };
 
+            Desc.pOwner = m_pOwner;
+
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_Thunder"), &Desc);
 
             m_fLifeTime = 0.f;

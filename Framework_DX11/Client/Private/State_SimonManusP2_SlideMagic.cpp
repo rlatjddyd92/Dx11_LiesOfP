@@ -162,6 +162,7 @@ void CState_SimonManusP2_SlideMagic::Effect_Check(_double CurTrackPos)
         _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
         vTargetPos.y += 1.f;
         Desc.vDir = _Vec3{ vTargetPos - Desc.vPos };
+        Desc.pOwner = m_pMonster;
 
         m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
 

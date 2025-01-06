@@ -247,6 +247,8 @@ void CState_RaxasiaP2_ChargeRush::Effect_Check(_double CurTrackPos)
 
                 Desc.vPos = vPos;
                 Desc.vDir = vTargetDir;
+                Desc.pOwner = m_pMonster;
+
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderDischarge"), &Desc);
 
                 m_bCharge = true;

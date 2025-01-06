@@ -79,8 +79,8 @@ void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
             vRight = vUp.Cross(vDirection);
 
             Desc.vDir = _Vec3{ vDirection };
-
             Desc.vPos = _Vec3{ vPosition + ( vDirection * 2.f ) };
+            Desc.pOwner = m_pMonster;
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
 
