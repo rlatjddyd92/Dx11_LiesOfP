@@ -120,6 +120,7 @@ void CCarcassTail::Update(_float fTimeDelta)
 	XMStoreFloat4x4(&WorldMat , m_pModelCom->Get_BoneCombindTransformationMatrix(7) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
 
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
 }
 
 void CCarcassTail::Late_Update(_float fTimeDelta)

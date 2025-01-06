@@ -65,11 +65,17 @@ void CState_CarcassTail_TailSwipMultiple::Collider_Check(_double CurTrackPos)
     {
         m_pMonster->Active_CurrentWeaponCollider(0.9f, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
         m_pMonster->Active_CurrentWeaponCollider(0.9f, 4, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+
+        m_pMonster->Active_Debuff(2, 0.7f);
+        m_pMonster->Active_Debuff(4, 0.7f);
     }
     else
     {
         m_pMonster->DeActive_CurrentWeaponCollider(2);
         m_pMonster->DeActive_CurrentWeaponCollider(4);
+
+        m_pMonster->DeActive_Debuff(2);
+        m_pMonster->DeActive_Debuff(4);
     }
 }
 

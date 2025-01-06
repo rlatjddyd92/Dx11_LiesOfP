@@ -125,6 +125,8 @@ void CCarcassBigA::Update(_float fTimeDelta)
 			else m_eStat.bWeakness = true;
 		}
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
+
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pDissolveEffect->Update(fTimeDelta);
 }

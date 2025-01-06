@@ -110,6 +110,7 @@ void CCarcassNormal::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
+	Update_Debuff(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }

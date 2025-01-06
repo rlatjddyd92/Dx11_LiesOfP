@@ -98,10 +98,14 @@ void CState_RaxasiaP1_GroundSlash::Collider_Check(_double CurTrackPos)
     if ((CurTrackPos >= 110.f && CurTrackPos <= 220.f))
     {
         m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+
+        m_pMonster->Active_Debuff(0, 1.f);
     }
     else
     {
         m_pMonster->DeActive_CurrentWeaponCollider(0);
+
+        m_pMonster->DeActive_Debuff(0);
     }
 
     if (!m_bResetList)

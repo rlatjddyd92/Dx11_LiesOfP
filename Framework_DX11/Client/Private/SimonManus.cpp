@@ -248,7 +248,11 @@ void CSimonManus::Update(_float fTimeDelta)
 		pEffect->Update(fTimeDelta);
 	}
 
-	Update_Collider();
+	if (!m_isCutScene)
+	{
+		Update_Collider();
+		Update_Debuff(fTimeDelta);
+	}
 
 	m_pWeapon->Update(fTimeDelta);
 	

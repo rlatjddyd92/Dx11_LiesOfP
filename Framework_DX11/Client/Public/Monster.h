@@ -96,6 +96,8 @@ public:
 	virtual void		On_PowerAttack(_bool bOn) {};
 	virtual void		Resetting() {};
 
+	void				Calc_DebuffGain(_uint iDebuffType, _float fDebuffDuration);
+
 protected:
 	_Vec4				m_vRootMoveStack{};
 	_Vec3				m_vCurRootMove{};
@@ -103,27 +105,35 @@ protected:
 	_bool               m_bDiscover = { false };
 	_bool               m_bFirstMeetCheck = { false };
 
-	_bool		m_bEndAnim = { false };
-	_bool		m_bResetRootMove = { true };
-	_bool		m_bRootMoveCtr = { true };
+	_bool				m_bEndAnim = { false };
+	_bool				m_bResetRootMove = { true };
+	_bool				m_bRootMoveCtr = { true };
 
-	_bool		m_bFatalAttacked = { false };
-	_bool		m_bTargetDead = { false };
+	_bool				m_bFatalAttacked = { false };
+	_bool				m_bTargetDead = { false };
 
-	_float		m_fPrevTrackPos{};
+	_float				m_fPrevTrackPos{};
 
-	_int		m_iOriginCellNum = {0};
+	_int				m_iOriginCellNum = {0};
 
-	_Vec4		m_vPosTarget{};
+	_Vec4				m_vPosTarget{};
 
-	_bool       m_isBoss = { false };
-	_bool		m_isFirstCreate = { false };
+	_bool				m_isBoss = { false };
+	_bool				m_isFirstCreate = { false };
 
-	_int		m_iErgoPoint = { 0 };
+	_int				m_iErgoPoint = { 0 };
+
+	//ต๐น๖วม
+	_float				m_fDebuffDuration[DEBUFF_END] = {};
+	_bool				m_bDebuffed[DEBUFF_END] = {};
 
 protected:
+	void				Update_Debuff(_float fTimeDelta);
+	void				Reset_Debuff();
+
 	HRESULT		Ready_Components();
 	HRESULT		Ready_FSM();
+
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

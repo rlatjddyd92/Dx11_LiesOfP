@@ -164,19 +164,23 @@ void CState_RaxasiaP2_TeleportAttack::Collider_Check(_double CurTrackPos)
             (CurTrackPos >= 140.f && CurTrackPos <= 165.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_Debuff(0, 0.4f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_Debuff(0);
         }
 
         if ((CurTrackPos >= 75.f && CurTrackPos <= 100.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_Debuff(0, 0.4f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(1);
+            m_pMonster->DeActive_Debuff(0);
         }
     }
 }

@@ -284,6 +284,56 @@ void CMonster::SetUp_Act()
 	m_bFirstMeetCheck = true;
 }
 
+void CMonster::Calc_DebuffGain(_uint iDebuffType, _float fDebuffDuration)
+{
+	if (m_bDebuffed[iDebuffType])
+	{
+		if (m_fDebuffDuration[iDebuffType] < fDebuffDuration)
+		{
+			m_fDebuffDuration[iDebuffType] = fDebuffDuration;
+		}
+	}
+	else
+	{
+		m_bDebuffed[iDebuffType] = true;
+
+		m_fDebuffDuration[iDebuffType] = fDebuffDuration;
+		//이펙트를 활성화
+	}
+}
+
+void CMonster::Update_Debuff(_float fTimeDelta)
+{
+	for (_uint i = 0; i < DEBUFF_END; ++i)
+	{
+		if (m_bDebuffed[i])
+		{
+			if (m_fDebuffDuration[i] > fTimeDelta)
+			{
+				m_fDebuffDuration[i] -= fTimeDelta;
+				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * fTimeDelta;
+			}
+			else
+			{
+				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * m_fDebuffDuration[i];
+				m_fDebuffDuration[i] = 0.f;
+			}
+			 
+			//이펙트 업데이트
+
+		}
+	}
+}
+
+void CMonster::Reset_Debuff()
+{
+	for (_uint i = 0; i < DEBUFF_END; ++i)
+	{
+		m_bDebuffed[i] = false;
+		m_fDebuffDuration[i] = 0.f;
+	}
+}
+
 HRESULT CMonster::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

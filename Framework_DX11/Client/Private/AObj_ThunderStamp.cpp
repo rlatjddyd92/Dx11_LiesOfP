@@ -3,8 +3,10 @@
 
 #include "GameInstance.h"
 #include "Pawn.h"
+#include "Player.h"
 
 #include "Effect_Manager.h"
+
 
 CAObj_ThunderStamp::CAObj_ThunderStamp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
@@ -125,6 +127,8 @@ void CAObj_ThunderStamp::OnCollisionEnter(CGameObject* pOther)
         {
             m_DamagedObjects.push_back(pOther);
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+
+            static_cast<CPlayer*>(pOther)->Calc_DebuffGain(CPawn::DEBUFF_ELEC, 10.f);
         }
     }
 }

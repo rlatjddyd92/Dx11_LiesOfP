@@ -142,10 +142,12 @@ void CState_RaxasiaP2_Tele::Collider_Check(_double CurTrackPos)
         if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_Debuff(0, 0.3f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(0);
+            m_pMonster->DeActive_Debuff(0);
         }
     }
 }

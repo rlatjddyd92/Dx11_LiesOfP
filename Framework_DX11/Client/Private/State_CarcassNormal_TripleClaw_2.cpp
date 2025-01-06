@@ -122,10 +122,14 @@ void CState_CarcassNormal_TripleClaw_2::Collider_Check(_double CurTrackPos)
         if (CurTrackPos >= 55.f && CurTrackPos <= 70.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1.1f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+
+            m_pMonster->Active_Debuff(1, 1.f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(1);
+
+            m_pMonster->DeActive_Debuff(1);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -133,10 +137,14 @@ void CState_CarcassNormal_TripleClaw_2::Collider_Check(_double CurTrackPos)
         if (CurTrackPos >= 30.f && CurTrackPos <= 45.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+
+            m_pMonster->Active_Debuff(0, 1.f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(0);
+
+            m_pMonster->DeActive_Debuff(1);
         }
     }
     else
@@ -144,10 +152,14 @@ void CState_CarcassNormal_TripleClaw_2::Collider_Check(_double CurTrackPos)
         if (CurTrackPos >= 55.f && CurTrackPos <= 65.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+
+            m_pMonster->Active_Debuff(1, 1.f);
         }
         else
         {
             m_pMonster->DeActive_CurrentWeaponCollider(1);
+
+            m_pMonster->DeActive_Debuff(1);
         }
     }
 
