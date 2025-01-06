@@ -46,9 +46,19 @@ HRESULT CState_Player_TH_Guard::Start_State(void* pArg)
 
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.05f);
 
-    m_pPlayer->Set_IsGuard(true);
+    if (m_pFsm->Get_PrevState() == CPlayer::OH_GUARDHIT
+        || m_pFsm->Get_PrevState() == CPlayer::TH_GUARDHIT)
+    {
+        m_pPlayer->Set_IsGuard(true, false);
+    }
+    else
+    {
+        m_pPlayer->Set_IsGuard(true);
+    }
+
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
     m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Rustle_Stab_01.wav"));
+
     return S_OK;
 }
 

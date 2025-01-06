@@ -91,8 +91,10 @@ void CPlayerCollider_Fatal::OnCollisionEnter(CGameObject* pOther)
 	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		m_pContactMonster = dynamic_cast<CMonster*>(pOther);
+
 		if (m_pContactMonster->Get_IsDieState())
 		{
+			m_pContactMonster->Get_Status()->bFatalAttack = false;
 			m_pContactMonster = nullptr;
 		}
 	}
@@ -106,7 +108,11 @@ void CPlayerCollider_Fatal::OnCollisionExit(CGameObject* pOther)
 {
 	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
-		m_pContactMonster = dynamic_cast<CMonster*>(pOther);
+		if (m_pContactMonster)
+		{
+			m_pContactMonster->Get_Status()->bFatalAttack = false;
+			m_pContactMonster = dynamic_cast<CMonster*>(pOther);
+		}
 	}
 }
 

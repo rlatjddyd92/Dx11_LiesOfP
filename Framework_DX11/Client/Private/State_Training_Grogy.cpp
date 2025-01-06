@@ -57,6 +57,8 @@ void CState_Training_Grogy::Update(_float fTimeDelta)
 
 void CState_Training_Grogy::End_State()
 {
+    m_pMonster->Get_Status()->bFatalAttack = false;
+    m_pMonster->Get_Status()->bWeakness = false;
     m_pMonster->Reset_GroggyPoint();
 }
 

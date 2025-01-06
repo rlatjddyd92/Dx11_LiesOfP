@@ -58,7 +58,7 @@ void CState_Player_Flame_LAttack00::Update(_float fTimeDelta)
 
     if (iFrame < m_iChangeFrame && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 30.f)
     {
-        if (m_pPlayer->Key_Hold(KEY::LBUTTON))
+        if (m_pPlayer->Key_Tab(KEY::LBUTTON))
         {
             m_isInputLButton = true;
             m_isInputRButton = false;

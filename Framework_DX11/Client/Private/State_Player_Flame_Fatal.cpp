@@ -75,7 +75,7 @@ void CState_Player_Flame_Fatal::Update(_float fTimeDelta)
 
     if (End_Check())
     {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 
     Control_Collider(iFrame);

@@ -167,12 +167,12 @@ public:
 	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
 
 	_bool					Get_IsGuard() { return m_isGuard; }
-	void					Set_IsGuard(_bool isGuard, _bool isReset = true, _float fTimeOffset = 0.f) {
+	void					Set_IsGuard(_bool isGuard, _bool isReset = true, _float fTime = 0.f) {
 		m_isGuard = isGuard;
 		if (m_isGuard && isReset)
 		{
 			m_isGuardSlow = true;
-			m_fGuardTime = 0.f + fTimeOffset;
+			m_fGuardTime = fTime;
 		}
 	}
 

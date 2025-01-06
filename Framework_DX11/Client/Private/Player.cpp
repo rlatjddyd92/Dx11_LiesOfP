@@ -157,13 +157,13 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
 	m_iRespawn_Cell_Num = 772;
@@ -182,7 +182,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	// 25-01-05 김성용
 	// 아래 함수 주석 걸면 튜토리얼 안들어감
-	//GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
+	GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
 
 	return S_OK;
 }
@@ -889,7 +889,10 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 
 			if (m_isGuardSlow)
+			{
 				m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
+				m_isGuardSlow = false;
+			}
 
 			return false;
 		}
@@ -1004,7 +1007,10 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 
 			if (m_isGuardSlow)
+			{
 				m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
+				m_isGuardSlow = false;
+			}
 		}
 		else
 		{
@@ -1132,6 +1138,9 @@ void CPlayer::Increase_Region(_float fAmount)
 
 void CPlayer::Decrease_Region(_uint iRegionCount)
 {
+	if (GET_GAMEINTERFACE->IsTutorial_Open())
+		return;
+
 	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
 	for (_uint i = 0; i < iRegionCount; ++i)
 	{
@@ -1844,13 +1853,14 @@ void CPlayer::Check_FatalAttack()
 	{
 		m_isFatalAttack = true;
 	}
-	else if ((fDirDot >= 0.85f && fLookDot >= 0.8f))
+	else if ((fDirDot >= 0.85f && fLookDot >= 0.8f) && !m_pContactMonster->Get_IsBoss())
 	{
-		if(!m_pContactMonster->Get_IsBoss())
-			m_isFatalAttack = true;
+		m_pContactMonster->Get_Status()->bFatalAttack = true;
+		m_isFatalAttack = true; 
 	}
 	else
 	{
+		m_pContactMonster->Get_Status()->bFatalAttack = false;
 		m_isFatalAttack = false;
 	}
 }

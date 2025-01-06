@@ -59,6 +59,9 @@ void CState_Training_HitFatal::End_State()
 {
     m_pMonster->Set_IsInvicible(false);
     (*m_pFatalAttacked) = false;
+    m_pMonster->Get_Status()->bFatalAttack = false;
+    m_pMonster->Get_Status()->bWeakness = false;
+    m_pMonster->Reset_GroggyPoint();
 }
 
 CState_Training_HitFatal* CState_Training_HitFatal::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

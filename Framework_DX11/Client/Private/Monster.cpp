@@ -273,6 +273,15 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	return true;
 }
 
+void CMonster::Increase_GroggyPoint(_float fGroggy)
+{
+	if (m_pFsmCom->Get_CurrentState() == GROGY
+		|| m_pFsmCom->Get_CurrentState() == HITFATAL)
+		return;
+
+		m_eStat.fGrogyPoint += fGroggy;
+}
+
 void CMonster::Start_Fatal()
 {
 	m_pFsmCom->Change_State(HITFATAL);
