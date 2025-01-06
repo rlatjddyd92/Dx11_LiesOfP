@@ -308,7 +308,6 @@ void CController_AnimationTool::ListUp_Anim()
 					m_iSelected_Index_Anim = i;
 				}
 
-
 				if (!is_selected)
 					ImGui::SetItemDefaultFocus();
 				is_selected = false;
@@ -322,7 +321,7 @@ void CController_AnimationTool::ListUp_Anim()
 	{
 		if (m_iSelected_Index_Anim != m_iCurSelected_Index_Anim)
 		{
-			static_cast<CAnimModel*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0))->ChangeAnim(m_iSelected_Index_Anim);
+			m_pCopyModelCom->SetUp_NextAnimation(m_iSelected_Index_Anim, true, 0.2f, 0, false);
 			if (m_pCopyAnimVec->size() > 0)
 			{
 				m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
