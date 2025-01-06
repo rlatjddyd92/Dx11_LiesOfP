@@ -5,14 +5,10 @@
 #include "Player.h"
 #include "Fsm.h"
 
-// 24-11-26 김성용
-// 게임인터페이스 접근 코드 
-// 정식 코드  
 #include "GameInterface_Controller.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
-//전부 수정하기
 
 #include "Weapon.h"
 #include "CutScene.h"
@@ -152,7 +148,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	if (dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Get_bHavePlayed())
 	{
 		m_isFirstCreate = false;
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-59.119f, -97.78, -27.848f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(0.f, 0.f, 0.f));
 		m_pTransformCom->LookAt_NoHeight(static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY))->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 	}
 	else
@@ -524,7 +520,11 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 		m_pRigidBodyCom->Set_GloblePose(_Vec3(0.f, 0.f, 0.f));
 		m_pTransformCom->Rotation(0.f, 50.f, 0.f);
 
-		m_pCutSceneFsmCom->Change_State(STATE_P2);
+		if(m_isFirstCreate)
+			m_pCutSceneFsmCom->Change_State(STATE_P2);
+		else
+			m_pCutSceneFsmCom->Set_State(STATE_P2);
+
 		break;
 	case CUTSCENE_DIE:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
