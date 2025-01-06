@@ -85,7 +85,8 @@ public:
 	_bool*				Get_bFatalAttacked() { return &m_bFatalAttacked; }
 
 	_bool*				Get_bDicover() { return &m_bDiscover; };
-	_bool				Get_TargetDead() { return m_bTargetDead; }
+	const _bool			Get_TargetDead() { return m_bTargetDead; }
+	const _bool			Get_BackAttackCtr() {return m_bBackAttackCtr; }
 	_bool*				Get_FirstMeetCheck() { return &m_bFirstMeetCheck; };
 
 	void				SetUp_Act();
@@ -102,15 +103,21 @@ protected:
 	_Vec4				m_vRootMoveStack{};
 	_Vec3				m_vCurRootMove{};
 
+	//상태제어
 	_bool               m_bDiscover = { false };
 	_bool               m_bFirstMeetCheck = { false };
+	_bool				m_bTargetDead = { false };
 
 	_bool				m_bEndAnim = { false };
 	_bool				m_bResetRootMove = { true };
 	_bool				m_bRootMoveCtr = { true };
 
+	//페이탈 어택 류
 	_bool				m_bFatalAttacked = { false };
-	_bool				m_bTargetDead = { false };
+	_bool				m_bBackAttackCtr = { false };
+
+	_float				m_fFatalDelay = {8.f};
+	_float				m_fFatalTimeStack = {8.f};
 
 	_float				m_fPrevTrackPos{};
 

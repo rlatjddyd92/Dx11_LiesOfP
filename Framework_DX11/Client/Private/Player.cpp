@@ -1877,8 +1877,16 @@ void CPlayer::Check_FatalAttack()
 	}
 	else if ((fDirDot >= 0.85f && fLookDot >= 0.8f) && !m_pContactMonster->Get_IsBoss())
 	{
-		m_pContactMonster->Get_Status()->bFatalAttack = true;
-		m_isFatalAttack = true; 
+		if (m_pContactMonster->Get_BackAttackCtr())
+		{
+			m_pContactMonster->Get_Status()->bFatalAttack = true;
+			m_isFatalAttack = true;
+		}
+		else
+		{
+			m_pContactMonster->Get_Status()->bFatalAttack = false;
+			m_isFatalAttack = false;
+		}
 	}
 	else
 	{

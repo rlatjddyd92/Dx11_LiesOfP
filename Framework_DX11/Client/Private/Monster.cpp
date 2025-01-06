@@ -45,17 +45,18 @@ HRESULT CMonster::Initialize(void* pArg)
 
 void CMonster::Priority_Update(_float fTimeDelta)
 {
+	//플레이어 위치 업데이트
 	CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 	if (m_pGameInstance->Find_Player(LEVEL_GAMEPLAY) != nullptr)
 	{
 		m_vPosTarget = pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 	}
-
+	//그로기 체크
 	if (m_eStat.fGrogyPoint >= m_eStat.fMaxGrogyPoint)
 	{
 		m_eStat.bWeakness = true;
 	}
-	
+	//플레이어 사망 체크
 	if (pPlayer->Get_IsDieState())
 	{
 		m_bTargetDead = true;
@@ -64,6 +65,16 @@ void CMonster::Priority_Update(_float fTimeDelta)
 	{
 		m_bTargetDead = false;
 	}
+	//페이탈 연타 방지 체크
+	if (!m_bBackAttackCtr)
+	{
+		m_fFatalTimeStack += fTimeDelta;
+		if (m_fFatalTimeStack >= m_fFatalDelay)
+		{
+			m_bBackAttackCtr = true;
+		}
+	}
+
 
 	if (!m_isBoss)
 	{
