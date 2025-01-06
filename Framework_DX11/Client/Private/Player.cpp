@@ -311,7 +311,8 @@ void CPlayer::Update(_float fTimeDelta)
 			CObjectPool<CDecal_Blood>::Get_GameObject()->Active_Random(vPlayerPos);
 		}
 
-		// late call
+		Calc_DebuffGain(DEBUFF_FIRE, 10.f);
+
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 		//Change_State(FLAME_FATAL);
@@ -1066,19 +1067,23 @@ void CPlayer::Calc_DebuffGain(_uint iDebuffType, _float fAmount)
 	if (m_fDebuffReduceTime > 0.f)
 		fAmount *= 0.4f;
 
+
 	switch (iDebuffType)
 	{
 	case Client::CPlayer::DEBUFF_FIRE:
+		fAmount = fAmount * ((m_tPlayer_Stat->fDebuff_Fire.x + m_tPlayer_Stat_Adjust->fDebuff_Fire.x) / 1000.f);
 		m_tPlayer_Stat->fDebuff_Fire.x = min(m_tPlayer_Stat->fDebuff_Fire.x + fAmount, m_tPlayer_Stat->fDebuff_Fire.y);
 		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
 
 	case Client::CPlayer::DEBUFF_ELEC:
+		fAmount = fAmount * ((m_tPlayer_Stat->fDebuff_Electric.x + m_tPlayer_Stat_Adjust->fDebuff_Electric.x) / 1000.f);
 		m_tPlayer_Stat->fDebuff_Electric.x = min(m_tPlayer_Stat->fDebuff_Electric.x + fAmount, m_tPlayer_Stat->fDebuff_Electric.y);
 		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
 
 	case Client::CPlayer::DEBUFF_ACID:
+		fAmount = fAmount * ((m_tPlayer_Stat->fDebuff_Acid.x + m_tPlayer_Stat_Adjust->fDebuff_Acid.x) / 1000.f);
 		m_tPlayer_Stat->fDebuff_Acid.x = min(m_tPlayer_Stat->fDebuff_Acid.x + fAmount, m_tPlayer_Stat->fDebuff_Acid.y);
 		m_fDebuffRecoveryTime[iDebuffType] = 0.15f;
 		break;
@@ -1285,6 +1290,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 
 	if (m_fDebuffRecoveryTime[DEBUFF_FIRE] <= 0.f)
 	{
+		m_DissolveEffects[DISSOLVE_FIRE]->Set_On(false);
 		m_tPlayer_Stat->fDebuff_Fire.x = max(m_tPlayer_Stat->fDebuff_Fire.x - 2.f * fTimeDelta, 0.f);
 	}
 	
@@ -1301,6 +1307,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	// 불 상태면 지속 데미지
 	if (m_tPlayer_Stat->fDebuff_Fire.x > m_tPlayer_Stat->fDebuff_Fire.y * 0.5f)
 	{
+		m_DissolveEffects[DISSOLVE_FIRE]->Set_On(true);
 		Damaged(0.05f);
 	}
 
@@ -2142,8 +2149,6 @@ HRESULT CPlayer::Ready_Effect()
 	m_DissolveEffects[DISSOLVE_FIRE] = static_cast<CDissolve_Fire*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
 	if (nullptr == m_DissolveEffects[DISSOLVE_FIRE])
 		return E_FAIL;
-	
-	m_DissolveEffects[DISSOLVE_FIRE]->Set_On(true);
 
 	return S_OK;
 }
