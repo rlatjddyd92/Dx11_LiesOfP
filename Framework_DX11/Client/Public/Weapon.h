@@ -33,6 +33,11 @@ public:
 	typedef struct : public WEAPON_DESC
 	{
 		class CMonster* pMonster = { nullptr };
+
+		// 속성 이넘, 기본 속성 스탯 받아오고, 속성 배율을 포함해서 키고 끌 수 있도록
+
+		//
+
 	}MONSTER_WAPON_DESC;
 
 protected:
