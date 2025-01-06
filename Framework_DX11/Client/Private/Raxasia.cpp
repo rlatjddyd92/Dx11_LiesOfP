@@ -1324,18 +1324,25 @@ void CRaxasia::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 
+	for (auto& DissolveEffect : m_DissolveEffects)
+	{
+		if (DissolveEffect)
+			Safe_Release(DissolveEffect);
+	}
+	m_DissolveEffects.clear();
+
 	Safe_Release(m_pDissloveTexture);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pWeaponShield);
 	Safe_Release(m_pKickCollObj);
 
-	if (m_pModelCom != m_pP1ModelCom && m_pP1ModelCom)
+	if (m_pP1ModelCom && m_pModelCom != m_pP1ModelCom)
 		Safe_Release(m_pP1ModelCom);
-	if (m_pModelCom != m_pExtraModelCom && m_pExtraModelCom)
+	if (m_pExtraModelCom && m_pModelCom != m_pExtraModelCom )
 		Safe_Release(m_pExtraModelCom);
-	if(m_pModelCom != m_pCutSceneModelCom[0] && m_pCutSceneModelCom[0])
+	if(m_pCutSceneModelCom[0] && m_pModelCom != m_pCutSceneModelCom[0])
 		Safe_Release(m_pCutSceneModelCom[0]);
-	if (m_pModelCom != m_pCutSceneModelCom[1] && m_pCutSceneModelCom[1])
+	if (m_pCutSceneModelCom[1] && m_pModelCom != m_pCutSceneModelCom[1])
 		Safe_Release(m_pCutSceneModelCom[1]);
 
 	Safe_Release(m_pDouTexture);
@@ -1359,12 +1366,9 @@ void CRaxasia::Free()
 	if (m_pCutSceneFsmCom != nullptr)
 	{
 		m_pCutSceneFsmCom->Release_States();
+		Safe_Release(m_pCutSceneFsmCom);
 	}
-	Safe_Release(m_pCutSceneFsmCom);
 	
-	for (auto& DissolveEffect : m_DissolveEffects)
-		Safe_Release(DissolveEffect);
-	m_DissolveEffects.clear();
 
 	__super::Free();
 
