@@ -113,7 +113,7 @@ HRESULT CGameObject::Add_Component(_uint iLevelIndex, const _wstring & strProtot
 	if (nullptr != Find_Component(strComponentTag))
 		return E_FAIL;
 
-	CComponent*		pComponent = m_pGameInstance->Clone_Component(iLevelIndex, strPrototypeTag, pArg);
+ 	CComponent*		pComponent = m_pGameInstance->Clone_Component(iLevelIndex, strPrototypeTag, pArg);
 	if (nullptr == pComponent)
 		return E_FAIL;
 

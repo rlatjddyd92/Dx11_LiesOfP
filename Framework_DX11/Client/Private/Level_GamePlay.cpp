@@ -503,6 +503,11 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"), &pDesc)))
 							return E_FAIL;
 					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerMale_Fire")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMaleFire"), &pDesc)))
+							return E_FAIL;
+					}
 				}	
 				else if (strLayerTag == "Layer_Decal")
 				{
