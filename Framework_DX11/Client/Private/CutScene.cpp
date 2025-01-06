@@ -309,7 +309,7 @@ void CCutScene::First_Setting()
 		break;
 	case BOSS2_DEFEAT:
 	{
-		m_bDeactivePlayer = true;
+		pPlayer->IsActive(false);
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		CGameObject* pBlockObj = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), 0);
 		if (pBlockObj != nullptr)
