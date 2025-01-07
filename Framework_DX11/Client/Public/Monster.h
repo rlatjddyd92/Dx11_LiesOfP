@@ -146,7 +146,7 @@ protected:
 	_float				m_fDebuffDuration[SURFACE_END] = {};
 	_bool				m_bDebuffed[SURFACE_END] = {};
 
-	vector<class CDissolve_Effect*> m_DissolveEffect;
+	vector<class CDissolve_Effect*> m_SurfaceEffect;
 
 protected:
 	void				Update_Debuff(_float fTimeDelta);
