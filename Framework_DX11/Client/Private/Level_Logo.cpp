@@ -64,7 +64,7 @@ void CLevel_Logo::Update(_float fTimeDelta)
 
 		if (FAILED(m_pGameInstance->Change_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
 			return;
-
+		 
 		GET_GAMEINTERFACE->Open_Loading_Page(); // 로딩 진행 
 
 	}

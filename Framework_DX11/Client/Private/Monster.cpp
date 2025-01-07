@@ -250,6 +250,15 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	m_eStat.fHp -= fAtkDmg;
 	m_eStat.fAtkDmg = fAtkDmg;
 
+	if (!m_isBoss)
+	{
+		if (iAttackStrength >= ATTACK_STRENGTH::ATK_STRONG && m_pFsmCom->Get_CurrentState() != KNOCKBACK &&
+			m_pFsmCom->Get_CurrentState() != HITFATAL && m_pFsmCom->Get_CurrentState() != GROGY)
+		{
+			++m_iKnockBackCount;
+		}
+	}
+
 	if (m_eStat.bWeakness && m_pFsmCom->Get_CurrentState() != HITFATAL && m_pFsmCom->Get_CurrentState() != GROGY)
 	{
 		if (iAttackStrength >= ATTACK_STRENGTH::ATK_NORMAL)
@@ -280,12 +289,22 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 			return true;
 		}
 	}
-	
+
 	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
 	{
 		m_bFatalAttacked = true;
 		m_eStat.bFatalAttack = false;
 		m_bDiscover = true;
+	}
+
+	if (!m_isBoss)
+	{
+		if (m_iKnockBackCount >= m_iKnockBackResist)
+		{
+			m_pFsmCom->Change_State(KNOCKBACK);
+			m_iKnockBackCount = 0;
+			return true;
+		}
 	}
 
 	if (!m_bDiscover)
