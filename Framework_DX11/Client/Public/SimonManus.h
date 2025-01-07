@@ -116,6 +116,8 @@ public:
 
 	virtual void		Resetting() override;
 	virtual void		On_PowerAttack(_bool bOn) override;
+
+	void				Effect_All_Off();
 private:
 	CColliderObject* m_pColliderObject = { nullptr };
 	vector<CGameObject*>	CollObjRenderP{};

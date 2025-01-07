@@ -130,6 +130,7 @@ public:
 	virtual void		Resetting() override;
 	virtual void		On_PowerAttack(_bool bOn) override;
 
+	void				Effect_All_Off();
 private:
 	vector<CGameObject*>	CollObjRenderP{};
 	vector<class CEffect_Container*> m_Effects;
