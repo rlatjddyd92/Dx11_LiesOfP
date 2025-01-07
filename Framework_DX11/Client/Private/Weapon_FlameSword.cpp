@@ -158,6 +158,11 @@ void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				m_fFinalDamageAmount *= 1.2f;
 
+			if (GET_GAMEINTERFACE->Get_Durable_Weapon_Ratio() < 0.3f)
+				m_fFinalDamageAmount *= 0.5f;
+
+			GET_GAMEINTERFACE->Add_Potion_Gauge(m_fDamageAmount * 2.f);
+
 			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				m_pPlayer->Increase_Region(10.f);

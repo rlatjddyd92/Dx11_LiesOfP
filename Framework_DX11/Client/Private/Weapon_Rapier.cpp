@@ -158,8 +158,8 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				m_fFinalDamageAmount *= 1.2f;
 
-			//if(GET_GAMEINTERFACE->Get_e=)
-			//m_fFinalDamageAmount 
+			if (GET_GAMEINTERFACE->Get_Durable_Weapon_Ratio() < 0.3f)
+				m_fFinalDamageAmount *= 0.5f;
 
 			GET_GAMEINTERFACE->Add_Potion_Gauge(m_fDamageAmount * 2.f);
 
