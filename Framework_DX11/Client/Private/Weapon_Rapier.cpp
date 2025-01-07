@@ -158,8 +158,7 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				m_fFinalDamageAmount *= 1.2f;
 
-			// 내구도 가져오는 함수 만들어 다라고 하기
-			//if(GET_GAMEINTERFACE->Get_weapon)
+			//if(GET_GAMEINTERFACE->Get_e=)
 			//m_fFinalDamageAmount 
 
 			GET_GAMEINTERFACE->Add_Potion_Gauge(m_fDamageAmount * 2.f);

@@ -105,6 +105,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Effect.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Electric.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Dissolve_Fire.cpp"
 
 
