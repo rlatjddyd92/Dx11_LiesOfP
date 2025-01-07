@@ -32,6 +32,7 @@ private:
     _uint               m_iRouteTrack = {};
 
     _bool               m_bSwing = { false };
+    _bool               m_bReverseSwing = { false };
 
     _bool               m_bResetCheck = { false };
     _bool               m_bStamp_Sound = { false };

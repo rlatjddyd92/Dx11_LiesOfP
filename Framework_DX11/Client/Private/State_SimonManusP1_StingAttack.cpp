@@ -23,6 +23,7 @@ HRESULT CState_SimonManusP1_StingAttack::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_STINGATTACK, false, 0.1f, 0);
 
     m_bStingSound = false;
+    m_bStingSound = false;
 
     return S_OK;
 }
@@ -61,6 +62,25 @@ void CState_SimonManusP1_StingAttack::Collider_Check(_double CurTrackPos)
     else
     {
         m_pMonster->DeActive_CurrentWeaponCollider(0);
+    }
+}
+
+void CState_SimonManusP1_StingAttack::Effect_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 85.f && CurTrackPos <= 110.f) ||
+        (CurTrackPos >= 175.f && CurTrackPos <= 200.f))
+    {
+        if (!m_bSting)
+        {
+            m_bSting = true;
+            m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
+
+        }
+    }
+    else
+    {
+        m_bSting = false;
+        m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
     }
 }
 

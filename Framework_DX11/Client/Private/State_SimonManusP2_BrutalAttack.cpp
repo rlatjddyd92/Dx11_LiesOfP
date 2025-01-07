@@ -104,32 +104,48 @@ void CState_SimonManusP2_BrutalAttack::Collider_Check(_double CurTrackPos)
 
 void CState_SimonManusP2_BrutalAttack::Effect_Check(_double CurTrackPos)
 {
-    if (!m_bSwing)
+    if ((CurTrackPos >= 88.f && CurTrackPos <= 115.f) ||
+        (CurTrackPos >= 154.f && CurTrackPos <= 180.f))
     {
-        if ((CurTrackPos >= 88.f && CurTrackPos <= 115.f) ||
-            (CurTrackPos >= 154.f && CurTrackPos <= 180.f) ||
-            (CurTrackPos >= 205.f && CurTrackPos <= 270.f))
+        if (!m_bSwing)
+        {
+            m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->Active_Effect(CSimonManus::SWING_DRAG_REVERSE);
+            m_bSwing = true;
+        }
+    }
+    else if ((CurTrackPos >= 205.f && CurTrackPos <= 270.f))
+    {
+        if (!m_bSwing)
         {
             m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
             m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
             m_bSwing = true;
         }
-        else
+    }
+    else
+    {
+        m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+        m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
+        m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG_REVERSE);
+        m_bSwing = false;
+    }
+
+    if ((CurTrackPos >= 332.f && CurTrackPos <= 350.f) ||
+        (CurTrackPos >= 392.f && CurTrackPos <= 419.f) ||
+        (CurTrackPos >= 154.f && CurTrackPos <= 571.f))
+    {
+        if (!m_bSwing)
         {
-            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
-            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
+            m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+            m_bSwing = true;
         }
     }
     else
     {
-        if ((CurTrackPos > 115.f && CurTrackPos <= 120.f) ||
-            (CurTrackPos > 180.f && CurTrackPos <= 185.f))
-        {
-            m_bSwing = false;
-        }
-
+        m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+        m_bSwing = false; 
     }
-
 
     if (!m_bStamp)
     {

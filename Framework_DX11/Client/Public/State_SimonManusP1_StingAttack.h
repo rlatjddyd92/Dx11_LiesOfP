@@ -26,11 +26,13 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bSting = { false };
     _bool           m_bStingSound = { false };
 
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
+    void                Effect_Check(_double CurTrackPos);
     void                Control_Sound(_double CurTrackPos);
 
 public:

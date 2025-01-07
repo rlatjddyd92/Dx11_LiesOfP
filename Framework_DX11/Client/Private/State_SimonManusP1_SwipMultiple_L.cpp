@@ -24,6 +24,7 @@ HRESULT CState_SimonManusP1_SwipMultiple_L::Start_State(void* pArg)
     m_bSwing_Sound = false;
     m_bStamp_Sound = false;
     m_bResetCheck = false;
+    m_bReverseSwing = false;
     m_bSwing = false;
     return S_OK;
 }
@@ -44,6 +45,7 @@ void CState_SimonManusP1_SwipMultiple_L::Update(_float fTimeDelta)
 
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
             m_bSwing = false;
+            m_bReverseSwing = false;
             m_bSwing_Sound = false;
             break;
 
@@ -130,7 +132,7 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0)
     {
-        if ((CurTrackPos >= 80.f && CurTrackPos <= 205.f))
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 160.f))
         {
             if (!m_bSwing)
             {
@@ -139,10 +141,20 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
                 m_bSwing = true;
             }
         }
+        else if ((CurTrackPos >= 160.f && CurTrackPos <= 200.f))
+        {
+            if (!m_bReverseSwing)
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG_REVERSE);
+                m_bReverseSwing = true;
+            }
+        }
         else
         {
             m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
-            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG_REVERSE);
         }
     }
     else
