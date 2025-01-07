@@ -121,6 +121,10 @@ protected:
 	_bool				m_bResetRootMove = { true };
 	_bool				m_bRootMoveCtr = { true };
 
+	//비틀거림
+	_int				m_iKnockBackCount = { 0 };
+	_int				m_iKnockBackResist = { 3 };
+
 	//페이탈 어택 류
 	_bool				m_bFatalAttacked = { false };
 	_bool				m_bBackAttackCtr = { false };

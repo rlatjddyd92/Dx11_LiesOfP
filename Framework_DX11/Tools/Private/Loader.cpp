@@ -1119,7 +1119,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
 
 
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Horesman/Horesman.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Horesman/Horesman.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Horesman.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (pModel != nullptr)
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Horesman"), pModel)))
@@ -1197,8 +1198,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 
 #pragma region RebornerMaleFire
 
-	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerMale.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/RebornerMale_Fire/RebornerMale_Fire.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerMale_Fire.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/RebornerMale_Fire/RebornerMale_Fire.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (pModel != nullptr)
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_RebornerMale_Fire"), pModel)))
