@@ -363,6 +363,9 @@ void CMonster::Reset_Debuff()
 
 void CMonster::On_SurfaceEffect(_uint iIndex, _bool bOn)
 {
+	if (nullptr == m_SurfaceEffect[iIndex])
+		return;
+
 	if (bOn != m_SurfaceEffect[iIndex]->Get_On())
 		m_SurfaceEffect[iIndex]->Set_On(bOn);
 }
