@@ -235,6 +235,16 @@ void CRebornerMaleFire::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 	m_pWeapon->DeActive_Collider();
 }
 
+void CRebornerMaleFire::Active_Debuff(_int iIndex, _float fDebuffRatio)
+{
+	m_pWeapon->Active_Debuff(fDebuffRatio);
+}
+
+void CRebornerMaleFire::DeActive_Debuff(_int iIndex)
+{
+	m_pWeapon->DeActive_Debuff();
+}
+
 void CRebornerMaleFire::Active_Effect(const _uint eType, _bool isLoop)
 {
 	m_pFireEffect->Set_Loop(true);

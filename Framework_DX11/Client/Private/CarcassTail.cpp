@@ -221,6 +221,16 @@ void CCarcassTail::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }
 
+void CCarcassTail::Active_Debuff(_int iIndex, _float fDebuffRatio)
+{
+	m_pColliderObject[iIndex]->Active_Debuff(fDebuffRatio);
+}
+
+void CCarcassTail::DeActive_Debuff(_int iIndex)
+{
+	m_pColliderObject[iIndex]->DeActive_Debuff();
+}
+
 
 void CCarcassTail::Update_Debuff(_float fTimeDelta)
 {

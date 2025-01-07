@@ -230,6 +230,14 @@ void CRebornerMale::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 	m_pColliderObject->DeActive_Collider();
 }
 
+void CRebornerMale::Active_Debuff(_int iIndex, _float fDebuffRatio)
+{
+}
+
+void CRebornerMale::DeActive_Debuff(_int iIndex)
+{
+}
+
 void CRebornerMale::Update_Debuff(_float fTimeDelta)
 {
 	for (_uint i = 0; i < DEBUFF_END; ++i)

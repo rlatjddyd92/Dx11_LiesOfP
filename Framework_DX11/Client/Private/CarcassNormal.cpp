@@ -217,6 +217,16 @@ void CCarcassNormal::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }
 
+void CCarcassNormal::Active_Debuff(_int iIndex, _float fDebuffRatio)
+{
+	m_pColliderObject[iIndex]->Active_Debuff(fDebuffRatio);
+}
+
+void CCarcassNormal::DeActive_Debuff(_int iIndex)
+{
+	m_pColliderObject[iIndex]->DeActive_Debuff();
+}
+
 void CCarcassNormal::Update_Debuff(_float fTimeDelta)
 {
 	for (_uint i = 0; i < DEBUFF_END; ++i)
