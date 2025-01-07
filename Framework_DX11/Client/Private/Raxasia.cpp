@@ -239,7 +239,6 @@ void CRaxasia::Update(_float fTimeDelta)
 	if (!m_isCutScene)
 	{
 		Update_Collider();
-		Update_Debuff(fTimeDelta);
 	}
 
 	m_pWeapon->Update(fTimeDelta);
@@ -748,29 +747,6 @@ void CRaxasia::On_PowerAttack(_bool bOn)
 		m_DissolveEffects[DISSOLVE_POWERATTACK_P1]->Set_On(bOn);
 	else
 		m_DissolveEffects[DISSOLVE_POWERATTACK_P2]->Set_On(bOn);
-}
-
-void CRaxasia::Update_Debuff(_float fTimeDelta)
-{
-	for (_uint i = 0; i < DEBUFF_END; ++i)
-	{
-		if (m_bDebuffed[i])
-		{
-			if (m_fDebuffDuration[i] > fTimeDelta)
-			{
-				m_fDebuffDuration[i] -= fTimeDelta;
-				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * fTimeDelta;
-			}
-			else
-			{
-				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * m_fDebuffDuration[i];
-				m_fDebuffDuration[i] = 0.f;
-			}
-
-		}
-		//이펙트 업데이트
-
-	}
 }
 
 HRESULT CRaxasia::Ready_Components()

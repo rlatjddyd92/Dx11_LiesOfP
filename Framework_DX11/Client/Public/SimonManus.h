@@ -146,8 +146,6 @@ private:
 	_float					m_fDeadFadeInTimer = {0.f};
 
 private:
-	virtual void		Update_Debuff(_float fTimeDelta) override;
-
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();

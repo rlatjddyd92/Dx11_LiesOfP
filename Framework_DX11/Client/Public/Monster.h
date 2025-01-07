@@ -141,13 +141,13 @@ protected:
 	_int				m_iErgoPoint = { 0 };
 
 	//ต๐น๖วม
-	_float				m_fDebuffDuration[DEBUFF_END] = {};
-	_bool				m_bDebuffed[DEBUFF_END] = {};
+	_float				m_fDebuffDuration[SURFACE_END] = {};
+	_bool				m_bDebuffed[SURFACE_END] = {};
 
 	vector<class CDissolve_Effect*> m_DissolveEffect;
 
 protected:
-	virtual void		Update_Debuff(_float fTimeDelta);
+	void				Update_Debuff(_float fTimeDelta);
 	void				Reset_Debuff();
 
 	HRESULT		Ready_Components();
