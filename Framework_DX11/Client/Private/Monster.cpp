@@ -370,10 +370,13 @@ void CMonster::Reset_Debuff()
 
 void CMonster::On_SurfaceEffect(_uint iIndex, _bool bOn)
 {
-	if (m_DissolveEffect[iIndex])
+	if (m_DissolveEffect.size() < iIndex && m_DissolveEffect[iIndex])
 	{
-		if (bOn != m_DissolveEffect[iIndex]->Get_On())
-			m_DissolveEffect[iIndex]->Set_On(bOn);
+		if (m_DissolveEffect[iIndex])
+		{
+			if (bOn != m_DissolveEffect[iIndex]->Get_On())
+				m_DissolveEffect[iIndex]->Set_On(bOn);
+		}
 	}
 }
 
