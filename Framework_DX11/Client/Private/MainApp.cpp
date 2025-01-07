@@ -81,6 +81,18 @@ void CMainApp::Update(_float fTimeDelta)
 			GET_GAMEINTERFACE->UIPart_On();
 
 	}
+
+	if (GET_GAMEINTERFACE->IsTalking_WithNPC() == true)
+		_int i = 0;
+
+	if (GET_GAMEINTERFACE->IsTalking_SelectPage() == true)
+		_int i = 0;
+
+	if (GET_GAMEINTERFACE->IsTalking_WithNPC(NPC_SCRIPT::SCR_MANUS) == true)
+		_int i = 0;
+
+	if (GET_GAMEINTERFACE->IsEndTalk_WithNPC(NPC_SCRIPT::SCR_MANUS) == true)
+		_int i = 0;
 	
 	if (KEY_TAP(KEY::M))
 	{

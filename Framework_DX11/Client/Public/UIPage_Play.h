@@ -153,6 +153,8 @@ public:
 
 		GROUP_CTRL,
 
+		GROUP_FABLE_FX,
+
 		GROUP_END
 	};
 
@@ -225,6 +227,10 @@ private:
 	void Action_Weapon(_float fTimeDelta);
 
 	void LU_Gauge_Update(_float fTimeDelta);
+
+	void LU_Gauge_FableAction_Start(_float fTimeDelta, _int iNow, _int iBefore);
+	void LU_Gauge_FableAction(_float fTimeDelta);
+
 	void LD_Potion_Tool_Update(_float fTimeDelta);
 	void LD_Bag_Update(_float fTimeDelta);
 	void LD_Arm_Update(_float fTimeDelta);
@@ -273,9 +279,13 @@ private:
 	_float m_fNormal_Weapon_Fx_Alpha_Origin[4] = { 0.f, };
 	_Vec2 m_vNormal_Weapon_Fx_Size_Origin[4] = { {0.f,0.f}, };
 
-	_Vec2 m_vFable_Art_ActionTime = { 0.f,0.5f };
+	_Vec2 m_vFable_Art_ActionTime = { -1.f,0.5f };
 
 	_int m_iFable_Art_Cell_Now = 0;
+	_int m_iFableMove_Index = -1;
+	_int m_iFableMove_IndexEnd = -1;
+
+	_Vec4 m_vFable_Fill_Origin = { 0.f,0.f,0.f,0.f };
 
 	// 보스 체력바 
 	_bool m_bIs_BossHp_Activate = false;

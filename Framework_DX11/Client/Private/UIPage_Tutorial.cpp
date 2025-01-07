@@ -127,6 +127,7 @@ void CUIPage_Tutorial::OpenAction()
 void CUIPage_Tutorial::CloseAction()
 {
 	__super::CloseAction();
+	m_bPopupOpen = false;
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, m_pSharedPonter_AttackMonster);
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, m_pSharedPonter_NormalMonster);
 }
