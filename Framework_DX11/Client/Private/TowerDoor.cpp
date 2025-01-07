@@ -182,7 +182,7 @@ HRESULT CTowerDoor::Ready_Components()
 		;
 
 	physX::GeometryBox BoxDesc;
-	BoxDesc.vSize = _Vec3(4.f, 3.f, 0.3f);
+	BoxDesc.vSize = _Vec3(4.f, 3.f, 0.6f);
 	RigidBodyDesc.pGeometry = &BoxDesc;
 
 	/* FOR.Com_RigidBody */
