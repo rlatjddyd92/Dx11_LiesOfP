@@ -231,6 +231,29 @@ void CRebornerMaleFire::DeActive_Effect(const _uint eType)
 	m_pFireEffect->Set_Loop(false);
 }
 
+void CRebornerMaleFire::Update_Debuff(_float fTimeDelta)
+{
+	for (_uint i = 0; i < DEBUFF_END; ++i)
+	{
+		if (m_bDebuffed[i])
+		{
+			if (m_fDebuffDuration[i] > fTimeDelta)
+			{
+				m_fDebuffDuration[i] -= fTimeDelta;
+				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * fTimeDelta;
+			}
+			else
+			{
+				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * m_fDebuffDuration[i];
+				m_fDebuffDuration[i] = 0.f;
+			}
+
+		}
+		//이펙트 업데이트
+
+	}
+}
+
 HRESULT CRebornerMaleFire::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

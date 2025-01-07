@@ -39,7 +39,7 @@
 #include "State_SimonManusP2_HitFatal.h"
 
 #include "State_SimonManusP2_ChasingSwing.h"
-#include "State_SimonManusP2_LightningToWave.h"
+#include "State_SimonManusP2_BackLightning.h"
 #include "State_SimonManusP2_SwingDown_Swing.h"
 #include "State_SimonManusP2_Stamp.h"
 #include "State_SimonManusP2_SwipMultiple.h"
@@ -602,6 +602,29 @@ void CSimonManus::On_PowerAttack(_bool bOn)
 		m_DissolveEffects[DISSOLVE_POWERATTACK_P2]->Set_On(bOn);
 }
 
+void CSimonManus::Update_Debuff(_float fTimeDelta)
+{
+	for (_uint i = 0; i < DEBUFF_END; ++i)
+	{
+		if (m_bDebuffed[i])
+		{
+			if (m_fDebuffDuration[i] > fTimeDelta)
+			{
+				m_fDebuffDuration[i] -= fTimeDelta;
+				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * fTimeDelta;
+			}
+			else
+			{
+				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * m_fDebuffDuration[i];
+				m_fDebuffDuration[i] = 0.f;
+			}
+
+		}
+		//이펙트 업데이트
+
+	}
+}
+
 HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -766,7 +789,7 @@ HRESULT CSimonManus::Ready_FSM()
 	
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_ChasingSwing::Create(m_pExtraFsmCom, this, ATKP2_CHASINGSWING, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_JumpToAttack::Create(m_pExtraFsmCom, this, ATKP2_JUMPTOATTACK, &Desc));
-	m_pExtraFsmCom->Add_State(CState_SimonManusP2_LightningToWave::Create(m_pExtraFsmCom, this, ATKP2_LIGHTNINGTOWAVE, &Desc));
+	m_pExtraFsmCom->Add_State(CState_SimonManusP2_BackLightning::Create(m_pExtraFsmCom, this, ATKP2_BACKLIGHTNING, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Stamp::Create(m_pExtraFsmCom, this, ATKP2_STAMP, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_SwingDown_Swing::Create(m_pExtraFsmCom, this, ATKP2_SWINGDOWN_SWING, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_SwipMultiple::Create(m_pExtraFsmCom, this, ATKP2_SWIPMULTIPLE, &Desc));

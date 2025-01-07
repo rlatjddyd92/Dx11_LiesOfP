@@ -332,6 +332,7 @@
     <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h" />
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_BackLightning.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
     <ClInclude Include="..\Public\State_Training01_Attack.h" />
     <ClInclude Include="..\Public\State_Training01_Idle.h" />
@@ -502,7 +503,6 @@
     <ClInclude Include="..\Public\State_SimonManusP2_HitFatal.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Idle.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_JumpToAttack.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_LightningToWave.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Route1.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Route2.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_SlideMagic.h" />
@@ -733,6 +733,7 @@
     <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_BackLightning.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
     <ClCompile Include="..\Private\State_Training01_Attack.cpp" />
     <ClCompile Include="..\Private\State_Training01_Idle.cpp" />
@@ -902,7 +903,6 @@
     <ClCompile Include="..\Private\State_SimonManusP2_HitFatal.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Idle.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_JumpToAttack.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_LightningToWave.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Route2.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_SlideMagic.cpp" />
