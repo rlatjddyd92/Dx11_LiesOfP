@@ -49,7 +49,7 @@ HRESULT CRebornerMaleFire::Initialize(void* pArg)
 
 	m_eStat.fHp = 130.f;
 	m_eStat.fMaxHp = 130.f;
-	m_eStat.fAtk = 5.f;
+	m_eStat.fAtk = 1.f;
 	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
@@ -187,7 +187,7 @@ void CRebornerMaleFire::Resetting()
 
 	m_eStat.fHp = 130.f;
 	m_eStat.fMaxHp = 130.f;
-	m_eStat.fAtk = 5.f;
+	m_eStat.fAtk = 1.f;
 
 	m_eStat.bWeakness = false;
 	m_eStat.bFatalAttack = false;

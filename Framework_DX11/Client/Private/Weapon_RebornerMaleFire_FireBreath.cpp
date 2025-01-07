@@ -44,12 +44,12 @@ HRESULT CWeapon_RebornerMaleFire_FireBreath::Initialize(void* pArg)
 	m_fDebuffAmount = pDesc->fDebuffAmount;
 	m_iDebuffType = pDesc->iDebuffType;
 
-	*m_pParentAtk = 20.f;
 	m_strObjectTag = TEXT("MonsterWeapon");
 
-	m_fDamageAmount = 20.f;
-	m_fDamageAmount = 10.f;
+	m_fDamageAmount = *m_pParentAtk;
+	
 	m_fAttackRange = 0.f;
+	
 	return S_OK;
 }
 
