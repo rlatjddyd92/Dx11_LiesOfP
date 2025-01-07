@@ -48,7 +48,7 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 	else
 		m_pModelCom->SetUp_NextAnimation(m_iAnimation_Phase2Index, false, 0.f, 1);
 
-	m_pModelCom->Play_Animation(0.1f);
+	m_pModelCom->Play_Animation(0.01f);
 	m_isPlayAnimation = false;
 
 	/*	static _float fX = 243.f;
@@ -390,7 +390,7 @@ void CRaxasia_Sword_CutScene::Control_Phase2Effect(_float fTimeDelta)
 	_Vec3 vCurrentPos = WorldMatrix.Translation();
 	_Vec3 vWorldUp = _Vec3(0.f, 1.f, 0.f);
 
-	if (fCurretTrackPosition >= 75)
+	if (fCurretTrackPosition >= 75 && m_isPlayAnimation)
 	{
 		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
 

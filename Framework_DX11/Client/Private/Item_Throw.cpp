@@ -91,9 +91,14 @@ void CItem_Throw::Update(_float fTimeDelta)
 
 			m_pNavigationCom->isMove(vCurrentPos);
 			
-			if (vCurrentPos.y <= fGroundY || m_fThrowTime > 2.f)
+			if (vCurrentPos.y <= fGroundY || m_fThrowTime > 2.3f)
 			{
 				Explosion();
+			}
+			else if (!m_isRealThrow && m_fThrowTime > 0.3f)
+			{
+				m_isRealThrow = true;
+				m_pRigidBodyCom->Add_Force(m_vThrowDir);
 			}
 			
 			m_pRigidBodyCom->Update(fTimeDelta);
@@ -244,10 +249,9 @@ void CItem_Throw::Throw()
 
 	m_vThrowDir.Normalize();
 
-	m_vThrowDir *= 900.f;
+	m_vThrowDir *= 800.f;
 	//m_vThrowDir.y *= 100.f;
 
-	m_pRigidBodyCom->Add_Force(m_vThrowDir);
 
 	m_isThrow = true;
 }

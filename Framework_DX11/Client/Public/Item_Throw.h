@@ -62,6 +62,7 @@ private:
 
 private:
 	_bool			m_isThrow = { false };
+	_bool			m_isRealThrow = { false };
 	_bool			m_isExplosion = { false };
 
 	_float			m_fThrowTime = {};

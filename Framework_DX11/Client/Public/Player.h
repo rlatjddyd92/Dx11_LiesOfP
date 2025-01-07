@@ -313,6 +313,7 @@ public:
 	void			Recovery_HP(_float fAmount);
 	void			Recovery_HP_Hit(_float fAmount);
 	void			Decrease_Arm(_float fAmount = 0.1f);
+	void			Recovery_All();
 
 	class CStargazer* Find_Stargazer(_int iCellNumber = -1);
 

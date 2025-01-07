@@ -341,7 +341,12 @@ void CCutScene::End_Setting()
 	case SOPHIA_ENTER:
 		pPlayer->Appear_Weapon();
 		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
-		pPlayer->Change_State(CPlayer::OH_IDLE);
+
+		if (pPlayer->Get_WeaponType() < 2)
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+		else
+			pPlayer->Change_State(CPlayer::TH_IDLE);
+
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		pPlayer->Init_PlayerCamera();
 		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
@@ -380,7 +385,12 @@ void CCutScene::End_Setting()
 	{
 		pPlayer->IsActive(true);
 		pPlayer->Appear_Weapon();
-		pPlayer->Change_State(CPlayer::OH_IDLE);
+
+		if (pPlayer->Get_WeaponType() < 2)
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+		else
+			pPlayer->Change_State(CPlayer::TH_IDLE);
+
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
 		pPlayer->Init_PlayerCamera();
 
@@ -426,7 +436,12 @@ void CCutScene::End_Setting()
 	case BOSS2_MEET3:
 	{
 		CPawn* pBoss2 = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
-		pPlayer->Change_State(CPlayer::OH_IDLE);
+
+		if (pPlayer->Get_WeaponType() < 2)
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+		else
+			pPlayer->Change_State(CPlayer::TH_IDLE);
+
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 118);
 		pPlayer->Appear_Weapon();
 		pPlayer->Get_Transform()->LookAt_NoHeight(pBoss2->Get_Transform()->Get_State(CTransform::STATE_POSITION));

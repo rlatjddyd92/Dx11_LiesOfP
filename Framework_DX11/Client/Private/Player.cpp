@@ -295,7 +295,7 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::K))
 	{
 		//Init_PlayerCamera();
-		Calc_DebuffGain(DEBUFF_ELEC, 30.f);
+		Calc_DebuffGain(DEBUFF_FIRE, 30.f);
 		//Change_State(RAPIER_FATAL);
 	}
 
@@ -1183,6 +1183,7 @@ void CPlayer::Damaged(_float fAtkDmg)
 	_float fFinalDmg = fAtkDmg - (fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f));
 
 	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fFinalDmg);
+
 	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
 		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fFinalDmg);
 
@@ -1395,6 +1396,16 @@ void CPlayer::Decrease_Arm(_float fAmount)
 {
 	m_fRecoveryArmTime = 5.f;
 	m_vGuage_Arm.x = max(0.f, m_vGuage_Arm.x - fAmount);
+}
+
+void CPlayer::Recovery_All()
+{
+	m_tPlayer_Stat->vGauge_Hp.x = m_tPlayer_Stat->vGauge_Hp.z + m_tPlayer_Stat_Adjust->vGauge_Hp.z;
+	m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
+	m_tPlayer_Stat->vGauge_Region.x = m_tPlayer_Stat->vGauge_Region.z;
+	m_tPlayer_Stat->vGauge_Stamina.x = m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z;
+	Use_DebuffResetItem();
+	GET_GAMEINTERFACE->Add_Durable_Weapon(100.f);
 }
 
 void CPlayer::On_DissolveEffect(_uint iIndex, _bool bOn)
@@ -1619,6 +1630,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		{
 			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 사용한다")))
 			{
+				Recovery_All();
 				GET_GAMEINTERFACE->Set_Potion_Count_Full();
 				GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_STARGAZER, 0); // 별바라기 화면 열기 
 				GET_GAMEINTERFACE->Set_Now_Interact_Stargezer(pStargazer->Get_CellNum());
