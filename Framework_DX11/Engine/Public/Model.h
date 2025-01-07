@@ -24,6 +24,7 @@ public:
 	vector<class CBone*>&	Get_Bones() { return m_Bones; }
 	_int					Get_BoneIndex(const _char* pBoneName) const;
 	_float4x4*			Get_BoneMatrices(_uint iMeshIndex);
+	_float4x4*			Get_ModelBoneMatrices() { return m_ZeroBoneMatrices; }
 
 	_matrix					Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix(); }
 	_matrix					Get_BoneCombindTransformationMatrix(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix(); }
@@ -203,6 +204,8 @@ private:
 	_Vec3							m_vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };	//물체의 최소 좌표 , 최대한 크게 초기화
 	_Vec3							m_vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//물체의 최대 좌표, 최대한 작게 초기화
 
+	//준호 뼈 각각 저장(0번 메쉬만).
+	_float4x4						m_ZeroBoneMatrices[g_iMaxMeshBones] = {};
 private:
 	vector<_uint>					m_UFBIndices;
 	vector<_uint>					m_RemoteTuningIndices;

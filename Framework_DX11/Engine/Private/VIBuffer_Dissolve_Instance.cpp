@@ -117,7 +117,7 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 	pDissolve->fThreshold = DissolveData.fThreshold;
 	pDissolve->iModelType = pModel->Get_ModelType();
 	pDissolve->vTextureSize = DissolveData.vTextureSize;
-	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
+	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_ModelBoneMatrices(), sizeof(_float4x4) * g_iMaxMeshBones);
 	//memcpy_s(&Test, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
 	
 	m_pContext->Unmap(m_pDissolveBuffer, 0);
