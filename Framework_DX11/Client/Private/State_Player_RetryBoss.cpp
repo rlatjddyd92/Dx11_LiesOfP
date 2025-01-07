@@ -56,6 +56,8 @@ HRESULT CState_Player_RetryBoss::Start_State(void* pArg)
         	return E_FAIL;
     }
 
+    m_pPlayer->Disappear_Weapon();
+
     return S_OK;
 }
 
@@ -96,6 +98,7 @@ void CState_Player_RetryBoss::End_State()
     m_pBlockObj->Close_Door();
     m_pBlockObj = nullptr;
 
+    m_pPlayer->Appear_Weapon();
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
 }
 

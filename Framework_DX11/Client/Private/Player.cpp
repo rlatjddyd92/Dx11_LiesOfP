@@ -164,9 +164,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
@@ -284,7 +284,7 @@ void CPlayer::Update(_float fTimeDelta)
 		pEffect->Update(fTimeDelta);
 	}
 
-	Active_CutScene();
+	Active_CutScene(fTimeDelta);
 	Active_Sophia_Dead_Talk(fTimeDelta);
 
 #pragma region 디버그 확인용
@@ -304,7 +304,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		for (_uint i = 0; i < 30; ++i)
+		/*for (_uint i = 0; i < 30; ++i)
 		{
 			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
@@ -315,7 +315,8 @@ void CPlayer::Update(_float fTimeDelta)
 
 		Calc_DebuffGain(DEBUFF_ACID, 10.f);
 
-		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));*/
+		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 		//Change_State(FLAME_FATAL);
 	}
@@ -1409,7 +1410,7 @@ void CPlayer::SetUp_Monster_Fatal()
 	m_pContactMonster->Start_Fatal();
 }
 
-void CPlayer::Active_CutScene()
+void CPlayer::Active_CutScene(_float fTimeDelta)
 {
 	//마누스 컷신 실행부분
 	if (m_pNavigationCom->Get_CurrentCellIndex() == 208 && m_bActivated_ManusCutScene == false)
@@ -1418,10 +1419,25 @@ void CPlayer::Active_CutScene()
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Start_Play();
 	}
 
-	if (GET_GAMEINTERFACE->IsEndTalk_WithNPC(NPC_SCRIPT::SCR_SOPIA_DIE) && m_isPlayingCutscene_SophiaDead == false)
+	if (GET_GAMEINTERFACE->IsEndTalk_WithNPC(NPC_SCRIPT::SCR_SOPIA_DIE) && m_isPlayingCutscene_DeadFadeOut == false)
 	{
-		m_isPlayingCutscene_SophiaDead = true;
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
+		m_isPlayingCutscene_DeadFadeOut = true;
+		GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), _Vec3(0.f, 0.f, 0.f), 1.f);
+	}
+
+	if (m_isPlayingCutscene_DeadFadeOut)
+	{
+		m_fCutscene_SophiaDead_FadeOutTimer += fTimeDelta;
+	}
+
+	if (m_fCutscene_SophiaDead_FadeOutTimer > 1.1f)
+	{
+		if (m_isPlayingCutscene_DeadFadeIn == false)
+		{
+			m_isPlayingCutscene_DeadFadeIn = true;
+			GET_GAMEINTERFACE->Fade_In(0.5f);
+			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
+		}
 	}
 }
 

@@ -31,6 +31,8 @@ HRESULT CState_Player_Stargazer::Start_State(void* pArg)
 
     m_pPlayer->Change_Animation(m_iAnimation_Stargazer, false, 0.1f);
 
+    m_pPlayer->Disappear_Weapon();
+
     return S_OK;
 }
 
@@ -56,6 +58,7 @@ void CState_Player_Stargazer::Update(_float fTimeDelta)
 
 void CState_Player_Stargazer::End_State()
 {
+    m_pPlayer->Appear_Weapon();
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
 }
 
