@@ -135,7 +135,7 @@ void CState_Raxasia_CutScene_Die::Control_Dialog(_int iFrame)
     {
         if (!m_isShowDialog && iFrame >= 20)
         {
-            GET_GAMEINTERFACE->Show_Script(TEXT("아아, 시몬님. 당신이야말로 제 유일한..."), TEXT("none"), 6.35f);
+            GET_GAMEINTERFACE->Show_Script(TEXT("아아, 시몬님. 당신이야말로 제 유일한..."), TEXT("none"), 9.35f);
             m_isShowDialog = true;
         }
     }
