@@ -255,6 +255,8 @@ public: // 외부에서 매니저 접근
 	const CItem_Manager::ITEM* Get_Now_Equip_Weapon_Blade() { return m_pItem_Manager->Get_Now_Equip_Weapon_Blade(); }
 	const CItem_Manager::ITEM* Get_Now_Equip_Weapon_Handle() { return m_pItem_Manager->Get_Now_Equip_Weapon_Handle(); }
 
+	_Vec2 Get_Durable_Weapon() { return m_pItem_Manager->Get_Durable_Weapon(); } 
+	_float Get_Durable_Weapon_Ratio() { return m_pItem_Manager->Get_Durable_Weapon_Ratio(); }
 	
 
 	// 포션 관련

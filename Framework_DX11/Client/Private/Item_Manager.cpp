@@ -485,6 +485,27 @@ void CItem_Manager::Add_Durable_Weapon(_float fAdd)
 	}
 }
 
+_Vec2 CItem_Manager::Get_Durable_Weapon()
+{
+	ITEM* pNowWeapon = m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select * 2]->eType)]->vecItemInfo[m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select * 2]->iIndex];
+	_Vec2 vResult = { -1.f,-1.f };
+
+	if (pNowWeapon != nullptr)
+		vResult = { pNowWeapon->fDurable_Now, pNowWeapon->fDurable_Max };
+
+	return vResult;
+}
+
+_float CItem_Manager::Get_Durable_Weapon_Ratio()
+{
+	_float fResult = -1.f;
+	_Vec2 vResult = Get_Durable_Weapon();
+
+	if (vResult.x >= 0.f)
+		fResult = vResult.x / vResult.y;
+	return fResult;
+}
+
 _bool CItem_Manager::Use_Potion()
 {
 	if (m_iNow_Potion_Count <= 0)
@@ -1184,6 +1205,7 @@ HRESULT CItem_Manager::Initialize_Item()
 
 		pNew->strFabel_Desc = iter[39];
 		pNew->strItem_Desc = iter[40];
+		pNew->strItem_Desc_Second = iter[41];
 
 		m_vecItem_BasicSpec.push_back(pNew);
 	}

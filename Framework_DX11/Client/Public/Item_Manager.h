@@ -135,6 +135,7 @@ public:
 
 		_wstring strFabel_Desc = {};
 		_wstring strItem_Desc = {};
+		_wstring strItem_Desc_Second = {};
 
 		// 암 관련
 		_float Arm_Gauge_Now = 1000.f;
@@ -477,8 +478,8 @@ public:
 	}
 	
 	void Add_Durable_Weapon(_float fAdd);
-	
-
+	_Vec2 Get_Durable_Weapon();
+	_float Get_Durable_Weapon_Ratio();
 
 
 	// 포션 관련 
