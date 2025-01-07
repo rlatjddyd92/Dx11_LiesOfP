@@ -80,17 +80,20 @@ void CMonster::Priority_Update(_float fTimeDelta)
 
 	if (!m_isBoss)
 	{
-		if (!m_bDieState && m_eStat.fHp <= 0.f)
+		if (!m_bBlockDead)
 		{
-			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-			m_bDieState = true;
-			m_pFsmCom->Change_State(DIE);
+			if (!m_bDieState && m_eStat.fHp <= 0.f)
+			{
+				GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+				m_bDieState = true;
+				m_pFsmCom->Change_State(DIE);
 
-			m_pRigidBodyCom->Set_Kinematic(false);
+				m_pRigidBodyCom->Set_Kinematic(false);
+				Reset_Debuff();
 
-			//에르고 추가
-
-			pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+				//에르고 추가
+				pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+			}
 		}
 	}
 }
@@ -321,12 +324,13 @@ void CMonster::Calc_DebuffGain(_uint iDebuffType, _float fDebuffDuration)
 
 		m_fDebuffDuration[iDebuffType] = fDebuffDuration;
 		//이펙트를 활성화
+		On_SurfaceEffect(iDebuffType, true);
 	}
 }
 
 void CMonster::Update_Debuff(_float fTimeDelta)
 {
-	for (_uint i = 0; i < DEBUFF_END; ++i)
+	for (_uint i = 0; i < SURFACE_END; ++i)
 	{
 		if (m_bDebuffed[i])
 		{
@@ -339,20 +343,21 @@ void CMonster::Update_Debuff(_float fTimeDelta)
 			{
 				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * m_fDebuffDuration[i];
 				m_fDebuffDuration[i] = 0.f;
+				m_bDebuffed[i] = false;
+				On_SurfaceEffect(i, false);
 			}
 			 
 		}
-		//이펙트 업데이트
-
 	}
 }
 
 void CMonster::Reset_Debuff()
 {
-	for (_uint i = 0; i < DEBUFF_END; ++i)
+	for (_uint i = 0; i < SURFACE_END; ++i)
 	{
 		m_bDebuffed[i] = false;
 		m_fDebuffDuration[i] = 0.f;
+		On_SurfaceEffect(i, false);
 	}
 }
 

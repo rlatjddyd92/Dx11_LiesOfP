@@ -57,13 +57,14 @@ private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) override;
 	virtual void	DeActive_CurrentWeaponCollider(_uint iCollIndex = 0) override;
 
+	virtual void		Active_Debuff(_int iIndex, _float fDebuffRatio = 1.f);
+	virtual void		DeActive_Debuff(_int iIndex);
+
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
 
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
 private:
-	virtual void		Update_Debuff(_float fTimeDelta) override;
-
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();

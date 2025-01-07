@@ -115,6 +115,11 @@ void CCarcassTail::Update(_float fTimeDelta)
 	else
 		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
 
+	if (m_bDebuffed[SURFACE_ELECTRIC])
+	{
+		m_vCurRootMove *= 0.8f;
+	}
+
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
@@ -200,6 +205,8 @@ void CCarcassTail::Resetting()
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
 	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
 
+	Reset_Debuff();
+
 	Change_State(CMonster::IDLE);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -221,28 +228,14 @@ void CCarcassTail::DeActive_CurrentWeaponCollider(_uint iCollIndex)
 	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }
 
-
-void CCarcassTail::Update_Debuff(_float fTimeDelta)
+void CCarcassTail::Active_Debuff(_int iIndex, _float fDebuffRatio)
 {
-	for (_uint i = 0; i < DEBUFF_END; ++i)
-	{
-		if (m_bDebuffed[i])
-		{
-			if (m_fDebuffDuration[i] > fTimeDelta)
-			{
-				m_fDebuffDuration[i] -= fTimeDelta;
-				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * fTimeDelta;
-			}
-			else
-			{
-				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * m_fDebuffDuration[i];
-				m_fDebuffDuration[i] = 0.f;
-			}
+	m_pColliderObject[iIndex]->Active_Debuff(fDebuffRatio);
+}
 
-		}
-		//이펙트 업데이트
-
-	}
+void CCarcassTail::DeActive_Debuff(_int iIndex)
+{
+	m_pColliderObject[iIndex]->DeActive_Debuff();
 }
 
 HRESULT CCarcassTail::Ready_Components()
@@ -508,9 +501,9 @@ HRESULT CCarcassTail::Ready_Effect()
 	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
 		return E_FAIL;
 
-	On_PowerAttack(true);
-	On_SurfaceEffect(SURFACE_FIRE, true);
-	On_SurfaceEffect(SURFACE_ELECTRIC, true);
+	//On_PowerAttack(true);
+	//On_SurfaceEffect(SURFACE_FIRE, true);
+	//On_SurfaceEffect(SURFACE_ELECTRIC, true);
 
 	return S_OK;
 }

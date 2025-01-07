@@ -141,8 +141,6 @@ private:
 	vector<class CDissolve_Effect*> m_DissolveEffects;
 
 private:
-	virtual void		Update_Debuff(_float fTimeDelta) override;
-
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();

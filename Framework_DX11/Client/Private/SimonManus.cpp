@@ -601,29 +601,6 @@ void CSimonManus::On_PowerAttack(_bool bOn)
 		m_DissolveEffects[DISSOLVE_POWERATTACK_P2]->Set_On(bOn);
 }
 
-void CSimonManus::Update_Debuff(_float fTimeDelta)
-{
-	for (_uint i = 0; i < DEBUFF_END; ++i)
-	{
-		if (m_bDebuffed[i])
-		{
-			if (m_fDebuffDuration[i] > fTimeDelta)
-			{
-				m_fDebuffDuration[i] -= fTimeDelta;
-				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * fTimeDelta;
-			}
-			else
-			{
-				m_eStat.fHp -= m_eStat.fMaxHp * 0.01f * m_fDebuffDuration[i];
-				m_fDebuffDuration[i] = 0.f;
-			}
-
-		}
-		//이펙트 업데이트
-
-	}
-}
-
 HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

@@ -56,8 +56,6 @@ private:
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
 
 private:
-	virtual void		Update_Debuff(_float fTimeDelta) override;
-
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();

@@ -100,6 +100,7 @@ public:
 
 	_Vec3				Get_Look() { return XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)); }
 	_bool				Get_IsWeakness() { return m_eStat.bWeakness; }//해당 위크니스는 각각 몹에서 그로기 양 비교하도록 만들기
+	_bool*				Get_BlockDead() { return &m_bBlockDead; }
 	
 	virtual void		On_PowerAttack(_bool bOn) {};
 	virtual void		Resetting() {};
@@ -123,6 +124,7 @@ protected:
 	//페이탈 어택 류
 	_bool				m_bFatalAttacked = { false };
 	_bool				m_bBackAttackCtr = { false };
+	_bool				m_bBlockDead = { false };
 
 	_float				m_fFatalDelay = {8.f};
 	_float				m_fFatalTimeStack = {8.f};
@@ -139,13 +141,13 @@ protected:
 	_int				m_iErgoPoint = { 0 };
 
 	//디버프
-	_float				m_fDebuffDuration[DEBUFF_END] = {};
-	_bool				m_bDebuffed[DEBUFF_END] = {};
+	_float				m_fDebuffDuration[SURFACE_END] = {};
+	_bool				m_bDebuffed[SURFACE_END] = {};
 
 	vector<class CDissolve_Effect*> m_DissolveEffect;
 
 protected:
-	virtual void		Update_Debuff(_float fTimeDelta);
+	void				Update_Debuff(_float fTimeDelta);
 	void				Reset_Debuff();
 
 	HRESULT		Ready_Components();
