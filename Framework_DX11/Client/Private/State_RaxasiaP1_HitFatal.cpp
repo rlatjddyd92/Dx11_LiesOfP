@@ -15,6 +15,8 @@ HRESULT CState_RaxasiaP1_HitFatal::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
+    m_pFatalAttacked = m_pMonster->Get_bFatalAttacked();
+    m_pBlockDead = m_pMonster->Get_BlockDead();
 
     return S_OK;
 }
@@ -22,7 +24,7 @@ HRESULT CState_RaxasiaP1_HitFatal::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP1_HitFatal::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, 0.1f, 0);
-
+    *m_pBlockDead = true;
     return S_OK;
 }
 
@@ -38,6 +40,7 @@ void CState_RaxasiaP1_HitFatal::Update(_float fTimeDelta)
         else
         {
             m_iAnimCnt = 0;
+            *m_pBlockDead = false;
             m_pMonster->Change_State(CRaxasia::GROGY);
         }
     }

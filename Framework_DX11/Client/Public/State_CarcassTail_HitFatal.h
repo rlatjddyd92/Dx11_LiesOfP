@@ -41,6 +41,7 @@ private:
     _int                m_iDirCnt = {};
 
     _bool*              m_pFatalAttacked = { nullptr };
+    _bool*              m_pBlockDead = { nullptr };
 
 private:
     _bool               End_Check();

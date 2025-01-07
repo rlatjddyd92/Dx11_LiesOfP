@@ -1059,6 +1059,7 @@ HRESULT CRaxasia::Ready_Weapon()
 	Desc.pParentWorldMatrix = WeaponDesc.pParentWorldMatrix;
 	Desc.pSocketBoneMatrix2 = WeaponDesc.pParentWorldMatrix;
 	Desc.fDamageAmount = m_eStat.fAtk;
+	Desc.pOWner = this;
 
 	m_pKickCollObj = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
