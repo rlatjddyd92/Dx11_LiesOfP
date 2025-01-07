@@ -99,7 +99,6 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eStat.strName = TEXT("Raxasia");
 
 	m_eStat.fHp = 2000.f;
-	m_eStat.fHp = 1.f;
 	m_eStat.fMaxHp = 2000.f;
 	m_eStat.fAtk = 250.f;
 
@@ -1193,7 +1192,7 @@ void CRaxasia::Update_Collider()
 
 	XMStoreFloat4x4(&UpdateMat
 		, *(m_pColliderBindMatrix[CT_LOWERARM_LEFT]) * WorldMat);
-	m_EXCollider[L_ARM_LEFT]->Update(&UpdateMat);
+	m_EXCollider[L_ARM_LEFT]->Update(&UpdateMat);		// ¿ä³ð
 	XMStoreFloat4x4(&UpdateMat
 		, *(m_pColliderBindMatrix[CT_LOWERARM_RIGHT]) * WorldMat);
 	m_EXCollider[L_ARM_RIGHT]->Update(&UpdateMat);
@@ -1284,7 +1283,6 @@ void CRaxasia::ChangePhase()
 	m_pColliderBindMatrix[CT_LOWERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(71);
 
 	m_eStat.fHp = 2500.f;
-	m_eStat.fHp = 1.f;
 	m_eStat.fMaxHp = 2500.f;
 	m_eStat.fAtk = 250.f;
 	//m_eStat.fDefence = 8.f;

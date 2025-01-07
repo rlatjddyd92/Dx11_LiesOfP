@@ -46,9 +46,9 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 	if (!pDesc->isPhase2)
 		m_pModelCom->SetUp_NextAnimation(m_iAnimation_Phase1Index, false, 0.f, 1);
 	else
-		m_pModelCom->SetUp_NextAnimation(m_iAnimation_Phase2Index, false, 0.f, 1);
+		m_pModelCom->SetUp_Animation(m_iAnimation_Phase2Index, false, 0);
 
-	m_pModelCom->Play_Animation(0.01f);
+	m_pModelCom->Play_Animation(1.f);
 	m_isPlayAnimation = false;
 
 	/*	static _float fX = 243.f;
