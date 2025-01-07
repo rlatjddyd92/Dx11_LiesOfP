@@ -15,14 +15,14 @@ HRESULT CState_CarcassNormal_HitFatal::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
     m_pFatalAttacked = m_pMonster->Get_bFatalAttacked();
-
+    m_pBlockDead = m_pMonster->Get_BlockDead();
     return S_OK;
 }
 
 HRESULT CState_CarcassNormal_HitFatal::Start_State(void* pArg)
 {
     m_iAnimTrack = 0;
-
+    *m_pBlockDead = true;
 
     _Vec3 vRight = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT), 0);
     _Vec3 vDir = m_pMonster->Get_TargetDir();
@@ -66,7 +66,7 @@ void CState_CarcassNormal_HitFatal::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_DOWN_B + m_iDirCnt, false, 0.1f);
 
             *m_pFatalAttacked = false;
-
+            *m_pBlockDead = false;
             return;
         }
         break;

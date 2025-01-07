@@ -80,17 +80,19 @@ void CMonster::Priority_Update(_float fTimeDelta)
 
 	if (!m_isBoss)
 	{
-		if (!m_bDieState && m_eStat.fHp <= 0.f)
+		if (!m_bBlockDead)
 		{
-			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-			m_bDieState = true;
-			m_pFsmCom->Change_State(DIE);
+			if (!m_bDieState && m_eStat.fHp <= 0.f)
+			{
+				GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+				m_bDieState = true;
+				m_pFsmCom->Change_State(DIE);
 
-			m_pRigidBodyCom->Set_Kinematic(false);
+				m_pRigidBodyCom->Set_Kinematic(false);
 
-			//에르고 추가
-
-			pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+				//에르고 추가
+				pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+			}
 		}
 	}
 }
