@@ -221,6 +221,7 @@ public:
 
 	_bool					Get_IsRespawnMonster() { return m_isRespawnMonster; }
 	void					Set_IsRespawnMonster(_bool isRespawn) { m_isRespawnMonster = isRespawn; }
+	void					Set_SophiaDeadCutScene();
 
 #pragma region PLAYER_STAT
 	STAT_INFO& Get_Player_Stat() { return *m_tPlayer_Stat; }
@@ -329,11 +330,19 @@ public:
 	void			SetUp_Monster_Fatal();
 
 	void			Active_CutScene();
+	void			Active_Sophia_Dead_Talk(_float fTimeDelta);
 private:
 	_bool					m_bActivated_ManusCutScene = { false };
 	_bool					m_isPlayingCutscene = { false };
 	_bool					m_isPlayingCutscene_SophiaDead = { false };
+	_bool					m_isSophia_DeadFadeOut = { false };
+	_bool					m_isSophia_DeadFadeIn = { false };
+	_bool					m_isSophia_DeadFadeOutSet = { false };
+	_bool					m_bStart_SophiaDead_Talking = { false };
 
+
+	_float					m_fSophia_DeadFadeOutTimer = { 0.f };
+	_float					m_fSophia_DeadFadeInTimer = { 0.f };
 private:
 	vector<class CEffect_Container*> m_Effects;
 	class CEffect_Manager* m_pEffect_Manager = { nullptr };

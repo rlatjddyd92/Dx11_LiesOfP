@@ -7,6 +7,7 @@
 #include "CutScene.h"
 
 #include "Camera.h"
+#include "Camera_Manager.h"
 #include "Monster.h"
 #include "Weapon.h"
 #include "Weapon_Scissor.h"
@@ -161,12 +162,12 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
@@ -284,7 +285,7 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 
 	Active_CutScene();
-
+	Active_Sophia_Dead_Talk(fTimeDelta);
 
 #pragma region 디버그 확인용
 	if (KEY_TAP(KEY::L))
@@ -1935,6 +1936,47 @@ HRESULT CPlayer::Ready_Weapon()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+
+void CPlayer::Set_SophiaDeadCutScene()
+{
+	m_isSophia_DeadFadeOut = true;
+	GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), _Vec3(0.f, 0.f, 0.f), 1.f);
+}
+
+void CPlayer::Active_Sophia_Dead_Talk(_float fTimeDelta)
+{
+	if (m_isSophia_DeadFadeOut)
+	{
+		m_fSophia_DeadFadeOutTimer += fTimeDelta;
+	}
+
+	if (m_fSophia_DeadFadeOutTimer > 1.2f)
+	{
+		if (m_isSophia_DeadFadeOutSet == false)
+		{
+			m_isSophia_DeadFadeOutSet = true;
+
+			m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178);
+			m_pTransformCom->LookAt_NoHeight(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"), 0)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+			static_cast<CPlayerCamera*>(CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Player")))->Move_PlayerBackPos();
+		}
+
+		if (m_isSophia_DeadFadeIn == false)
+		{
+			m_isSophia_DeadFadeIn = true;
+			GET_GAMEINTERFACE->Fade_In(1.f);
+		}
+
+		m_fSophia_DeadFadeInTimer += fTimeDelta;
+
+		if (m_fSophia_DeadFadeInTimer > 1.1f && m_bStart_SophiaDead_Talking == false)
+		{
+			m_bStart_SophiaDead_Talking = true;
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
+		}
+	}
 }
 
 HRESULT CPlayer::Ready_Components()
