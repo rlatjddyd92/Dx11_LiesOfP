@@ -54,7 +54,7 @@ void CCutScene::Update(_float fTimeDelta)
 		if (m_bDeactivePlayer || m_bMovePlayerDelay)
 		{
 			m_fPlayerSetDelayTimer += fTimeDelta;
-			if (m_fPlayerSetDelayTimer > 3.f)
+			if (m_fPlayerSetDelayTimer > m_fPlayerSetDelayTime)
 			{
 				m_fPlayerSetDelayTimer = 0.f;
 				Delay_Set_Player();
@@ -309,7 +309,8 @@ void CCutScene::First_Setting()
 		break;
 	case BOSS2_DEFEAT:
 	{
-		pPlayer->IsActive(false);
+		m_bDeactivePlayer = true;
+		m_fPlayerSetDelayTime = 1.f;
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		CGameObject* pBlockObj = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), 0);
 		if (pBlockObj != nullptr)
@@ -506,6 +507,9 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 void CCutScene::Start_Play()
 {
 	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"), true);
+	CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"))->Reset_MoveLerp();
+	CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"))->Reset_Zoom();
+	CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"))->Stop_Turn();
 	m_isActive = true;
 	m_bPlay = true;
 	m_bFinished_Setting = false;

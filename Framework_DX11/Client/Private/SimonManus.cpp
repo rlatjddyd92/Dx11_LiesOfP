@@ -12,7 +12,6 @@
 
 #include "Weapon.h"
 #include "CutScene.h"
-#include "Camera_Manager.h"
 
 #pragma region Phase1
 #include "State_SimonManusP1_Idle.h"
@@ -193,37 +192,9 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 		if (m_fDissloveRatio >= 2.f)
 		{
 			m_isDead = true;
-
-			if(m_isDeadFadeOut ==false)
-			{
-				m_isDeadFadeOut = true;
-				GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), _Vec3(0.f, 0.f, 0.f), 1.f);
-			}
-			m_fDeadFadeOutTimer += fTimeDelta;
-
-			if(m_fDeadFadeOutTimer > 1.2f)
-			{
-				if(m_isDeadFadeOutSet == false)
-				{
-					m_isDeadFadeOutSet = true;
-					CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
-					pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
-					pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
-					pPlayer->Get_Transform()->LookAt_NoHeight(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"), 0)->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-					static_cast<CPlayerCamera*>(CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Player")))->Move_PlayerBackPos();
-				}
-
-				if(m_isDeadFadeIn ==false)
-				{
-					m_isDeadFadeIn = true;
-					GET_GAMEINTERFACE->Fade_In(1.f);
-				}
-
-				m_fDeadFadeInTimer += fTimeDelta;
-
-				if(m_fDeadFadeInTimer > 1.1f)
-					GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
-			}
+			CPlayer* pPlayer = static_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+			pPlayer->Get_Player_Stat_Adjust()->iErgo += m_iErgoPoint;
+			pPlayer->Set_SophiaDeadCutScene();
 		}
 	}
 
