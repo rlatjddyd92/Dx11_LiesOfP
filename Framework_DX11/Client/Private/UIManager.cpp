@@ -126,7 +126,6 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 			DestroyWindow(g_hWnd);
 	}
 
-
 	if (KEY_TAP(KEY::P))
 		m_pUIPage_Tutorial->OpenAction();
 	else if (KEY_TAP(KEY::L))

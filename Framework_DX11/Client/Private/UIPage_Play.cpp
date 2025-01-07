@@ -107,7 +107,7 @@ void CUIPage_Play::OpenAction()
 	if (m_bIsStart == true)
 	{
 		m_bIsStart = false;
-		GET_GAMEINTERFACE->Show_Region_Info(TEXT("¾Æ¸£ÄÉ ´ë¼öµµ¿ø"), TEXT("Èå¸° ³¯¾¾"));
+		//GET_GAMEINTERFACE->Show_Region_Info(TEXT("PÀÇ ÈÆ·Ã¼Ò"), TEXT("Èå¸° ³¯¾¾"));
 	}
 }
 
@@ -695,7 +695,7 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 
 void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
 {
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo + GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo);
 }
 
 void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)

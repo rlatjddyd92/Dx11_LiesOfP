@@ -97,6 +97,10 @@ public:
 			fDebuff_Fire = { 0.f,0.f };
 			fDebuff_Electric = { 0.f,0.f };
 			fDebuff_Acid = { 0.f,0.f };
+
+			 fResist_Fire = 0.f;
+			 fResist_Electric = 0.f;
+			 fResist_Acid = 0.f;
 		};
 
 		// 유저 레벨 

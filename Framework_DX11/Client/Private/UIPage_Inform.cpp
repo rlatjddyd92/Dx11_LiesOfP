@@ -215,8 +215,9 @@ void CUIPage_Inform::Show_PlayerDead_UI()
 	m_bIsPlayerDead_UI_NowEnd = false;
 	m_bCheckNowEnd = false;
 
-	GET_GAMEINTERFACE->UIPart_Off();
-
+	GET_GAMEINTERFACE->UIPart_Off(false);
+	m_pSoundCom->Play2D(TEXT("SE_UI_AlertDeath_01.wav"), &g_fUIVolume);
+	
 	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_Back); i <= _int(PART_GROUP::INFORM_PlayerDeath_LieORDie); ++i)
 	{
 		m_vecPart[i]->bRender = true;
@@ -441,7 +442,7 @@ void CUIPage_Inform::Update_PlayerDead_Neddle(_float fTimeDelta, _int iPhase)
 
 void CUIPage_Inform::Update_PlayerDead_Debris(_float fTimeDelta, _int iPhase)
 {
-	_float fRatio = m_vPlayerDead_Time.x / (m_vPlayerDead_Time.y + (m_vPlayerDead_Time.z * 0.5f));
+	_float fRatio = m_vPlayerDead_Time.x / (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z + m_vPlayerDead_Time.w);
 	fRatio = fRatio > 1.f ? 1.f : fRatio;
 
 	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_XII); i <= _int(PART_GROUP::INFORM_PlayerDeath_DebrisSmall); ++i)

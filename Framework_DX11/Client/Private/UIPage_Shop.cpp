@@ -463,7 +463,7 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 		}
 	}
 	
-	if (m_iNowTab == 1)
+	/*if (m_iNowTab == 1)
 	{
 		_bool bRoot = true;
 
@@ -484,7 +484,7 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 					m_vecPart[iterPart]->strText = m_Title_Chest->strTitle;
 				__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
 			}
-	}
+	}*/
 }
 
 void CUIPage_Shop::Update_Focus(_float fTimeDelta)
@@ -590,17 +590,17 @@ void CUIPage_Shop::Setting_SellTab()
 
 	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
 
-	if (m_Title_Chest == nullptr)
-	{
-		m_Title_Chest = new CELL_RENDER;
-		m_Title_Chest->bIsTitle = true;
-		m_Title_Chest->strTitle = TEXT("보관함");
+	//if (m_Title_Chest == nullptr)
+	//{
+	//	m_Title_Chest = new CELL_RENDER;
+	//	m_Title_Chest->bIsTitle = true;
+	//	m_Title_Chest->strTitle = TEXT("보관함");
 
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
-		m_Title_Chest->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fPosition;
-		m_Title_Chest->vPos.y = fStartY + fAdjustY;
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.2f;
-	}
+	//	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
+	//	m_Title_Chest->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fPosition;
+	//	m_Title_Chest->vPos.y = fStartY + fAdjustY;
+	//	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.2f;
+	//}
 
 	// 보관함 관련 내용 필요 
 

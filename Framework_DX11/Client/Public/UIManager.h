@@ -372,9 +372,10 @@ public:
 		m_bIsPlayPageMaintain = true;
 		m_bIsUIOff = false;
 	}
-	void UIPart_Off()
+	void UIPart_Off(_bool bOffVolume = true)
 	{
-		Mute_UI_Volume(true);
+		if (bOffVolume == true)
+			Mute_UI_Volume(true);
 		for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 		{
 			if (i == _int(UIPAGE::PAGE_ORTHO))
@@ -493,7 +494,6 @@ private:
 
 	// 게임 종료 
 	_float m_fExit_Time = 0.f;
-
 
 	// test code
 #ifdef _DEBUG

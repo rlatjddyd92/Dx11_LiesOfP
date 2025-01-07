@@ -79,6 +79,7 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 			GET_GAMEINTERFACE->Get_Player()->Get_Navigation()->Move_to_Cell(GET_GAMEINTERFACE->Get_Player()->Get_RigidBody(), 774);
 			GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
 			GET_GAMEINTERFACE->Fade_In();
+			GET_GAMEINTERFACE->Show_Region_Info(TEXT("아르케 대수도원"), TEXT("흐린 날씨"));
 		}
 	}
 	else if (m_fStartTime < 0.f)

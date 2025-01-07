@@ -291,6 +291,7 @@ private:
 	_Vec2 m_vGrinder_Wait = { 0.f,2.f };
 
 	_bool m_bIsStart = true;
+	_bool m_bIsCompleteTutorial = false;
 
 	// 키 가이드 
 	_bool m_bIsKeyGuideOn = true;
