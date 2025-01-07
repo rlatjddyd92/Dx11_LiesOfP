@@ -59,8 +59,6 @@ private:
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
 private:
-	virtual void		Update_Debuff(_float fTimeDelta) override;
-
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Effects();

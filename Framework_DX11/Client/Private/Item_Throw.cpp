@@ -180,7 +180,22 @@ void CItem_Throw::OnCollisionEnter(CGameObject* pOther)
 	{
 		CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
 
-		pMonster->Calc_DamageGain(155.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG);
+
+		switch (m_eType)
+		{
+		case SPECIAL_ITEM::SP_GRANADE:
+			pMonster->Calc_DamageGain(170.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG);
+			break;
+		case SPECIAL_ITEM::SP_THERMITE:
+			pMonster->Calc_DebuffGain(CMonster::SURFACE_EFFECT::SURFACE_FIRE, 3.f);
+			pMonster->Calc_DamageGain(155.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG);
+			break;
+		case SPECIAL_ITEM::SP_THROW_BATTERY:
+			pMonster->Calc_DebuffGain(CMonster::SURFACE_EFFECT::SURFACE_ELECTRIC, 3.f);
+			pMonster->Calc_DamageGain(155.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG);
+			break;
+		}
+
 		Explosion();
 	}
 }

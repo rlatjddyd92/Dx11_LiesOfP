@@ -1070,6 +1070,9 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 
 void CPlayer::Calc_DebuffGain(_uint iDebuffType, _float fAmount)
 {
+	if (m_bDieState)
+		return;
+
 	if (m_fDebuffReduceTime > 0.f)
 		fAmount *= 0.4f;
 

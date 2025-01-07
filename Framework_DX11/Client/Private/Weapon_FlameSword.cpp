@@ -165,6 +165,8 @@ void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 
 			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
+				pMonster->Calc_DebuffGain(CMonster::SURFACE_EFFECT::SURFACE_FIRE, 3.f);
+
 				m_pPlayer->Increase_Region(10.f);
 				m_pPlayer->Recovery_HP_Hit(m_fDamageAmount * 2.f);
 
