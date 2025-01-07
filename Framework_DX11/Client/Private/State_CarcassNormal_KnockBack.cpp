@@ -15,7 +15,6 @@ HRESULT CState_CarcassNormal_KnockBack::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
 
     //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
-
     return S_OK;
 }
 
@@ -54,11 +53,14 @@ void CState_CarcassNormal_KnockBack::Update(_float fTimeDelta)
     {
         m_pMonster->Change_State(CCarcassBigA::IDLE);
     }
-
 }
 
 void CState_CarcassNormal_KnockBack::End_State()
 {
+    if (m_pMonster->Get_Status()->bFatalAttack == true)
+    {
+        m_pMonster->Get_Status()->bFatalAttack = false;
+    }
 }
 
 _bool CState_CarcassNormal_KnockBack::End_Check()

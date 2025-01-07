@@ -35,7 +35,7 @@ private:
     _float              m_fDiscoverDist = { 4.f };
 
     _float              m_fIdleTime = { 0.f };
-    _float              m_fIdleEndDuration = { 0.6f };
+    _float              m_fIdleEndDuration = { 2.f };
 
     _bool               m_bRunning = { false };
     _bool               m_bWalk = { false };

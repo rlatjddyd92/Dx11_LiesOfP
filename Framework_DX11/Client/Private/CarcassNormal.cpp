@@ -90,6 +90,7 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.2f, 0.f };
 
+	m_bHaveGrogy = false;
 	m_bDiscover = false;
 
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL, this);

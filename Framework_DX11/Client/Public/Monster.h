@@ -135,6 +135,8 @@ protected:
 
 	_Vec4				m_vPosTarget{};
 
+	_bool				m_bHaveGrogy = { true };
+
 	_bool				m_isBoss = { false };
 	_bool				m_isFirstCreate = { false };
 
@@ -150,8 +152,8 @@ protected:
 	void				Update_Debuff(_float fTimeDelta);
 	void				Reset_Debuff();
 
-	HRESULT		Ready_Components();
-	HRESULT		Ready_FSM();
+	HRESULT				Ready_Components();
+	HRESULT				Ready_FSM();
 
 
 public:
