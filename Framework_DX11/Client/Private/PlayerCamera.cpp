@@ -130,6 +130,9 @@ void CPlayerCamera::PlayerLockOn(_float fTimeDelta)
 	if (nullptr == m_pPlayer->Get_TargetMonster())
 		return;
 
+	_Vec3 vTargetPos = m_pPlayer->Get_TargetMonster()->Calc_CenterPos();
+	vTargetPos.y += 0.05f;
+
 	m_pTransformCom->LookAt(m_pPlayer->Get_TargetMonster()->Calc_CenterPos());
 
 	_long      MouseMove = { 0 };

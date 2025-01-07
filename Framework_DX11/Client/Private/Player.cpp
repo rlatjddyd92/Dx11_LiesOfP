@@ -472,6 +472,10 @@ void CPlayer::SetUp_Die()
 		m_pTargetMonster = nullptr;
 	}
 
+	m_tPlayer_Stat->fDebuff_Electric.x = 0.f;
+	m_tPlayer_Stat->fDebuff_Fire.x = 0.f;
+	m_tPlayer_Stat->fDebuff_Acid.x = 0.f;
+
 	m_bDieState = true;
 }
 
@@ -1129,10 +1133,7 @@ _bool CPlayer::Check_Region_Fable01()
 
 _bool CPlayer::Check_Region_Fable02()
 {
-	_int iRegionCount = 3;
-
-	if (WEP_SCISSOR != m_eWeaponType)
-		iRegionCount = 1;
+	_int iRegionCount = 1;
 
 	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x - m_tPlayer_Stat->fRegion_Interval * iRegionCount;
 

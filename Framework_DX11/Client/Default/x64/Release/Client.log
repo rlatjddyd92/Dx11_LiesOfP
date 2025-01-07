@@ -1,89 +1,4 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_DissolveCompute.hlsl(330,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_DissolveCompute.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl(106,5-26): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Mesh.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Texture.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_ParticleCompute.hlsl(324,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_ParticleCompute.hlsl(399,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_ParticleCompute.hlsl(474,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_ParticleCompute.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_SSD.hlsl(107,12-76): warning X3206: implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_SSD.hlsl(200,12-76): warning X3206: implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_SSD.hlsl(274,12-76): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_SSD.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl(81,5-75): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_TrailHead_PointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl(88,5-75): warning X3206: implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl(305,12-38): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_TrailTail_PointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl(701,21-69): warning X3206: implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl(703,21-60): warning X3206: implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl(707,21-100): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Trail_MultiPoint_Compute.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Change_Color.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_UI_Master.hlsl(232,9-47): warning X3206: 'Check_Angle': implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_UI_Master.hlsl(247,9-47): warning X3206: 'Check_Angle': implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_UI_Master.hlsl(265,9-47): warning X3206: 'Check_Angle': implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Master.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Multiple_Color.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Normal.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxAnimModel.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxCubeTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_VtxDiffuseInstance.hlsl(87,5-75): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxDiffuseInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxModel.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxNorTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl(76,5-66): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPosTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxRectInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxTrail_OnePoint_Instance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxTrail_TwoPoint_Instance.cso
-  unity_278W4HDWF63VD9DD.cpp
+﻿  unity_278W4HDWF63VD9DD.cpp
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(49,1): warning C4005: 'PX_ALLOC': 매크로 재정의
   (소스 파일 '/x64/Release/unity_278W4HDWF63VD9DD.cpp'을(를) 컴파일하는 중)
   D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(67,1):
@@ -113,9 +28,8 @@ D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp(992,30
   (소스 파일 '/x64/Release/unity_278W4HDWF63VD9DD.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp(348): warning C4715: 'Client::CItem_Manager::UseItem_Equip': 모든 제어 경로에서 값을 반환하지는 않습니다.
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp(388): warning C4715: 'Client::CItem_Manager::UseItem_Inven': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  All 11843 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  4 of 11843 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    35 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe
