@@ -257,7 +257,14 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 			m_eStat.bWeakness = false;
 			m_eStat.bFatalAttack = true;
 
-			m_pFsmCom->Change_State(GROGY);
+			if (m_bHaveGrogy)
+			{
+				m_pFsmCom->Change_State(GROGY);
+			}
+			else
+			{
+				m_pFsmCom->Change_State(KNOCKBACK);
+			}
 			m_bDiscover = true;
 			return true;
 		}

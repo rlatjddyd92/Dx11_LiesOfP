@@ -75,6 +75,7 @@ void CState_RebornerMaleFire_Breath::Update(_float fTimeDelta)
 
 void CState_RebornerMaleFire_Breath::End_State()
 {
+    m_pMonster->DeActive_Effect(0);
 
     m_pMonster->DeActive_CurrentWeaponCollider(0);
     m_pMonster->DeActive_Debuff(0);
