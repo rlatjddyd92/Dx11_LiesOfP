@@ -95,8 +95,9 @@ void CItem_Throw::Update(_float fTimeDelta)
 			{
 				Explosion();
 			}
-			else if (!m_isRealThrow && m_fThrowTime > 0.3f)
+			else if (!m_isRealThrow && m_fThrowTime > 0.2f)
 			{
+				m_Effect->Set_Loop(true);
 				m_isRealThrow = true;
 				m_pRigidBodyCom->Add_Force(m_vThrowDir);
 			}
@@ -249,7 +250,7 @@ void CItem_Throw::Throw()
 
 	m_vThrowDir.Normalize();
 
-	m_vThrowDir *= 800.f;
+	m_vThrowDir *= 900.f;
 	//m_vThrowDir.y *= 100.f;
 
 
@@ -278,17 +279,14 @@ HRESULT CItem_Throw::Ready_Components()
 	case SPECIAL_ITEM::SP_GRANADE:
 		strModelTag = TEXT("Prototype_Component_Model_Throw_Cluster");
 		m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Item_Fire_Throw"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.15f));
-		m_Effect->Set_Loop(true);
 		break;
 	case SPECIAL_ITEM::SP_THERMITE:
 		strModelTag = TEXT("Prototype_Component_Model_Throw_Thermite");
 		m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Item_Bomb_Throw"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.15f));
-		m_Effect->Set_Loop(true);
 		break;
 	case SPECIAL_ITEM::SP_THROW_BATTERY:
 		strModelTag = TEXT("Prototype_Component_Model_Throw_Battery");
 		m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Item_Electric_Throw"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.15f));
-		m_Effect->Set_Loop(true);
 		break;
 	default:
 		return E_FAIL;
