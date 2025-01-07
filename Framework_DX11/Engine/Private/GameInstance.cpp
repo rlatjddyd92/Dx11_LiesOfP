@@ -892,6 +892,16 @@ void CGameInstance::SetVolume_BGM(_float fVolume)
 	m_pSound_Manager->SetVolume_BGM(fVolume);
 }
 
+_bool CGameInstance::IsPlaying_BGM()
+{
+	return m_pSound_Manager->IsPlaying_BGM();
+}
+
+_bool CGameInstance::IsPause_BGM()
+{
+	return m_pSound_Manager->IsPause_BGM();
+}
+
 void CGameInstance::Play_ENV(const TCHAR* pSoundKey, _float* fVolume)
 {
 	m_pSound_Manager->Play_ENV(pSoundKey, fVolume);

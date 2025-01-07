@@ -205,7 +205,7 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 
 void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {	
-	if (pCutSceneDesc->Sound_Desc.bStopBGM)
+	if (pCutSceneDesc->Sound_Desc.bStopBGM && !m_pGameInstance->IsPause_BGM())
 		m_pGameInstance->Pause_BGM();
 
 	if(pCutSceneDesc->Sound_Desc.bChangeBGM)

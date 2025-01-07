@@ -55,9 +55,9 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	m_eStat.fHp = 1000.f;
-	m_eStat.fMaxHp = 1000.f;
-	m_eStat.fAtk = 200.f;
+	m_eStat.fHp = 900.f;
+	m_eStat.fMaxHp = 900.f;
+	m_eStat.fAtk = 210.f;
 	//m_eStat.fDefence = 2.f;
 
 	m_eStat.fGrogyPoint = 0.f;
@@ -185,9 +185,9 @@ void CCarcassTail::Resetting()
 {
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 1000.f;
-	m_eStat.fMaxHp = 1000.f;
-	m_eStat.fAtk = 200.f;
+	m_eStat.fHp = 900.f;
+	m_eStat.fMaxHp = 900.f;
+	m_eStat.fAtk = 210.f;
 
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 210.f;
@@ -426,8 +426,8 @@ HRESULT CCarcassTail::Ready_Components()
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
 
 	physX::GeometryCapsule CapsuleDesc;
-	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.8f;
+	CapsuleDesc.fHeight = 1.f;
+	CapsuleDesc.fRadius = 1.f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 
 	/* FOR.Com_RigidBody */

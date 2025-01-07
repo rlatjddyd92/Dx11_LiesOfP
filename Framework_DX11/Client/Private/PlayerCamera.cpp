@@ -111,14 +111,14 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 	{
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 		{
-			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.8f, fTimeDelta * MouseMove * 0.1f);
+			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.6f, fTimeDelta * MouseMove * 0.1f);
 		}
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
 		{
-			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.8f, 2.8f, fTimeDelta * MouseMove * 0.1f);
+			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.8f, 2.6f, fTimeDelta * MouseMove * 0.1f);
 		}
 	}
-	m_vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.8f;
+	m_vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.6f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vTargetPos);
 
@@ -187,7 +187,7 @@ void CPlayerCamera::Move_PlayerBackPos()
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vInitPos);
 		m_pTransformCom->LookAt(vPlayerPos);
 
-		m_vTargetPos = (_Vec3)vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.8f;
+		m_vTargetPos = (_Vec3)vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.6f;
 	}
 }
 

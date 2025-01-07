@@ -36,6 +36,8 @@ public:
 	void Stop_BGM();
 	void Pause_BGM();
 	void SetVolume_BGM(_float fVolume);
+	_bool IsPlaying_BGM();
+	_bool IsPause_BGM();
 
 public:
 	void Play_ENV(const TCHAR* pSoundKey, _float* fVolume);

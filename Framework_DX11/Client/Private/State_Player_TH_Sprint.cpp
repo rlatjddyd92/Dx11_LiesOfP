@@ -47,7 +47,7 @@ void CState_Player_TH_Sprint::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
-    else if (m_fSprintEndTime > 0.1f)
+    else if (m_fSprintEndTime > 0.1f || m_pPlayer->Get_Player_Stat().vGauge_Stamina.x <= 0.f)
     {
         m_pPlayer->Change_State(CPlayer::TH_RUN);
     }

@@ -176,7 +176,7 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
             m_isFadeOut = true;
 
             _Vec3 vPos = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-            //vPos.y += 1.f;
+            vPos.y += 0.6f;
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), vPos);
             m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End_VolumeUP.wav"));
         }
@@ -251,7 +251,7 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
             m_isFadeOut = true;
 
             _Vec3 vPos = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-            //vPos.y += 1.f;
+            vPos.y += 0.6f;
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), vPos);
             m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End_VolumeUP.wav"));
         }
@@ -315,7 +315,7 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
                 GET_GAMEINTERFACE->Set_Potion_Count_Full();
 
                 _Vec3 vPos = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-                //vPos.y += 1.f;
+                vPos.y += 0.6f;
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), vPos);
                 m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End_VolumeUP.wav"));
                 m_isFadeIn = true;

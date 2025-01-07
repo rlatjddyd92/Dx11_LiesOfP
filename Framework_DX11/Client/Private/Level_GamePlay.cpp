@@ -106,10 +106,13 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 			static_cast<CMonster*>(ObjectVector[i])->Resetting();
 		}
 
-		if(m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia")))
+		CLayer* pRaxasiaLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"));
+		if(pRaxasiaLayer && pRaxasiaLayer->Get_ObjectCount() > 0)
 			static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList()[0])->Resetting();
 
-		if (m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus")))
+		CLayer* pSimonLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"));
+		if (pSimonLayer && pSimonLayer->Get_ObjectCount() > 0)
+		if (m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("")))
 			static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList()[0])->Resetting();
 
 		m_pPlayer->Set_IsRespawnMonster(false);
@@ -585,7 +588,7 @@ HRESULT CLevel_GamePlay::Ready_PoolingObject()
 	BloodTrailDesc.pParentMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr();
 	BloodTrailDesc.pSocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	for (_uint i = 0; i < 8; ++i)
+	for (_uint i = 0; i < 20; ++i)
 	{
 		CBloodTrail* pBloodTrail = dynamic_cast<CBloodTrail*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect_Polling"), TEXT("Prototype_GameObject_Effect_BloodTrail"), &BloodTrailDesc));
 		if (!pBloodTrail)

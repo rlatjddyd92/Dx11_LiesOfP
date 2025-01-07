@@ -100,6 +100,21 @@ void CSound_Manager::SetVolume_BGM(_float fVolume)
 	m_pBGMChannel->setVolume(fVolume);
 }
 
+_bool CSound_Manager::IsPlaying_BGM()
+{
+	_bool isPlaying;
+	m_pBGMChannel->isPlaying(&isPlaying);
+
+	return isPlaying;
+}
+
+_bool CSound_Manager::IsPause_BGM()
+{
+	_bool isPause;
+	m_pBGMChannel->getPaused(&isPause);
+	return isPause;
+}
+
 void CSound_Manager::Play_ENV(const TCHAR* pSoundKey, _float* fVolume)
 {
 	auto iter = Find_Sound(pSoundKey);
