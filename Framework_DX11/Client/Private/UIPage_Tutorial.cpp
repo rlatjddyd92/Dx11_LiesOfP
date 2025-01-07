@@ -88,7 +88,8 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 		return;
 	}
 		
-
+	if (m_bStart == false)
+		return;
 
 	if (m_iNowChapter == -1)
 		Next_Chapter();
@@ -695,6 +696,8 @@ void CUIPage_Tutorial::Initialize_Tutorial()
 	m_pPopup->Set_Popup(m_vecPart);
 
 	Data_Setting();
+
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
 }
 
 void CUIPage_Tutorial::Data_Setting()

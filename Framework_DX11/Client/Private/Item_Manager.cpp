@@ -69,7 +69,8 @@ ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
 
 	m_vecArray_Inven[iInvenSlotIndex]->Input_Item(NewItem, iCount);
 
-	GET_GAMEINTERFACE->Input_Drop_Item_Info(iItemIndex, iCount);
+	if (m_bInitialize == true)
+		GET_GAMEINTERFACE->Input_Drop_Item_Info(iItemIndex, iCount);
 
 	m_bIsChange = true;
 	return ITEM_RESULT::RESULT_SUCCESS;
@@ -1318,6 +1319,7 @@ HRESULT CItem_Manager::Initialize_Item()
 	}
 
 	m_iWeapon_Select = 0;
+	m_bInitialize = true;
 
 	return S_OK;
 }

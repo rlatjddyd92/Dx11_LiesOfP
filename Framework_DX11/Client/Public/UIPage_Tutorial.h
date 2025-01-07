@@ -78,6 +78,8 @@ public:
 
 	void Close_Popup();
 	void Open_Popup();
+
+	void Set_CanStartTuto() { m_bStart = true; }
 	
 	// 정보 확인
 	_bool Get_TutorialPopup_Open() { return m_bPopupOpen; }
