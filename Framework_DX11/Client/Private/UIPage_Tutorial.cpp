@@ -79,6 +79,7 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 			GET_GAMEINTERFACE->Get_Player()->Get_Navigation()->Move_to_Cell(GET_GAMEINTERFACE->Get_Player()->Get_RigidBody(), 774);
 			GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
 			GET_GAMEINTERFACE->Fade_In();
+			GET_GAMEINTERFACE->Show_Region_Info(TEXT("아르케 대수도원"), TEXT("흐린 날씨"));
 		}
 	}
 	else if (m_fStartTime < 0.f)
@@ -87,7 +88,8 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 		return;
 	}
 		
-
+	if (m_bStart == false)
+		return;
 
 	if (m_iNowChapter == -1)
 		Next_Chapter();
@@ -126,6 +128,7 @@ void CUIPage_Tutorial::OpenAction()
 void CUIPage_Tutorial::CloseAction()
 {
 	__super::CloseAction();
+	m_bPopupOpen = false;
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, m_pSharedPonter_AttackMonster);
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, m_pSharedPonter_NormalMonster);
 }
@@ -693,6 +696,8 @@ void CUIPage_Tutorial::Initialize_Tutorial()
 	m_pPopup->Set_Popup(m_vecPart);
 
 	Data_Setting();
+
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
 }
 
 void CUIPage_Tutorial::Data_Setting()

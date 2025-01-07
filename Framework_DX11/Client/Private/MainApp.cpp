@@ -61,14 +61,16 @@ void CMainApp::Update(_float fTimeDelta)
 	// UI 연출 관련 테스트 코드 
 	if (KEY_HOLD(KEY::CTRL))
 	{
+		if (KEY_TAP(KEY::NUM1))
+			GET_GAMEINTERFACE->Show_Script(TEXT("Testtest"), TEXT("Testtest"), 10.f);
 		if (KEY_TAP(KEY::NUM2))
 			GET_GAMEINTERFACE->Show_PlayerDead_UI();
 		if (KEY_TAP(KEY::NUM3))
 			GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다"));
 		if (KEY_TAP(KEY::NUM4))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_ZEMINI);
+			GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
 		if (KEY_TAP(KEY::NUM5))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
+			GET_GAMEINTERFACE->Fade_In();
 		if (KEY_TAP(KEY::NUM6))
 			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
 		if (KEY_TAP(KEY::NUM7))
@@ -79,6 +81,18 @@ void CMainApp::Update(_float fTimeDelta)
 			GET_GAMEINTERFACE->UIPart_On();
 
 	}
+
+	if (GET_GAMEINTERFACE->IsTalking_WithNPC() == true)
+		_int i = 0;
+
+	if (GET_GAMEINTERFACE->IsTalking_SelectPage() == true)
+		_int i = 0;
+
+	if (GET_GAMEINTERFACE->IsTalking_WithNPC(NPC_SCRIPT::SCR_MANUS) == true)
+		_int i = 0;
+
+	if (GET_GAMEINTERFACE->IsEndTalk_WithNPC(NPC_SCRIPT::SCR_MANUS) == true)
+		_int i = 0;
 	
 	if (KEY_TAP(KEY::M))
 	{

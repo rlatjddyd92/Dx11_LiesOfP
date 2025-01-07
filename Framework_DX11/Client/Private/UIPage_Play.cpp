@@ -81,6 +81,9 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 		if (i == _int(PART_GROUP::GROUP_POTION_FILL))
 			continue;
 
+		if (i == _int(PART_GROUP::GROUP_FABLE_FX))
+			continue;
+
 		if ((i >= _int(PART_GROUP::GROUP_WEAPON_DURABLE_FRAME)) && (i <= _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)))
 			continue;
 
@@ -103,11 +106,12 @@ HRESULT CUIPage_Play::Render()
 void CUIPage_Play::OpenAction()
 {
 	__super::OpenAction();
+	ShowCursor(false);
 
 	if (m_bIsStart == true)
 	{
 		m_bIsStart = false;
-		GET_GAMEINTERFACE->Show_Region_Info(TEXT("¾Æ¸£ÄÉ ´ë¼öµµ¿ø"), TEXT("Èå¸° ³¯¾¾"));
+		//GET_GAMEINTERFACE->Show_Region_Info(TEXT("PÀÇ ÈÆ·Ã¼Ò"), TEXT("Èå¸° ³¯¾¾"));
 	}
 }
 
@@ -169,6 +173,8 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 
 	m_pPlayCom_Weapon = CUIPlay_Weapon::Create(m_pDevice, m_pContext);
 	m_pPlayCom_Weapon->Initialize_Weapon_Component(m_vecPart);
+
+	m_vFable_Fill_Origin = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SP0_FILL))->fTextureColor;
 
 	return S_OK;
 }
@@ -463,12 +469,87 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SP0_FILL) + i]->fRatio = 0.f;
 	}
 
+	LU_Gauge_FableAction_Start(fTimeDelta, iSP_Cell_Filled, m_iFable_Art_Cell_Now);
+	LU_Gauge_FableAction(fTimeDelta);
+
 	m_iFable_Art_Cell_Now = iSP_Cell_Filled;
 
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->bRender = false;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->strText = {};
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->bRender = false;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->strText = {};
+
+
+}
+
+void CUIPage_Play::LU_Gauge_FableAction_Start(_float fTimeDelta, _int iNow, _int iBefore)
+{
+	if (iNow == iBefore)
+		return;
+
+	_int iCount = 0;
+
+	m_iFableMove_Index = iNow;
+	m_iFableMove_IndexEnd = iBefore - 1;
+	m_vFable_Art_ActionTime.x = 0.f;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_FABLE_FX)]->PartIndexlist)
+	{
+		if ((iCount >= m_iFableMove_Index) && (iCount <= m_iFableMove_IndexEnd))
+		{
+			m_vecPart[iter]->bRender = true;
+		}
+		else
+			m_vecPart[iter]->bRender = false;
+
+		++iCount;
+	}
+
+	
+}
+
+void CUIPage_Play::LU_Gauge_FableAction(_float fTimeDelta)
+{
+	if (m_vFable_Art_ActionTime.x >= 0.f)
+		m_vFable_Art_ActionTime.x += fTimeDelta;
+
+	if (m_vFable_Art_ActionTime.x >= m_vFable_Art_ActionTime.y)
+	{
+		m_vFable_Art_ActionTime.x == -1.f;
+
+		for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_FABLE_FX)]->PartIndexlist)
+		{
+			m_vecPart[iter]->bRender = false;
+		}
+			
+
+		for (_int i = 0; i < 5; ++i)
+		{
+			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SP0_FILL) + i)->fTextureColor = m_vFable_Fill_Origin;
+		}
+
+		m_iFableMove_Index = -1;
+		m_iFableMove_IndexEnd = -1;
+	}
+	else
+	{
+		_int iCount = 0;
+
+		for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_FABLE_FX)]->PartIndexlist)
+		{
+			if (iCount == m_iFableMove_Index)
+				m_vecPart[iter]->fRatio = m_vFable_Art_ActionTime.x / m_vFable_Art_ActionTime.y;
+
+			++iCount;
+		}
+
+		for (_int i = m_iFableMove_Index; i <= m_iFableMove_IndexEnd; ++i)
+		{
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SP0_FILL) + i]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SP0_FILL) + i]->fRatio = 1.f;
+			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SP0_FILL) + i)->fTextureColor *= (fTimeDelta + 1.f);
+		}
+	}
 }
 
 void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
@@ -695,7 +776,7 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 
 void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
 {
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo + GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo);
 }
 
 void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
@@ -987,6 +1068,10 @@ void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 				{
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio = vBuff.x / vBuff.y;
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fTextureColor = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->vTexture_Color;
+
+					if (__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio > 0.5f)
+						__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fTextureColor *= 2.f;
+
 					_Vec2 vPos = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_DEBUFF_STATIC)]->PartIndexlist.back()]->fPosition;
 					vPos.y += fHeight;
 

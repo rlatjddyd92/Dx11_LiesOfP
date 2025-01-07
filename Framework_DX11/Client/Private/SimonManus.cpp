@@ -504,6 +504,7 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 {
 	const _Matrix* pNewSocketMatrix = { nullptr };
 
+	Effect_All_Off();
 	DeActive_AllEffect();
 
 	switch (iCutSceneNum)

@@ -147,7 +147,7 @@ HRESULT CTowerDoor::Ready_Components()
 
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.8f, 1.0f, 0.5f);
+	ColliderDesc.vExtents = _float3(1.8f, 1.0f, 0.8f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 	ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
 

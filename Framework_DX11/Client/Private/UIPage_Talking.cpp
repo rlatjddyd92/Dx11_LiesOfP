@@ -179,9 +179,13 @@ void CUIPage_Talking::Show_Select_Script(_wstring strLeft, _wstring strRight, _f
 
 _bool CUIPage_Talking::IsTalking_WithNPC(NPC_SCRIPT eNPC)
 {
+	if (IsTalking_WithNPC() == false)
+		return false;
+
 	if (m_eNowNpc != eNPC)
 		return false;
-	else if (IsEndTalk_WithNPC(eNPC) == true)
+
+	if (IsEndTalk_WithNPC(eNPC) == true)
 		return false;
 
 	return true;
