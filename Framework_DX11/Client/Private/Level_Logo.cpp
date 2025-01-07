@@ -54,6 +54,7 @@ void CLevel_Logo::Update(_float fTimeDelta)
 
 	if ((GetKeyState(VK_RETURN) & 0x8000) || (GET_GAMEINTERFACE->Get_Start_Loading()))
 	{
+		m_pGameInstance->Play_Effect(TEXT("SE_UI_TitleScreen_Steelheart_Heartbeat_01.wav"), &g_fEffectVolume);
 
 		DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
 		if (nullptr == tDesc)
@@ -66,7 +67,6 @@ void CLevel_Logo::Update(_float fTimeDelta)
 
 		GET_GAMEINTERFACE->Open_Loading_Page(); // 로딩 진행 
 
-		m_pGameInstance->Play_Effect(TEXT("SE_UI_TitleScreen_Steelheart_Heartbeat_01.wav"), &g_fEffectVolume);
 	}
 }
 

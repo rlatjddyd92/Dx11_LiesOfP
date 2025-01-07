@@ -1,4 +1,57 @@
-﻿  unity_9CDJ00FE6ZXK395S.cpp
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Effect_Texture.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(155,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(182,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Bloom.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Cell.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Back.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(180,5-82): warning X3206: implicit truncation of vector type
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(201,27-49): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(235,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(306,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(339,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(393,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(426,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_HDR.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Model_Instance.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_PostProcess.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(116,16-42): warning X3206: implicit truncation of vector type
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(187,12-68): warning X3206: implicit truncation of vector type
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(188,12-68): warning X3206: implicit truncation of vector type
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(112,33-78): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(148,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(172,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
+  unity_9CDJ00FE6ZXK395S.cpp
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,1): warning C4005: 'PX_ALLOC': 매크로 재정의
   (소스 파일 'x64/Release/unity_9CDJ00FE6ZXK395S.cpp'을(를) 컴파일하는 중)
   D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(67,1):
@@ -27,9 +80,9 @@ D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
      ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
   코드를 생성하고 있습니다.
-  2 of 5955 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    2 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(30): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  All 5955 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
 Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
