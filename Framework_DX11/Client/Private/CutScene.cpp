@@ -9,6 +9,8 @@
 #include "Raxasia.h"
 #include "Sophia.h"
 #include "CMoveBlockObj.h"
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -359,7 +361,8 @@ void CCutScene::End_Setting()
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		pPlayer->Init_PlayerCamera();
-		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+		GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다"));
 
 		int iCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"));
 		for (int i = 0; i < iCount; ++i)

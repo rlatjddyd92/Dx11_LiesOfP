@@ -329,20 +329,25 @@ public:
 
 	void			SetUp_Monster_Fatal();
 
-	void			Active_CutScene();
+	void			Active_CutScene(_float fTimeDelta);
 	void			Active_Sophia_Dead_Talk(_float fTimeDelta);
 private:
 	_bool					m_bActivated_ManusCutScene = { false };
 	_bool					m_isPlayingCutscene = { false };
 	_bool					m_isPlayingCutscene_SophiaDead = { false };
+	_bool					m_isPlayingCutscene_DeadFadeOut = { false };
+	_bool					m_isPlayingCutscene_DeadFadeIn = { false };
 	_bool					m_isSophia_DeadFadeOut = { false };
 	_bool					m_isSophia_DeadFadeIn = { false };
 	_bool					m_isSophia_DeadFadeOutSet = { false };
 	_bool					m_bStart_SophiaDead_Talking = { false };
+	_bool					m_bStart_SophiaDead_CutScene = { false };
 
 
 	_float					m_fSophia_DeadFadeOutTimer = { 0.f };
+	_float					m_fCutscene_SophiaDead_FadeOutTimer = { 0.f };
 	_float					m_fSophia_DeadFadeInTimer = { 0.f };
+	_float					m_fCutscene_SophiaDead_FadeInTimer = { 0.f };
 private:
 	vector<class CEffect_Container*> m_Effects;
 	class CEffect_Manager* m_pEffect_Manager = { nullptr };
