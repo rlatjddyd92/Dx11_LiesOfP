@@ -106,6 +106,7 @@ HRESULT CUIPage_Play::Render()
 void CUIPage_Play::OpenAction()
 {
 	__super::OpenAction();
+	ShowCursor(false);
 
 	if (m_bIsStart == true)
 	{
