@@ -40,7 +40,7 @@ private:
     _bool               m_bRunning = { false };
     _bool               m_bWalk = { false };
 
-    _float              m_fRunSpeed = { 3.5f };
+    _float              m_fRunSpeed = { 2.5f };
     _float              m_fWalkSpeed = { 1.f };
 
     _float              m_fRunningWeights = { 4.f };

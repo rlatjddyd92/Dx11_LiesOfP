@@ -111,6 +111,9 @@
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Dissolve_Player_Dead.cpp"
 
 
+#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Poison.cpp"
+
+
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_PowerAttack.cpp"
 
 
@@ -472,6 +475,9 @@
 
 
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerMale_Reload.cpp"
+
+
+#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_BackLightning.cpp"
 
 
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die_Talking.cpp"
@@ -979,9 +985,6 @@
 
 
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_JumpToAttack.cpp"
-
-
-#include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_LightningToWave.cpp"
 
 
 #include "C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route1.cpp"
