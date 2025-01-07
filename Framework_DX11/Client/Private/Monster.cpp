@@ -245,7 +245,7 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	m_eStat.fHp -= fAtkDmg;
 	m_eStat.fAtkDmg = fAtkDmg;
 
-	if (m_eStat.bWeakness && m_pFsmCom->Get_CurrentState() == HITFATAL && m_pFsmCom->Get_CurrentState() == GROGY)
+	if (m_eStat.bWeakness && m_pFsmCom->Get_CurrentState() != HITFATAL && m_pFsmCom->Get_CurrentState() != GROGY)
 	{
 		if (iAttackStrength >= ATTACK_STRENGTH::ATK_NORMAL)
 		{
