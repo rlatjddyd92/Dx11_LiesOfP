@@ -394,7 +394,7 @@ public:
 
 			m_vecPage[i]->CloseAction();
 		}
-		ShowCursor(false);
+		
 		m_bIsPlayPageMaintain = false;
 		m_bIsUIOff = true;
 	}
