@@ -103,7 +103,10 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
-	m_pDissolveEffect->Priority_Update(fTimeDelta);
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Priority_Update(fTimeDelta);
+
+	m_pPowerAttackEffect->Priority_Update(fTimeDelta);
 }
 
 void CCarcassBigA::Update(_float fTimeDelta)
@@ -128,7 +131,10 @@ void CCarcassBigA::Update(_float fTimeDelta)
 	Update_Debuff(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
-	m_pDissolveEffect->Update(fTimeDelta);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Update(fTimeDelta);
+	m_pPowerAttackEffect->Update(fTimeDelta);
 }
 
 void CCarcassBigA::Late_Update(_float fTimeDelta)
@@ -140,7 +146,10 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 			__super::Late_Update(fTimeDelta);
 
 			m_pRigidBodyCom->Update(fTimeDelta);
-			m_pDissolveEffect->Late_Update(fTimeDelta);
+
+			for (auto& Effect : m_DissolveEffect)
+				Effect->Late_Update(fTimeDelta);
+			m_pPowerAttackEffect->Late_Update(fTimeDelta);
 
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 			for (_uint i = 0; i < TYPE_END; ++i)
@@ -423,8 +432,8 @@ void CCarcassBigA::Resetting()
 
 void CCarcassBigA::On_PowerAttack(_bool bOn)
 {
-	if(bOn != m_pDissolveEffect->Get_On())
-		m_pDissolveEffect->Set_On(bOn);
+	if(bOn != m_pPowerAttackEffect->Get_On())
+		m_pPowerAttackEffect->Set_On(bOn);
 }
 
 HRESULT CCarcassBigA::Ready_Effect()
@@ -437,9 +446,25 @@ HRESULT CCarcassBigA::Ready_Effect()
 	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassBigA_PowerAttack");
 
-	m_pDissolveEffect = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
-	if (nullptr == m_pDissolveEffect)
+	m_pPowerAttackEffect = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
+	if (nullptr == m_pPowerAttackEffect)
 		return E_FAIL;
+
+	m_DissolveEffect.resize(SURFACE_END);
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassBigA_Fire");
+	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
+		return E_FAIL;
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassBigA_Electric");
+	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+		return E_FAIL;
+
+	On_PowerAttack(true);
+	On_SurfaceEffect(SURFACE_FIRE, true);
+	On_SurfaceEffect(SURFACE_ELECTRIC, true);
 
 	return S_OK;
 }
@@ -488,7 +513,6 @@ CCarcassBigA* CCarcassBigA::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 }
 
 
-
 CPawn* CCarcassBigA::Clone(void* pArg)
 {
 	CCarcassBigA* pInstance = new CCarcassBigA(*this);
@@ -513,7 +537,7 @@ void CCarcassBigA::Free()
 	{
 		Safe_Release(m_EXCollider[i]);
 	}
-	Safe_Release(m_pDissolveEffect);
+	Safe_Release(m_pPowerAttackEffect);
 
 	__super::Free();
 

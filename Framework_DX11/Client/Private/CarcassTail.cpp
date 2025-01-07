@@ -28,7 +28,6 @@
 #include "State_CarcassTail_ScratchingToSwip.h"
 
 #include "Dissolve_PowerAttack.h"
-#include "Dissolve_Fire.h"
 
 CCarcassTail::CCarcassTail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -105,6 +104,8 @@ void CCarcassTail::Priority_Update(_float fTimeDelta)
 
 	for (auto& Effect : m_DissolveEffect)
 		Effect->Priority_Update(fTimeDelta);
+
+	m_pPowerAttackEffect->Priority_Update(fTimeDelta);
 }
 
 void CCarcassTail::Update(_float fTimeDelta)
@@ -120,6 +121,7 @@ void CCarcassTail::Update(_float fTimeDelta)
 
 	for (auto& Effect : m_DissolveEffect)
 		Effect->Update(fTimeDelta);
+	m_pPowerAttackEffect->Update(fTimeDelta);
 
 	_float4x4 WorldMat{};
 	XMStoreFloat4x4(&WorldMat , m_pModelCom->Get_BoneCombindTransformationMatrix(7) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
@@ -140,6 +142,7 @@ void CCarcassTail::Late_Update(_float fTimeDelta)
 
 			for(auto& Effect : m_DissolveEffect)
 				Effect->Late_Update(fTimeDelta);
+			m_pPowerAttackEffect->Late_Update(fTimeDelta);
 
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
@@ -204,14 +207,8 @@ void CCarcassTail::Resetting()
 
 void CCarcassTail::On_PowerAttack(_bool bOn)
 {
-	if (bOn != m_DissolveEffect[DISSOLVE_POWERATTACK]->Get_On())
-		m_DissolveEffect[DISSOLVE_POWERATTACK]->Set_On(bOn);
-}
-
-void CCarcassTail::On_DissolveEffect(_uint iIndex, _bool bOn)
-{
-	if (bOn != m_DissolveEffect[iIndex]->Get_On())
-		m_DissolveEffect[iIndex]->Set_On(bOn);
+	if (bOn != m_pPowerAttackEffect->Get_On())
+		m_pPowerAttackEffect->Set_On(bOn);
 }
 
 void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
@@ -487,8 +484,6 @@ HRESULT CCarcassTail::Ready_FSM()
 
 HRESULT CCarcassTail::Ready_Effect()
 {
-	m_DissolveEffect.resize(DISSOLVE_END);
-
 	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
 	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	DissolveDesc.fSpeedPerSec = 1.f;
@@ -497,22 +492,25 @@ HRESULT CCarcassTail::Ready_Effect()
 	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_PowerAttack");
 
-	m_DissolveEffect[DISSOLVE_POWERATTACK] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
-	if (nullptr == m_DissolveEffect[DISSOLVE_POWERATTACK])
+	m_pPowerAttackEffect = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
+	if (nullptr == m_pPowerAttackEffect)
 		return E_FAIL;
 
-	CDissolve_Effect::DISSOLVE_EFFECT_DESC FireDesc = {};
-	FireDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	FireDesc.fSpeedPerSec = 1.f;
-	FireDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	FireDesc.pTarget_ModelCom = m_pModelCom;
-	FireDesc.pTarget_TransformCom = m_pTransformCom;
-	FireDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Fire");
-	m_DissolveEffect[DISSOLVE_FIRE] = static_cast<CDissolve_Fire*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &FireDesc));
-	if (nullptr == m_DissolveEffect[DISSOLVE_FIRE])
+	m_DissolveEffect.resize(SURFACE_END);
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_Fire");
+	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
 		return E_FAIL;
 
-	On_DissolveEffect(DISSOLVE_FIRE, true);
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_Electric");
+	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+		return E_FAIL;
+
+	On_PowerAttack(true);
+	On_SurfaceEffect(SURFACE_FIRE, true);
+	On_SurfaceEffect(SURFACE_ELECTRIC, true);
 
 	return S_OK;
 }
@@ -595,9 +593,7 @@ void CCarcassTail::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 
-	for(auto& Effect : m_DissolveEffect)
-		Safe_Release(Effect);
-	m_DissolveEffect.clear();
+	Safe_Release(m_pPowerAttackEffect);
 
 	__super::Free();
 

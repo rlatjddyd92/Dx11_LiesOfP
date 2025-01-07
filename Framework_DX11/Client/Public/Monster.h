@@ -19,6 +19,13 @@ public:
 		MONSTER_STATE_END
 	};
 
+	enum SURFACE_EFFECT
+	{
+		SURFACE_FIRE,
+		SURFACE_ELECTRIC,
+		SURFACE_END
+	};
+
 protected:
 	CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CMonster(const CMonster& Prototype);
@@ -98,6 +105,7 @@ public:
 	virtual void		Resetting() {};
 
 	void				Calc_DebuffGain(_uint iDebuffType, _float fDebuffDuration);
+	void				On_SurfaceEffect(_uint iIndex, _bool bOn);
 
 protected:
 	_Vec4				m_vRootMoveStack{};
@@ -133,6 +141,8 @@ protected:
 	//ต๐น๖วม
 	_float				m_fDebuffDuration[DEBUFF_END] = {};
 	_bool				m_bDebuffed[DEBUFF_END] = {};
+
+	vector<class CDissolve_Effect*> m_DissolveEffect;
 
 protected:
 	virtual void		Update_Debuff(_float fTimeDelta);

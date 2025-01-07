@@ -111,6 +111,7 @@
 #include "Dissolve_Player_Dead.h"
 #include "Dissolve_Fire.h"
 #include "Dissolve_Poison.h"
+#include "Dissolve_Electric.h"
 
 #include "ObjectPool.h"
 #include "Decal_Blood.h"
@@ -292,7 +293,7 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 	if (KEY_TAP(KEY::K))
 	{
-		Init_PlayerCamera();
+		//Init_PlayerCamera();
 		Calc_DebuffGain(DEBUFF_ELEC, 30.f);
 		//Change_State(RAPIER_FATAL);
 	}
@@ -311,7 +312,7 @@ void CPlayer::Update(_float fTimeDelta)
 			CObjectPool<CDecal_Blood>::Get_GameObject()->Active_Random(vPlayerPos);
 		}
 
-		Calc_DebuffGain(DEBUFF_FIRE, 10.f);
+		Calc_DebuffGain(DEBUFF_ACID, 10.f);
 
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
@@ -1321,10 +1322,12 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	// 전기 상태면 이동 속도 감소
 	if (m_tPlayer_Stat->fDebuff_Electric.x > m_tPlayer_Stat->fDebuff_Electric.y * 0.5f)
 	{
+		m_DissolveEffects[DISSOLVE_ELECTRIC]->Set_On(true);
 		m_fDebuffSpeedRatio = 0.8f;
 	}
 	else
 	{
+		m_DissolveEffects[DISSOLVE_ELECTRIC]->Set_On(false);
 		m_fDebuffSpeedRatio = 1.f;
 	}
 
@@ -2167,6 +2170,8 @@ HRESULT CPlayer::Ready_Effect()
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Poison");
 	m_DissolveEffects[DISSOLVE_POISON] = static_cast<CDissolve_Poison*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Poison"), &DissolveDesc));
 
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Electric");
+	m_DissolveEffects[DISSOLVE_ELECTRIC] = static_cast<CDissolve_Electric*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
 	return S_OK;
 }
 

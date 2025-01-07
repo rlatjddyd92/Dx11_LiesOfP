@@ -207,6 +207,7 @@
     <ClInclude Include="..\Public\Decal.h" />
     <ClInclude Include="..\Public\Decal_Blood.h" />
     <ClInclude Include="..\public\Dissolve_Effect.h" />
+    <ClInclude Include="..\public\Dissolve_Electric.h" />
     <ClInclude Include="..\Public\Dissolve_Fire.h" />
     <ClInclude Include="..\Public\Dissolve_Player_Dead.h" />
     <ClInclude Include="..\public\Dissolve_Poison.h" />
@@ -609,6 +610,7 @@
     <ClCompile Include="..\Private\Decal.cpp" />
     <ClCompile Include="..\Private\Decal_Blood.cpp" />
     <ClCompile Include="..\private\Dissolve_Effect.cpp" />
+    <ClCompile Include="..\private\Dissolve_Electric.cpp" />
     <ClCompile Include="..\Private\Dissolve_Fire.cpp" />
     <ClCompile Include="..\Private\Dissolve_Player_Dead.cpp" />
     <ClCompile Include="..\private\Dissolve_Poison.cpp" />

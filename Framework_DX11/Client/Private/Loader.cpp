@@ -122,6 +122,7 @@
 #include "Dissolve_PowerAttack.h"
 #include "Dissolve_Fire.h"
 #include "Dissolve_Poison.h"
+#include "Dissolve_Electric.h"
 #pragma endregion
 
 #include "CMoveBlockObj.h"
@@ -1069,6 +1070,17 @@ HRESULT CLoader::Ready_Resources_For_Player()
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
+	DissolveInstanceDesc.iNumInstance = 10;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 2.f, 4.f };
+	DissolveInstanceDesc.vMinColor = { 1.2f, 1.5f, 3.f, 1.f };
+	DissolveInstanceDesc.vMaxColor = { 1.2f, 1.5f, 3.f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.1f, 0.2f };
+	DissolveInstanceDesc.vSpeed = { 0.05f, 0.1f };
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1092,9 +1104,6 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
 	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
 	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_PowerAttack"),
-		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
-		return E_FAIL;
 
 	DISSOLVE_INSTANCE_DESC FireDesc = {};
 	FireDesc.iNumInstance = 10;
@@ -1107,14 +1116,43 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	FireDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
 	FireDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
 
+	DISSOLVE_INSTANCE_DESC ElectricDesc = {};
+	ElectricDesc.iNumInstance = 10;
+	ElectricDesc.vCenter = { 0.f, 0.f, 0.f };
+	ElectricDesc.vLifeTime = { 2.f, 4.f };
+	ElectricDesc.vMinColor = { 1.2f, 1.5f, 3.f, 1.f };
+	ElectricDesc.vMaxColor = { 1.2f, 1.5f, 3.f, 1.f };
+	ElectricDesc.vSize = { 0.1f, 0.2f };
+	ElectricDesc.vSpeed = { 0.05f, 0.1f };
+	ElectricDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	ElectricDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassTail");
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_PowerAttack"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_Fire"),
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassTail_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, ElectricDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_CarcassNormal
 	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassNormal"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassNormal.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	FireDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassNormal");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassNormal_Fire"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
+		return E_FAIL;
+
+	ElectricDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassNormal");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassNormal_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, ElectricDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_CarcassBigA
@@ -1128,16 +1166,46 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
+	FireDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassBigA");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassBigA_Fire"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
+		return E_FAIL;
+
+	ElectricDesc.strModelTag = TEXT("Prototype_Component_Model_CarcassBigA");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassBigA_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, ElectricDesc))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_CurruptedStrongArm
 	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Horesman"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Horesman.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	FireDesc.strModelTag = TEXT("Prototype_Component_Model_Horesman");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Horesman_Fire"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
+		return E_FAIL;
+
+	ElectricDesc.strModelTag = TEXT("Prototype_Component_Model_Horesman");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Horesman_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, ElectricDesc))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_RebornerMale
 	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMale"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerMale.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	FireDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerMale");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMale_Fire"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
+		return E_FAIL;
+
+	ElectricDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerMale");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMale_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, ElectricDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_Weapon_RebornerMale_Gun
@@ -1152,6 +1220,16 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerMaleFire.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	FireDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerMaleFire");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMaleFire_Fire"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
+		return E_FAIL;
+
+	ElectricDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerMaleFire");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMaleFire_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, ElectricDesc))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_RebornerBigA
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerBigA"),
@@ -1161,6 +1239,16 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerBigA");
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_PowerAttack"),
 		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
+	FireDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerBigA");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_Fire"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, FireDesc))))
+		return E_FAIL;
+
+	ElectricDesc.strModelTag = TEXT("Prototype_Component_Model_RebornerBigA");
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_Electric"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, ElectricDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_Weapon_RebornerBigA_Stick
@@ -1912,7 +2000,11 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Poison"),
 		CDissolve_Poison::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	
+
+	/* For. Prototype_GameObject_Effect_Dissolve_Electric */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"),
+		CDissolve_Electric::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 	/* For. Prototype_GameObject_Effect_BossDoor_Veli */

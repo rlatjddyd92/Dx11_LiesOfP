@@ -66,8 +66,9 @@ private:
 	class CWeapon* m_pWeapon = { nullptr };
 
 	class CEffect_Container* m_pSwingEffect = { nullptr };
-	class CDissolve_Effect* m_pDissolveEffect = { nullptr };
-	
+
+	class CDissolve_PowerAttack* m_pPowerAttackEffect = { nullptr };
+
 private:
 	virtual void		Update_Debuff(_float fTimeDelta) override;
 

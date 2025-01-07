@@ -2,13 +2,12 @@
 
 #include "Dissolve_Effect.h"
 
-BEGIN(Client)
-class CDissolve_PowerAttack final : public CDissolve_Effect
+class CDissolve_Electric final : public CDissolve_Effect
 {
 private:
-	CDissolve_PowerAttack(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CDissolve_PowerAttack(const CDissolve_PowerAttack& Prototype);
-	virtual ~CDissolve_PowerAttack() = default;
+	CDissolve_Electric(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CDissolve_Electric(const CDissolve_Electric& Prototype);
+	virtual ~CDissolve_Electric() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -42,8 +41,8 @@ private:
 	HRESULT Ready_Components();
 
 public:
-	static CDissolve_PowerAttack* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CDissolve_PowerAttack* Clone(void* pArg);
+	static CDissolve_Electric* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CDissolve_Electric* Clone(void* pArg);
 	virtual void Free() override;
 };
-END
+

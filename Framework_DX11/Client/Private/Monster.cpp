@@ -8,6 +8,8 @@
 #include "GameInterface_Controller.h"
 #include "Fsm.h"
 
+#include "Dissolve_Effect.h"
+
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn{ pDevice, pContext }
@@ -354,6 +356,12 @@ void CMonster::Reset_Debuff()
 	}
 }
 
+void CMonster::On_SurfaceEffect(_uint iIndex, _bool bOn)
+{
+	if (bOn != m_DissolveEffect[iIndex]->Get_On())
+		m_DissolveEffect[iIndex]->Set_On(bOn);
+}
+
 HRESULT CMonster::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -377,4 +385,9 @@ HRESULT CMonster::Ready_FSM()
 void CMonster::Free()
 {
 	__super::Free();
+
+	for (auto& Effect : m_DissolveEffect)
+		Safe_Release(Effect);
+	m_DissolveEffect.clear();
+
 }

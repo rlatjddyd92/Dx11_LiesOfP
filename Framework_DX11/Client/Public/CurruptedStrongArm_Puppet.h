@@ -63,6 +63,7 @@ private:
 
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
+	HRESULT Ready_Effects();
 
 	void	Update_Collider();
 

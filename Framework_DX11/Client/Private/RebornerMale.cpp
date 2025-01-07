@@ -22,6 +22,8 @@
 
 #include "Effect_Manager.h"
 
+#include "Dissolve_Effect.h"
+
 
 CRebornerMale::CRebornerMale(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -67,6 +69,9 @@ HRESULT CRebornerMale::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effects()))
+		return E_FAIL;
+
 	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
 
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
@@ -103,6 +108,10 @@ void CRebornerMale::Priority_Update(_float fTimeDelta)
 
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pColliderObject->Priority_Update(fTimeDelta);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Priority_Update(fTimeDelta);
+
 }
 
 void CRebornerMale::Update(_float fTimeDelta)
@@ -133,6 +142,10 @@ void CRebornerMale::Update(_float fTimeDelta)
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
 	m_pColliderObject->Update(fTimeDelta);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Update(fTimeDelta);
+
 }
 
 void CRebornerMale::Late_Update(_float fTimeDelta)
@@ -144,8 +157,11 @@ void CRebornerMale::Late_Update(_float fTimeDelta)
 			__super::Late_Update(fTimeDelta);
 
 			m_pRigidBodyCom->Update(fTimeDelta);
-			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
+			for (auto& Effect : m_DissolveEffect)
+				Effect->Late_Update(fTimeDelta);
+
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 			m_pGameInstance->Add_ColliderList(m_pColliderCom);
 			for (_int i = 0; i < CT_END - 1; ++i)
@@ -440,6 +456,33 @@ HRESULT CRebornerMale::Ready_Weapon()
 		return E_FAIL;
 
 	m_pWeapon->Appear();
+
+	return S_OK;
+}
+
+HRESULT CRebornerMale::Ready_Effects()
+{
+	m_DissolveEffect.resize(SURFACE_END);
+
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pTarget_ModelCom = m_pModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMale_Fire");
+	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
+		return E_FAIL;
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMale_Electric");
+	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+		return E_FAIL;
+
+	On_PowerAttack(true);
+	On_SurfaceEffect(SURFACE_FIRE, true);
+	On_SurfaceEffect(SURFACE_ELECTRIC, true);
 
 	return S_OK;
 }

@@ -24,6 +24,8 @@
 #include "State_CarcassNormal_Bite.h"
 #include "State_CarcassNormal_ClawRush.h"
 
+#include "Dissolve_Effect.h"
+
 
 CCarcassNormal::CCarcassNormal(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -69,6 +71,9 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
 	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
 
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
@@ -96,6 +101,10 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 void CCarcassNormal::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Priority_Update(fTimeDelta);
+
 }
 
 void CCarcassNormal::Update(_float fTimeDelta)
@@ -113,6 +122,10 @@ void CCarcassNormal::Update(_float fTimeDelta)
 	Update_Debuff(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+	for (auto& Effect : m_DissolveEffect)
+		Effect->Update(fTimeDelta);
+
 }
 
 void CCarcassNormal::Late_Update(_float fTimeDelta)
@@ -124,6 +137,10 @@ void CCarcassNormal::Late_Update(_float fTimeDelta)
 			__super::Late_Update(fTimeDelta);
 
 			m_pRigidBodyCom->Update(fTimeDelta);
+
+			for (auto& Effect : m_DissolveEffect)
+				Effect->Late_Update(fTimeDelta);
+
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 			for (_uint i = 0; i < TYPE_END; ++i)
@@ -460,6 +477,33 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	{
 		m_pColliderObject[i]->DeActive_Collider();
 	}
+
+	return S_OK;
+}
+
+HRESULT CCarcassNormal::Ready_Effect()
+{
+	m_DissolveEffect.resize(SURFACE_END);
+
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pTarget_ModelCom = m_pModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassNormal_Fire");
+	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
+		return E_FAIL;
+
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_CarcassNormal_Electric");
+	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+		return E_FAIL;
+
+	On_PowerAttack(true);
+	On_SurfaceEffect(SURFACE_FIRE, true);
+	On_SurfaceEffect(SURFACE_ELECTRIC, true);
 
 	return S_OK;
 }
