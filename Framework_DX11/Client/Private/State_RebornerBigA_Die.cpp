@@ -45,12 +45,11 @@ HRESULT CState_RebornerBigA_Die::Start_State(void* pArg)
 
 void CState_RebornerBigA_Die::Update(_float fTimeDelta)
 {
-    //if (End_Check())
-    //{
-    //    //몬스터 사망
-    //    m_pMonster->Change_State(CCarcassBigA::IDLE);   //임시
-    //
-    //}
+    if (End_Check())
+    {
+        m_pMonster->Get_RigidBody()->Set_Kinematic(false);
+    }
+
 
 }
 

@@ -34,12 +34,12 @@ HRESULT CState_RebornerMaleFire_Die::Start_State(void* pArg)
 
     if (vCrossUp.y <= 0)
     {
-        iAnimIndex = AN_DIE_B;
+        iAnimIndex = AN_DIE_B;  //22
         m_iDirCnt = 0;
     }
     else
     {
-        iAnimIndex = AN_DIE_F;
+        iAnimIndex = AN_DIE_F;  //21
         m_iDirCnt = 1;
     }
 
@@ -54,12 +54,10 @@ void CState_RebornerMaleFire_Die::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    //if (End_Check())
-    //{
-    //    //몬스터 사망
-    //    m_pMonster->Change_State(CCarcassBigA::IDLE);   //임시
-    //
-    //}
+    if (End_Check())
+    {
+        m_pMonster->Get_RigidBody()->Set_Kinematic(false);
+    }
 
     Effect_Check(CurTrackPos);
 
@@ -97,11 +95,11 @@ void CState_RebornerMaleFire_Die::Effect_Check(_double CurTrackPos)
 
     if (m_iDirCnt == 0)
     {
-        EffectTime = 175.f;
+        EffectTime = 100.f;
     }
     else
     {
-        EffectTime = 80.f;
+        EffectTime = 190.f;
     }
     if (!m_bExplosion)
     {
