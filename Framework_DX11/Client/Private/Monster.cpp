@@ -40,8 +40,6 @@ HRESULT CMonster::Initialize(void* pArg)
 	
 	m_strObjectTag = TEXT("Monster");
 
-	
-
 	return S_OK;
 }
 
@@ -389,7 +387,7 @@ void CMonster::Reset_Debuff()
 
 void CMonster::On_SurfaceEffect(_uint iIndex, _bool bOn)
 {
-	if (m_SurfaceEffect.size() >= iIndex && !m_SurfaceEffect[iIndex])
+	if (m_SurfaceEffect.size() <= iIndex || !m_SurfaceEffect[iIndex])
 		return;
 
 	if (bOn != m_SurfaceEffect[iIndex]->Get_On())
