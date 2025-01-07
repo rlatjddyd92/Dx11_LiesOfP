@@ -107,7 +107,6 @@ void CUIPage_Play::OpenAction()
 {
 	__super::OpenAction();
 	ShowCursor(false);
-
 	if (m_bIsStart == true)
 	{
 		m_bIsStart = false;
@@ -118,7 +117,7 @@ void CUIPage_Play::OpenAction()
 void CUIPage_Play::CloseAction()
 {
 	__super::CloseAction();
-
+	ShowCursor(true);
 }
 
 CHECK_MOUSE CUIPage_Play::Check_Page_Action(_float fTimeDelta)
