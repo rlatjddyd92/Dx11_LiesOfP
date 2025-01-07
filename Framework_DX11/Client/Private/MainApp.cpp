@@ -118,9 +118,9 @@ void CMainApp::Update(_float fTimeDelta)
 
 	Update_Radial(fTimeDelta);
 	
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
-//#endif
+#endif
 }
 
 HRESULT CMainApp::Render()
@@ -134,6 +134,8 @@ HRESULT CMainApp::Render()
 
 	++m_iNumDraw;
 
+
+#ifdef _DEBUG
 	if (m_fTimeAcc >= 1.f)
 	{
 		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iNumDraw);
@@ -143,6 +145,7 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Render_Text(TEXT("Font_145"), m_szFPS, XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
 
+#endif
 
 	m_pGameInstance->Render_End();
 

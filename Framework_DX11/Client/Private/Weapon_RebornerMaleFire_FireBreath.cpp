@@ -145,7 +145,7 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionEnter(CGameObject* pOther)
 			return;
 		}
 
-		static_cast<CPlayer*>(pOther)->Damaged(5.f);
+		static_cast<CPlayer*>(pOther)->Damaged(0.02f);
 	}
 }
 
