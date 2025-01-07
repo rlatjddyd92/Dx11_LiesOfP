@@ -140,7 +140,7 @@ public: // 외부에서 매니저 접근
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) { m_pUIManager->Show_Script(strScript0, strScript1, fTime, vColor); }
 	_float Check_Fade() { return m_pUIManager->Check_Fade(); }
 	void UIPart_On() { m_pUIManager->UIPart_On(); }
-	void UIPart_Off() { m_pUIManager->UIPart_Off(); }
+	void UIPart_Off(_bool bOffVolume = true) { m_pUIManager->UIPart_Off(bOffVolume); }
 
 	// NPC 스크립트 
 	void Show_Script_Npc_Talking(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }

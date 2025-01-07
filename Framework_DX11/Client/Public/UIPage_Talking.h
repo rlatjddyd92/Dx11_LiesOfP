@@ -161,7 +161,15 @@ public:
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime);
 	_bool IsLeft_LastSelect_Result() { return m_bLastSelect_Result_IsLeft; }
 
-	_bool IsTalking_WithNPC() { return !m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)]; }
+	_bool IsTalking_WithNPC()
+	{
+		if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] == true)
+			if ((m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] == false) && (m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] == false))
+				if (m_eNowNpc != NPC_SCRIPT::SCR_END)
+					return true;
+
+		return false;
+	}
 	_bool IsTalking_SelectPage() { return (m_vSelectTime.x >= 0.f); }
 
 	_bool IsTalking_WithNPC(NPC_SCRIPT eNPC); // 대화가 진행 중일 때 

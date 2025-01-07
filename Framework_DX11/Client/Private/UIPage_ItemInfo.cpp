@@ -457,6 +457,12 @@ void CUIPage_ItemInfo::Make_TooltipPage(const CItem_Manager::ITEM* Item, _bool b
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pItem->strName;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pItem->strItem_Desc;
 
+			if (Item->strItem_Desc_Second[0] != 'x')
+			{
+				m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc_0)]->bRender = true;
+				m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc_0)]->strText = Item->strItem_Desc_Second;
+			}
+
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pItem->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pItem->iPrice);
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pItem->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
 
