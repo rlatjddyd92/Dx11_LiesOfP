@@ -1246,6 +1246,9 @@ HRESULT CModel::Bind_MeshBoneMatrices(CShader* pShader, const _char* pConstantNa
 {
 	m_Meshes[iMeshIndex]->Bind_BoneMatrices(this, pShader, pConstantName);
 
+	if (0 == iMeshIndex)
+		memcpy_s(&m_ZeroBoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
+
 	return S_OK;
 }
 
