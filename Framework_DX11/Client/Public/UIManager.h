@@ -303,6 +303,7 @@ public:
 
 	void Start_Tutorial() // 튜토리얼 바로 진입
 	{ 
+		m_pUIPage_Tutorial->Set_CanStartTuto();
 		m_pUIPage_Tutorial->OpenAction();
 		m_pUIPage_Play->KeyGuideOnOff(false);
 	}

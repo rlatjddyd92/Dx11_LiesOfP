@@ -277,9 +277,9 @@ void CUIPlay_Weapon::Update_DurableGauge(_float fTimeDelta)
 	m_pSharedPointer_DurableGauge_Fill->fRatio = fDurable;
 
 	if (GET_GAMEINTERFACE->Get_Durable_Weapon_Ratio() <= 0.3f)
-		m_pSharedPointer_DurableGauge_Fill->fTextureColor = { 2.f,1.5f,1.5f,1.f };
+		m_pSharedPointer_DurableGauge_Fill->fTextureColor.x = 2.f;
 	else 
-		m_pSharedPointer_DurableGauge_Fill->fTextureColor = { 1.f, 1.f, 1.f, 1.f };
+		m_pSharedPointer_DurableGauge_Fill->fTextureColor.x = 1.f;
 }
 
 void CUIPlay_Weapon::Update_WeaponCell_Fx(_float fTimeDelta)

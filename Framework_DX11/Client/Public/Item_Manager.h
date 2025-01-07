@@ -678,6 +678,8 @@ private:
 	5. 일반 분리 자루 +5;
 	*/
 
+	_bool m_bInitialize = false;
+
 	vector<ARRAY*> m_vecArray_Inven; // 인벤토리 정보 모음 (행 단위)
 	vector<EQUIP*> m_vecEquip_ItemInfo; // 현재 어떤 장비 장착 중인 지 확인 
 
