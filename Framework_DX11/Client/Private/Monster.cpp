@@ -363,8 +363,8 @@ void CMonster::Reset_Debuff()
 
 void CMonster::On_SurfaceEffect(_uint iIndex, _bool bOn)
 {
-	if (bOn != m_DissolveEffect[iIndex]->Get_On())
-		m_DissolveEffect[iIndex]->Set_On(bOn);
+	if (bOn != m_SurfaceEffect[iIndex]->Get_On())
+		m_SurfaceEffect[iIndex]->Set_On(bOn);
 }
 
 HRESULT CMonster::Ready_Components()
@@ -391,8 +391,8 @@ void CMonster::Free()
 {
 	__super::Free();
 
-	for (auto& Effect : m_DissolveEffect)
+	for (auto& Effect : m_SurfaceEffect)
 		Safe_Release(Effect);
-	m_DissolveEffect.clear();
+	m_SurfaceEffect.clear();
 
 }

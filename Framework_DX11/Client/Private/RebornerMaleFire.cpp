@@ -113,7 +113,7 @@ void CRebornerMaleFire::Priority_Update(_float fTimeDelta)
 
 	m_pWeapon->Priority_Update(fTimeDelta);
 
-	for (auto& Effect : m_DissolveEffect)
+	for (auto& Effect : m_SurfaceEffect)
 		Effect->Priority_Update(fTimeDelta);
 
 }
@@ -157,7 +157,7 @@ void CRebornerMaleFire::Update(_float fTimeDelta)
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
 
-	for (auto& Effect : m_DissolveEffect)
+	for (auto& Effect : m_SurfaceEffect)
 		Effect->Update(fTimeDelta);
 
 }
@@ -172,7 +172,7 @@ void CRebornerMaleFire::Late_Update(_float fTimeDelta)
 
 			m_pRigidBodyCom->Update(fTimeDelta);
 
-			for (auto& Effect : m_DissolveEffect)
+			for (auto& Effect : m_SurfaceEffect)
 				Effect->Late_Update(fTimeDelta);
 
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -468,7 +468,7 @@ HRESULT CRebornerMaleFire::Ready_Effect()
 
 	m_pFireEffect->Set_Loop(false);
 
-	m_DissolveEffect.resize(SURFACE_END);
+	m_SurfaceEffect.resize(SURFACE_END);
 
 	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
 	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
@@ -477,13 +477,13 @@ HRESULT CRebornerMaleFire::Ready_Effect()
 	DissolveDesc.pTarget_ModelCom = m_pModelCom;
 	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMaleFire_Fire");
-	m_DissolveEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
-	if (nullptr == m_DissolveEffect[SURFACE_FIRE])
+	m_SurfaceEffect[SURFACE_FIRE] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Fire"), &DissolveDesc));
+	if (nullptr == m_SurfaceEffect[SURFACE_FIRE])
 		return E_FAIL;
 
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerMaleFire_Electric");
-	m_DissolveEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
-	if (nullptr == m_DissolveEffect[SURFACE_ELECTRIC])
+	m_SurfaceEffect[SURFACE_ELECTRIC] = static_cast<CDissolve_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_SurfaceEffect[SURFACE_ELECTRIC])
 		return E_FAIL;
 
 	//On_PowerAttack(true);
