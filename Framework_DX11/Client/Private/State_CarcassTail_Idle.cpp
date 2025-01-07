@@ -120,7 +120,7 @@ void CState_CarcassTail_Idle::Update(_float fTimeDelta)
                 m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
                 m_bRunning = true;
             }
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 4.f, fTimeDelta);
             _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 
             m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fRunSpeed);
@@ -133,7 +133,7 @@ void CState_CarcassTail_Idle::Update(_float fTimeDelta)
                 m_pMonster->Change_Animation(AN_WALK, true, 0.1f, 0);
                 m_bWalk = true;
             }
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
             _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 
             m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fWalkSpeed);
@@ -146,7 +146,7 @@ void CState_CarcassTail_Idle::Update(_float fTimeDelta)
         if (fDist >= 9.f && fDist < 30.f || m_fLinkedTailCtrl >= 3)
         {
             //뒤에있을때 공격도 있어서. 회전을 거리가 멀때만 하게 조정
-            iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+            iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 4.f, fTimeDelta);
 
             switch (iDir)
             {
@@ -197,7 +197,6 @@ void CState_CarcassTail_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
             m_iAtkCnt = 0;
         }
 
-        m_iAtkCnt = 4;
         switch (m_iAtkCnt)
         {
         case 0:

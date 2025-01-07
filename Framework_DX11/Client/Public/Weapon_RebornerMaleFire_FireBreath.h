@@ -47,7 +47,7 @@ private:
 	_float	m_fAttackRange = {0.f};
 
 	_float	m_fResetTimer = { 0.f };
-	_float	m_fResetTime = { 0.5f };
+	_float	m_fResetTime = { 0.05f };
 
 public:
 	static CWeapon_RebornerMaleFire_FireBreath* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

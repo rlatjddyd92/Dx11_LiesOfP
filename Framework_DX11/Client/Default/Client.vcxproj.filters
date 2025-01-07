@@ -688,9 +688,6 @@
     <Filter Include="04.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand">
       <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04.Fsm\Monster\SimonManus\P2\HitFatal">
-      <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.Fsm\Monster\SimonManus\P2\Die_Talking">
       <UniqueIdentifier>{8f69d69b-43bc-49a5-8605-e02f119e89ec}</UniqueIdentifier>
     </Filter>
@@ -1464,6 +1461,9 @@
     </Filter>
     <Filter Include="04.Fsm\Monster\SimonManus\P1\Attack\Route\Stamp">
       <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04.Fsm\Monster\SimonManus\P2\HitFatal">
+      <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -98,7 +98,9 @@ void CState_RebornerMale_HitFatal::Update(_float fTimeDelta)
 
 void CState_RebornerMale_HitFatal::End_State()
 {
+    m_pMonster->Reset_GroggyPoint();
     m_fHitFatalTime = 0.f;
+    m_pMonster->Get_Status()->bFatalAttack = false;
 }
 
 _bool CState_RebornerMale_HitFatal::End_Check()

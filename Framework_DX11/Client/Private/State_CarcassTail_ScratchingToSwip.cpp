@@ -62,6 +62,7 @@ void CState_CarcassTail_ScratchingToSwip::Update(_float fTimeDelta)
             m_bSwipSound = false;
 
             m_pMonster->Change_Animation(m_iLastAnim, false, 0.1f, 80);
+            return;
         }
     }
     else
@@ -95,17 +96,11 @@ _bool CState_CarcassTail_ScratchingToSwip::End_Check()
     switch (m_iRouteTrack)
     {
     case 0:
-        if ((m_iFirstAnim) == iCurAnim)
-        {
-            bEndCheck = m_pMonster->Get_EndAnim(m_iFirstAnim);
-        }
+        bEndCheck = m_pMonster->Get_EndAnim(m_iFirstAnim);
         break;
 
     case 1:
-        if ((m_iLastAnim) == iCurAnim)
-        {
-            bEndCheck = m_pMonster->Get_EndAnim(m_iLastAnim);
-        }
+        bEndCheck = m_pMonster->Get_EndAnim(m_iLastAnim);
         break;
 
     default:

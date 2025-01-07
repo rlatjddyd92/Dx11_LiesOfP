@@ -99,6 +99,7 @@ void CState_CarcassTail_HitFatal::Update(_float fTimeDelta)
 void CState_CarcassTail_HitFatal::End_State()
 {
     m_fHitFatalTime = 0.f;
+    m_pMonster->Get_Status()->bFatalAttack = false;
 }
 
 _bool CState_CarcassTail_HitFatal::End_Check()

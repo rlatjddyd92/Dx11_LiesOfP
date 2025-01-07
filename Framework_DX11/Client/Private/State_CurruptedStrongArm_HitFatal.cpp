@@ -98,6 +98,7 @@ void CState_CurruptedStrongArm_HitFatal::Update(_float fTimeDelta)
 void CState_CurruptedStrongArm_HitFatal::End_State()
 {
     m_fHitFatalTime = 0.f;
+    m_pMonster->Get_Status()->bFatalAttack = false;
 }
 
 _bool CState_CurruptedStrongArm_HitFatal::End_Check()

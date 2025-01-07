@@ -121,11 +121,6 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 
 void CRebornerBigA::Update(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::R))
-	{
-		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
-			_Vec3{ Calc_CenterPos() }, _Vec3{ 0, 0, 1 });
-	}
 	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
 		m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 	else

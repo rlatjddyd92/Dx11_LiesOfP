@@ -64,6 +64,7 @@ void CState_RebornerBigA_Grogy::Update(_float fTimeDelta)
 
 void CState_RebornerBigA_Grogy::End_State()
 {
+    m_pMonster->Reset_GroggyPoint();
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
 }
 

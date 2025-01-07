@@ -38,7 +38,7 @@ void CState_SimonManusP1_HitFatal::Update(_float fTimeDelta)
         else
         {
             m_iAnimCnt = 0;
-            m_pMonster->Change_State(CSimonManus::GROGY);
+            m_pMonster->Change_State(CSimonManus::IDLE);
         }
     }
 
@@ -46,6 +46,8 @@ void CState_SimonManusP1_HitFatal::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_HitFatal::End_State()
 {
+    m_pMonster->Reset_GroggyPoint();
+    m_pMonster->Get_Status()->bFatalAttack = false;
     m_fHitFatalTime = 0.f;
     m_iAnimCnt = 0;
 }

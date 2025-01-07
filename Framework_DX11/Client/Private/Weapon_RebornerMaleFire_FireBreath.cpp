@@ -74,15 +74,7 @@ void CWeapon_RebornerMaleFire_FireBreath::Update(_float fTimeDelta)
 			m_fAttackRange += fTimeDelta * 5.f;
 		}
 
-		if (m_fResetTimer >= m_fResetTime)
-		{
-			m_fResetTimer -= m_fResetTime;
-			Reset_OverLapCheck();
-		}
-		else
-		{
-			m_fResetTimer += fTimeDelta;
-		}
+		m_fResetTimer += fTimeDelta;
 	}
 	//CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
 	//ColliderDesc.vExtents = _float3(m_fAttackRange, 1.4f, 1.2f);
@@ -145,7 +137,11 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionEnter(CGameObject* pOther)
 			return;
 		}
 
-		static_cast<CPlayer*>(pOther)->Damaged(0.02f);
+		if (m_fResetTimer >= m_fResetTime)
+		{
+			m_fResetTimer -= m_fResetTime;
+			static_cast<CPlayer*>(pOther)->Damaged(3.f);
+		}
 	}
 }
 
@@ -164,7 +160,11 @@ void CWeapon_RebornerMaleFire_FireBreath::OnCollisionStay(CGameObject* pOther)
 			return;
 		}
 
-		static_cast<CPlayer*>(pOther)->Damaged(5.f);
+		if (m_fResetTimer >= m_fResetTime)
+		{
+			m_fResetTimer -= m_fResetTime;
+			static_cast<CPlayer*>(pOther)->Damaged(3.f);
+		}
 
 	}
 }

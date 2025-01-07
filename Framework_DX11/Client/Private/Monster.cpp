@@ -322,6 +322,12 @@ void CMonster::Increase_GroggyPoint(_float fGroggy)
 		m_eStat.fGrogyPoint += fGroggy;
 }
 
+void CMonster::Reset_GroggyPoint()
+{
+	m_eStat.fGrogyPoint = 0;
+	m_eStat.bWeakness = false;
+}
+
 void CMonster::Start_Fatal()
 {
 	m_pFsmCom->Change_State(HITFATAL);

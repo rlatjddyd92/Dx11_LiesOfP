@@ -236,7 +236,7 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 
 				// 24-12-06 김성용
 				// 무기 사용 시, 내구도 감소 
-				GET_GAMEINTERFACE->Add_Durable_Weapon(-3.f);
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
 
 				if (pMonster->Get_Status()->fHp > 0.f)
 				{

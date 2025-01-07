@@ -38,7 +38,7 @@ void CState_RaxasiaP2_HitFatal::Update(_float fTimeDelta)
         else
         {
             m_iAnimCnt = 0;
-            m_pMonster->Change_State(CRaxasia::GROGY);
+            m_pMonster->Change_State(CRaxasia::IDLE);
         }
     }
 
@@ -46,6 +46,8 @@ void CState_RaxasiaP2_HitFatal::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_HitFatal::End_State()
 {
+    m_pMonster->Reset_GroggyPoint();
+    m_pMonster->Get_Status()->bFatalAttack = false;
     m_fHitFatalTime = 0.f;
     m_iAnimCnt = 0;
 }

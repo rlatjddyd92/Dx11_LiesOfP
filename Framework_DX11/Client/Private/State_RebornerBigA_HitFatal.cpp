@@ -100,6 +100,7 @@ void CState_RebornerBigA_HitFatal::Update(_float fTimeDelta)
 void CState_RebornerBigA_HitFatal::End_State()
 {
     m_fHitFatalTime = 0.f;
+    m_pMonster->Get_Status()->bFatalAttack = false;
 }
 
 _bool CState_RebornerBigA_HitFatal::End_Check()

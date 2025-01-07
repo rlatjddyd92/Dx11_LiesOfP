@@ -338,7 +338,7 @@ HRESULT CCarcassTail::Ready_Components()
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
-	ColliderOBBDesc_Obj.vExtents = _float3(0.9f, 0.4f, 0.4f);
+	ColliderOBBDesc_Obj.vExtents = _float3(1.2f, 0.7f, 0.7f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.3f, 0.f, 0.f);
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 	

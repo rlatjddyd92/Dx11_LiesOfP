@@ -67,6 +67,7 @@ void CState_CarcassTail_Grogy::Update(_float fTimeDelta)
 
 void CState_CarcassTail_Grogy::End_State()
 {
+    m_pMonster->Reset_GroggyPoint();
     m_pMonster->Get_Status()->bFatalAttack = false;
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
 }

@@ -34,11 +34,11 @@ HRESULT CState_CurruptedStrongArm_Die::Start_State(void* pArg)
 
     if (fDirCheck.y < 0)
     {
-        iAnimIndex = AN_DIE_B;
+        iAnimIndex = AN_DIE_F;
     }
     else
     {
-        iAnimIndex = AN_DIE_F;
+        iAnimIndex = AN_DIE_B;
     }
     m_pMonster->Change_Animation(iAnimIndex, false, 0.1f);
 

@@ -85,7 +85,7 @@ public:
 	virtual _bool		Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 
 	void				Increase_GroggyPoint(_float fGroggy);
-	void				Reset_GroggyPoint() { m_eStat.fGrogyPoint = 0; }
+	void				Reset_GroggyPoint();
 	virtual void		SetUp_Dead() {};
 	
 	virtual void		Start_Fatal();
