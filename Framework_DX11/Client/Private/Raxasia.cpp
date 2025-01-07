@@ -511,7 +511,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 {
 	const _Matrix* pNewSocketMatrix = { nullptr };
 
-	//Effect_All_OFf();
+	Effect_All_Off();
 	m_vRimLightColor = { 0.f,0.f,0.f,0.f};
 
 	switch (iCutSceneNum)
