@@ -187,8 +187,8 @@ void CState_CurruptedStrongArm_Idle::Calc_Act_Attack()
     {
     case 0:
         m_pMonster->Change_State(CCurruptedStrongArm_Puppet::SWIPATTACK);
-        m_fNeedLowerDist_ForAttack = 4.f;
-        m_fNeedDist_ForAttack = 7.f;
+        m_fNeedLowerDist_ForAttack = 6.f;
+        m_fNeedDist_ForAttack = 9.f;
         break;
 
     case 1:

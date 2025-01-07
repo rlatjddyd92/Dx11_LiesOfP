@@ -86,6 +86,7 @@ HRESULT CRebornerMaleFire::Initialize(void* pArg)
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
 
+	m_bHaveGrogy = false;
 	m_bDiscover = false;
 	m_bFirstMeetCheck = false;
 

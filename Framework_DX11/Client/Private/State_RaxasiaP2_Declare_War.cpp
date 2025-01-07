@@ -238,8 +238,8 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
                 Desc.vPos = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
                 Desc.vPos.y = m_fHeight;
 
-                _float fvariableX = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
-                _float fvariableZ = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
+                _float fvariableX = m_pGameInstance->Get_Random(0.f, 12.f) - 6.f;
+                _float fvariableZ = m_pGameInstance->Get_Random(0.f, 12.f) - 6.f;
                 
                 Desc.vPos.x += fvariableX;
                 Desc.vPos.z += fvariableZ;
