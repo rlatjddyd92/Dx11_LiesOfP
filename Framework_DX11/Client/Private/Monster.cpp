@@ -337,6 +337,12 @@ void CMonster::SetUp_Act()
 
 void CMonster::Calc_DebuffGain(_uint iDebuffType, _float fDebuffDuration)
 {
+	if (m_isBoss)
+	{
+		return;
+
+	}
+
 	if (m_bDebuffed[iDebuffType])
 	{
 		if (m_fDebuffDuration[iDebuffType] < fDebuffDuration)

@@ -282,7 +282,7 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                     m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Hit_03.wav"), &g_fEffectVolume);
                 }
 
-                if (m_bCounter)
+                if (!m_bCounter)
                 {
                     static_cast<CPlayer*>(pOther)->Calc_DebuffGain(CPawn::DEBUFF_ELEC, 5.f);
                 }

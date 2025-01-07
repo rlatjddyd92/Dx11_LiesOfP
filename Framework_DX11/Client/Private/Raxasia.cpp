@@ -748,6 +748,19 @@ void CRaxasia::On_PowerAttack(_bool bOn)
 		m_DissolveEffects[DISSOLVE_POWERATTACK_P2]->Set_On(bOn);
 }
 
+void CRaxasia::Effect_All_Off()
+{
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Set_Dead(true);
+	}
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Set_Dead(true);
+	}
+}
+
 HRESULT CRaxasia::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

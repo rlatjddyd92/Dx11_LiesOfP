@@ -12,7 +12,7 @@ class CState_CarcassNormal_KnockBack :
 {
 private:
     typedef enum {
-        AN_KNOCKBACK_L = 42, AN_KNOCKBACK_R = 43, AN_KNOCKBACK_B = 39
+        AN_KNOCKBACK_L = 113, AN_KNOCKBACK_R = 117, AN_KNOCKBACK_B = 109
     }ANIMNUM;
 
 public:

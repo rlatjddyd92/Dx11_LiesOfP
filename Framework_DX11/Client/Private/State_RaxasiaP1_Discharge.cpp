@@ -221,6 +221,9 @@ void CState_RaxasiaP1_Discharge::Effect_Check(_double CurTrackPos)
 
                 Desc.vPos = vPos;
                 Desc.vDir = vTargetDir;
+
+                Desc.pOwner = m_pMonster;
+
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
 
                 m_bStampBlast = true;

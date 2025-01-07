@@ -50,9 +50,7 @@ void CState_CarcassBigA_Die::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
-        //몬스터 사망
-        //m_pMonster->Change_State(CCarcassBigA::IDLE);   //임시
-
+        m_pMonster->Get_RigidBody()->Set_Kinematic(false);
     }
 
 }
