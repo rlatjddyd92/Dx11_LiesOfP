@@ -262,7 +262,7 @@ public:
 
 #pragma region SOUND_MANAGER
 		void Play_BGM(const TCHAR* pSoundKey, _float* fVolume);
-		void Play_Effect(const TCHAR* pSoundKey, _float fVolume);
+		void Play_Effect(const TCHAR* pSoundKey, _float* fVolume);
 		void Stop_BGM();
 		void Pause_BGM();
 		void SetVolume_BGM(_float fVolume);

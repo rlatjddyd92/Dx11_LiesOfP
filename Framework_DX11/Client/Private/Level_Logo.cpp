@@ -65,6 +65,8 @@ void CLevel_Logo::Update(_float fTimeDelta)
 			return;
 
 		GET_GAMEINTERFACE->Open_Loading_Page(); // 로딩 진행 
+
+		m_pGameInstance->Play_Effect(TEXT("SE_UI_TitleScreen_Steelheart_Heartbeat_01.wav"), &g_fEffectVolume);
 	}
 }
 

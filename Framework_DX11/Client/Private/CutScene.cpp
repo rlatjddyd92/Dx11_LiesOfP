@@ -378,7 +378,6 @@ void CCutScene::End_Setting()
 		pPlayer->Appear_Weapon();
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
-		m_pObjects[BOSS1]->End_CutScene(0);
 		pPlayer->Init_PlayerCamera();
 
 		CMoveBlockObj::MOVEBLOCK_DESC desc = {};
@@ -389,6 +388,8 @@ void CCutScene::End_Setting()
 
 		m_pGameInstance->Play_BGM(TEXT("MU_MS_Rocksasia_PH1.wav"), &g_fBGMVolume);
 		m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Wind_Middle.wav"), &g_fEnvVolume);
+
+		m_pObjects[BOSS1]->End_CutScene(0);
 	}
 		break;
 	case BOSS1_PHASE2:

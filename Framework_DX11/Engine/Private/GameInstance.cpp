@@ -872,7 +872,7 @@ void CGameInstance::Play_BGM(const TCHAR* pSoundKey, _float* fVolume)
 	m_pSound_Manager->Play_BGM(pSoundKey, fVolume);
 }
 
-void CGameInstance::Play_Effect(const TCHAR* pSoundKey, _float fVolume)
+void CGameInstance::Play_Effect(const TCHAR* pSoundKey, _float* fVolume)
 {
 	m_pSound_Manager->Play_Effect(pSoundKey, fVolume);
 }

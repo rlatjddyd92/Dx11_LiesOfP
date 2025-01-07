@@ -70,7 +70,7 @@ void CSound_Manager::Play_BGM(const TCHAR* pSoundKey, _float* fVolume)
 	m_pBGMVolume = fVolume;
 }
 
-void CSound_Manager::Play_Effect(const TCHAR* pSoundKey, _float fVolume)
+void CSound_Manager::Play_Effect(const TCHAR* pSoundKey, _float* fVolume)
 {
 	auto iter = Find_Sound(pSoundKey);
 
@@ -79,7 +79,7 @@ void CSound_Manager::Play_Effect(const TCHAR* pSoundKey, _float fVolume)
 
 	m_pSystem->playSound(iter->second, 0, false, &m_pEffectChannel);
 	m_pEffectChannel->setMode(FMOD_2D);
-	m_pEffectChannel->setVolume(fVolume);
+	m_pEffectChannel->setVolume(*fVolume);
 
 }
 

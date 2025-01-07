@@ -1,35 +1,35 @@
-﻿  unity_JR96D7SPETJQACO3.cpp
+﻿  unity_GTTNR6ZRNBIQM5GB.cpp
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(49,1): warning C4005: 'PX_ALLOC': 매크로 재정의
-  (소스 파일 '/x64/Release/unity_JR96D7SPETJQACO3.cpp'을(를) 컴파일하는 중)
+  (소스 파일 '/x64/Release/unity_GTTNR6ZRNBIQM5GB.cpp'을(를) 컴파일하는 중)
   D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(67,1):
   'PX_ALLOC'의 이전 정의를 참조하십시오.
   
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(51,1): warning C4005: 'PX_FREE': 매크로 재정의
-  (소스 파일 '/x64/Release/unity_JR96D7SPETJQACO3.cpp'을(를) 컴파일하는 중)
+  (소스 파일 '/x64/Release/unity_GTTNR6ZRNBIQM5GB.cpp'을(를) 컴파일하는 중)
   D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(77,1):
   'PX_FREE'의 이전 정의를 참조하십시오.
   
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(59,1): warning C4005: 'PX_NEW': 매크로 재정의
-  (소스 파일 '/x64/Release/unity_JR96D7SPETJQACO3.cpp'을(를) 컴파일하는 중)
+  (소스 파일 '/x64/Release/unity_GTTNR6ZRNBIQM5GB.cpp'을(를) 컴파일하는 중)
   D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(87,1):
   'PX_NEW'의 이전 정의를 참조하십시오.
   
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(61,1): warning C4005: 'PX_DELETE': 매크로 재정의
-  (소스 파일 '/x64/Release/unity_JR96D7SPETJQACO3.cpp'을(를) 컴파일하는 중)
+  (소스 파일 '/x64/Release/unity_GTTNR6ZRNBIQM5GB.cpp'을(를) 컴파일하는 중)
   D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(89,1):
   'PX_DELETE'의 이전 정의를 참조하십시오.
   
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(76,1): warning C4005: 'PX_DELETE_ARRAY': 매크로 재정의
-  (소스 파일 '/x64/Release/unity_JR96D7SPETJQACO3.cpp'을(를) 컴파일하는 중)
+  (소스 파일 '/x64/Release/unity_GTTNR6ZRNBIQM5GB.cpp'을(를) 컴파일하는 중)
   D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(90,1):
   'PX_DELETE_ARRAY'의 이전 정의를 참조하십시오.
   
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp(971,30): warning C4244: '=': 'Engine::_int'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/x64/Release/unity_JR96D7SPETJQACO3.cpp'을(를) 컴파일하는 중)
+  (소스 파일 '/x64/Release/unity_GTTNR6ZRNBIQM5GB.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
-  3 of 11788 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 11820 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    50 functions had inline decision re-evaluated but remain unchanged
+    36 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

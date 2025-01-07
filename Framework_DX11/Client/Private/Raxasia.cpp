@@ -680,6 +680,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36));
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 
+		SetUp_Act();
 		m_isCutScene = false;
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)

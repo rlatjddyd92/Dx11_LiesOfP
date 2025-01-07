@@ -165,7 +165,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
@@ -183,8 +183,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
 
-	// 25-01-05 김성용
-	// 아래 함수 주석 걸면 튜토리얼 안들어감
 	GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
 
 	return S_OK;

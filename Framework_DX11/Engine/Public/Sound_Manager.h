@@ -32,7 +32,7 @@ public:
 
 public:
 	void Play_BGM(const TCHAR* pSoundKey, _float* fVolume);
-	void Play_Effect(const TCHAR* pSoundKey, _float fVolume);
+	void Play_Effect(const TCHAR* pSoundKey, _float* fVolume);
 	void Stop_BGM();
 	void Pause_BGM();
 	void SetVolume_BGM(_float fVolume);
@@ -61,9 +61,10 @@ private:
 
 	// FMOD_CHANNEL : 재생하고 있는 사운드를 관리할 객체 
 	FMOD::Channel* m_pBGMChannel;
-	FMOD::Channel* m_pEffectChannel;
 	FMOD::Channel* m_pENVChannel;
 	FMOD::Channel* m_pCinemticChannel;
+
+	FMOD::Channel* m_pEffectChannel;
 
 	// 사운드 ,채널 객체 및 장치를 관리하는 객체 
 	//FMOD::System* m_pSystem;

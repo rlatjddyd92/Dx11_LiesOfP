@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "CMoveBlockObj.h"
+#include "Monster.h"
 
 CState_Player_RetryBoss::CState_Player_RetryBoss(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -83,6 +84,15 @@ void CState_Player_RetryBoss::Update(_float fTimeDelta)
 
 void CState_Player_RetryBoss::End_State()
 {
+    if (m_pBlockObj->Get_Type() == 0)
+    {
+        static_cast<CMonster*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0))->SetUp_Act();
+    }
+    else if (m_pBlockObj->Get_Type() == 2)
+    {
+        static_cast<CMonster*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->SetUp_Act();
+    }
+
     m_pBlockObj->Close_Door();
     m_pBlockObj = nullptr;
 

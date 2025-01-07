@@ -8,7 +8,6 @@ class CCollider;
 class CShader;
 class CModel;
 class CSound;
-class CRigidBody;
 END
 
 BEGIN(Client)
@@ -35,7 +34,6 @@ private:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 	CSound* m_pSoundCom = { nullptr };
-	CRigidBody* m_pRigidBodyCom = { nullptr };
 
 private:
 	_uint		m_iAnimation_Gear = {};
