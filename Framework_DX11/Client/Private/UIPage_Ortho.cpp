@@ -281,11 +281,11 @@ void CUIPage_Ortho::Initialize_Ortho_Info()
 	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.8f,0.f }; // 몬스터 특수공격
 
 	// Reboner_Big
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.5f,0.f }; // 몬스터 포커싱
-	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.85f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.85f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.85f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.65f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.65f,0.f }; // 몬스터 특수공격
 
 	// Reboner_Male
 	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,3.15f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
