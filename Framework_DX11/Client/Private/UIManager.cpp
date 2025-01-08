@@ -879,10 +879,29 @@ void CUIManager::OnOffCursor()
 	_bool bCursorNow = true;
 
 	// Ä¿¼­ OFF
-	if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
-		bCursorNow = false;
-	else if (m_vecPage[_int(UIPAGE::PAGE_TALKING)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+
+	if (m_vecPage[_int(UIPAGE::PAGE_TALKING)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
 		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_TELEPOT)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_SHOP)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_CHEST)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_ACHIEVMENT)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_MENU)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_INVEN)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_EQUIP)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_STAT)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_OPTION)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+			bCursorNow = false;
 	else if (m_bIsUIOff == true)
 		bCursorNow = false;
 	else
