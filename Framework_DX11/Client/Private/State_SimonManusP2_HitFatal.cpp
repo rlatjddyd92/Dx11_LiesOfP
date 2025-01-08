@@ -14,6 +14,7 @@ HRESULT CState_SimonManusP2_HitFatal::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    m_pFatalAttacked = m_pMonster->Get_bFatalAttacked();
 
     return S_OK;
 }
@@ -38,6 +39,14 @@ void CState_SimonManusP2_HitFatal::Update(_float fTimeDelta)
         {
             m_iAnimCnt = 0;
             m_pMonster->Change_State(CSimonManus::IDLE);
+        }
+    }
+    if (m_iAnimCnt == 1)
+    {
+        if (*m_pFatalAttacked)
+        {
+            ++m_iAnimCnt;
+            m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, 0.0f, 0);
         }
     }
 

@@ -158,7 +158,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
@@ -167,7 +167,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
@@ -185,8 +185,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
 
-	GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
-
+	//GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
+	
 	return S_OK;
 }
 
@@ -234,6 +234,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	for (auto& pEffect : m_DissolveEffects)
 	{
 		pEffect->Priority_Update(fTimeDelta);
+	}
+
+	if (Key_Tab(KEY::B))
+	{
+		m_tPlayer_Stat_Adjust->iErgo = -3120;
 	}
 }
 
@@ -287,40 +292,6 @@ void CPlayer::Update(_float fTimeDelta)
 	Active_CutScene(fTimeDelta);
 	Active_Sophia_Dead_Talk(fTimeDelta);
 
-#pragma region 디버그 확인용
-	if (KEY_TAP(KEY::L))
-	{
-		Change_State(RAPIER_PARRYATTACK);
-	}
-	if (KEY_TAP(KEY::K))
-	{
-		//Init_PlayerCamera();
-		Calc_DebuffGain(DEBUFF_FIRE, 30.f);
-		//Change_State(RAPIER_FATAL);
-	}
-
-
-
-
-	if (KEY_TAP(KEY::Q))
-	{
-		/*for (_uint i = 0; i < 30; ++i)
-		{
-			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
-			vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
-
-			CObjectPool<CDecal_Blood>::Get_GameObject()->Active_Random(vPlayerPos);
-		}
-
-		Calc_DebuffGain(DEBUFF_ACID, 10.f);
-
-		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));*/
-		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
-		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
-		//Change_State(FLAME_FATAL);
-	}
-#pragma endregion
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -1032,7 +1003,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				isHPZero = !Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
 				Decrease_Stamina(fAtkDmg * 0.23f);
 
-				GET_GAMEINTERFACE->Add_Durable_Weapon(-17.f);
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-7.f);
 			}
 		}
 

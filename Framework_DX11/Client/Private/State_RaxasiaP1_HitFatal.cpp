@@ -32,7 +32,7 @@ void CState_RaxasiaP1_HitFatal::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
-        if (m_iAnimCnt < 2)
+        if (m_iAnimCnt == 0)
         {
             ++m_iAnimCnt;
             m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, 0.0f, 0);
@@ -42,6 +42,15 @@ void CState_RaxasiaP1_HitFatal::Update(_float fTimeDelta)
             m_iAnimCnt = 0;
             *m_pBlockDead = false;
             m_pMonster->Change_State(CRaxasia::IDLE);
+        }
+    }
+
+    if (m_iAnimCnt == 1)
+    {
+        if (*m_pFatalAttacked)
+        {
+            ++m_iAnimCnt;
+            m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, 0.0f, 0);
         }
     }
 

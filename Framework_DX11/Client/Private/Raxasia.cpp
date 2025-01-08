@@ -98,13 +98,13 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	
 	m_eStat.strName = TEXT("Raxasia");
 
-	m_eStat.fHp = 2000.f;
-	m_eStat.fMaxHp = 2000.f;
+	m_eStat.fHp = 1400.f;
+	m_eStat.fMaxHp = 1400.f;
 	m_eStat.fAtk = 250.f;
 
 	m_eStat.bWeakness = false;
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 330.f;
+	m_eStat.fMaxGrogyPoint = 270.f;
 
 	m_iErgoPoint = 700;
 
@@ -1296,12 +1296,12 @@ void CRaxasia::ChangePhase()
 	m_pColliderBindMatrix[CT_LOWERARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(24);//ForeArm
 	m_pColliderBindMatrix[CT_LOWERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(71);
 
-	m_eStat.fHp = 2500.f;
-	m_eStat.fMaxHp = 2500.f;
+	m_eStat.fHp = 1900.f;
+	m_eStat.fMaxHp = 1900.f;
 	m_eStat.fAtk = 250.f;
 	//m_eStat.fDefence = 8.f;
 
-	m_eStat.fMaxGrogyPoint = 330.f;
+	m_eStat.fMaxGrogyPoint = 280.f;
 	m_eStat.fGrogyPoint = 0.f;
 
 	m_bDieState = false;

@@ -156,11 +156,11 @@ void CAObj_Bullet::OnCollisionEnter(CGameObject* pOther)
             m_DamagedObjects.push_back(pOther);
             _bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
             m_isDead = true;
-            
-            if (bHitCheck)
-            {
-                CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
 
+            CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+            if (bHitCheck && !pPlayer->Get_IsInvicible())
+            {
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
                     _Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vMoveDir);
             }

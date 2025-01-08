@@ -127,11 +127,11 @@ void CAObj_ThunderStamp::OnCollisionEnter(CGameObject* pOther)
         {
             m_DamagedObjects.push_back(pOther);
             _bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
-            
-            if (bHitCheck)
-            {
-                CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
 
+            CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+            if (bHitCheck && !pPlayer->Get_IsInvicible())
+            {
                 _Vec3 vDir = {};
                 vDir = _Vec3{ pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
 

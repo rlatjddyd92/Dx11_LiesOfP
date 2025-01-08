@@ -15,23 +15,13 @@ HRESULT CState_RaxasiaP1_Grogy::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pTrackPos = pDesc->pPrevTrackPos;
 
     return S_OK;
 }
 
 HRESULT CState_RaxasiaP1_Grogy::Start_State(void* pArg)
 {
-    if (*m_pTrackPos > 0)
-    {
-        ++m_iAnimCnt;
-        m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, 0.1f, 0);
-        m_fGrogyTime = (_float)*m_pTrackPos;
-    }
-    else
-    {
-        m_pMonster->Change_Animation(AN_GROGY_START, false, 0.1f, 0);
-    }
+    m_pMonster->Change_Animation(AN_GROGY_START, false, 0.1f, 0);
 
     return S_OK;
 }
@@ -63,7 +53,6 @@ void CState_RaxasiaP1_Grogy::Update(_float fTimeDelta)
         if (End_Check())
         {
             m_iAnimCnt = 0;
-            *m_pTrackPos = 0.f;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
@@ -79,7 +68,6 @@ void CState_RaxasiaP1_Grogy::Update(_float fTimeDelta)
         m_pMonster->Change_State(CRaxasia::HITFATAL);
     }
 
-    *m_pTrackPos = m_fGrogyTime;
 }
 
 void CState_RaxasiaP1_Grogy::End_State()

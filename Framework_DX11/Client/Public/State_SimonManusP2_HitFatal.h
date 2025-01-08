@@ -37,6 +37,7 @@ private:
 private:
     _bool               End_Check();
 
+    _bool* m_pFatalAttacked = { nullptr };
 public:
     static CState_SimonManusP2_HitFatal* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

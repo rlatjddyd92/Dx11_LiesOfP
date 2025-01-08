@@ -266,7 +266,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 105.f && CurTrackPos <= 125.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(0.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -278,7 +278,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Collider_Check(_double CurTrackPos)
         if ((CurTrackPos >= 25.f && CurTrackPos <= 40.f) ||
             (CurTrackPos >= 70.f && CurTrackPos <= 85.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(0.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -290,7 +290,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Collider_Check(_double CurTrackPos)
         if ((CurTrackPos >= 35.f && CurTrackPos <= 60.f) ||
             (CurTrackPos >= 80.f && CurTrackPos <= 95.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(0.75f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {

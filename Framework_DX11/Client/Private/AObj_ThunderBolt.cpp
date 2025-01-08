@@ -288,8 +288,11 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
 
                     CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
 
-                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
-                        _Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vMoveDir);
+                    if (!pPlayer->Get_IsInvicible())
+                    {
+                        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
+                            _Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vMoveDir);
+                    }
                 }
                 else
                 {

@@ -358,9 +358,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderStamp">
       <UniqueIdentifier>{9828ed59-03f5-4eba-8281-0708f9de8453}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBolt">
-      <UniqueIdentifier>{c9cb8f31-b95b-4de1-9c95-d26f9bcc814f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderLanding">
       <UniqueIdentifier>{f261e074-745b-4cb3-beee-c9db38cc05ca}</UniqueIdentifier>
     </Filter>
@@ -1465,6 +1462,9 @@
     <Filter Include="04.Fsm\Monster\SimonManus\P2\HitFatal">
       <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt">
+      <UniqueIdentifier>{c9cb8f31-b95b-4de1-9c95-d26f9bcc814f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2382,7 +2382,7 @@
       <Filter>04.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderBolt.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Machine_EffectObj.h">
       <Filter>02.GameObjects\13.EffectObject\Machine</Filter>
@@ -3597,7 +3597,7 @@
       <Filter>04.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderBolt.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Machine_EffectObj.cpp">
       <Filter>02.GameObjects\13.EffectObject\Machine</Filter>

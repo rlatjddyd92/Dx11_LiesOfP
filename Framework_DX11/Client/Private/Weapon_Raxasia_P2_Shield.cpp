@@ -208,10 +208,10 @@ void CWeapon_Raxasia_P2_Shield::OnCollisionEnter(CGameObject* pOther)
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			_bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
 
-			if (bHitCheck)
-			{
-				CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+			CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
 
+			if (bHitCheck && !pPlayer->Get_IsInvicible())
+			{
 				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
 					_Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vAttackDir);
 			}

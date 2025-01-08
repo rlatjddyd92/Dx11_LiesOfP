@@ -117,11 +117,11 @@ void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			_bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_eHitType, m_eAttackStrength, (CGameObject*)m_pOwner);
-			
-			if (bHitCheck)
-			{
-				CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
 
+			CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+			if (bHitCheck && !pPlayer->Get_IsInvicible())
+			{
 				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
 					_Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vAttackDir);
 			}
