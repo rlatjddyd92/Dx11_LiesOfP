@@ -119,6 +119,8 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	OnOffCursor();
+
 	if (m_fExit_Time > 0.f)
 	{
 		m_fExit_Time -= fTimeDelta;
@@ -172,6 +174,8 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			m_vecPage[_int(iter)]->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
+
+	
 }
 
 HRESULT CUIManager::Render()
@@ -867,6 +871,29 @@ void CUIManager::ClosePage(UIPAGE ePage)
 
 	if (ePage != UIPAGE::PAGE_END)
 		m_vecPage[_int(ePage)]->CloseAction();
+}
+
+void CUIManager::OnOffCursor()
+{
+
+	_bool bCursorNow = true;
+
+	// Ä¿¼­ OFF
+	if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = false;
+	else if (m_vecPage[_int(UIPAGE::PAGE_TALKING)]->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true)
+		bCursorNow = true;
+	else if (m_bIsUIOff == true)
+		bCursorNow = false;
+	else
+		bCursorNow = true;
+	
+	if (m_bShowCursor != bCursorNow)
+	{
+		m_bShowCursor = bCursorNow;
+		ShowCursor(m_bShowCursor);
+	}
+	
 }
 
 _Vec2 CUIManager::CheckMouse(_Vec2 fPos, _Vec2 fSize)

@@ -1068,7 +1068,7 @@ void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio = vBuff.x / vBuff.y;
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fTextureColor = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->vTexture_Color;
 
-					if (__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio > 0.5f)
+					if (__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio > 0.1f)
 						__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fTextureColor *= 2.f;
 
 					_Vec2 vPos = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_DEBUFF_STATIC)]->PartIndexlist.back()]->fPosition;
