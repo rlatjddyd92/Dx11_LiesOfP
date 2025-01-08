@@ -174,10 +174,10 @@ void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
 
             m_isDead = true;
 
-            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_LightningSpear_Impact_Ground"),
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_LightningSpear_Impact"),
                 _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) }, _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_LOOK) });
+            m_pEffect->Set_Loop(false);
         }
-        m_pEffect->Set_Loop(false);
     }
 }
 

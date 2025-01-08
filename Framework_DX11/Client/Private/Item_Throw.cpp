@@ -67,7 +67,14 @@ void CItem_Throw::Update(_float fTimeDelta)
 {
 	if (!m_isExplosion)
 	{
-		if (!m_isThrow)
+		if (!m_isRealThrow && m_fThrowTime > 0.2f)
+		{
+			m_Effect->Set_Loop(true);
+			m_isRealThrow = true;
+			m_pRigidBodyCom->Add_Force(m_vThrowDir);
+		}
+
+		if (!m_isRealThrow)
 		{
 			_matrix		SocketMatrix = *m_pSocketMatrix;
 
@@ -82,7 +89,8 @@ void CItem_Throw::Update(_float fTimeDelta)
 			_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		}
-		else if (m_isThrow)
+		
+		if (m_isThrow)
 		{
 			m_fThrowTime += fTimeDelta;
 
@@ -95,13 +103,7 @@ void CItem_Throw::Update(_float fTimeDelta)
 			{
 				Explosion();
 			}
-			else if (!m_isRealThrow && m_fThrowTime > 0.2f)
-			{
-				m_Effect->Set_Loop(true);
-				m_isRealThrow = true;
-				m_pRigidBodyCom->Add_Force(m_vThrowDir);
-			}
-			
+
 			m_pRigidBodyCom->Update(fTimeDelta);
 
 			if (m_pColliderCom != nullptr)
@@ -190,10 +192,10 @@ void CItem_Throw::OnCollisionEnter(CGameObject* pOther)
 		switch (m_eType)
 		{
 		case SPECIAL_ITEM::SP_GRANADE:
+			pMonster->Calc_DebuffGain(CMonster::SURFACE_EFFECT::SURFACE_FIRE, 3.f);
 			pMonster->Calc_DamageGain(170.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG);
 			break;
 		case SPECIAL_ITEM::SP_THERMITE:
-			pMonster->Calc_DebuffGain(CMonster::SURFACE_EFFECT::SURFACE_FIRE, 3.f);
 			pMonster->Calc_DamageGain(155.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG);
 			break;
 		case SPECIAL_ITEM::SP_THROW_BATTERY:
@@ -250,7 +252,7 @@ void CItem_Throw::Throw()
 
 	m_vThrowDir.Normalize();
 
-	m_vThrowDir *= 900.f;
+	m_vThrowDir *= 800.f;
 	//m_vThrowDir.y *= 100.f;
 
 

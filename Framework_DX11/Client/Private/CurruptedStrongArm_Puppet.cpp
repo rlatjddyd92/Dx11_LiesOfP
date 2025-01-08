@@ -95,6 +95,11 @@ void CCurruptedStrongArm_Puppet::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
+	for (_uint i = 0; i < TYPE_END; ++i)
+	{
+		m_pColliderObject[i]->Priority_Update(fTimeDelta);
+	}
+
 	for (auto& Effect : m_SurfaceEffect)
 		Effect->Priority_Update(fTimeDelta);
 
@@ -118,6 +123,11 @@ void CCurruptedStrongArm_Puppet::Update(_float fTimeDelta)
 	
 	Update_Collider();
 	Update_Debuff(fTimeDelta);
+
+	for (_uint i = 0; i < TYPE_END; ++i)
+	{
+		m_pColliderObject[i]->Update(fTimeDelta);
+	}
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{

@@ -5,7 +5,8 @@
 
 #include "Effect_Manager.h"
 
-#include "Pawn.h"
+#include "Player.h"
+#include "Effect_Manager.h"
 
 CAObj_Wave::CAObj_Wave(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
@@ -150,10 +151,18 @@ void CAObj_Wave::OnCollisionEnter(CGameObject* pOther)
 
         if (!bOverlapCheck)
         {
+            m_pEffect->Set_Loop(false);
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            _bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            
+            if (bHitCheck)
+            {
+                CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
+                    _Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vMoveDir);
+            }
         }
-        m_pEffect->Set_Loop(false);
     }
 }
 

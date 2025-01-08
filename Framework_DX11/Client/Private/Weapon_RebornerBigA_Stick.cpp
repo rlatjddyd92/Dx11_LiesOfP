@@ -5,6 +5,9 @@
 
 #include "GameInstance.h"
 
+#include "Effect_Manager.h"
+#include "Player.h"
+
 CWeapon_RebornerBigA_Stick::CWeapon_RebornerBigA_Stick(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -26,6 +29,9 @@ HRESULT CWeapon_RebornerBigA_Stick::Initialize(void* pArg)
 	m_pMonster = pDesc->pMonster;
 	if (nullptr == m_pMonster)
 		return E_FAIL;
+
+	m_pEffect_Manager = CEffect_Manager::Get_Instance();
+	Safe_AddRef(m_pEffect_Manager);
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(pDesc)))
@@ -119,7 +125,16 @@ void CWeapon_RebornerBigA_Stick::OnCollisionEnter(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength, m_pMonster);
+			_bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength, m_pMonster);
+			
+			if (bHitCheck)
+			{
+				CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
+					_Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vAttackDir);
+			}
+			
 		}
 	}
 }
@@ -196,4 +211,6 @@ CGameObject* CWeapon_RebornerBigA_Stick::Clone(void* pArg)
 void CWeapon_RebornerBigA_Stick::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pEffect_Manager);
 }

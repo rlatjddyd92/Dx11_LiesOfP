@@ -96,7 +96,7 @@ void CMainApp::Update(_float fTimeDelta)
 	if (GET_GAMEINTERFACE->IsEndTalk_WithNPC(NPC_SCRIPT::SCR_MANUS) == true)
 		_int i = 0;
 	
-	if (KEY_TAP(KEY::M))
+	if (KEY_TAP(KEY::B))
 	{
 		g_isHideCursor = !g_isHideCursor;
 

@@ -285,6 +285,11 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 if (!m_bCounter)
                 {
                     static_cast<CPlayer*>(pOther)->Calc_DebuffGain(CPawn::DEBUFF_ELEC, 5.f);
+
+                    CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
+                        _Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vMoveDir);
                 }
                 else
                 {

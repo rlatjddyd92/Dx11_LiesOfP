@@ -6,6 +6,7 @@
 #include "Pawn.h"
 
 #include "Player.h"
+#include "Effect_Manager.h"
 
 CColliderObject::CColliderObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
@@ -29,6 +30,9 @@ HRESULT CColliderObject::Initialize(void* pArg)
 	m_eType = pDesc->eType;
 	m_pOwner = pDesc->pOWner;
 
+	m_pEffect_Manager = CEffect_Manager::Get_Instance();
+	Safe_AddRef(m_pEffect_Manager);
+
 	if (FAILED(__super::Initialize(pDesc)))
 		return E_FAIL;
 	
@@ -51,7 +55,17 @@ void CColliderObject::Priority_Update(_float fTimeDelta)
 
 void CColliderObject::Update(_float fTimeDelta)
 {
-	
+	//__super::Update(fTimeDelta);
+
+	m_OldWroldMatrix = m_WorldMatrix;
+
+	XMStoreFloat4x4(&m_WorldMatrix, (*m_pSocketMatrix) * (*m_pParentMatrix));
+
+	m_vVelocity = m_WorldMatrix.Translation() - m_OldWroldMatrix.Translation();
+	m_vAttackDir = m_vVelocity;
+	m_vAttackDir.Normalize();
+
+	m_pColliderCom->Update(&m_WorldMatrix);
 }
 
 void CColliderObject::Late_Update(_float fTimeDelta)
@@ -59,9 +73,7 @@ void CColliderObject::Late_Update(_float fTimeDelta)
 	//if (!m_pColliderCom->IsActive())
 	//	return;
 
-	XMStoreFloat4x4(&m_WorldMatrix, (*m_pSocketMatrix) * (*m_pParentMatrix));
 
-	m_pColliderCom->Update(&m_WorldMatrix);
 
 	if (nullptr != m_pColliderCom)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -104,7 +116,15 @@ void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			m_DamagedObjects.push_back(pOther);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_eHitType, m_eAttackStrength, (CGameObject*)m_pOwner);
+			_bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_eHitType, m_eAttackStrength, (CGameObject*)m_pOwner);
+			
+			if (bHitCheck)
+			{
+				CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
+					_Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vAttackDir);
+			}
 
 			if (m_bDebuffAttack)
 			{
@@ -152,6 +172,9 @@ HRESULT CColliderObject::Ready_Components(CBounding::BOUNDING_DESC* pBoundingDes
 	}
 	m_pColliderCom->Set_Owner(this);
 
+	if (FAILED(__super::Ready_Components()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -185,5 +208,6 @@ void CColliderObject::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pEffect_Manager);
 	Safe_Release(m_pColliderCom);
 }

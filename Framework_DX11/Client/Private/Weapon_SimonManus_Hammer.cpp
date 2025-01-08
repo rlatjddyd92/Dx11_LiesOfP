@@ -2,6 +2,9 @@
 #include "Weapon_SimonManus_Hammer.h"
 
 #include "Monster.h"
+#include "Player.h"
+
+#include "Effect_Manager.h"
 
 #include "GameInstance.h"
 
@@ -26,6 +29,9 @@ HRESULT CWeapon_SimonManus_Hammer::Initialize(void* pArg)
 	m_pMonster = pDesc->pMonster;
 	if (nullptr == m_pMonster)
 		return E_FAIL;
+
+	m_pEffect_Manager = CEffect_Manager::Get_Instance();
+	Safe_AddRef(m_pEffect_Manager);
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(pDesc)))
@@ -134,7 +140,16 @@ void CWeapon_SimonManus_Hammer::OnCollisionEnter(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
+			_bool bHitCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_eAttackStrength);
+			
+			if (bHitCheck)
+			{
+				CPlayer* pPlayer = static_cast<CPlayer*>(pOther);
+
+				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"),
+					_Vec3{ pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) + _Vec3{0.f, 1.f, 0.f} }, m_vAttackDir);
+			}
+			
 		}
 	}
 }
@@ -264,5 +279,6 @@ void CWeapon_SimonManus_Hammer::Free()
 {
 	__super::Free();
 	Safe_Release(m_pExtraColliderCom);
+	Safe_Release(m_pEffect_Manager);
 
 }

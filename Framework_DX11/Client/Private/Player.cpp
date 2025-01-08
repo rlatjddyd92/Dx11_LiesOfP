@@ -1249,7 +1249,7 @@ void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStreng
 			m_pFsmCom->Change_State(HIT, &HitDesc);
 	}
 
-	m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"), pParetnMatrix, pSocketBoneMatrix);
+	m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 }
 
 void CPlayer::Update_Stat(_float fTimeDelta)
@@ -1263,7 +1263,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	// 회복 아뮬렛
 	if (m_tPlayer_Stat_Adjust->fHeal > 0.f)
 	{
-		Recovery_HP(1.5f * fTimeDelta);
+		Recovery_HP(1.1f * fTimeDelta);
 	}
 
 #pragma region 스테미나
@@ -1320,14 +1320,14 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 
 	// 불 상태면 지속 데미지
-	if (m_tPlayer_Stat->fDebuff_Fire.x > m_tPlayer_Stat->fDebuff_Fire.y * 0.5f)
+	if (m_tPlayer_Stat->fDebuff_Fire.x > m_tPlayer_Stat->fDebuff_Fire.y * 0.1f)
 	{
 		m_DissolveEffects[DISSOLVE_FIRE]->Set_On(true);
 		Damaged(0.05f);
 	}
 
 	// 전기 상태면 이동 속도 감소
-	if (m_tPlayer_Stat->fDebuff_Electric.x > m_tPlayer_Stat->fDebuff_Electric.y * 0.5f)
+	if (m_tPlayer_Stat->fDebuff_Electric.x > m_tPlayer_Stat->fDebuff_Electric.y * 0.1f)
 	{
 		m_DissolveEffects[DISSOLVE_ELECTRIC]->Set_On(true);
 		m_fDebuffSpeedRatio = 0.8f;
@@ -1339,7 +1339,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 
 	// 독 상태면 일정 시간마다 데미지
-	if (m_tPlayer_Stat->fDebuff_Acid.x > m_tPlayer_Stat->fDebuff_Acid.y * 0.5f)
+	if (m_tPlayer_Stat->fDebuff_Acid.x > m_tPlayer_Stat->fDebuff_Acid.y * 0.1f)
 	{
 		m_DissolveEffects[DISSOLVE_POISON]->Set_On(true);
 		m_fDebuffAcidDamageTime -= fTimeDelta;
@@ -1501,7 +1501,7 @@ void CPlayer::Create_ThrowItem(SPECIAL_ITEM eItemType)
 	if (m_pTargetMonster)
 	{
 		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_Vec3 vTargetPos = m_pTargetMonster->Calc_CenterPos(); //m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
 		Desc.vThrowDir = vTargetPos - vPlayerPos;
 	}

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Weapon.h"
+#include"Weapon_FlameSword.h"
 
 CState_Player_Flame_Fatal::CState_Player_Flame_Fatal(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -42,14 +43,9 @@ HRESULT CState_Player_Flame_Fatal::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_FlameFatal, false, 0.05f);
 
-    //m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Start_01.wav"));
-    //m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Motor_03.wav"));
-
     m_isActiveEffect[0] = false;
     m_isActiveEffect[1] = false;
     m_isActiveEffect[2] = false;
-
-    //m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First_Ready"));
 
     for (_uint i = 0; i < 3; ++i)
     {
@@ -85,6 +81,7 @@ void CState_Player_Flame_Fatal::Update(_float fTimeDelta)
 
 void CState_Player_Flame_Fatal::End_State()
 {
+    m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
@@ -142,7 +139,7 @@ void CState_Player_Flame_Fatal::Control_Effect(_int iFrame)
     {
         m_isActiveEffect[0] = true;
     }
-    else if (!m_isActiveEffect[1] && (iFrame == m_iColliderStartFrame[3] || iFrame == m_iColliderStartFrame[3] + 1))
+    else if (!m_isActiveEffect[1] && (iFrame == m_iColliderStartFrame[1] || iFrame == m_iColliderStartFrame[1] + 1))
     {
         m_isActiveEffect[1] = true;
     }

@@ -406,6 +406,7 @@ void CMonster::On_SurfaceEffect(_uint iIndex, _bool bOn)
 		m_SurfaceEffect[iIndex]->Set_On(bOn);
 }
 
+
 HRESULT CMonster::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

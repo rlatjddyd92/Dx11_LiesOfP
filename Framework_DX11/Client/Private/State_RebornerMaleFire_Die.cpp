@@ -2,7 +2,8 @@
 #include "State_RebornerMaleFire_Die.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "CarcassBigA.h"
+#include "RebornerMaleFire.h"
+#include "AttackObject.h"
 
 #include "Effect_Manager.h"
 
@@ -105,16 +106,22 @@ void CState_RebornerMaleFire_Die::Effect_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= EffectTime)
         {
+            CAttackObject::ATKOBJ_DESC Desc;
+
             _float4x4 WorldMat{};
             _Vec3 vPos = { 0.f, 0.f, 0.f };
-            XMStoreFloat4x4(&WorldMat,
-                (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_ROOT))
-                    * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+            XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_CHEST))
+                * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
             vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-            //vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
-            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
-                vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+            _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+
+            Desc.vPos = vPos;
+            Desc.vDir = vTargetDir;
+            Desc.pOwner = m_pMonster;
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Explosion"), &Desc);
+
             m_bExplosion = true;
         }
     }

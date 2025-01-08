@@ -27,6 +27,23 @@ HRESULT CState_Player_TH_Walk::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iFootStepFrame[WALK_B][0] = 28;
+    m_iFootStepFrame[WALK_B][1] = 64;
+    m_iFootStepFrame[WALK_BL][0] = 24;
+    m_iFootStepFrame[WALK_BL][1] = 56;
+    m_iFootStepFrame[WALK_BR][0] = 26;
+    m_iFootStepFrame[WALK_BR][1] = 61;
+    m_iFootStepFrame[WALK_F][0] = 3;
+    m_iFootStepFrame[WALK_F][1] = 37;
+    m_iFootStepFrame[WALK_FL][0] = 2; // 70 씩 더하기
+    m_iFootStepFrame[WALK_FL][1] = 34; // 보류
+    m_iFootStepFrame[WALK_FR][0] = 6;
+    m_iFootStepFrame[WALK_FR][1] = 37;
+    m_iFootStepFrame[WALK_L][0] = 9;
+    m_iFootStepFrame[WALK_L][1] = 48;
+    m_iFootStepFrame[WALK_R][0] = 12;
+    m_iFootStepFrame[WALK_R][1] = 51;
+
     return S_OK;
 }
 
@@ -71,9 +88,16 @@ void CState_Player_TH_Walk::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_GUARD);
     }
+    else if (!m_pPlayer->Get_IsLockOn())
+    {
+        m_pPlayer->Change_State(CPlayer::TH_RUN);
+        return;
+    }
 
     if (m_pPlayer->Key_Tab(KEY::SPACE))
         m_isInputSpace = true;
+
+    Control_Sound();
 }
 
 
@@ -189,6 +213,49 @@ _bool CState_Player_TH_Walk::Move(_float fTimeDelta)
     }
 
     return isMoving;
+}
+
+void CState_Player_TH_Walk::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_eWalkState == WALK_FL || m_eWalkState == WALK_BR)
+    {
+        if (iFrame % 70 == m_iFootStepFrame[m_eWalkState][0] && !m_isPlaySound)
+        {
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+            m_isPlaySound = true;
+        }
+        else if (iFrame % 70 == m_iFootStepFrame[m_eWalkState][1] && !m_isPlaySound)
+        {
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
+            m_isPlaySound = true;
+        }
+        else
+        {
+            m_isPlaySound = false;
+        }
+    }
+    else if (iFrame == m_iFootStepFrame[m_eWalkState][0] && !m_isPlaySound)
+    {
+        if (m_eWalkState == WALK_FL || m_eWalkState == WALK_BR)
+            return;
+
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+        m_isPlaySound = true;
+    }
+    else if (iFrame == m_iFootStepFrame[m_eWalkState][1] && !m_isPlaySound)
+    {
+        if (m_eWalkState == WALK_FL || m_eWalkState == WALK_BR)
+            return;
+
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
+        m_isPlaySound = true;
+    }
+    else
+    {
+        m_isPlaySound = false;
+    }
 }
 
 CState_Player_TH_Walk* CState_Player_TH_Walk::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

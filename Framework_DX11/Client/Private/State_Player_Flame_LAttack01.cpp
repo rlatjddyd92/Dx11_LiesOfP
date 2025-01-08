@@ -106,6 +106,7 @@ void CState_Player_Flame_LAttack01::Update(_float fTimeDelta)
 
 void CState_Player_Flame_LAttack01::End_State()
 {
+    m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 

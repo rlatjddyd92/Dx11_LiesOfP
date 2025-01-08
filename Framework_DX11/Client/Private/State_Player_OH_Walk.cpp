@@ -77,16 +77,23 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
         if (m_pPlayer->Key_None(KEY::SPACE))
         {
             m_pPlayer->Change_State(CPlayer::OH_DASH);
+            return;
         }
 
         if (m_pPlayer->Key_Hold(KEY::SPACE) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 10.f)
         {
             m_pPlayer->Change_State(CPlayer::OH_SPRINT);
+            return;
         }
     }
     else if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::OH_GUARD);
+    }
+    else if (!m_pPlayer->Get_IsLockOn())
+    {
+        m_pPlayer->Change_State(CPlayer::OH_RUN);
+        return;
     }
 
     if (m_pPlayer->Key_Tab(KEY::SPACE))

@@ -19,7 +19,7 @@ float g_fVoiceVolume = 1.f;
 float g_fEnvVolume = 1.f;
 float g_fUIVolume = 1.f;
 float g_fCutSceneVolume = 1.f;
-bool g_isHideCursor = true;
+bool g_isHideCursor = false;
 
 
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.

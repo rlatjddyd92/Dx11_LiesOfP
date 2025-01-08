@@ -108,7 +108,6 @@ public:
 	const _Matrix* Get_BoneCombinedMatrix(_uint iBoneIndex);
 	const _Matrix* Get_WorldMatrix_Ptr() { return &m_WorldMatrix; }
 
-	
 protected:
 	CShader*			m_pShaderCom = { nullptr };	
 	CModel*				m_pModelCom = { nullptr };
