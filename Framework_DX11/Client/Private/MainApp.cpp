@@ -44,6 +44,8 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Open_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
+	ClipCursor(NULL);
+
 	return S_OK;
 }
 

@@ -423,7 +423,7 @@ private:
 	void OpenPage(UIPAGE ePage); // 열렸거나 열리는 중이면 무시하고 아니면 연다 
 	void ClosePage(UIPAGE ePage); // 닫혔거나 닫히는 중이면 무시하고 아니면 닫는다 
 
-
+	void OnOffCursor();
 
 private:
 	vector<CUIPage*> m_vecPage; // <- 렌더러 참조용
@@ -495,6 +495,8 @@ private:
 
 	// 게임 종료 
 	_float m_fExit_Time = 0.f;
+
+	_bool m_bShowCursor = true;
 
 	// test code
 #ifdef _DEBUG
