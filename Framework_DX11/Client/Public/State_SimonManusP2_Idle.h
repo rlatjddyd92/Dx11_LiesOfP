@@ -44,7 +44,7 @@ private:
     _float              m_fNeedDist_ForAttack = { 25.5f };//13.f
 
 
-    _uint               m_iAtkTrack = {11 };
+    _uint               m_iAtkTrack = { 0 };
 private:
     void                Calc_Act_Attack(_float fTimeDelta, _float fDist);
 

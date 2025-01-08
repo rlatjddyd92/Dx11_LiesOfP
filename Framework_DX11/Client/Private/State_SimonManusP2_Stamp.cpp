@@ -91,6 +91,10 @@ void CState_SimonManusP2_Stamp::Update(_float fTimeDelta)
 void CState_SimonManusP2_Stamp::End_State()
 {
     m_pMonster->DeActive_CurrentWeaponCollider(0);
+
+    m_pMonster->Change_WeaponAnimation(0, false, 0.1f);
+    m_bWeaponSpin = false;
+    m_bStamp = false;
 }
 
 _bool CState_SimonManusP2_Stamp::End_Check()
@@ -128,7 +132,7 @@ void CState_SimonManusP2_Stamp::Collider_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 60.f && CurTrackPos <= 75.f)
             {
-                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
             }
             else
             {
@@ -139,7 +143,7 @@ void CState_SimonManusP2_Stamp::Collider_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 80 && CurTrackPos <= 95.f)
             {
-                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
             }
             else
             {

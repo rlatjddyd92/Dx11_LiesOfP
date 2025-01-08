@@ -51,7 +51,7 @@ void CGH_Creater::Update(_float fTimeDelta)
 	if (m_fStackTime >= m_fGodHandsDelay)
 	{
 		m_fStackTime = 0.f;
-		m_fGodHandsDelay = 15.f;
+		m_fGodHandsDelay = 35.f;
 		//포지션 땡겨와서 갓핸드 생성
 
 		CAttackObject::ATKOBJ_DESC Desc;

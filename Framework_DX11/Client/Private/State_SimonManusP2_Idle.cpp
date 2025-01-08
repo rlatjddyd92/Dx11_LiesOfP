@@ -157,12 +157,11 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
     }
     else
     {
-        if (m_iAtkTrack >= 14)
+        if (m_iAtkTrack >= 13)
         {
             m_iAtkTrack = 0;
         }
 
-        //m_iAtkTrack = 13;
         switch (m_iAtkTrack)
         {
         case 0:
@@ -196,41 +195,36 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
             break;
 
         case 6:
-            m_pMonster->Change_State(CSimonManus::ATKP2_STAMP);
-            m_fNeedDist_ForAttack = 6.5f;
-            break;
-
-        case 7:
             m_pMonster->Change_State(CSimonManus::ATKP2_SWINGDOWN_SWING);
             m_fNeedDist_ForAttack = 7.5f;
             break;
 
-        case 8:
+        case 7:
             m_pMonster->Change_State(CSimonManus::ATKP2_STING);
             m_fNeedDist_ForAttack = 20.f;
             break;
 
-        case 9:
+        case 8:
             m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
             m_fNeedDist_ForAttack = 10.5f;
             break;
 
-        case 10:
+        case 9:
             m_pMonster->Change_State(CSimonManus::ATKP2_CHASINGSWING);
             m_fNeedDist_ForAttack = 25.5f;
             break;
 
-        case 11:
+        case 10:
             m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
             m_fNeedDist_ForAttack = 8.f;
             break;
 
-        case 12:
+        case 11:
             m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
             m_fNeedDist_ForAttack = 20.f;
             break;
 
-        case 13:
+        case 12:
             m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
             m_fNeedDist_ForAttack = 11.f;
             break;

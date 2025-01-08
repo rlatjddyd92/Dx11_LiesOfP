@@ -43,7 +43,7 @@ HRESULT CAObj_Bullet::Initialize(void* pArg)
 
     m_fDamageAmount = 40.f;
     m_fLifeDuration = 2.5f;
-    m_fSpeed = 60.f;
+    m_fSpeed = 55.f;
     //m_fSpeed = 0.5f;
     m_pColliderCom->IsActive(true);
 
@@ -184,7 +184,7 @@ HRESULT CAObj_Bullet::Ready_Components()
 
     /* FOR.Com_Collider */
     CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
-    ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.5f);
+    ColliderDesc.vExtents = _float3(0.12f, 0.12f, 0.7f);
     ColliderDesc.vCenter = _float3(0.f, 0.f, -0.15f);
     ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 

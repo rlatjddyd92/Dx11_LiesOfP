@@ -100,6 +100,7 @@ _bool CState_SimonManusP1_Stamp::End_Check()
         break;
 
     case 1:
+    case 2:
         if ((AN_SPINBLAST) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_SPINBLAST);

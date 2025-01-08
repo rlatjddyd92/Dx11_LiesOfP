@@ -57,9 +57,9 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	m_eStat.fHp = 1300.f;
-	m_eStat.fMaxHp = 1300.f;
-	m_eStat.fAtk = 210.f;
+	m_eStat.fHp = 1000.f;
+	m_eStat.fMaxHp = 1000.f;
+	m_eStat.fAtk = 180.f;
 	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
@@ -136,7 +136,7 @@ void CCarcassBigA::Update(_float fTimeDelta)
 
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
-		m_pColliderObject[i]->Priority_Update(fTimeDelta);
+		m_pColliderObject[i]->Update(fTimeDelta);
 	}
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -213,8 +213,8 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.7f, 0.55f, 0.8f);
-	ColliderDesc.vCenter = _float3(0.1f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.7f, 0.65f, 0.8f);
+	ColliderDesc.vCenter = _float3(0.1f, -0.07f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -275,6 +275,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	for (_int i = 0; i< CT_END - 1; ++i)
 	{
 		m_EXCollider[i]->Set_Owner(this);
+		m_EXCollider[i]->IsActive(true);
 	}
 
 	//유사 웨폰
@@ -391,9 +392,9 @@ void CCarcassBigA::Resetting()
 {
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 1300.f;
-	m_eStat.fMaxHp = 1300.f;
-	m_eStat.fAtk = 210.f;
+	m_eStat.fHp = 1000.f;
+	m_eStat.fMaxHp = 1000.f;
+	m_eStat.fAtk = 180.f;
 
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 210.f;

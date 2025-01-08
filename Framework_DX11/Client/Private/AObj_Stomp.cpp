@@ -38,8 +38,8 @@ HRESULT CAObj_Stomp::Initialize(void* pArg)
     m_pOwner = pDesc->pOwner;
     Safe_AddRef(m_pOwner);
 
-    m_fDamageAmount = 270.f;
-    m_fLifeDuration = 0.2f;
+    m_fDamageAmount = 240.f;
+    m_fLifeDuration = 0.1f;
     m_pColliderCom->IsActive(true);
 
     m_strObjectTag = TEXT("MonsterWeapon");
@@ -54,14 +54,14 @@ void CAObj_Stomp::Priority_Update(_float fTimeDelta)
 
 void CAObj_Stomp::Update(_float fTimeDelta)
 {
-    //if (m_fLifeTime >= m_fLifeDuration)
-    //{
-    //    m_isDead = true;
-    //}
-    //else
-    //{
-    //    m_fLifeTime += fTimeDelta;
-    //}
+    if (m_fLifeTime >= m_fLifeDuration)
+    {
+        m_pEffect->Set_Dead(true);
+    }
+    else
+    {
+        m_fLifeTime += fTimeDelta;
+    }
 
     if (m_pEffect->Get_Dead())
     {

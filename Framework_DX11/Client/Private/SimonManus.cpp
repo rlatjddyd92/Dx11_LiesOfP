@@ -101,14 +101,14 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	m_eStat.strName = TEXT("시몬 마누스");
 
-	m_eStat.fHp = 3000.f;
-	m_eStat.fMaxHp = 3000.f;
-	m_eStat.fAtk = 270.f;
+	m_eStat.fHp = 1800.f;
+	m_eStat.fMaxHp = 1800.f;
+	m_eStat.fAtk = 250.f;
 	//m_eStat.fDefence = 5.f;
 
 	m_eStat.bWeakness = false;
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 390.f;
+	m_eStat.fMaxGrogyPoint = 350.f;
 
 	m_iErgoPoint = 700;
 
@@ -1027,12 +1027,12 @@ void CSimonManus::ChangePhase()
 	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
 	m_Effects[P1_CHARGEHAMMER]->Set_EffectDesc(Desc);
 
-	m_eStat.fHp = 4000.f;
-	m_eStat.fMaxHp = 4000.f;
-	m_eStat.fAtk = 270.f;
+	m_eStat.fHp = 2000.f;
+	m_eStat.fMaxHp = 2000.f;
+	m_eStat.fAtk = 260.f;
 	//m_eStat.fDefence = 8.f;
 
-	m_eStat.fMaxGrogyPoint = 390.f;
+	m_eStat.fMaxGrogyPoint = 350.f;
 	m_eStat.fGrogyPoint = 0.f;
 
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-Spine");

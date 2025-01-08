@@ -128,7 +128,7 @@ void CState_SimonManusP2_ChasingSwing::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 140.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
@@ -174,6 +174,7 @@ void CState_SimonManusP2_ChasingSwing::Effect_Check(_double CurTrackPos)
             if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+                m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
                 m_pMonster->Active_Effect(CSimonManus::SWING_DRAG_REVERSE);
                 m_bSwing = true;
             }
@@ -181,6 +182,7 @@ void CState_SimonManusP2_ChasingSwing::Effect_Check(_double CurTrackPos)
         else
         {
             m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
             m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG_REVERSE);
         }
     }

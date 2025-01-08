@@ -23,7 +23,6 @@ HRESULT CState_SimonManusP2_BrutalAttack::Initialize(_uint iStateNum, void* pArg
 HRESULT CState_SimonManusP2_BrutalAttack::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_BRUTALATTACK, false, 0.1f, 0);
-    m_pMonster->Get_Model()->Set_SpeedRatio(AN_BRUTALATTACK, 0.15);
     m_iColliderResetCheckCnt = 0;
     m_bSwingSound = false;
     m_bStampSound = false;
