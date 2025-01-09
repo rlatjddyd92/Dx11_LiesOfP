@@ -26,6 +26,7 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bPull = { false };
     _bool           m_bSting = { false };
     _bool           m_bStingSound = { false };
 

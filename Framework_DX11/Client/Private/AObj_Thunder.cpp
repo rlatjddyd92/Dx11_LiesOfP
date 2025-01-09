@@ -106,7 +106,7 @@ void CAObj_Thunder::Update(_float fTimeDelta)
 
 void CAObj_Thunder::Late_Update(_float fTimeDelta)
 {
-    if (m_pOwner->Get_Dead())
+    if (m_pOwner->Get_IsDieState())
     {
         m_isDead = true;
     }

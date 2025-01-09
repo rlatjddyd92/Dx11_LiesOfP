@@ -22,6 +22,7 @@ HRESULT CState_SimonManusP2_Sting::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_STINGATTACK, false, 0.1f, 0);
     m_bSting = false;
+    m_bPull = false;
     m_bStingSound = false;
     return S_OK;
 }
@@ -37,6 +38,7 @@ void CState_SimonManusP2_Sting::Update(_float fTimeDelta)
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
 }
 
@@ -65,19 +67,32 @@ void CState_SimonManusP2_Sting::Collider_Check(_double CurTrackPos)
 
 void CState_SimonManusP2_Sting::Effect_Check(_double CurTrackPos)
 {
-    if ((CurTrackPos >= 75.f && CurTrackPos <= 105.f) ||
-        (CurTrackPos >= 175.f && CurTrackPos <= 225.f))
+    if ((CurTrackPos >= 75.f && CurTrackPos <= 105.f))
     {
         if (!m_bSting)
         {
             m_bSting = true;
-            m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->Active_Effect(CSimonManus::SWING_DRAG_REVERSE);
         }
     }
     else
     {
         m_bSting = false;
-        m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+        m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG_REVERSE);
+    }
+
+    if ((CurTrackPos >= 175.f && CurTrackPos <= 225.f))
+    {
+        if (!m_bPull)
+        {
+            m_bPull = true;
+            m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
+        }
+    }
+    else
+    {
+        m_bPull = false;
+        m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
     }
 }
 

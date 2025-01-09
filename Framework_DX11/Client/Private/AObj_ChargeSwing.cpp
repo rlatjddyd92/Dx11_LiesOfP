@@ -39,7 +39,7 @@ HRESULT CAObj_ChargeSwing::Initialize(void* pArg)
 
     m_fDamageAmount = 270.f;
 
-    m_fLifeDuration = 0.4f;
+    m_fLifeDuration = 0.2f;
 
     m_pColliderCom->IsActive(true);
 
@@ -68,14 +68,15 @@ void CAObj_ChargeSwing::Update(_float fTimeDelta)
         {
             m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
         }
-        if (m_pEffect->Get_Dead())
-        {
-            m_isDead = true;
-        }
     }
     else
     {
         m_fLifeTime += fTimeDelta;
+    }
+
+    if (m_pEffect->Get_Dead())
+    {
+        m_isDead = true;
     }
 
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());

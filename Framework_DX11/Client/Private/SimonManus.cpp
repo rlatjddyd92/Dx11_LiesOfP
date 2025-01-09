@@ -102,6 +102,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	m_eStat.strName = TEXT("시몬 마누스");
 
 	m_eStat.fHp = 1800.f;
+	//m_eStat.fHp = 1.f;
 	m_eStat.fMaxHp = 1800.f;
 	m_eStat.fAtk = 250.f;
 	//m_eStat.fDefence = 5.f;
@@ -510,6 +511,7 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 	switch (iCutSceneNum)
 	{
 	case CUTSCENE_MEET :
+		m_Effects[WEAPON_PARTICLE]->Set_Loop(false);
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
 
 		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
@@ -519,6 +521,7 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 		m_pCutSceneFsmCom->Set_State(STATE_MEET);
 		break;
 	case CUTSCENE_P2:
+		m_Effects[WEAPON_PARTICLE]->Set_Loop(false);
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
 
 		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
@@ -537,6 +540,7 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 
 		break;
 	case CUTSCENE_DIE:
+		m_Effects[WEAPON_PARTICLE]->Set_Loop(false);
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
 		break;
 	}
@@ -553,17 +557,20 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 		const _Matrix* pNewSocketMatrix = { nullptr };
 		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
 		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
-		
+
+		m_Effects[WEAPON_PARTICLE]->Set_Loop(true);
 		Active_Weapon();
 		SetUp_Act();
 	}
 	else if (iCutSceneNum == STATE_P2)
 	{
+		m_Effects[WEAPON_PARTICLE]->Set_Loop(true);
 		ChangePhase();
 		Active_Weapon();
 	}
 	else if (iCutSceneNum == STATE_DIE)
 	{
+		m_Effects[WEAPON_PARTICLE]->Set_Loop(false);
 		m_pWeapon->IsActive(false);
 		Change_State(CSimonManus::DIE_TALKING);
 	}
@@ -829,7 +836,7 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects.resize(EFFECT_END);
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
 
 	m_Effects[P1_CHARGEHAMMER] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Weapon_ChargeSwing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
@@ -891,6 +898,7 @@ HRESULT CSimonManus::Ready_Effects()
 		pEffect->Set_Loop(false);
 		pEffect->Set_Dead(true);
 	}
+
 	m_Effects[WEAPON_PARTICLE]->Set_Loop(true);
 
 	m_DissolveEffects.resize(DISSOLVE_END);
@@ -1022,9 +1030,9 @@ void CSimonManus::ChangePhase()
 	m_Effects[SWING_DRAG]->Set_EffectDesc(Desc);
 	
 	Desc.vRotate = _Vec3{0.f, 0.f, 180.f};
-	m_Effects[SWING_DRAG_REVERSE]->Set_EffectDesc(Desc);
+	m_Effects[SWING_DRAG_REVERSE]->Set_EffectDesc(Desc); 
 
-	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
+	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
 	m_Effects[P1_CHARGEHAMMER]->Set_EffectDesc(Desc);
 
 	m_eStat.fHp = 2000.f;

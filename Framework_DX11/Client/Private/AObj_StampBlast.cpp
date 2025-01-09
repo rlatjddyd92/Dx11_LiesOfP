@@ -39,7 +39,7 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
 
     m_fDamageAmount = 270.f;
 
-    m_fLifeDuration = 0.6f;
+    m_fLifeDuration = 0.3f;
     m_pColliderCom->IsActive(true);
 
     m_pColliderCom->Set_Owner(this);

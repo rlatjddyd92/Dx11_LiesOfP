@@ -56,7 +56,6 @@ void CAObj_Stomp::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
-        m_pEffect->Set_Dead(true);
     }
     else
     {

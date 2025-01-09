@@ -115,7 +115,7 @@ void CState_SimonManusP2_HighJumpFall::Collider_Check(_double CurTrackPos)
 
     if (!m_bStompAttack)
     {
-        if (CurTrackPos >= 245.f)
+        if (CurTrackPos >= 255.f)
         {
             CAttackObject::ATKOBJ_DESC Desc;
             Desc.vPos = _Vec3{ m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) };

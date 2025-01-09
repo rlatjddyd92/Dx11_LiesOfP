@@ -225,7 +225,7 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
     }
     else       //½ºÅÆÇÁ
     {
-        if (CurTrackPos >= 60 && CurTrackPos <= 75.f)
+        if (CurTrackPos >= 75 && CurTrackPos <= 80.f)
         {
             if (!m_bStampEffect)
             {
