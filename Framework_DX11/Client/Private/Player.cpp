@@ -1153,7 +1153,7 @@ void CPlayer::Damaged(_float fAtkDmg)
 {
 	_float fFinalDmg = fAtkDmg - (fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f));
 
-	fFinalDmg = 0.f;
+	//fFinalDmg = 0.f;
 	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fFinalDmg);
 
 	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
@@ -1165,7 +1165,7 @@ _bool CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
 {
 	_float fFinalDmg = fAtkDmg - (fAtkDmg * ((m_tPlayer_Stat->iStat_Defence + m_tPlayer_Stat_Adjust->iStat_Defence) / 4000.f));
 
-	fFinalDmg = 0.f;
+	//fFinalDmg = 0.f;
 	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fFinalDmg * 0.15f);
 
 	if (m_tPlayer_Stat->vGauge_Hp.x <= 0.f)
