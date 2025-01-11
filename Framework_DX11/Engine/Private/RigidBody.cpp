@@ -199,14 +199,27 @@ void CRigidBody::Set_Gravity(_bool isGravity)
 
 void CRigidBody::Set_Kinematic(_bool isKinematic)
 {
-	if (isKinematic)
-		m_PxScene->removeActor(*m_PxActor);
-	else
-		m_PxScene->addActor(*m_PxActor);
+	if (!m_isStatic)
+	{
+		// 운동학적 상태 설정
+		static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
+	}
 
-	/*static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
-	m_PxShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, isKinematic);
-	m_PxShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !isKinematic);*/
+	// 충돌을 감지하되 물리적 반응을 없애기 위해 트리거로 설정
+	m_PxShapes[0]->setFlag(PxShapeFlag::eTRIGGER_SHAPE, isKinematic);
+
+	// 트리거가 아닐 때만 시뮬레이션 충돌 활성화
+	m_PxShapes[0]->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !isKinematic);
+}
+
+void CRigidBody::Add_Actor()
+{
+	m_PxScene->addActor(*m_PxActor);
+}
+
+void CRigidBody::Remove_Actor()
+{
+	m_PxScene->removeActor(*m_PxActor);
 }
 
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
@@ -256,15 +269,15 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	eShapeFlags = eShapeFlags | PxShapeFlag::eVISUALIZATION;
 
 
-	physX::Geometry* pGeometry = pDesc->pGeometry;
+	physX::Physx_Geometry_Desc* pGeometryDesc = pDesc->pGeometryDesc;
 
 	PxShape* pShape = { nullptr };
 
-	switch (pGeometry->GetType())
+	switch (pGeometryDesc->Get_GeometryType())
 	{
 	case physX::PX_CAPSULE:
 	{
-		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometry);
+		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometryDesc);
 		pShape = m_pPhysX->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
 		if (!pShape)
 			return E_FAIL;
@@ -307,10 +320,21 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	case physX::PX_SPHERE:
 	{
 		//PlayerPxTransform = PxTransformFromSegment(PlayerPxTransform.p, PlayerPxTransform.p + PxVec3(0.f, 1.f, 0.f) * 1.5f);
-		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometry);
+		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometryDesc);
 		pShape = m_pPhysX->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
 		if (!pShape)
 			return E_FAIL;
+
+		PxVec3 newPosition = ConvertToPxVec3(m_vOffset);// 캡슐의 새로운 로컬 위치
+		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
+
+		PxTransform newLocalPose(newPosition, newRotation);
+
+		PxTransform Transform = m_PxActor->getGlobalPose();
+
+		m_PxActor->setGlobalPose(Transform);
+
+		pShape->setLocalPose(newLocalPose);
 
 		m_PxActor->attachShape(*pShape);
 		m_PxShapes.emplace_back(pShape);
@@ -318,7 +342,7 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	break;
 	case physX::PX_BOX:
 	{
-		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
+		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometryDesc);
 		pShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
 		if (!pShape)
 			return E_FAIL;
@@ -340,7 +364,7 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	break;
 	case physX::PX_MODEL:
 	{
-		physX::GeometryTriangleMesh* TriangleGeometry = static_cast<physX::GeometryTriangleMesh*>(pGeometry);
+		physX::GeometryTriangleMesh* TriangleGeometry = static_cast<physX::GeometryTriangleMesh*>(pGeometryDesc);
 		CModel* pModel = TriangleGeometry->pModel;
 
 		_Matrix WorldMatrix = m_pOwnerTransform->Get_WorldMatrix();

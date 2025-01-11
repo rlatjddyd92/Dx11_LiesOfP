@@ -337,7 +337,7 @@ HRESULT CStargazer::Ready_Components()
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 0.5f;
 	CapsuleDesc.fRadius = 0.25f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
+	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

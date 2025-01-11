@@ -14,7 +14,6 @@
 #include "Collider_Manager.h"
 #include "Key_Manager.h"
 #include "PhysX_Manager.h"
-#include "NvCloth_Manager.h"
 #include "Sound_Manager.h"
 
 // 2024-11-06 ±è¼º¿ë
@@ -113,17 +112,10 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (nullptr == m_pPhysX_Manager)
 		return E_FAIL;
 
-	m_pNvCloth_Manager = CNvCloth_Manager::Create(*ppDevice, *ppContext);
-	if (nullptr == m_pNvCloth_Manager)
-		return E_FAIL;
-
-
-	// 2024-11-06 ±è¼º¿ë
 	m_pCSVFile_Manager = CCSVFile_Manager::Create();
 	if (nullptr == m_pCSVFile_Manager)
 		return E_FAIL;
 
-	// Á¤½ÂÇö
 	m_pInstance_Manager = CInstance_Manager::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pInstance_Manager)
 		return E_FAIL;
@@ -537,34 +529,24 @@ const _float& CGameInstance::Get_Far()
 	return m_pPipeLine->Get_Far();
 }
 
-const _Matrix* CGameInstance::Get_CascadeViewMatirx() const
+const _Matrix* CGameInstance::Get_CascadeViewMatrices() const
 {
-	return m_pPipeLine->Get_CascadeViewMatirx();;
+	return m_pPipeLine->Get_CascadeViewMatrices();;
 }
 
-void CGameInstance::Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices)
+void CGameInstance::Set_CascadeViewMatrices(_Matrix* CascadeViewMatrices)
 {
-	m_pPipeLine->Set_CascadeViewMatirx(CascadeViewMatrices);
+	m_pPipeLine->Set_CascadeViewMatrices(CascadeViewMatrices);
 }
 
-const _Matrix* CGameInstance::Get_CascadeProjMatirx() const
+const _Matrix* CGameInstance::Get_CascadeProjMatrices() const
 {
-	return m_pPipeLine->Get_CascadeProjMatirx();
+	return m_pPipeLine->Get_CascadeProjMatrices();
 }
 
-void CGameInstance::Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices)
+void CGameInstance::Set_CascadeProjMatrices(_Matrix* CascadeProjMatrices)
 {
-	m_pPipeLine->Set_CascadeProjMatirx(CascadeProjMatrices);
-}
-
-const _Matrix* CGameInstance::Get_CascadeProjInverseMatirx() const
-{
-	return m_pPipeLine->Get_CascadeProjInverseMatirx();
-}
-
-void CGameInstance::Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices)
-{
-	m_pPipeLine->Set_CascadeProjInverseMatirx(CascadeProjInverseMatrices);
+	m_pPipeLine->Set_CascadeProjMatrices(CascadeProjMatrices);
 }
 
 #pragma endregion
@@ -1004,7 +986,6 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pLight_Manager);
-	Safe_Release(m_pNvCloth_Manager);
 	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pSound_Manager);

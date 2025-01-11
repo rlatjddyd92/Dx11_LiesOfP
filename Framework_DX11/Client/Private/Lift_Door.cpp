@@ -59,7 +59,7 @@ void CLift_Door::Update(_float fTimeDelta)
 			m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Lift_Door_Open.wav"), &g_fEffectVolume);
 		}
 
-		m_pRigidBodyCom->Set_Kinematic(true);
+		m_pRigidBodyCom->Remove_Actor();
 
 		if(m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Open
 			&& m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Close_Idle)
@@ -81,7 +81,7 @@ void CLift_Door::Update(_float fTimeDelta)
 			m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Lift_Door_Close.wav"), &g_fEffectVolume);
 		}
 
-		m_pRigidBodyCom->Set_Kinematic(false);
+		m_pRigidBodyCom->Add_Actor();
 
 		if (m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open_Idle)
 			m_pModelCom->SetUp_NextAnimation(m_iAnim_Close);
@@ -185,7 +185,7 @@ HRESULT CLift_Door::Ready_Components()
 
 	physX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(0.3f, 3.f, 3.f);
-	RigidBodyDesc.pGeometry = &BoxDesc;
+	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

@@ -354,9 +354,9 @@ HRESULT CPlayer::Render_LightDepth()
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatrices(), 3)))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatrices(), 3)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
@@ -2033,7 +2033,7 @@ HRESULT CPlayer::Ready_Components()
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.f;
 	CapsuleDesc.fRadius = 0.25f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
+	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

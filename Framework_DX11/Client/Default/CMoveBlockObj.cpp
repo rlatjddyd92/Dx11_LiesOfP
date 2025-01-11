@@ -99,14 +99,14 @@ void CMoveBlockObj::OnCollisionExit(CGameObject* pOther)
 void CMoveBlockObj::Open_Door()
 {
 	m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_OPEN);
-	m_pRigidBodyCom->Set_Kinematic(true);
+	m_pRigidBodyCom->Remove_Actor();
 	m_bOpened = true;
 }
 
 void CMoveBlockObj::Close_Door()
 {
 	m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_CLOSE);
-	m_pRigidBodyCom->Set_Kinematic(false);
+	m_pRigidBodyCom->Add_Actor();
 	m_bOpened = false;
 }
 
@@ -145,7 +145,7 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 	RigidBodyDesc.vOffset = _Vec3(0.f, ColliderDesc.vExtents.y * 0.5f, 0.f);
 	physX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(ColliderDesc.vExtents.x, ColliderDesc.vExtents.y, ColliderDesc.vExtents.z);
-	RigidBodyDesc.pGeometry = &BoxDesc;
+	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

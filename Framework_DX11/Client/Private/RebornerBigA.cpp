@@ -232,6 +232,8 @@ void CRebornerBigA::Resetting()
 	Change_State(CMonster::IDLE);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+
+	m_pRigidBodyCom->Add_Actor();
 }
 
 void CRebornerBigA::On_PowerAttack(_bool bOn)
@@ -386,7 +388,7 @@ HRESULT CRebornerBigA::Ready_Components()
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
 	CapsuleDesc.fRadius = 0.6f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
+	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;

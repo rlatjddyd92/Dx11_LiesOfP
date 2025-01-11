@@ -223,7 +223,7 @@ HRESULT CTreasureBox::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 
 	physX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(1.f, 1.f, 1.f);
-	RigidBodyDesc.pGeometry = &BoxDesc;
+	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

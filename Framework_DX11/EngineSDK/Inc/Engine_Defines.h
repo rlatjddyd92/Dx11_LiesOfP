@@ -69,13 +69,6 @@ using namespace Engine;
 
 using namespace physx;
 
-#include "NvCloth/Cloth.h"
-#include "NvCloth/Factory.h"
-#include "NvCloth/Solver.h"
-#include "NvCloth/DxContextManagerCallback.h"
-
-using namespace nv::cloth;
-
 //#include <cuda.h>
 //#include <cuda_runtime.h>
 //#include <device_launch_parameters.h>
@@ -105,78 +98,48 @@ namespace physX
 {
 	enum GEOMETRY_TYPE { PX_CAPSULE, PX_SPHERE, PX_BOX, PX_MODEL, PX_END };
 
-	struct ENGINE_DLL Geometry abstract
+	struct ENGINE_DLL Physx_Geometry_Desc abstract
 	{
 	protected:
-		Geometry() = delete;
-		Geometry(GEOMETRY_TYPE eType)
-			:m_eGeometryType(eType) {};
+		Physx_Geometry_Desc(GEOMETRY_TYPE eType)
+		{
+			m_eGeometryType = eType;
+		}
+
 		GEOMETRY_TYPE m_eGeometryType = { PX_END };
+
 	public:
-		GEOMETRY_TYPE GetType() { return m_eGeometryType; };
+		GEOMETRY_TYPE Get_GeometryType() { return m_eGeometryType; };
 	};
 
-	struct ENGINE_DLL GeometryCapsule final : public Geometry
+	// 母蕉 可记
+	struct ENGINE_DLL GeometryCapsule final : public Physx_Geometry_Desc
 	{
 		GeometryCapsule()
-			: Geometry(PX_CAPSULE) {}
+			: Physx_Geometry_Desc(PX_CAPSULE) {}
 		_float fRadius = 0.f;
 		_float fHeight = 0.f;
 	};
 
-	struct ENGINE_DLL GeometrySphere final : public Geometry
+	// 备 可记
+	struct ENGINE_DLL GeometrySphere final : public Physx_Geometry_Desc
 	{
-		GeometrySphere() : Geometry(PX_SPHERE) {}
+		GeometrySphere() : Physx_Geometry_Desc(PX_SPHERE) {}
 		_float fRadius = 0.f;
 	};
 
-	struct ENGINE_DLL GeometryBox final : public Geometry
+	// 冠胶 可记
+	struct ENGINE_DLL GeometryBox final : public Physx_Geometry_Desc
 	{
 		GeometryBox()
-			: Geometry(PX_BOX) {}
+			: Physx_Geometry_Desc(PX_BOX) {}
 		_Vec3 vSize = { 0.f,0.f,0.f };
 	};
-
-	struct ENGINE_DLL GeometryTriangleMesh final : public Geometry
+	
+	struct ENGINE_DLL GeometryTriangleMesh final : public Physx_Geometry_Desc
 	{
 		GeometryTriangleMesh()
-			: Geometry(PX_MODEL), pModel(nullptr) {}
+			: Physx_Geometry_Desc(PX_MODEL), pModel(nullptr) {}
 		class CModel* pModel = { nullptr };
 	};
-}
-
-
-inline PxVec2 ConvertToPxVec2(const _Vec2& _vector)
-{
-	return PxVec2(_vector.x, _vector.y);
-}
-
-inline PxVec3 ConvertToPxVec3(const _Vec3& _vector)
-{
-	return PxVec3(_vector.x, _vector.y, _vector.z);
-}
-
-inline PxVec4 ConvertToPxVec4(const _Vec4& _vector)
-{
-	return PxVec4(_vector.x, _vector.y, _vector.z, _vector.w);
-}
-
-inline PxQuat ConvertToPxQuat(const _Quaternion& _Quaternion)
-{
-	return PxQuat(_Quaternion.x, _Quaternion.y, _Quaternion.z, _Quaternion.w);
-}
-
-inline PxMat33 ConvertToPxMat33(const _Matrix& _Matrix)
-{
-	return PxMat33(ConvertToPxVec3(_Matrix.Right()), ConvertToPxVec3(_Matrix.Up()), ConvertToPxVec3(_Matrix.Forward()));
-}
-
-inline PxMat44 ConvertToPxMat44(const _Matrix& _Matrix)
-{
-	return PxMat44(ConvertToPxVec3(_Matrix.Right()), ConvertToPxVec3(_Matrix.Up()), ConvertToPxVec3(_Matrix.Forward()), ConvertToPxVec3(_Matrix.Translation()));
-}
-
-inline PxTransform ConvertToPxTransform(const _Vec3& _vector, const _Quaternion& _Quaternion)
-{
-	return PxTransform(ConvertToPxVec3(_vector), ConvertToPxQuat(_Quaternion));
 }

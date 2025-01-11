@@ -58,7 +58,7 @@ void CTowerDoor::Update(_float fTimeDelta)
 				m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Monastery_Stone_Slide.wav"), &g_fEffectVolume);
 			}
 		}
-		m_pRigidBodyCom->Set_Kinematic(true);
+		m_pRigidBodyCom->Remove_Actor();
 		m_pModelCom->Play_Animation(fTimeDelta);
 
 		if (m_bPlaySound && m_pModelCom->Get_IsEndAnimArray()[m_iAnim_Open])
@@ -183,7 +183,7 @@ HRESULT CTowerDoor::Ready_Components()
 
 	physX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(4.f, 3.f, 0.8f);
-	RigidBodyDesc.pGeometry = &BoxDesc;
+	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

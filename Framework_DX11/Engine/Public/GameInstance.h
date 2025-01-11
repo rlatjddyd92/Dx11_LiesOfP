@@ -140,14 +140,11 @@ public:
 	const _float& Get_Near();
 	const _float& Get_Far();
 
-	const _Matrix* Get_CascadeViewMatirx() const;
-	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices);
+	const _Matrix* Get_CascadeViewMatrices() const;
+	void Set_CascadeViewMatrices(_Matrix* CascadeViewMatrices);
 
-	const _Matrix* Get_CascadeProjMatirx() const;
-	void Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices);
-
-	const _Matrix* Get_CascadeProjInverseMatirx() const;
-	void Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices);
+	const _Matrix* Get_CascadeProjMatrices() const;
+	void Set_CascadeProjMatrices(_Matrix* CascadeProjMatrices);
 #pragma endregion
 
 #pragma region LIGHT_MANAGER
@@ -315,7 +312,6 @@ private:
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
 	class CInstance_Manager*		m_pInstance_Manager = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
-	class CNvCloth_Manager*			m_pNvCloth_Manager = { nullptr };
 
 	// 2024-11-06 ±è¼º¿ë
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };

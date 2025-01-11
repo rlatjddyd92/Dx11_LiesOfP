@@ -220,6 +220,8 @@ void CRebornerMale::Resetting()
 	Change_State(CMonster::IDLE);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+
+	m_pRigidBodyCom->Add_Actor();
 }
 
 void CRebornerMale::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
@@ -381,7 +383,7 @@ HRESULT CRebornerMale::Ready_Components()
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
 	CapsuleDesc.fRadius = 0.5f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
+	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;

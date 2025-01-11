@@ -168,7 +168,7 @@ HRESULT CDeco_Collider::Ready_Components()
 
     physX::GeometryBox BoxDesc;
     BoxDesc.vSize = _Vec3(0.8f, 2.f, 0.8f);
-    RigidBodyDesc.pGeometry = &BoxDesc;
+    RigidBodyDesc.pGeometryDesc = &BoxDesc;
 
     /* FOR.Com_RigidBody */
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

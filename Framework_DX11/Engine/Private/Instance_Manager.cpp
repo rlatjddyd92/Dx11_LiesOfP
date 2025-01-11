@@ -108,9 +108,9 @@ HRESULT CInstance_Manager::Draw_Shadow()
 		if (FAILED(m_pNonAnimInstanceShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 			return E_FAIL;
 
-		if (FAILED(m_pNonAnimInstanceShader->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+		if (FAILED(m_pNonAnimInstanceShader->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatrices(), 3)))
 			return E_FAIL;
-		if (FAILED(m_pNonAnimInstanceShader->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+		if (FAILED(m_pNonAnimInstanceShader->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatrices(), 3)))
 			return E_FAIL;
 
 		if (FAILED(m_pNonAnimInstanceShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))

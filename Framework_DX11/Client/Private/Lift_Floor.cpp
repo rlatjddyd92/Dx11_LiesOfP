@@ -249,7 +249,7 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 
 	physX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(2.f, 0.05f, 2.f);
-	RigidBodyDesc.pGeometry = &BoxDesc;
+	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

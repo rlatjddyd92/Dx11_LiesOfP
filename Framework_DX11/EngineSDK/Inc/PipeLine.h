@@ -32,14 +32,11 @@ public:
 	const _float& Get_Near() { return m_fNear; }
 	const _float& Get_Far() { return m_fFar; }
 
-	const _Matrix* Get_CascadeViewMatirx() const { return m_CascadeViewMatrices; }
-	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices) { memcpy(m_CascadeViewMatrices, CascadeViewMatrices, sizeof(_Matrix) * 3); }
+	const _Matrix* Get_CascadeViewMatrices() const { return m_CascadeViewMatrices; }
+	void Set_CascadeViewMatrices(_Matrix* CascadeViewMatrices) { memcpy(m_CascadeViewMatrices, CascadeViewMatrices, sizeof(_Matrix) * 3); }
 
-	const _Matrix* Get_CascadeProjMatirx() const { return m_CascadeProjMatrices; }
-	void Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices) { memcpy(m_CascadeProjMatrices, CascadeProjMatrices, sizeof(_Matrix) * 3); }
-
-	const _Matrix* Get_CascadeProjInverseMatirx() const { return m_CascadeProjInverseMatrices; }
-	void Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices) { memcpy(m_CascadeProjInverseMatrices, CascadeProjInverseMatrices, sizeof(_Matrix) * 3); }
+	const _Matrix* Get_CascadeProjMatrices() const { return m_CascadeProjMatrices; }
+	void Set_CascadeProjMatrices(_Matrix* CascadeProjMatrices) { memcpy(m_CascadeProjMatrices, CascadeProjMatrices, sizeof(_Matrix) * 3); }
 
 public:
 	HRESULT Initialize();
@@ -59,7 +56,6 @@ private:
 
 	_Matrix			m_CascadeViewMatrices[3];
 	_Matrix			m_CascadeProjMatrices[3];
-	_Matrix			m_CascadeProjInverseMatrices[3];
 
 public:
 	static CPipeLine*	Create();

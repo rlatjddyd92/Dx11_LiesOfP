@@ -55,6 +55,7 @@ public:
 	void Reset_MoveLerp();
 	void Start_MoveLerp(_Vec3 vTargetPos, _float fSpeed);
 	void Stop_Turn() { m_bTurn = false; }
+
 protected:
 	_float				m_fFovy = {};
 	_float				m_fAspect = {};
@@ -89,15 +90,14 @@ protected:
 	_float				m_fMoveSpeed;
 
 	// 캐스캐이드용
-	_float				m_fCascadeFarPlanes[4];
-	_Vec3				m_vPrevCenterPos[3];
+	_float				m_fNearFarPlanes[4];
 
 	_wstring			m_strCameraTag = {};
 
 	_bool				m_isLock = { false };
 
 protected:
-	void Calculat_CascadeFrustum();
+	void Calculate_CascadeFrustum();
 	void Update_Zoom(_float fTimeDelta);
 	void Update_Turn(_float fTimeDelta);
 	void Update_MoveLerp(_float fTimeDelta);

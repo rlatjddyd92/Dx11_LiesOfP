@@ -102,7 +102,7 @@ void CFreeCamera::Update(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, currentPos);
 	}
 
-	Calculat_CascadeFrustum();
+	Calculate_CascadeFrustum();
 }
 
 void CFreeCamera::Late_Update(_float fTimeDelta)

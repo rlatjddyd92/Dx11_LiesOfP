@@ -29,7 +29,7 @@ void CState_RaxasiaP2_Die::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
-        m_pMonster->Get_RigidBody()->Set_Kinematic(false);
+        m_pMonster->Get_RigidBody()->Remove_Actor();
 
         m_pMonster->Reset_Die();
         dynamic_cast<CRaxasia*>(m_pMonster)->ChangePhase();

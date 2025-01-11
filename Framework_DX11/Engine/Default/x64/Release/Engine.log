@@ -1,88 +1,10 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Effect_Texture.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(155,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(182,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Bloom.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Cell.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Back.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(180,5-82): warning X3206: implicit truncation of vector type
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(201,27-49): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(235,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(306,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(339,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(393,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(426,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_HDR.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Model_Instance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_PostProcess.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(116,16-42): warning X3206: implicit truncation of vector type
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(187,12-68): warning X3206: implicit truncation of vector type
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(188,12-68): warning X3206: implicit truncation of vector type
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(112,33-78): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(148,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(172,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-  
-  compilation object save succeeded; see C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
-  unity_OXMU3TV162GBPTGO.cpp
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,1): warning C4005: 'PX_ALLOC': 매크로 재정의
-  (소스 파일 'x64/Release/unity_OXMU3TV162GBPTGO.cpp'을(를) 컴파일하는 중)
-  C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(67,1):
-  'PX_ALLOC'의 이전 정의를 참조하십시오.
-  
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(51,1): warning C4005: 'PX_FREE': 매크로 재정의
-  (소스 파일 'x64/Release/unity_OXMU3TV162GBPTGO.cpp'을(를) 컴파일하는 중)
-  C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(77,1):
-  'PX_FREE'의 이전 정의를 참조하십시오.
-  
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(59,1): warning C4005: 'PX_NEW': 매크로 재정의
-  (소스 파일 'x64/Release/unity_OXMU3TV162GBPTGO.cpp'을(를) 컴파일하는 중)
-  C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(87,1):
-  'PX_NEW'의 이전 정의를 참조하십시오.
-  
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(61,1): warning C4005: 'PX_DELETE': 매크로 재정의
-  (소스 파일 'x64/Release/unity_OXMU3TV162GBPTGO.cpp'을(를) 컴파일하는 중)
-  C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(89,1):
-  'PX_DELETE'의 이전 정의를 참조하십시오.
-  
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(76,1): warning C4005: 'PX_DELETE_ARRAY': 매크로 재정의
-  (소스 파일 'x64/Release/unity_OXMU3TV162GBPTGO.cpp'을(를) 컴파일하는 중)
-  C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(90,1):
-  'PX_DELETE_ARRAY'의 이전 정의를 참조하십시오.
-  
+﻿  unity_YPTTJWBD6I0HAXK7.cpp
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
      ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
   코드를 생성하고 있습니다.
-  Previous IPDB not found, fall back to full compilation.
-C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(30): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
-  All 5955 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  9 of 5932 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    4 functions were new in current compilation
+    17 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
 Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
@@ -115,7 +37,7 @@ PhysXPvdSDK_static_64.lib(PxPvdObjectRegistrar.obj) : warning LNK4099: '' PDB를
 PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-  Engine.vcxproj -> C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Engine.dll
+  Engine.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Engine.dll
   ..\Bin\Engine.lib
   1개 파일이 복사되었습니다.
   ..\ThirdPartyLib\assimp-vc140-mt.lib
@@ -182,10 +104,8 @@ PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB�
   ..\Public\Light_Manager.h
   ..\Public\Mesh.h
   ..\Public\Model.h
-  ..\Public\MyContextManagerCallback.h
   ..\Public\MyProfilerCallback.h
   ..\Public\Navigation.h
-  ..\Public\NvCloth_Manager.h
   ..\Public\Object_Manager.h
   ..\Public\Occludee.h
   ..\Public\Octree.h
@@ -345,35 +265,6 @@ PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB�
   ..\Public\Fmod\fmod_errors.cs
   ..\Public\Fmod\fmod_errors.h
   ..\Public\Fmod\fmod_output.h
-  ..\Public\NvCloth\Allocator.h
-  ..\Public\NvCloth\Callbacks.h
-  ..\Public\NvCloth\Cloth.h
-  ..\Public\NvCloth\DxContextManagerCallback.h
-  ..\Public\NvCloth\Fabric.h
-  ..\Public\NvCloth\Factory.h
-  ..\Public\NvCloth\PhaseConfig.h
-  ..\Public\NvCloth\Range.h
-  ..\Public\NvCloth\Solver.h
-  ..\Public\NvCloth\ps\Ps.h
-  ..\Public\NvCloth\ps\PsAlignedMalloc.h
-  ..\Public\NvCloth\ps\PsAllocator.cpp
-  ..\Public\NvCloth\ps\PsAllocator.h
-  ..\Public\NvCloth\ps\PsArray.h
-  ..\Public\NvCloth\ps\PsAtomic.h
-  ..\Public\NvCloth\ps\PsBasicTemplates.h
-  ..\Public\NvCloth\ps\PsBitUtils.h
-  ..\Public\NvCloth\ps\PsHash.h
-  ..\Public\NvCloth\ps\PsHashInternals.h
-  ..\Public\NvCloth\ps\PsHashMap.h
-  ..\Public\NvCloth\ps\PsIntrinsics.h
-  ..\Public\NvCloth\ps\PsMathUtils.h
-  ..\Public\NvCloth\ps\PsUserAllocated.h
-  ..\Public\NvCloth\ps\unix\PsUnixIntrinsics.h
-  ..\Public\NvCloth\ps\windows\PsWindowsIntrinsics.h
-  ..\Public\NvClothExt\ClothFabricCooker.h
-  ..\Public\NvClothExt\ClothMeshDesc.h
-  ..\Public\NvClothExt\ClothMeshQuadifier.h
-  ..\Public\NvClothExt\ClothTetherCooker.h
   ..\Public\PhysX\PxActor.h
   ..\Public\PhysX\PxActorData.h
   ..\Public\PhysX\PxAggregate.h
@@ -741,7 +632,7 @@ PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB�
   ..\Public\PhysX\vehicle2\wheel\PxVehicleWheelHelpers.h
   ..\Public\PhysX\vehicle2\wheel\PxVehicleWheelParams.h
   ..\Public\PhysX\vehicle2\wheel\PxVehicleWheelStates.h
-  600개 파일이 복사되었습니다.
+  569개 파일이 복사되었습니다.
   ..\Bin\Engine.dll
   1개 파일이 복사되었습니다.
   ..\Bin\ShaderFiles\Shader_Bloom.hlsl

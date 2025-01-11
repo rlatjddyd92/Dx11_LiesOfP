@@ -50,7 +50,7 @@ void CState_CarcassBigA_Die::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
-        m_pMonster->Get_RigidBody()->Set_Kinematic(false);
+        m_pMonster->Get_RigidBody()->Remove_Actor();
     }
 
 }

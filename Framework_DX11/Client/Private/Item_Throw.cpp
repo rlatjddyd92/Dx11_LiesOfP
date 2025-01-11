@@ -334,7 +334,7 @@ HRESULT CItem_Throw::Ready_Components()
 
 	physX::GeometrySphere SphereDesc;
 	SphereDesc.fRadius = 0.1f;
-	RigidBodyDesc.pGeometry = &SphereDesc;
+	RigidBodyDesc.pGeometryDesc = &SphereDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

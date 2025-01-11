@@ -34,6 +34,11 @@ HRESULT CCamera::Initialize(void * pArg)
 	m_fNear = pDesc->fNear;
 	m_fFar = pDesc->fFar;
 
+	// 캐스캐이드용
+	m_fNearFarPlanes[1] = 7.f;
+	m_fNearFarPlanes[2] = 25.f;
+	m_fNearFarPlanes[3] = 200.f;
+
 	return S_OK;
 }
 
@@ -126,48 +131,48 @@ void CCamera::Start_MoveLerp(_Vec3 vTargetPos, _float fSpeed)
 	m_fMoveSpeed = fSpeed;
 }
 
-void CCamera::Calculat_CascadeFrustum()
+void CCamera::Calculate_CascadeFrustum()
 {
 	if (!m_pGameInstance->Get_IsOnShadow())
 		return;
 
-	_Matrix CascadeViewMatrix[3];
-	_Matrix CascadeProjMatrix[3];
-	_Matrix CascadeProjInverseMatrix[3];
+	// 3단계로 구성
+	_Matrix CascadeViewMatrices[3];
+	_Matrix CascadeProjMatrices[3];
 
 	_Matrix WorldMatrix = m_pTransformCom->Get_WorldMatrix();
 	_Matrix ViewMatrix = WorldMatrix.Invert();
 
-	_Vec3 vLightDir = m_pGameInstance->Get_DirectionLightDir();
+	_Vec3 vLightDir = m_pGameInstance->Get_DirectionLightDir();	// 방향성 광원의 방향 받아오기
 
-	_float fTanHalfVFov = tanf(m_fFovy * 0.5f);
-	_float fTanHalfHFov = fTanHalfVFov * m_fAspect;
+	// 수직, 수평 절반의 탄젠트
+	// 평면의 크기를 구하기 위한 용도
+	_float fVerticalFovHalfTangent = tanf(m_fFovy * 0.5f);
+	_float fHorizontalFovHalfTangent = fVerticalFovHalfTangent * m_fAspect;
 
-	m_fCascadeFarPlanes[0] = m_fNear;
-	m_fCascadeFarPlanes[1] = 7.f;
-	m_fCascadeFarPlanes[2] = 25.f;
-	m_fCascadeFarPlanes[3] = 200.f;
+	// 게임에 알맞은 수치를 찾아함
+	m_fNearFarPlanes[0] = m_fNear;
 
 	for (_uint i = 0; i < 3; ++i)
 	{
-		_float fNearX = m_fCascadeFarPlanes[i] * fTanHalfHFov;
-		_float fNearY = m_fCascadeFarPlanes[i] * fTanHalfVFov;
+		_float fNearX = m_fNearFarPlanes[i] * fVerticalFovHalfTangent;
+		_float fNearY = m_fNearFarPlanes[i] * fVerticalFovHalfTangent;
 
-		_float fFarX = m_fCascadeFarPlanes[i + 1] * fTanHalfHFov;
-		_float fFarY = m_fCascadeFarPlanes[i + 1] * fTanHalfVFov;
+		_float fFarX = m_fNearFarPlanes[i + 1] * fVerticalFovHalfTangent;
+		_float fFarY = m_fNearFarPlanes[i + 1] * fVerticalFovHalfTangent;
 
 		//Near Far 평면 구성
 		_Vec4 vFrustumCorners[8] =
 		{
-			{fNearX, fNearY, m_fCascadeFarPlanes[i], 1.0f},
-			{-fNearX, fNearY, m_fCascadeFarPlanes[i], 1.0f},
-			{fNearX, -fNearY, m_fCascadeFarPlanes[i], 1.0f},
-			{-fNearX, -fNearY, m_fCascadeFarPlanes[i], 1.0f},
+			{fNearX, fNearY, m_fNearFarPlanes[i], 1.0f},	// 우상
+			{-fNearX, fNearY, m_fNearFarPlanes[i], 1.0f},	// 좌상
+			{fNearX, -fNearY, m_fNearFarPlanes[i], 1.0f},	// 우하
+			{-fNearX, -fNearY, m_fNearFarPlanes[i], 1.0f},	// 좌하
 
-			{fFarX, fFarY, m_fCascadeFarPlanes[i + 1], 1.0f},
-			{-fFarX, fFarY, m_fCascadeFarPlanes[i + 1],1.0f},
-			{fFarX, -fFarY, m_fCascadeFarPlanes[i + 1],1.0f},
-			{-fFarX, -fFarY, m_fCascadeFarPlanes[i + 1],1.0f}
+			{fFarX, fFarY, m_fNearFarPlanes[i + 1], 1.0f},	// 우상
+			{-fFarX, fFarY, m_fNearFarPlanes[i + 1],1.0f},	// 좌상
+			{fFarX, -fFarY, m_fNearFarPlanes[i + 1],1.0f},	// 우하
+			{-fFarX, -fFarY, m_fNearFarPlanes[i + 1],1.0f}	// 좌하
 		};
 
 		//절두체 중심점 구하기
@@ -177,38 +182,33 @@ void CCamera::Calculat_CascadeFrustum()
 			vFrustumCorners[j] = XMVector4Transform(vFrustumCorners[j], WorldMatrix);
 			vCenterPos += vFrustumCorners[j];
 		}
-
 		vCenterPos /= 8.f;
 
+		// 가장 먼 모서리까지의 거리
 		_float fRadius = 0.f;
 		for (_uint j = 0; j < 8; ++j) 
 		{
 			_float fDistance = (vFrustumCorners[j] - vCenterPos).Length();
 			fRadius = max(fDistance, fRadius);
 		}
-		fRadius = ceil(fRadius * 16.f) / 16.f;
+		fRadius = ceil(fRadius * 16.f) / 16.f;	// 올림
 
-		_Vec3 vMaxExtents = _Vec3(fRadius, fRadius, fRadius + 60.f);
+		_Vec3 vMaxExtents = _Vec3(fRadius, fRadius, fRadius + 5.f);
 		_Vec3 vMinExtents = -vMaxExtents;
 
-		// 움직였음?
 		_Vec3 vShadowCamPos = _Vec3(vCenterPos) + (vLightDir * vMinExtents.z);
-
-		m_vPrevCenterPos[i] = vShadowCamPos;
 
 		// 위치, look, up
 		_Matrix LightMatrix = _Matrix::CreateWorld(vShadowCamPos, -vLightDir, _float3(0.0f, 1.0f, 0.0f));
-		CascadeViewMatrix[i] = LightMatrix.Invert();
+		CascadeViewMatrices[i] = LightMatrix.Invert();
 
 		_Vec3 vCascadeExtents = vMaxExtents - vMinExtents;
 
-		CascadeProjMatrix[i] = XMMatrixOrthographicLH(vCascadeExtents.x, vCascadeExtents.y, 0.1f, vCascadeExtents.z);
-		CascadeProjInverseMatrix[i] = XMMatrixOrthographicLH(vCascadeExtents.x, vCascadeExtents.y, vCascadeExtents.z, 0.f);
+		CascadeProjMatrices[i] = XMMatrixOrthographicLH(vCascadeExtents.x, vCascadeExtents.y, 0.1f, vCascadeExtents.z);
 	}
 
-	m_pGameInstance->Set_CascadeViewMatirx(CascadeViewMatrix);
-	m_pGameInstance->Set_CascadeProjMatirx(CascadeProjMatrix);
-	m_pGameInstance->Set_CascadeProjInverseMatirx(CascadeProjInverseMatrix);
+	m_pGameInstance->Set_CascadeViewMatrices(CascadeViewMatrices);
+	m_pGameInstance->Set_CascadeProjMatrices(CascadeProjMatrices);
 }
 
 void CCamera::Update_Zoom(_float fTimeDelta)

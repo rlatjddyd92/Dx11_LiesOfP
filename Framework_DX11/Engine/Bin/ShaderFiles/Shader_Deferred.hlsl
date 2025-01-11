@@ -67,7 +67,6 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
         return 1.f;
     }
     
-    const float DepthThreshold = 0.05f; // 깊이 차이 제한값
     float fShadowPower = 1.f;
     for (int x = -1; x <= 1; ++x)
     {
@@ -121,12 +120,6 @@ VS_OUT VS_MAIN(/*정점*/VS_IN In)
 
 	return Out;
 }
-
-/* Triangle : 정점 세개가 다 vs_main을 통과할때까지 대기 */
-/* 세개가 모두다 통과되면. 밑의 과정을 수행. */
-/* 리턴된 정점의 w로 정점의 xyzw를 나눈다. 투영 */
-/* 정점의 위치를 뷰포트로 변환다. (윈도우좌표로 변환한다)*/
-/* 래스터라이즈 : 정점정보를 기반으로하여 픽셀이 만들어진다. */
 
 struct PS_IN
 {
@@ -213,7 +206,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
         float cosLo = max(0.f, dot(vNormal, vLookToCamera)); // 카메라 방향과 법선 벡터의 코사인 값
 
     
-        float3 F0 = lerp(0.04f, vAlbedo, fMetallic); // 금속성이라면, albedo와 F0의 값을 선형보간 하고, 아니라면 0.04를 사용한다.
+        float3 F0 = lerp(0.04f, vAlbedo, fMetallic); // 금속성이라면, albedo와 F0의 값을 선형보간, 아니라면 0.04
         float3 radiance = g_vLightDiffuse.xyz;
     
         float3 Li = -g_vLightDir.xyz;

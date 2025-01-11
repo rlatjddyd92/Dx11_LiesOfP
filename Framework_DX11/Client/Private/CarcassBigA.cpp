@@ -67,7 +67,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 210.f;
 
-	m_iKnockBackResist = 5.f;
+	m_iKnockBackResist = 5;
 	m_iErgoPoint = 400;
 
 	if (FAILED(Ready_Components()))
@@ -338,7 +338,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
 	CapsuleDesc.fRadius = 0.7f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
+	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
@@ -417,6 +417,8 @@ void CCarcassBigA::Resetting()
 	Change_State(CMonster::IDLE);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+
+	m_pRigidBodyCom->Add_Actor();
 }
 
 void CCarcassBigA::On_PowerAttack(_bool bOn)
