@@ -91,9 +91,6 @@ HRESULT CPhysX_Manager::Initialize()
 
 void CPhysX_Manager::PhysX_Update(_float fTimeDelta)
 {
-
-
-    // 물리 씬 업데이트
     m_PxScene->simulate(fTimeDelta);
     m_PxScene->fetchResults(true);
     m_PxScene->fetchResultsParticleSystem();
@@ -274,25 +271,6 @@ _bool CPhysX_Manager::RayCast(_vector vRayPos, _vector vRayDir, _vector* vHitPos
 #endif
 
     return isHit;
-}
-
-PxTransform CPhysX_Manager::Get_PhysXTransform(CGameObject* pObject)
-{
-    //이게 맞나?
-    //암튼 피직스용 Transfrom으로 변환
-    const _float4x4* WorldMat = pObject->Get_Transform()->Get_WorldMatrix_Ptr();
-
-    PxVec3 position(WorldMat->_41, WorldMat->_42, WorldMat->_43);
-
-    // 회전 추출 (3x3 상단 행렬을 쿼터니언으로 변환)
-    PxMat33 rotation(
-        PxVec3(WorldMat->_11, WorldMat->_12, WorldMat->_13),
-        PxVec3(WorldMat->_21, WorldMat->_22, WorldMat->_23),
-        PxVec3(WorldMat->_31, WorldMat->_32, WorldMat->_33)
-    );
-    PxQuat quaternion = PxQuat(rotation);
-
-    return PxTransform(position, quaternion);
 }
 
 HRESULT CPhysX_Manager::Create_CudaContextManager()

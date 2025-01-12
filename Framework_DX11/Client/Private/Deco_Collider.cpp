@@ -166,7 +166,7 @@ HRESULT CDeco_Collider::Ready_Components()
         PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z 
         ;
 
-    physX::GeometryBox BoxDesc;
+    MyPhysX::GeometryBox BoxDesc;
     BoxDesc.vSize = _Vec3(0.8f, 2.f, 0.8f);
     RigidBodyDesc.pGeometryDesc = &BoxDesc;
 

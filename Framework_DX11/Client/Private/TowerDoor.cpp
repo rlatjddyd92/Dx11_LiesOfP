@@ -181,7 +181,7 @@ HRESULT CTowerDoor::Ready_Components()
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
 		;
 
-	physX::GeometryBox BoxDesc;
+	MyPhysX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(4.f, 3.f, 0.8f);
 	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 

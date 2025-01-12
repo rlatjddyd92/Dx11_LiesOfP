@@ -257,15 +257,38 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	eShapeFlags = eShapeFlags | PxShapeFlag::eVISUALIZATION;
 
 
-	physX::Physx_Geometry_Desc* pGeometryDesc = pDesc->pGeometryDesc;
+	MyPhysX::Physx_Geometry_Desc* pGeometryDesc = pDesc->pGeometryDesc;
 
 	PxShape* pShape = { nullptr };
 
 	switch (pGeometryDesc->Get_GeometryType())
 	{
-	case physX::PX_CAPSULE:
+	case MyPhysX::PX_BOX:
 	{
-		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometryDesc);
+		MyPhysX::GeometryBox* BoxGeometry = static_cast<MyPhysX::GeometryBox*>(pGeometryDesc);
+		pShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		if (!pShape)
+			return E_FAIL;
+
+		PxVec3 newPosition = ConvertToPxVec3(m_vOffset);// 캡슐의 새로운 로컬 위치
+		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
+
+		PxTransform newLocalPose(newPosition, newRotation);
+
+		PxTransform Transform = m_PxActor->getGlobalPose();
+
+		m_PxActor->setGlobalPose(Transform);
+
+		pShape->setLocalPose(newLocalPose);
+
+		m_PxActor->attachShape(*pShape);
+		m_PxShapes.emplace_back(pShape);
+	}
+	break;
+
+	case MyPhysX::PX_CAPSULE:
+	{
+		MyPhysX::GeometryCapsule* CapsuleGeometry = static_cast<MyPhysX::GeometryCapsule*>(pGeometryDesc);
 		pShape = m_pPhysX->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
 		if (!pShape)
 			return E_FAIL;
@@ -305,10 +328,11 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 		}
 	}
 	break;
-	case physX::PX_SPHERE:
+
+	case MyPhysX::PX_SPHERE:
 	{
 		//PlayerPxTransform = PxTransformFromSegment(PlayerPxTransform.p, PlayerPxTransform.p + PxVec3(0.f, 1.f, 0.f) * 1.5f);
-		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometryDesc);
+		MyPhysX::GeometrySphere* SphereGeometry = static_cast<MyPhysX::GeometrySphere*>(pGeometryDesc);
 		pShape = m_pPhysX->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
 		if (!pShape)
 			return E_FAIL;
@@ -328,31 +352,10 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 		m_PxShapes.emplace_back(pShape);
 	}
 	break;
-	case physX::PX_BOX:
+
+	case MyPhysX::PX_MODEL:
 	{
-		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometryDesc);
-		pShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
-		if (!pShape)
-			return E_FAIL;
-
-		PxVec3 newPosition = ConvertToPxVec3(m_vOffset);// 캡슐의 새로운 로컬 위치
-		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
-
-		PxTransform newLocalPose(newPosition, newRotation);
-
-		PxTransform Transform = m_PxActor->getGlobalPose();
-
-		m_PxActor->setGlobalPose(Transform);
-
-		pShape->setLocalPose(newLocalPose);
-
-		m_PxActor->attachShape(*pShape);
-		m_PxShapes.emplace_back(pShape);
-	}
-	break;
-	case physX::PX_MODEL:
-	{
-		physX::GeometryTriangleMesh* TriangleGeometry = static_cast<physX::GeometryTriangleMesh*>(pGeometryDesc);
+		MyPhysX::GeometryTriangleMesh* TriangleGeometry = static_cast<MyPhysX::GeometryTriangleMesh*>(pGeometryDesc);
 		CModel* pModel = TriangleGeometry->pModel;
 
 		_Matrix WorldMatrix = m_pOwnerTransform->Get_WorldMatrix();
@@ -384,7 +387,6 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 			for (_uint i = 0; i < iNumVertices; ++i)
 			{
 				Vertices.emplace_back(ConvertToPxVec3(XMVector3TransformCoord(vVertexPositions[i], WorldMatrix)));
-				//Vertices.emplace_back(ConvertToPxVec3(vVertexPositions[i]));
 			}
 
 			// 인덱스를 저장할 벡터
@@ -436,8 +438,6 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	}
 	break;
 	}
-
-	//m_PxActor->attachShape(*m_PxShape);
 
 	return S_OK;
 }

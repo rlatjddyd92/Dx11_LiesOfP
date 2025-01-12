@@ -56,10 +56,10 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     vTextCoord.x = vLightProjPos.x * 0.5f + 0.5f;
     vTextCoord.y = vLightProjPos.y * -0.5f + 0.5f;
     
-    float fNormalOffset = 0.00001f;
+    float fOffset = 0.00001f;
     float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
     //float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
-    float fBias = fNormalOffset * 5.0f * (1.0f - fDot);
+    float fBias = fOffset * 5.0f * (1.0f - fDot);
     
 	// 이 사이에 있어야함
     if (vLightProjPos.z > 1.f || vLightProjPos.z < 0.f)
@@ -179,7 +179,6 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
     //Out.vShade = g_vLightDiffuse * saturate(fHalfLambert + (g_vLightAmbient * g_vMtrlAmbient));
     Out.vShade = g_vLightDiffuse *  (g_vLightAmbient * g_vMtrlAmbient);
     
-    // PBR
     vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
     vector      vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);

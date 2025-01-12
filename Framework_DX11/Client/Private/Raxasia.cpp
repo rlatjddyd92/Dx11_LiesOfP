@@ -911,7 +911,7 @@ HRESULT CRaxasia::Ready_Components()
 	RigidBodyDesc.fDynamicFriction = 0.f;
 	RigidBodyDesc.fRestituion = 0.f;
 
-	physX::GeometryCapsule CapsuleDesc;
+	MyPhysX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 2.5f;
 	CapsuleDesc.fRadius = 0.45f;
 	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;

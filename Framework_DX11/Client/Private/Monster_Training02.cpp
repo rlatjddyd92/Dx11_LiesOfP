@@ -191,7 +191,7 @@ HRESULT CMonster_Training02::Ready_Components()
 	RigidBodyDesc.fDynamicFriction = 0.0f;
 	RigidBodyDesc.fRestituion = 0.0f;
 
-	physX::GeometryCapsule CapsuleDesc;
+	MyPhysX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.4f;
 	CapsuleDesc.fRadius = 0.5f;
 	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;

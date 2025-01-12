@@ -143,7 +143,7 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 		;
 
 	RigidBodyDesc.vOffset = _Vec3(0.f, ColliderDesc.vExtents.y * 0.5f, 0.f);
-	physX::GeometryBox BoxDesc;
+	MyPhysX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(ColliderDesc.vExtents.x, ColliderDesc.vExtents.y, ColliderDesc.vExtents.z);
 	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 

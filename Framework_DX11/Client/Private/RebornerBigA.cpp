@@ -385,7 +385,7 @@ HRESULT CRebornerBigA::Ready_Components()
 	RigidBodyDesc.fDynamicFriction = 0.0f;
 	RigidBodyDesc.fRestituion = 0.0f;
 
-	physX::GeometryCapsule CapsuleDesc;
+	MyPhysX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
 	CapsuleDesc.fRadius = 0.6f;
 	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;

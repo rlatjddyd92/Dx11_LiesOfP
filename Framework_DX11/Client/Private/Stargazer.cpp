@@ -334,7 +334,7 @@ HRESULT CStargazer::Ready_Components()
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
 		;
 
-	physX::GeometryCapsule CapsuleDesc;
+	MyPhysX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 0.5f;
 	CapsuleDesc.fRadius = 0.25f;
 	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;

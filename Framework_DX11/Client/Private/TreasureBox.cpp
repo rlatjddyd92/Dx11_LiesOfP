@@ -221,7 +221,7 @@ HRESULT CTreasureBox::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
 		;
 
-	physX::GeometryBox BoxDesc;
+	MyPhysX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(1.f, 1.f, 1.f);
 	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 

@@ -2030,7 +2030,7 @@ HRESULT CPlayer::Ready_Components()
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
 
-	physX::GeometryCapsule CapsuleDesc;
+	MyPhysX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.f;
 	CapsuleDesc.fRadius = 0.25f;
 	RigidBodyDesc.pGeometryDesc = &CapsuleDesc;

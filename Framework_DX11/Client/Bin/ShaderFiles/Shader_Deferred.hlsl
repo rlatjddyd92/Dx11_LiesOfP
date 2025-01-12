@@ -56,10 +56,10 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     vTextCoord.x = vLightProjPos.x * 0.5f + 0.5f;
     vTextCoord.y = vLightProjPos.y * -0.5f + 0.5f;
     
-    float fNormalOffset = 0.00001f;
+    float fOffset = 0.00001f;
     float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
     //float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
-    float fBias = fNormalOffset * 5.0f * (1.0f - fDot);
+    float fBias = fOffset * 5.0f * (1.0f - fDot);
     
 	// 이 사이에 있어야함
     if (vLightProjPos.z > 1.f || vLightProjPos.z < 0.f)
@@ -67,7 +67,6 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
         return 1.f;
     }
     
-    const float DepthThreshold = 0.05f; // 깊이 차이 제한값
     float fShadowPower = 1.f;
     for (int x = -1; x <= 1; ++x)
     {
@@ -121,12 +120,6 @@ VS_OUT VS_MAIN(/*정점*/VS_IN In)
 
 	return Out;
 }
-
-/* Triangle : 정점 세개가 다 vs_main을 통과할때까지 대기 */
-/* 세개가 모두다 통과되면. 밑의 과정을 수행. */
-/* 리턴된 정점의 w로 정점의 xyzw를 나눈다. 투영 */
-/* 정점의 위치를 뷰포트로 변환다. (윈도우좌표로 변환한다)*/
-/* 래스터라이즈 : 정점정보를 기반으로하여 픽셀이 만들어진다. */
 
 struct PS_IN
 {
@@ -186,7 +179,6 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
     //Out.vShade = g_vLightDiffuse * saturate(fHalfLambert + (g_vLightAmbient * g_vMtrlAmbient));
     Out.vShade = g_vLightDiffuse *  (g_vLightAmbient * g_vMtrlAmbient);
     
-    // PBR
     vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
     vector      vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
@@ -213,7 +205,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
         float cosLo = max(0.f, dot(vNormal, vLookToCamera)); // 카메라 방향과 법선 벡터의 코사인 값
 
     
-        float3 F0 = lerp(0.04f, vAlbedo, fMetallic); // 금속성이라면, albedo와 F0의 값을 선형보간 하고, 아니라면 0.04를 사용한다.
+        float3 F0 = lerp(0.04f, vAlbedo, fMetallic); // 금속성이라면, albedo와 F0의 값을 선형보간, 아니라면 0.04
         float3 radiance = g_vLightDiffuse.xyz;
     
         float3 Li = -g_vLightDir.xyz;
@@ -284,9 +276,8 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
 	vector		vLightDir = vPosition - g_vLightPos;
     
     float fDenom = length(vLightDir) / g_fLightRange;
-    //float fAtt = 1.f / (fDenom * fDenom);
-    float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
-    
+    //float     fAtt = 1.f / (fDenom * fDenom);
+    float       fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
 	//float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
     
     Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;

@@ -136,6 +136,8 @@ void CCamera::Calculate_CascadeFrustum()
 	if (!m_pGameInstance->Get_IsOnShadow())
 		return;
 
+	m_fNearFarPlanes[0] = m_fNear;
+
 	// 3단계로 구성
 	_Matrix CascadeViewMatrices[3];
 	_Matrix CascadeProjMatrices[3];
@@ -150,9 +152,6 @@ void CCamera::Calculate_CascadeFrustum()
 	_float fVerticalFovHalfTangent = tanf(m_fFovy * 0.5f);
 	_float fHorizontalFovHalfTangent = fVerticalFovHalfTangent * m_fAspect;
 
-	// 게임에 알맞은 수치를 찾아함
-	m_fNearFarPlanes[0] = m_fNear;
-
 	for (_uint i = 0; i < 3; ++i)
 	{
 		_float fNearX = m_fNearFarPlanes[i] * fVerticalFovHalfTangent;
@@ -164,13 +163,13 @@ void CCamera::Calculate_CascadeFrustum()
 		//Near Far 평면 구성
 		_Vec4 vFrustumCorners[8] =
 		{
-			{fNearX, fNearY, m_fNearFarPlanes[i], 1.0f},	// 우상
 			{-fNearX, fNearY, m_fNearFarPlanes[i], 1.0f},	// 좌상
+			{fNearX, fNearY, m_fNearFarPlanes[i], 1.0f},	// 우상
 			{fNearX, -fNearY, m_fNearFarPlanes[i], 1.0f},	// 우하
 			{-fNearX, -fNearY, m_fNearFarPlanes[i], 1.0f},	// 좌하
 
-			{fFarX, fFarY, m_fNearFarPlanes[i + 1], 1.0f},	// 우상
 			{-fFarX, fFarY, m_fNearFarPlanes[i + 1],1.0f},	// 좌상
+			{fFarX, fFarY, m_fNearFarPlanes[i + 1], 1.0f},	// 우상
 			{fFarX, -fFarY, m_fNearFarPlanes[i + 1],1.0f},	// 우하
 			{-fFarX, -fFarY, m_fNearFarPlanes[i + 1],1.0f}	// 좌하
 		};

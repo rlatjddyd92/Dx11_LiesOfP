@@ -94,7 +94,7 @@ namespace Engine {
 	class CModel;  // CModel에 대한 포워드 선언
 }
 
-namespace physX
+namespace MyPhysX
 {
 	enum GEOMETRY_TYPE { PX_CAPSULE, PX_SPHERE, PX_BOX, PX_MODEL, PX_END };
 

@@ -101,6 +101,7 @@ protected:
 	void Update_Zoom(_float fTimeDelta);
 	void Update_Turn(_float fTimeDelta);
 	void Update_MoveLerp(_float fTimeDelta);
+
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

@@ -332,7 +332,7 @@ HRESULT CItem_Throw::Ready_Components()
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z
 		;
 
-	physX::GeometrySphere SphereDesc;
+	MyPhysX::GeometrySphere SphereDesc;
 	SphereDesc.fRadius = 0.1f;
 	RigidBodyDesc.pGeometryDesc = &SphereDesc;
 

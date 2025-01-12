@@ -22,7 +22,7 @@ public:
         
         _Vec3               vOffset = { 0.f,0.f,0.f };
 
-        physX::Physx_Geometry_Desc*    pGeometryDesc = { nullptr };
+        MyPhysX::Physx_Geometry_Desc*    pGeometryDesc = { nullptr };
         PxRigidDynamicLockFlags PxLockFlags = {};
 
         class CGameObject* pOwner = { nullptr };
@@ -92,22 +92,22 @@ private:
     HRESULT Add_PxGeometry(RIGIDBODY_DESC* pDesc);
 
 
-    inline PxVec3 ConvertToPxVec3(const _Vec3& _vector)
+    PxVec3 ConvertToPxVec3(const _Vec3& _vector)
     {
         return PxVec3(_vector.x, _vector.y, _vector.z);
     }
 
-    inline PxVec4 ConvertToPxVec4(const _Vec4& _vector)
+    PxVec4 ConvertToPxVec4(const _Vec4& _vector)
     {
         return PxVec4(_vector.x, _vector.y, _vector.z, _vector.w);
     }
 
-    inline PxQuat ConvertToPxQuat(const _Quaternion& _Quaternion)
+    PxQuat ConvertToPxQuat(const _Quaternion& _Quaternion)
     {
         return PxQuat(_Quaternion.x, _Quaternion.y, _Quaternion.z, _Quaternion.w);
     }
 
-    inline PxTransform ConvertToPxTransform(const _Vec3& _vector, const _Quaternion& _Quaternion)
+    PxTransform ConvertToPxTransform(const _Vec3& _vector, const _Quaternion& _Quaternion)
     {
         return PxTransform(ConvertToPxVec3(_vector), ConvertToPxQuat(_Quaternion));
     }

@@ -247,7 +247,7 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_X | 
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z;
 
-	physX::GeometryBox BoxDesc;
+	MyPhysX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(2.f, 0.05f, 2.f);
 	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 

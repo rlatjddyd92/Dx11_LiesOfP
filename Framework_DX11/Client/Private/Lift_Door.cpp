@@ -183,7 +183,7 @@ HRESULT CLift_Door::Ready_Components()
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
 		;
 
-	physX::GeometryBox BoxDesc;
+	MyPhysX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(0.3f, 3.f, 3.f);
 	RigidBodyDesc.pGeometryDesc = &BoxDesc;
 

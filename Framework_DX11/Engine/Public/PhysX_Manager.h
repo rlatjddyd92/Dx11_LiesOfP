@@ -119,8 +119,6 @@ private:
     vector<PxRigidStatic*> m_StaticActors;
 
 private:
-    // 주어진 게임 오브젝트의 PhysX 변환 정보를 얻기 위한 함수
-    PxTransform     Get_PhysXTransform(CGameObject* pObject);
     HRESULT         Create_CudaContextManager();
 
 public:
