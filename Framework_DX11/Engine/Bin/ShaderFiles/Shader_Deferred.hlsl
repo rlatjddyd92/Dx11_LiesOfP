@@ -277,9 +277,8 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
 	vector		vLightDir = vPosition - g_vLightPos;
     
     float fDenom = length(vLightDir) / g_fLightRange;
-    //float fAtt = 1.f / (fDenom * fDenom);
-    float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
-    
+    //float     fAtt = 1.f / (fDenom * fDenom);
+    float       fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
 	//float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
     
     Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;

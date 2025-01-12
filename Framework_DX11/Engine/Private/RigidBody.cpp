@@ -224,19 +224,7 @@ void CRigidBody::Remove_Actor()
 
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 {
-
 	PxTransform Transform = ConvertToPxTransform((_Vec3)m_pOwnerTransform->Get_State(CTransform::STATE_POSITION), m_pOwnerTransform->Get_Quaternion());
-
-	//pxcloth
-	//PxCudaContextManagerDesc;
-	//PxSoftBody* cloth = m_pPhysX->createSoftBody(*m_PxCudaContextManager);
-	//m_PxScene->addActor(*cloth);
-
-	//if (pDesc->isCapsule)
-	//{
-	//	PxQuat qq = PxQuat(PxPiDivTwo, PxVec3(0.0f, 0.0f, 1.0f)); // Z축 기준으로 90도 회전
-	//	Transform.q = qq;
-	//}
 
 	if (m_isStatic)
 	{
