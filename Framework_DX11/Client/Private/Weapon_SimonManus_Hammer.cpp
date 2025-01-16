@@ -279,6 +279,5 @@ void CWeapon_SimonManus_Hammer::Free()
 {
 	__super::Free();
 	Safe_Release(m_pExtraColliderCom);
-	Safe_Release(m_pEffect_Manager);
 
 }

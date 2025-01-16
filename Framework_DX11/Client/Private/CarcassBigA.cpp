@@ -74,7 +74,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
-
+	
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
 	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
 
