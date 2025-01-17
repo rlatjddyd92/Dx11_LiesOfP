@@ -218,6 +218,4 @@ CGameObject* CWeapon_Raxasia_P2_Sword::Clone(void* pArg)
 void CWeapon_Raxasia_P2_Sword::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pEffect_Manager);
 }

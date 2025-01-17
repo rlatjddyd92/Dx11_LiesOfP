@@ -221,6 +221,4 @@ CGameObject* CWeapon_Raxasia_P1_Shield::Clone(void* pArg)
 void CWeapon_Raxasia_P1_Shield::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pEffect_Manager);
 }

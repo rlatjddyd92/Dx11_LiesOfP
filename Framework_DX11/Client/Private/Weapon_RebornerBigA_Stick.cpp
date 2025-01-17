@@ -211,6 +211,4 @@ CGameObject* CWeapon_RebornerBigA_Stick::Clone(void* pArg)
 void CWeapon_RebornerBigA_Stick::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pEffect_Manager);
 }

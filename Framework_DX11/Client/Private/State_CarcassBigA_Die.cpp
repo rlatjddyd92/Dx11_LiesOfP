@@ -35,13 +35,13 @@ HRESULT CState_CarcassBigA_Die::Start_State(void* pArg)
 
     if (fDirCheck.y < 0)
     {
-        m_iDirCnt = DIR::DIR_BEHIND;
+        m_iDirCnt = DIR::DIR_FRONT;
     }
     else
     {
-        m_iDirCnt = DIR::DIR_FRONT;
+        m_iDirCnt = DIR::DIR_BEHIND;
     }
-    m_pMonster->Change_Animation(AN_DIE_F + m_iDirCnt, false, 0.1f);
+    m_pMonster->Change_Animation(AN_DIE_B + m_iDirCnt, false, 0.1f);
 
     return S_OK;
 }
@@ -61,7 +61,7 @@ void CState_CarcassBigA_Die::End_State()
 
 _bool CState_CarcassBigA_Die::End_Check()
 {
-    return  m_pMonster->Get_EndAnim(AN_DIE_F + m_iDirCnt);;
+    return  m_pMonster->Get_EndAnim(AN_DIE_B + m_iDirCnt);;
 }
 
 CState_CarcassBigA_Die* CState_CarcassBigA_Die::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
