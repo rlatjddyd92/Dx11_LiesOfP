@@ -100,10 +100,6 @@ void CWeapon_FlameSword::Late_Update(_float fTimeDelta)
 			pEffect->Late_Update(fTimeDelta);
 	}
 
-#ifdef _DEBUG
-	m_pGameInstance->Add_DebugObject(m_pColliderCom);
-
-#endif
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 

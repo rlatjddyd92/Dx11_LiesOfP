@@ -269,7 +269,7 @@ void CController_EffectTool::Render()
 	{
 		Back_EffectContainer();
 	}
-	if (ImGui::Button("Reset Effect Conainer"))
+	if (ImGui::Button("Reset Effect Conainer") || KEY_TAP(KEY::X))
 	{
 		Reset_EffectContainer();
 	}

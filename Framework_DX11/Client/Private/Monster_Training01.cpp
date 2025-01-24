@@ -126,7 +126,7 @@ HRESULT CMonster_Training01::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	m_pColliderCom->Render();
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 
 #endif
 	return S_OK;

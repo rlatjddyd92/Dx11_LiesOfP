@@ -400,6 +400,7 @@ _float CNavigation::Get_CellPosY(_Vec3 vPos, _float fOffset)
 
 HRESULT CNavigation::Render()
 {
+	return S_OK;
 
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;

@@ -55,8 +55,6 @@ void CColliderObject::Priority_Update(_float fTimeDelta)
 
 void CColliderObject::Update(_float fTimeDelta)
 {
-	//__super::Update(fTimeDelta);
-
 	m_OldWroldMatrix = m_WorldMatrix;
 
 	XMStoreFloat4x4(&m_WorldMatrix, (*m_pSocketMatrix) * (*m_pParentMatrix));
@@ -70,11 +68,6 @@ void CColliderObject::Update(_float fTimeDelta)
 
 void CColliderObject::Late_Update(_float fTimeDelta)
 {
-	//if (!m_pColliderCom->IsActive())
-	//	return;
-
-
-
 	if (nullptr != m_pColliderCom)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
@@ -88,7 +81,7 @@ HRESULT CColliderObject::Render()
 {
 	
 #ifdef _DEBUG
-	m_pColliderCom->Render();
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif
 
 	return S_OK;

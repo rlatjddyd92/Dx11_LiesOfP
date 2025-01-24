@@ -221,7 +221,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
         //비금속 - 알베도값에 의존
         //금속- Fresnel 값 F가 중요
         float3 kd = lerp(float3(1.f, 1.f, 1.f) - F, float3(0.f, 0.f, 0.f), fMetallic);
-        float3 vDiffuseBRDF = kd * vAlbedo;
+        float3 vDiffuseBRDF = vAlbedo / 3.141592f;
         float3 vSpecularBRDF = (F * D * G) / max(0.00001f, 4.0 * cosLi * cosLo);
     
         fAmbietnOcc = pow(fAmbietnOcc, 2.2f);
@@ -324,7 +324,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
         //비금속 - 알베도값에 의존
         //금속- Fresnel 값 F가 중요
         float3 kd = lerp(float3(1.f, 1.f, 1.f) - F, float3(0.f, 0.f, 0.f), fMetallic);
-        float3 vDiffuseBRDF = kd * vAlbedo;
+        float3 vDiffuseBRDF = vAlbedo / 3.141592f;
         float3 vSpecularBRDF = (F * D * G) / max(0.00001f, 4.0 * cosLi * cosLo);
     
         fAmbietnOcc = pow(fAmbietnOcc, 2.2f);
@@ -411,7 +411,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT_PBR(PS_IN In)
         //비금속 - 알베도값에 의존
         //금속- Fresnel 값 F가 중요
         float3 kd = lerp(float3(1.f, 1.f, 1.f) - F, float3(0.f, 0.f, 0.f), fMetallic);
-        float3 vDiffuseBRDF = kd * vAlbedo;
+        float3 vDiffuseBRDF = vAlbedo / 3.141592f;
         float3 vSpecularBRDF = (F * D * G) / max(0.00001f, 4.0 * cosLi * cosLo);
     
         fAmbietnOcc = pow(fAmbietnOcc, 2.2f);

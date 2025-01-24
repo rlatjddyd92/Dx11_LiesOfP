@@ -170,7 +170,8 @@ private:
 
 #ifdef _DEBUG
 private:
-	HRESULT Render_Debug();
+	HRESULT Render_Debug_Collider();
+	HRESULT Render_Debug_RenderTarget();
 
 #endif
 

@@ -102,8 +102,7 @@ HRESULT CPawn::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	m_pColliderCom->Render();
-	m_pNavigationCom->Render();
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif
 
 	return S_OK;

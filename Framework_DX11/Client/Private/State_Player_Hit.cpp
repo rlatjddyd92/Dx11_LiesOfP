@@ -60,7 +60,7 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
             m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.05f);
 
         m_eHitType = eType;
-        m_iChangeFrame = m_pPlayer->Get_Model()->Get_LastFrame_CurrentAnim(m_iAnimation_Hit[m_eHitType]) - 35;
+        m_iChangeFrame = m_pPlayer->Get_Model()->Get_LastFrame_CurrentAnim(m_iAnimation_Hit[m_eHitType]) - 15;
     }
 
     

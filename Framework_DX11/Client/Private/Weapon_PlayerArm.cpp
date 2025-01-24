@@ -76,19 +76,12 @@ void CWeapon_PlayerArm::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-
-#ifdef _DEBUG
-	m_pGameInstance->Add_DebugObject(m_pColliderCom);
-#endif
 }
 
 HRESULT CWeapon_PlayerArm::Render()
 {
-	//if (FAILED(__super::Render()))
-	//	return E_FAIL;
-
 #ifdef _DEBUG
-	m_pColliderCom->Render();
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif
 	return S_OK;
 }
@@ -126,6 +119,8 @@ void CWeapon_PlayerArm::OnCollisionEnter(CGameObject* pOther)
 				// 사우드 및 각종 이펙트
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_CounterCharge_Explosion"),
 					m_WorldMatrix.Translation());
+
+				m_pSoundCom[WEP_SOUND_EFFECT1]->Play2D(TEXT("SE_PC_SK_FX_FlameThrower_Upgrade_Explo_01.wav"), &g_fEffectVolume);
 			}
 		}
 	}

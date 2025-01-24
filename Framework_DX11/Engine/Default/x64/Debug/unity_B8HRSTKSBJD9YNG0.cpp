@@ -44,9 +44,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\CSVFile_Manager.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\MyContextManagerCallback.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp"
 
 
@@ -108,9 +105,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\private\Navigation.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\NvCloth_Manager.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"
@@ -204,9 +198,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\private\VIBuffer_Instancing.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_PhysX.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_Point_Instance.cpp"

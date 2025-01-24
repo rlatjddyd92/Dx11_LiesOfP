@@ -82,6 +82,12 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 				m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
 			}
 		}
+
+		if(KEY_TAP(KEY::Z))
+		{
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.f, 5.f, -5.f));
+			m_pTransformCom->LookAt(_Vec4(0.f, 0.f, 0.f, 1.f));
+		}
 	}
 	else
 	{

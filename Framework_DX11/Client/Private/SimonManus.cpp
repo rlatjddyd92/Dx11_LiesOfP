@@ -416,10 +416,15 @@ HRESULT CSimonManus::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	m_pColliderCom->Render();
+
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+	m_pGameInstance->Add_DebugObject(m_EXCollider[LEG_LEFT]);
+	m_pGameInstance->Add_DebugObject(m_EXCollider[LEG_RIGHT]);
+	m_pGameInstance->Add_DebugObject(m_EXCollider[LOWERBODY]);
+	/*m_pColliderCom->Render();
 	m_EXCollider[LEG_LEFT]->Render();
 	m_EXCollider[LEG_RIGHT]->Render();
-	m_EXCollider[LOWERBODY]->Render();
+	m_EXCollider[LOWERBODY]->Render();*/
 #endif
 
 	return S_OK;

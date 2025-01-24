@@ -89,6 +89,8 @@ void CCollider::Reset_Bounding()
 #ifdef _DEBUG
 HRESULT CCollider::Render()
 {
+	return S_OK;
+
 	m_pContext->GSSetShader(nullptr, nullptr, 0);
 
 	m_pEffect->SetWorld(XMMatrixIdentity());

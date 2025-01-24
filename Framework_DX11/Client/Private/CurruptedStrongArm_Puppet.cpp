@@ -176,15 +176,15 @@ HRESULT CCurruptedStrongArm_Puppet::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	m_pColliderCom->Render();
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+
 	for(_int i = 0; i < CT_END - 1; ++i)
 	{
-		m_EXCollider[i]->Render();
+		m_pGameInstance->Add_DebugObject(m_EXCollider[i]);
 	}
 
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
-		//m_pColliderObject[i]->Active_Collider();
 		m_pColliderObject[i]->Render();
 	}
 #endif

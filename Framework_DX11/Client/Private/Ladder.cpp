@@ -73,9 +73,8 @@ void CLadder::Late_Update(_float fTimeDelta)
 
 
 #ifdef _DEBUG
-	if (m_pColliderCom != nullptr)
-		m_pGameInstance->Add_DebugObject(m_pColliderCom[UP]);
-		m_pGameInstance->Add_DebugObject(m_pColliderCom[DOWN]);
+	m_pGameInstance->Add_DebugObject(m_pColliderCom[UP]);
+	m_pGameInstance->Add_DebugObject(m_pColliderCom[DOWN]);
 #endif
 }
 

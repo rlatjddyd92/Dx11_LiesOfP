@@ -119,10 +119,6 @@ HRESULT CMonster_Training02::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-#ifdef _DEBUG
-	m_pColliderCom->Render();
-
-#endif
 	return S_OK;
 }
 

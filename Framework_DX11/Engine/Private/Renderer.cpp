@@ -196,16 +196,20 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_PickDepth"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_PickObjectDepth"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 500.f, 200.f, 200.f)))
-		return E_FAIL;
-	
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 300.f, 100.f, 200.f, 200.f)))
+
+	/*if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Depth"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 	
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_ARM"), 300.f, 100.f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Emessive"), 300.f, 300.f, 200.f, 200.f)))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_RimLight"), 300.f, 500.f, 200.f, 200.f)))
+		return E_FAIL;*/
 #endif
 
 
@@ -227,6 +231,13 @@ HRESULT CRenderer::Add_RenderObject(RENDERGROUP eRenderGroupID, CGameObject * pR
 
 HRESULT CRenderer::Draw()
 {
+	//m_isOnPBR = true;
+	//m_tHDR.isOnHDR = true;
+	//m_tSSAO.isOnSSAO = false;
+	////m_isOnShadow = false;
+	//m_tDOF.isOnDOF = false;
+	//m_tRadial.isOnRadial = false;
+
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 	if (FAILED(Render_Height()))
@@ -278,16 +289,20 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
 
-	if (FAILED(Render_UI()))
-		return E_FAIL;
-
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::F1))
 		m_isDebugRender = !m_isDebugRender;
 
-	if (FAILED(Render_Debug()))
+	if (FAILED(Render_Debug_Collider()))
+		return E_FAIL;
+#endif	
+
+	if (FAILED(Render_UI()))
 		return E_FAIL;
 
+#ifdef _DEBUG
+	if (FAILED(Render_Debug_RenderTarget()))
+		return E_FAIL;
 #endif	
 
 	return S_OK;
@@ -1360,9 +1375,6 @@ HRESULT CRenderer::Render_UI()
 	}
 	m_RenderObjects[RG_UI].clear();
 
-	//¿ÁÆ®¸® ·»´õ
-	//m_pGameInstance->World_Octree_Render();
-
 	return S_OK;
 }
 
@@ -1898,15 +1910,15 @@ HRESULT CRenderer::Ready_Shader()
 	return S_OK;
 }
 
+
+
 #ifdef _DEBUG
 
-HRESULT CRenderer::Render_Debug()
+HRESULT CRenderer::Render_Debug_Collider()
 {
-	if (!m_isDebugRender)
-		return S_OK;
-
 	for (auto& pDebugCom : m_DebugObjects)
 	{
+		if (m_isDebugRender)
 			pDebugCom->Render();
 
 		Safe_Release(pDebugCom);
@@ -1914,15 +1926,23 @@ HRESULT CRenderer::Render_Debug()
 
 	m_DebugObjects.clear();
 
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Debug_RenderTarget()
+{
+	if (!m_isDebugRender)
+		return S_OK;
+
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL; 
-	
+		return E_FAIL;
+
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Lights"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Effect"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Distortion"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Cascade"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO"), m_pShader, m_pVIBuffer);
 
 	return S_OK;
 }

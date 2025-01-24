@@ -187,6 +187,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//GET_GAMEINTERFACE->Start_Tutorial_Talking(); // 제미니 대화부터 시작하는 함수, Start_Tutorial 함수를 쓰면 대화 없이 바로 튜토리얼 진행 
 	
+	m_pTransformCom->Rotation(0.f, -90.f, 0.f);
+
 	return S_OK;
 }
 
@@ -233,12 +235,14 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	}
 	for (auto& pEffect : m_DissolveEffects)
 	{
+
 		pEffect->Priority_Update(fTimeDelta);
 	}
 
 	if (Key_Tab(KEY::B))
 	{
-		m_tPlayer_Stat_Adjust->iErgo = -2320;
+		m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1287); // 튜토리얼
+		m_pPlayerCamera->Move_PlayerBackPos();
 	}
 }
 
@@ -286,6 +290,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	for (auto& pEffect : m_DissolveEffects)
 	{
+
 		pEffect->Update(fTimeDelta);
 	}
 
@@ -872,6 +877,9 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				m_isGuardSlow = false;
 			}
 
+
+			Choice_GuardSound(iAttackStrength, iHitType, true);
+
 			return false;
 		}
 		else if (m_isParry)
@@ -899,11 +907,11 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			}
 			else if (ATK_WEAK == iAttackStrength)
 			{
-				if (0)
+				if (rand() % 2)
 				{
 					if (nullptr != pAttackerMonster)
 					{
-						m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
+						m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), m_pWeapon_Arm->Get_Position());
 						pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
 					}
 
@@ -911,16 +919,17 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				}
 				else
 				{
+					Choice_GuardSound(iAttackStrength, iHitType, false);
 					m_pFsmCom->Change_State(ARM_GURAD_WEAK);
 				}
 			}
 			else if (ATK_NORMAL == iAttackStrength)
 			{
-				if (0)
+				if (rand() % 2)
 				{
 					if (nullptr != pAttackerMonster)
 					{
-						m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
+						m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), m_pWeapon_Arm->Get_Position());
 						pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
 					}
 
@@ -928,11 +937,13 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				}
 				else
 				{
+					Choice_GuardSound(iAttackStrength, iHitType, false);
 					m_pFsmCom->Change_State(ARM_GURAD_HARD);
 				}
 			}
 			else if (ATK_STRONG == iAttackStrength)
 			{
+				Choice_GuardSound(iAttackStrength, iHitType, false);
 				m_pFsmCom->Change_State(ARM_GURAD_HEAVY);
 			}
 
@@ -989,6 +1000,9 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 				m_isGuardSlow = false;
 			}
+
+
+			Choice_GuardSound(iAttackStrength, iHitType, true);
 		}
 		else
 		{
@@ -1027,7 +1041,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			else
 				m_pFsmCom->Change_State(TH_GUARDHIT, &isStrong);
 
-			Choice_GuardSound(0, 0, false);
+			Choice_GuardSound(iAttackStrength, iHitType, false);
 			return false;
 		}
 	}
@@ -2216,9 +2230,15 @@ HRESULT CPlayer::Ready_Effect()
 
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Poison");
 	m_DissolveEffects[DISSOLVE_POISON] = static_cast<CDissolve_Poison*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Poison"), &DissolveDesc));
+	if (nullptr == m_DissolveEffects[DISSOLVE_POISON])
+		return E_FAIL;
 
 	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Electric");
 	m_DissolveEffects[DISSOLVE_ELECTRIC] = static_cast<CDissolve_Electric*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Electric"), &DissolveDesc));
+	if (nullptr == m_DissolveEffects[DISSOLVE_ELECTRIC])
+		return E_FAIL;
+
+
 	return S_OK;
 }
 

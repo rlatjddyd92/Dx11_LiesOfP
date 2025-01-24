@@ -183,10 +183,11 @@ HRESULT CCarcassTail::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	m_pColliderCom->Render();
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+
 	for (_uint i = 0; i <CT_END - 1; ++i)
 	{
-		m_EXCollider[i]->Render();
+		m_pGameInstance->Add_DebugObject(m_EXCollider[i]);
 	}
 #endif
 	return S_OK;

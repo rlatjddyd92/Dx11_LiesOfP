@@ -41,7 +41,7 @@ void CState_Player_Arm_ParryBomb::Update(_float fTimeDelta)
         return;
     }
 
-    //Control_Sound();
+    Control_Sound();
 }
 
 void CState_Player_Arm_ParryBomb::End_State()
@@ -60,7 +60,7 @@ void CState_Player_Arm_ParryBomb::Control_Sound()
 
     if ((iFrame == m_iSoundFrame || iFrame == m_iSoundFrame + 1) && !m_isPlaySound)
     {
-        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_Rapier_1H_H_FableArts_Parry_01.wav"));
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_FlameThrower_Upgrade_Explo_01.wav"));
         m_isPlaySound = true;
     }
     else

@@ -1538,12 +1538,12 @@ void CController_MapTool::Light_Create()
 	if (ImGui::RadioButton("Spot", iLightType == Light_Spot))
 	{
 		iLightType = Light_Spot;
-	} ImGui::SameLine();
+	} //ImGui::SameLine();
 
-	if (ImGui::RadioButton("GodRay", iLightType == Light_GodRay))
+	/*if (ImGui::RadioButton("GodRay", iLightType == Light_GodRay))
 	{
 		iLightType = Light_GodRay;
-	}
+	}*/
 
 	static _Vec4 vDirection = { 1.f,1.f,1.f,0.f };
 	static _Vec4 vPosition = { 0.f,0.f,0.f,1.f };

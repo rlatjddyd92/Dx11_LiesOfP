@@ -99,9 +99,6 @@ void CWeapon::Late_Update(_float fTimeDelta)
 {
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
-
-	/*if (nullptr != m_pColliderCom)
-		m_pGameInstance->Add_ColliderList(m_pColliderCom);*/
 }
 
 HRESULT CWeapon::Render()
@@ -175,9 +172,11 @@ HRESULT CWeapon::Render()
 	m_fEmissiveMask = 0.f;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
 		return E_FAIL;
+
+
 #ifdef _DEBUG
 	if(nullptr != m_pColliderCom)
-		m_pColliderCom->Render();
+		m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif
 
 	return S_OK;

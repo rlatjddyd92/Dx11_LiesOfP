@@ -132,7 +132,7 @@ void CCamera_Manager::Update_DOF()
 
 	if (tDesc->isOnDOF)
 	{
-		ImGui::Checkbox("DOF Inverse", &isInverse);
+		//ImGui::Checkbox("DOF Inverse", &isInverse);
 		ImGui::DragFloat("DOF", &fDOF, 0.001f);
 	}
 

@@ -80,7 +80,7 @@ HRESULT CPlayerCollider_Fatal::Render()
 {
 
 #ifdef _DEBUG
-	m_pColliderCom->Render();
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif
 
 	return S_OK;
