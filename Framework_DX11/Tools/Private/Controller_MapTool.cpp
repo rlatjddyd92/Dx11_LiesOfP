@@ -267,7 +267,7 @@ void CController_MapTool::Pick_Object()
 	ImGui::DragFloat3("Rotation(X, Y, Z)", (_float*)&vRot, 0.05f, -360.f, 360.f, 0);
 	ImGui::DragFloat3("Position(X, Y, Z)", (_float*)&vPos, 0.05f, -5000.f, 5000.f, 0);
 
-	ImGui::InputInt("RenderTarget ID", &iSelectObj_RenderTargetID);
+	ImGui::InputInt("Object ID", &iSelectObj_RenderTargetID);
 	ImGui::Checkbox("Render Shadow", &bShadow);
 
 	ImGui::PopItemWidth();
