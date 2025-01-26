@@ -127,14 +127,14 @@ PS_OUT PS_MAIN(PS_IN In)
     if (vDecalDiffuse.r <= 0.3f)
         discard;
     
-    Out.vColor = vDecalDiffuse;
-    
-    if(bUseWorldColor)
+    if (bUseWorldColor)
     {
         Out.vColor.a = 0;
-        
+        vector vWorldColor = g_DiffuseTexture.Sample(PointSampler, vTexUV);
+        Out.vColor = vWorldColor;
     }
-   
+    else
+        Out.vColor = vDecalDiffuse;
     
     if (bNormal)
     {
