@@ -77,6 +77,7 @@ void CState_RebornerMaleFire_Breath::End_State()
 {
     m_pMonster->DeActive_Effect(0);
 
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
     m_pMonster->DeActive_CurrentWeaponCollider(0);
     m_pMonster->DeActive_Debuff(0);
 }
@@ -144,7 +145,6 @@ void CState_RebornerMaleFire_Breath::Sound_Check(_double CurTrackPos)
     //    {
     //        if (!m_bSwingSound)
     //        {
-    //            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
     //            m_bSwingSound = true;
     //        }
     //    }
@@ -157,8 +157,9 @@ void CState_RebornerMaleFire_Breath::Effect_Check(_double CurTrackPos)
     {
         if (!m_bBreath)
         {
-            if (CurTrackPos >= 60.f)
+            if (CurTrackPos >= 60.f)//SE_NPC_SK_FX_Fire_L
             {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Fire_L.wav"), false);
                 m_pMonster->Active_Effect(0);
                 m_bBreath = true;
             }
@@ -170,6 +171,7 @@ void CState_RebornerMaleFire_Breath::Effect_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 15.f)
             {
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
                 m_pMonster->DeActive_Effect(0);
                 m_bBreath = false;
             }

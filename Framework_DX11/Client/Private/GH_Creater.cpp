@@ -30,7 +30,7 @@ HRESULT CGH_Creater::Initialize(void* pArg)
 	Safe_AddRef(m_pManus);
 
 	m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));
-	m_fGodHandsDelay = 5.f;
+	m_fGodHandsDelay = 1.f;
 	return S_OK;
 }
 
@@ -56,6 +56,7 @@ void CGH_Creater::Update(_float fTimeDelta)
 
 		CAttackObject::ATKOBJ_DESC Desc;
 		Desc.vPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION)};
+		Desc.vDir = -_Vec3{ m_pManus->Get_TargetDir() };
 		Desc.pOwner = m_pManus;
 
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_GodHands"), &Desc);

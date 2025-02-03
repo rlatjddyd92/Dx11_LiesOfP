@@ -119,9 +119,11 @@ void CState_CarcassTail_ScratchingToSwip::Collider_Check(_double CurTrackPos)
             if (m_iFirstAnim == AN_ROUTE_FIRST_L)
             {
                 m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+                m_pMonster->Active_CurrentWeaponCollider(1.1f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
             }
             else
             {
+                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
                 m_pMonster->Active_CurrentWeaponCollider(1.1f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
             }
         }
@@ -130,9 +132,11 @@ void CState_CarcassTail_ScratchingToSwip::Collider_Check(_double CurTrackPos)
             if (m_iFirstAnim == AN_ROUTE_FIRST_L)
             {
                 m_pMonster->DeActive_CurrentWeaponCollider(0);
+                m_pMonster->DeActive_CurrentWeaponCollider(1);
             }
             else
             {
+                m_pMonster->DeActive_CurrentWeaponCollider(0);
                 m_pMonster->DeActive_CurrentWeaponCollider(1);
             }
         }

@@ -159,7 +159,6 @@ void CCamera_Manager::Update_Radial()
 	{
 		ImGui::DragFloat("CenterX", &vCenterPos.x, 0.02f);
 		ImGui::DragFloat("CenterY", &vCenterPos.y, 0.02f);
-		ImGui::DragFloat("Radius", &fRadius, 0.02f);
 		ImGui::DragFloat("RadialPower", &fRadialPower, 0.005f);
 	}
 

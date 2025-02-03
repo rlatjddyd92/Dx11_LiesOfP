@@ -28,6 +28,7 @@ HRESULT CState_RebornerMaleFire_Die::Start_State(void* pArg)
     _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
     _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
 
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
 
     _Vec3 vCrossUp = vRight.Cross(vTargetDir);
 

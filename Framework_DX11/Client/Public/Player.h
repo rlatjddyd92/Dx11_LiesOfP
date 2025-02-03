@@ -99,9 +99,9 @@ public:
 			fDebuff_Electric = { 0.f,0.f };
 			fDebuff_Acid = { 0.f,0.f };
 
-			 fResist_Fire = 0.f;
-			 fResist_Electric = 0.f;
-			 fResist_Acid = 0.f;
+			fResist_Fire = 0.f;
+			fResist_Electric = 0.f;
+			fResist_Acid = 0.f;
 		};
 
 		// 유저 레벨 
@@ -165,7 +165,7 @@ public:
 #pragma endregion
 
 public:
-	CPlayerCamera*			Get_Camera() { return m_pPlayerCamera; }
+	CPlayerCamera* Get_Camera() { return m_pPlayerCamera; }
 	void					Set_Camera(class CPlayerCamera* pCamera) { m_pPlayerCamera = pCamera; }
 
 	_bool					Get_IsJump() { return m_isJump; }
@@ -189,7 +189,7 @@ public:
 		if (isArm)
 			m_fArmRecoveryTime = 1.f;
 	}
-	_Vec2*					Get_ArmGuage_Ptr() { return &m_vGuage_Arm; }
+	_Vec2* Get_ArmGuage_Ptr() { return &m_vGuage_Arm; }
 
 	_bool					Get_IsParry() { return m_isParry; }
 	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
@@ -205,11 +205,11 @@ public:
 
 	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
-	class CWeapon*			Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
+	class CWeapon* Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
 
 	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{ 0,0,0,0 }; }
 
-	class CMonster*			Get_TargetMonster() { return m_pTargetMonster; }
+	class CMonster* Get_TargetMonster() { return m_pTargetMonster; }
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
@@ -292,7 +292,7 @@ public:
 
 	void			Toggle_LockOn();
 	void			Off_LockOn();
-	CMonster*		Find_TargetMonster();
+	CMonster* Find_TargetMonster();
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
