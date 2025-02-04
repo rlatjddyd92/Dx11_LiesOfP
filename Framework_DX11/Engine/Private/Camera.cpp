@@ -192,7 +192,7 @@ void CCamera::Calculate_CascadeFrustum()
 		}
 		fRadius = ceil(fRadius * 16.f) / 16.f;	// ¿Ã¸²
 
-		_Vec3 vMaxExtents = _Vec3(fRadius, fRadius, fRadius + 5.f);
+		_Vec3 vMaxExtents = _Vec3(fRadius, fRadius, fRadius + 50.f);
 		_Vec3 vMinExtents = -vMaxExtents;
 
 		_Vec3 vShadowCamPos = _Vec3(vCenterPos) + (vLightDir * vMinExtents.z);
