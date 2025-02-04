@@ -160,26 +160,11 @@
     <Filter Include="97.ShaderFiles\99.UI_Shader">
       <UniqueIdentifier>{b83c9fd9-a108-45c5-8e6f-296e8b63c2da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject">
-      <UniqueIdentifier>{ce4ea603-046b-4d4c-bb5e-c2d7a15acc70}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus">
-      <UniqueIdentifier>{69123db6-9c86-4773-9c4d-290a4b3f972c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\StampBlast">
-      <UniqueIdentifier>{ccceba3e-2e39-473e-8a58-3e8f8e2816d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97.ShaderFiles\Effect\Compute">
       <UniqueIdentifier>{ede8ee30-c961-464c-89ae-e58d78db771c}</UniqueIdentifier>
     </Filter>
     <Filter Include="97.ShaderFiles\Effect\Vtx">
       <UniqueIdentifier>{9ab855b2-1a6b-463a-9090-dda8739cec69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ChargeSwing">
-      <UniqueIdentifier>{8f3085a2-11c3-46f3-b3de-5e5066470893}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\BlackBall">
-      <UniqueIdentifier>{39713752-8c79-4b97-957c-30f68e5c7e25}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option %2850%25%29">
       <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
@@ -205,41 +190,14 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29">
       <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Wave">
-      <UniqueIdentifier>{3fbe7865-eaf5-4108-95d7-66b4e0d1fc8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %2850%25%29">
       <UniqueIdentifier>{94ad924a-4751-4924-aeb7-673aedf1ec24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GoldBall">
-      <UniqueIdentifier>{de88a1cd-d5b9-4174-ab42-21ca9c1bbdf1}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\14.CutScene">
       <UniqueIdentifier>{9c37d23a-9c1b-4b27-a4e0-a4b833b353e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderCalling">
-      <UniqueIdentifier>{6a300c4f-6744-4bb0-a855-c4c8bcb7461f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder">
-      <UniqueIdentifier>{852ff816-edba-4ba7-a46b-861b911b05b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningBall">
-      <UniqueIdentifier>{f0a993e7-6c4c-4c57-be39-8dbd132df27c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear">
-      <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\02.Player_Stat_Manager">
       <UniqueIdentifier>{a1e3baf8-3478-4ec4-89c1-68e0b1ea6bdf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GH_Creater">
-      <UniqueIdentifier>{37ed73ea-0466-4018-9b66-8c9743635a9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GH_Creater\GodHands">
-      <UniqueIdentifier>{8f7485cc-d647-4c77-8b7e-5d47d74e71e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Stomp">
-      <UniqueIdentifier>{4c93ec4b-622d-4d23-9b30-e71e06b6e88e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\06.Weapon\02.Raxasia">
       <UniqueIdentifier>{686b6fc9-f25f-4429-83b5-c02d738f1171}</UniqueIdentifier>
@@ -343,30 +301,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Common">
       <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia">
-      <UniqueIdentifier>{dfc59883-117b-4770-8849-f5ae3b3c80ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderMark">
-      <UniqueIdentifier>{8107f50c-2e8a-4ca7-8188-c1096eb9639f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBlast">
-      <UniqueIdentifier>{7dc222b7-f853-4f65-8a39-500e8e478b14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderSpread">
-      <UniqueIdentifier>{17abbeb9-fd4e-46bb-abaf-b28fe80ad541}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderStamp">
-      <UniqueIdentifier>{9828ed59-03f5-4eba-8281-0708f9de8453}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderLanding">
-      <UniqueIdentifier>{f261e074-745b-4cb3-beee-c9db38cc05ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderWave">
-      <UniqueIdentifier>{5b4d3dba-dc37-475f-925f-28ef39f22066}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark">
-      <UniqueIdentifier>{77dace17-07fa-459c-8365-865c87cf129f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\06.Weapon\03.RebornerBigA">
       <UniqueIdentifier>{5f8abec3-18b0-4b92-8a40-fb6f85898890}</UniqueIdentifier>
     </Filter>
@@ -442,15 +376,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status">
       <UniqueIdentifier>{71207553-8ab5-4308-abcf-fde764d7ecf6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\RebornerMale">
-      <UniqueIdentifier>{6eda7376-8972-4109-8ea0-2c4f83ca7d36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\RebornerMale\Bullet">
-      <UniqueIdentifier>{a51c15c9-f261-47de-b895-70fdb9d8199b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderDischarge">
-      <UniqueIdentifier>{9c2b992e-d2e7-4b03-ba9f-da2a9beca625}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D">
       <UniqueIdentifier>{86955ff6-8ad3-4d95-8c1f-e0f6a81039f2}</UniqueIdentifier>
     </Filter>
@@ -522,12 +447,6 @@
     </Filter>
     <Filter Include="02.GameObjects\06.Weapon\05.RebornerMaleFire">
       <UniqueIdentifier>{f2067b83-e48a-48b7-9236-ad02f88eb6f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\RebornerMaleFire">
-      <UniqueIdentifier>{8c86135a-0043-437a-a20c-60d147f2470d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion">
-      <UniqueIdentifier>{ccbccaef-ae58-4cdc-9f1a-818a3f89edc1}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli">
       <UniqueIdentifier>{a85d83ed-2450-48d1-9fa9-bb24488e553c}</UniqueIdentifier>
@@ -1366,9 +1285,6 @@
     <Filter Include="04.Fsm\Monster\Training\HitFatal">
       <UniqueIdentifier>{57b88088-8a84-46a1-bbc7-7dfd8384afd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningImpact">
-      <UniqueIdentifier>{4aa89830-467a-4bc1-a51e-7ee244b7e790}</UniqueIdentifier>
-    </Filter>
     <Filter Include="04.Fsm\Monster\RebornerMale\Attack">
       <UniqueIdentifier>{ce09b9ba-7cfe-48ca-a752-5500d6683265}</UniqueIdentifier>
     </Filter>
@@ -1462,8 +1378,92 @@
     <Filter Include="04.Fsm\Monster\SimonManus\P2\HitFatal">
       <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt">
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject">
+      <UniqueIdentifier>{ce4ea603-046b-4d4c-bb5e-c2d7a15acc70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus">
+      <UniqueIdentifier>{69123db6-9c86-4773-9c4d-290a4b3f972c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\StampBlast">
+      <UniqueIdentifier>{ccceba3e-2e39-473e-8a58-3e8f8e2816d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ChargeSwing">
+      <UniqueIdentifier>{8f3085a2-11c3-46f3-b3de-5e5066470893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\BlackBall">
+      <UniqueIdentifier>{39713752-8c79-4b97-957c-30f68e5c7e25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\Wave">
+      <UniqueIdentifier>{3fbe7865-eaf5-4108-95d7-66b4e0d1fc8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GoldBall">
+      <UniqueIdentifier>{de88a1cd-d5b9-4174-ab42-21ca9c1bbdf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ThunderCalling">
+      <UniqueIdentifier>{6a300c4f-6744-4bb0-a855-c4c8bcb7461f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ThunderCalling\Thunder">
+      <UniqueIdentifier>{852ff816-edba-4ba7-a46b-861b911b05b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningBall">
+      <UniqueIdentifier>{f0a993e7-6c4c-4c57-be39-8dbd132df27c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningBall\LightningSpear">
+      <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GH_Creater">
+      <UniqueIdentifier>{37ed73ea-0466-4018-9b66-8c9743635a9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GH_Creater\GodHands">
+      <UniqueIdentifier>{8f7485cc-d647-4c77-8b7e-5d47d74e71e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\Stomp">
+      <UniqueIdentifier>{4c93ec4b-622d-4d23-9b30-e71e06b6e88e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningImpact">
+      <UniqueIdentifier>{4aa89830-467a-4bc1-a51e-7ee244b7e790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia">
+      <UniqueIdentifier>{dfc59883-117b-4770-8849-f5ae3b3c80ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderMark">
+      <UniqueIdentifier>{8107f50c-2e8a-4ca7-8188-c1096eb9639f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderBlast">
+      <UniqueIdentifier>{7dc222b7-f853-4f65-8a39-500e8e478b14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt">
       <UniqueIdentifier>{c9cb8f31-b95b-4de1-9c95-d26f9bcc814f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderSpread">
+      <UniqueIdentifier>{17abbeb9-fd4e-46bb-abaf-b28fe80ad541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderStamp">
+      <UniqueIdentifier>{9828ed59-03f5-4eba-8281-0708f9de8453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderLanding">
+      <UniqueIdentifier>{f261e074-745b-4cb3-beee-c9db38cc05ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderWave">
+      <UniqueIdentifier>{5b4d3dba-dc37-475f-925f-28ef39f22066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderStampMark">
+      <UniqueIdentifier>{77dace17-07fa-459c-8365-865c87cf129f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderDischarge">
+      <UniqueIdentifier>{9c2b992e-d2e7-4b03-ba9f-da2a9beca625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\RebornerMale">
+      <UniqueIdentifier>{6eda7376-8972-4109-8ea0-2c4f83ca7d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\RebornerMale\Bullet">
+      <UniqueIdentifier>{a51c15c9-f261-47de-b895-70fdb9d8199b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\RebornerMaleFire">
+      <UniqueIdentifier>{8c86135a-0043-437a-a20c-60d147f2470d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\12.AttackObject\RebornerMaleFire\Explosion">
+      <UniqueIdentifier>{ccbccaef-ae58-4cdc-9f1a-818a3f89edc1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2015,10 +2015,10 @@
       <Filter>04.Fsm\Player\Common\Teleport</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AttackObject.h">
-      <Filter>02.GameObjects\12.AttackObject</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_StampBlast.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\StampBlast</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\StampBlast</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Grinder.h">
       <Filter>04.Fsm\Player\Item\Grinder</Filter>
@@ -2027,7 +2027,7 @@
       <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ChargeSwing.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ChargeSwing</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ChargeSwing</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_GetUp.h">
       <Filter>04.Fsm\Player\Common\GetUp</Filter>
@@ -2042,7 +2042,7 @@
       <Filter>02.GameObjects\13.EffectObject\Common\Followed</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_LightningSpear.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningBall\LightningSpear</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
@@ -2072,7 +2072,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Wave.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\Wave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_OpenSophiaDoor.h">
       <Filter>04.Fsm\Player\CutScene\Sophia\Door</Filter>
@@ -2093,7 +2093,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_GoldBall.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Effect.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_Fatal.h">
@@ -2118,28 +2118,28 @@
       <Filter>02.GameObjects\14.CutScene</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderCalling.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ThunderCalling</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Thunder.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_LightningBall.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sophia.h">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_BlackBall.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\BlackBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_GodHands.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GH_Creater\GodHands</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GH_Creater\GodHands</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GH_Creater.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GH_Creater</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GH_Creater</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Stomp.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\Stomp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManus_CutScene_Meet.h">
       <Filter>04.Fsm\Monster\SimonManus\CutScene\Meet</Filter>
@@ -2346,25 +2346,25 @@
       <Filter>04.Fsm\Player\CutScene\Raxasia\Door</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderStamp.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStamp</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderStamp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderSpread.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderSpread</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderSpread</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderMark.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderMark</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderMark</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderLanding.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderLanding</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderLanding</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderBlast.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderBlast</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderStampMark.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderStampMark</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderWave.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderWave</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderWave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\CurruptedStrongArm_Puppet</Filter>
@@ -2382,7 +2382,7 @@
       <Filter>04.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderBolt.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Machine_EffectObj.h">
       <Filter>02.GameObjects\13.EffectObject\Machine</Filter>
@@ -2545,7 +2545,7 @@
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Bullet.h">
-      <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\RebornerMale\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Achievment.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
@@ -2644,7 +2644,7 @@
       <Filter>04.Fsm\Monster\RebornerMaleFire\KnockBack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Explosion.h">
-      <Filter>02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\RebornerMaleFire\Explosion</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BossDoor_Veli.h">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli</Filter>
@@ -2653,7 +2653,7 @@
       <Filter>02.GameObjects\16.Decal\Decal_Blood</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderDischarge.h">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderDischarge</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderDischarge</Filter>
     </ClInclude>
     <ClInclude Include="..\public\BloodTrail.h">
       <Filter>02.GameObjects\02.Pawn\00.Player\BloodTrail</Filter>
@@ -2690,7 +2690,7 @@
       <Filter>04.Fsm\Monster\Training\HitFatal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_LightningImpact.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningImpact</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningImpact</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
       <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
@@ -3230,10 +3230,10 @@
       <Filter>04.Fsm\Player\Common\Teleport</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AttackObject.cpp">
-      <Filter>02.GameObjects\12.AttackObject</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_StampBlast.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\StampBlast</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\StampBlast</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Grinder.cpp">
       <Filter>04.Fsm\Player\Item\Grinder</Filter>
@@ -3242,7 +3242,7 @@
       <Filter>04.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ChargeSwing.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ChargeSwing</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ChargeSwing</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_GetUp.cpp">
       <Filter>04.Fsm\Player\Common\GetUp</Filter>
@@ -3257,7 +3257,7 @@
       <Filter>02.GameObjects\13.EffectObject\Common\Followed</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_LightningSpear.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningBall\LightningSpear</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
@@ -3287,7 +3287,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Wave.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\Wave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OpenSophiaDoor.cpp">
       <Filter>04.Fsm\Player\CutScene\Sophia\Door</Filter>
@@ -3308,7 +3308,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_GoldBall.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Effect.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_Fatal.cpp">
@@ -3333,28 +3333,28 @@
       <Filter>02.GameObjects\14.CutScene</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderCalling.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ThunderCalling</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Thunder.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_LightningBall.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sophia.cpp">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_BlackBall.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\BlackBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_GodHands.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GH_Creater\GodHands</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GH_Creater\GodHands</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GH_Creater.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GH_Creater</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\GH_Creater</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Stomp.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\Stomp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManus_CutScene_Meet.cpp">
       <Filter>04.Fsm\Monster\SimonManus\CutScene\Meet</Filter>
@@ -3561,25 +3561,25 @@
       <Filter>04.Fsm\Player\CutScene\Raxasia\Door</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderStamp.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStamp</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderStamp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderSpread.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderSpread</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderSpread</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderMark.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderMark</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderMark</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderLanding.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderLanding</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderLanding</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderBlast.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderBlast</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderStampMark.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderStampMark</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderWave.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderWave</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderWave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\CurruptedStrongArm_Puppet</Filter>
@@ -3597,7 +3597,7 @@
       <Filter>04.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderBolt.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderBlast\ThunderBolt</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Machine_EffectObj.cpp">
       <Filter>02.GameObjects\13.EffectObject\Machine</Filter>
@@ -3757,7 +3757,7 @@
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Bullet.cpp">
-      <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\RebornerMale\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Achievment.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
@@ -3856,7 +3856,7 @@
       <Filter>04.Fsm\Monster\RebornerMaleFire\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Explosion.cpp">
-      <Filter>02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\RebornerMaleFire\Explosion</Filter>
     </ClCompile>
     <ClCompile Include="..\private\BossDoor_Veli.cpp">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli</Filter>
@@ -3865,7 +3865,7 @@
       <Filter>02.GameObjects\16.Decal\Decal_Blood</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderDischarge.cpp">
-      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderDischarge</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\Raxasia\ThunderDischarge</Filter>
     </ClCompile>
     <ClCompile Include="..\private\BloodTrail.cpp">
       <Filter>02.GameObjects\02.Pawn\00.Player\BloodTrail</Filter>
@@ -3899,7 +3899,7 @@
       <Filter>04.Fsm\Monster\Training\HitFatal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_LightningImpact.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningImpact</Filter>
+      <Filter>02.GameObjects\13.EffectObject\12.AttackObject\SimonManus\LightningImpact</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
       <Filter>04.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
