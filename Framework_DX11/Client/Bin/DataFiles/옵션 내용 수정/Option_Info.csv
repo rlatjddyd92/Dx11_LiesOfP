@@ -1,0 +1,37 @@
+﻿_TabNum,_TabName,_LineFunc,_LineName,_LineKey,_BoolLeftName,_BoolRightName,_SlideInt,_SlideMin,_SlideDefault,_SlideMax,_SlideInter,_DropSize,_Drop0,_Drop1,_Drop2,_Drop3,_Drop4,_Drop5,_Drop6,_Drop7,_Drop8,_Drop9,_Drop10,_Drop11,_Drop12,_Drop13,_Drop14,_Description
+0,그래픽,0,그래픽 효과 설정,11100100,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,그래픽에 적용할 특수 효과를 선택합니다.
+0,그래픽,2,SSAO,1,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,SSAO 효과를 적용합니다.
+0,그래픽,2,HDR,2,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,HDR 효과를 적용합니다.
+0,그래픽,2,Glow,3,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Glow 효과를 적용합니다.
+0,그래픽,2,DOF,4,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,DOF 효과를 적용합니다.
+0,그래픽,2,PBR,5,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,PBR 효과를 적용합니다.
+0,그래픽,2,Shadow,6,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Shadow 효과를 적용합니다.
+1,사운드,0,사운드 크기 조절,11100101,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임 내 사운드의 볼륨을 조절합니다.
+1,사운드,4,배경 음악,8,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,배경 음악의 크기를 조절합니다.
+1,사운드,4,효과음,9,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,각종 동작 및 스킬 등 게임 플레이 행동의 소리를 조절합니다.
+1,사운드,4,등장인물 음성,10,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임 등장인물의 목소리 크기를 조절합니다.
+1,사운드,4,환경,11,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,플레이어 주변에서 들려오는 소리를 조절합니다.
+1,사운드,4,UI 조작,12,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,UI 조작 효과음을 조절합니다. 
+1,사운드,4,컷신 볼륨,13,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,컷신의 음량을 조절합니다.
+1,그래픽,2,SSAO,1,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,SSAO 효과를 적용합니다.
+1,그래픽,2,HDR,2,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,HDR 효과를 적용합니다.
+1,그래픽,2,Glow,3,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Glow 효과를 적용합니다.
+1,그래픽,2,DOF,4,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,DOF 효과를 적용합니다.
+1,그래픽,2,PBR,5,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,PBR 효과를 적용합니다.
+1,그래픽,2,Shadow,6,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Shadow 효과를 적용합니다.
+2,게임 종료,1,게임 종료하기,11100037,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임을 종료합니다.
+3,그래픽,0,그래픽 효과 설정,11100100,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,그래픽에 적용할 특수 효과를 선택합니다.
+3,그래픽,2,SSAO,1,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,SSAO 효과를 적용합니다.
+3,그래픽,2,HDR,2,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,HDR 효과를 적용합니다.
+3,그래픽,2,Glow,3,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Glow 효과를 적용합니다.
+3,그래픽,2,DOF,4,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,DOF 효과를 적용합니다.
+3,그래픽,2,PBR,5,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,PBR 효과를 적용합니다.
+3,그래픽,2,Shadow,6,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Shadow 효과를 적용합니다.
+4,사운드,0,사운드 크기 조절,11100101,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임 내 사운드의 볼륨을 조절합니다.
+4,사운드,4,배경 음악,8,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,배경 음악의 크기를 조절합니다.
+4,사운드,4,효과음,9,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,각종 동작 및 스킬 등 게임 플레이 행동의 소리를 조절합니다.
+4,사운드,4,등장인물 음성,10,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임 등장인물의 목소리 크기를 조절합니다.
+4,사운드,4,환경,11,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,플레이어 주변에서 들려오는 소리를 조절합니다.
+4,사운드,4,UI 조작,12,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,UI 조작 효과음을 조절합니다. 
+4,사운드,4,컷신 볼륨,13,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,컷신의 음량을 조절합니다.
+5,게임 종료,1,게임 종료하기,11100037,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임을 종료합니다.

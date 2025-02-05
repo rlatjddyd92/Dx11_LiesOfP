@@ -118,6 +118,7 @@ HRESULT CUIPage_Loading::Ready_UIPart_Group_Control()
 		pNew->strName = vecBuffer[i + 1][1];
 		pNew->strRole_First = vecBuffer[i + 1][2];
 		pNew->strRole_Second = vecBuffer[i + 1][3];
+		pNew->strRole_Third = vecBuffer[i + 1][4];
 
 		m_vecCreadit[i] = pNew;
 	}
@@ -128,6 +129,7 @@ HRESULT CUIPage_Loading::Ready_UIPart_Group_Control()
 	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_NAME))]->strText = m_vecCreadit[m_iCreadit_Count]->strName;
 	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_ROLE_0))]->strText = m_vecCreadit[m_iCreadit_Count]->strRole_First;
 	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_ROLE_1))]->strText = m_vecCreadit[m_iCreadit_Count]->strRole_Second;
+	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_ROLE_2))]->strText = m_vecCreadit[m_iCreadit_Count]->strRole_Third;
 
 	m_bRender = false;
 
@@ -173,7 +175,7 @@ void CUIPage_Loading::Credit_Update(_float fTimeDelta)
 
 			if (m_iCreadit_Count == 5)
 			{
-				__super::Array_Control(_int(PART_GROUP::GROUP_CREADIT_STATIC), _int(PART_GROUP::GROUP_CREADIT_ROLE_1), CTRL_COMMAND::COM_RENDER, false);
+				__super::Array_Control(_int(PART_GROUP::GROUP_CREADIT_STATIC), _int(PART_GROUP::GROUP_CREADIT_ROLE_2), CTRL_COMMAND::COM_RENDER, false);
 				__super::Array_Control(_int(PART_GROUP::GROUP_LOADING_STATIC), _int(PART_GROUP::GROUP_LOADING_NOSE_PROGRESS), CTRL_COMMAND::COM_RENDER, true);
 				m_bLoading_Scene = true;
 				return;
@@ -184,11 +186,12 @@ void CUIPage_Loading::Credit_Update(_float fTimeDelta)
 				m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_NAME))]->strText = m_vecCreadit[m_iCreadit_Count]->strName;
 				m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_ROLE_0))]->strText = m_vecCreadit[m_iCreadit_Count]->strRole_First;
 				m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_ROLE_1))]->strText = m_vecCreadit[m_iCreadit_Count]->strRole_Second;
+				m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CREADIT_ROLE_2))]->strText = m_vecCreadit[m_iCreadit_Count]->strRole_Third;
 			}
 		}
 	}
 
-	for (_int i = _int(PART_GROUP::GROUP_CREADIT_STATIC); i <= _int(PART_GROUP::GROUP_CREADIT_ROLE_1); ++i)
+	for (_int i = _int(PART_GROUP::GROUP_CREADIT_STATIC); i <= _int(PART_GROUP::GROUP_CREADIT_ROLE_2); ++i)
 	{
 		if (m_fInverval == 0.f)
 		{

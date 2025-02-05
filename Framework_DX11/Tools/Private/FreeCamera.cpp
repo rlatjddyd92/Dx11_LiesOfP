@@ -119,7 +119,7 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 
 void CFreeCamera::Update(_float fTimeDelta)
 {
-	Calculat_CascadeFrustum();
+	//Calculat_CascadeFrustum();
 	Update_Zoom(fTimeDelta);
 
 	if (m_pTransformCom->Get_isTurning())

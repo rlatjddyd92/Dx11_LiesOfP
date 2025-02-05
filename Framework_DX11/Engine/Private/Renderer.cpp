@@ -290,6 +290,8 @@ HRESULT CRenderer::Draw()
 
 #endif	
 
+	
+
 	return S_OK;
 }
 
