@@ -308,6 +308,8 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 #endif	
 
+	
+
 	return S_OK;
 }
 

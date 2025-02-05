@@ -20,6 +20,7 @@ public:
 		GROUP_CREADIT_NAME,
 		GROUP_CREADIT_ROLE_0,
 		GROUP_CREADIT_ROLE_1,
+		GROUP_CREADIT_ROLE_2,
 
 		GROUP_LOADING_STATIC,
 		GROUP_LOADING_TEXT_0,
@@ -28,6 +29,8 @@ public:
 		GROUP_LOADING_NOSE,
 		GROUP_LOADING_NOSE_TEXT,
 		GROUP_LOADING_NOSE_PROGRESS,
+
+		
 
 		GROUP_END
 	};
@@ -38,6 +41,7 @@ public:
 		_wstring strName = {};
 		_wstring strRole_First = {};
 		_wstring strRole_Second = {};
+		_wstring strRole_Third = {};
 	}CREADIT;
 
 

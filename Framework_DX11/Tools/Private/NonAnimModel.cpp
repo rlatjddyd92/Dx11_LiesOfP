@@ -159,7 +159,6 @@ HRESULT CNonAnimModel::Render_LightDepth()
 	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatrices(), 3)))
 		return E_FAIL;
 
-
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
