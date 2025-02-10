@@ -97,13 +97,13 @@ void CState_Player_Scissor_Fatal::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::OH_GUARD);
         }
         else if (m_isInputLButton)
-            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
+            m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
         else if (m_isInputRButton)
         {
             if (m_fRButtonTime > 0.15f)
-                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+                m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE0);
             else
-                m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+                m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK0);
         }
         else if (m_pPlayer->Key_Hold(KEY::W) || m_pPlayer->Key_Hold(KEY::S) || m_pPlayer->Key_Hold(KEY::D) || m_pPlayer->Key_Hold(KEY::A))
         {

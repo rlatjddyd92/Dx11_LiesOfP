@@ -58,7 +58,6 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     
     float fOffset = 0.00001f;
     float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
-    //float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
     float fBias = fOffset * 5.0f * (1.0f - fDot);
     
 	// 이 사이에 있어야함
@@ -174,9 +173,6 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
     
     vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 	
-    
-    float fHalfLambert = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormal) * 0.5f + 0.5f);
-    //Out.vShade = g_vLightDiffuse * saturate(fHalfLambert + (g_vLightAmbient * g_vMtrlAmbient));
     Out.vShade = g_vLightDiffuse *  (g_vLightAmbient * g_vMtrlAmbient);
     
     vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
@@ -199,11 +195,8 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
     else
     {
         float3 vLookToCamera = (normalize(g_vCamPosition - vPosition)).xyz; // 월드 위치에서 카메라 방향
-    
-        float fHalfLambert = dot(vNormal, vLookToCamera) * 0.5f + 0.5f;
-        //float cosLo = max(0.f, fHalfLambert);
-        float cosLo = max(0.f, dot(vNormal, vLookToCamera)); // 카메라 방향과 법선 벡터의 코사인 값
 
+        float cosLo = max(0.f, dot(vNormal, vLookToCamera)); // 카메라 방향과 법선 벡터의 코사인 값
     
         float3 F0 = lerp(0.04f, vAlbedo, fMetallic); // 금속성이라면, albedo와 F0의 값을 선형보간, 아니라면 0.04
         float3 radiance = g_vLightDiffuse.xyz;
@@ -218,9 +211,6 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
         float D = ndfGGX(cosLh, fRoughness); //Diffuse BRDF
         float G = gaSchlickGGX(cosLi, cosLo, fRoughness);
 
-        //비금속 - 알베도값에 의존
-        //금속- Fresnel 값 F가 중요
-        float3 kd = lerp(float3(1.f, 1.f, 1.f) - F, float3(0.f, 0.f, 0.f), fMetallic);
         float3 vDiffuseBRDF = vAlbedo / 3.141592f;
         float3 vSpecularBRDF = (F * D * G) / max(0.00001f, 4.0 * cosLi * cosLo);
     
@@ -305,8 +295,6 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
         float3 vLookToCamera = (normalize(g_vCamPosition - vPosition)).xyz; // 월드 위치에서 카메라 방향
     
         float cosLo = max(0.0, dot(vNormal.xyz, vLookToCamera));
-        //float3 Lr = 2.0 * cosLo * vNormal - vLookToCamera;
-    
     
         float3 F0 = lerp(0.04f, vAlbedo, fMetallic);
         float3 radiance = g_vLightDiffuse.xyz;
@@ -321,9 +309,6 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
         float D = ndfGGX(cosLh, fRoughness); //Diffuse BRDF
         float G = gaSchlickGGX(cosLi, cosLo, fRoughness);
 
-        //비금속 - 알베도값에 의존
-        //금속- Fresnel 값 F가 중요
-        float3 kd = lerp(float3(1.f, 1.f, 1.f) - F, float3(0.f, 0.f, 0.f), fMetallic);
         float3 vDiffuseBRDF = vAlbedo / 3.141592f;
         float3 vSpecularBRDF = (F * D * G) / max(0.00001f, 4.0 * cosLi * cosLo);
     
@@ -363,7 +348,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT_PBR(PS_IN In)
     
     /* 각도 기반 감쇠 */
     float fTheta = dot(normalize(vLightDir), normalize(g_vLightDir)); // 빛의 방향과 픽셀 방향의 코사인
-    float fEpsilon = g_fCutOff - g_fOuterCutOff; // cuttoff  값이 outercutoff보다 높은 값을 가지게 됨
+    float fEpsilon = g_fCutOff - g_fOuterCutOff; // cuttoff 값이 outercutoff보다 높은 값을 가지게 됨
     float fSpotFactor = max(0.0001f, saturate((fTheta - g_fOuterCutOff) / fEpsilon)); // 선형 감쇠
     fAtt *= fSpotFactor;
     
@@ -392,8 +377,6 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT_PBR(PS_IN In)
         float3 vLookToCamera = (normalize(g_vCamPosition - vPosition)).xyz; // 월드 위치에서 카메라 방향
     
         float cosLo = max(0.0, dot(vNormal.xyz, vLookToCamera));
-        //float3 Lr = 2.0 * cosLo * vNormal - vLookToCamera;
-    
     
         float3 F0 = lerp(0.04f, vAlbedo, fMetallic);
         float3 radiance = g_vLightDiffuse.xyz;
@@ -408,8 +391,6 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT_PBR(PS_IN In)
         float D = ndfGGX(cosLh, fRoughness); //Diffuse BRDF
         float G = gaSchlickGGX(cosLi, cosLo, fRoughness);
 
-        //비금속 - 알베도값에 의존
-        //금속- Fresnel 값 F가 중요
         float3 kd = lerp(float3(1.f, 1.f, 1.f) - F, float3(0.f, 0.f, 0.f), fMetallic);
         float3 vDiffuseBRDF = vAlbedo / 3.141592f;
         float3 vSpecularBRDF = (F * D * G) / max(0.00001f, 4.0 * cosLi * cosLo);
@@ -481,7 +462,6 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
     
     float fHalfLambert = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormal.xyz) * 0.5f + 0.5f);
     Out.vShade = g_vLightDiffuse * saturate(fHalfLambert) + (g_vLightAmbient * g_vMtrlAmbient);
-    //Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
 
     vector vReflect = reflect(normalize(g_vLightDir), normalize(vNormal));
 
@@ -534,8 +514,6 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
     float fDenom = length(vLightDir) / g_fLightRange;
     //float fAtt = 1.f / (1.f + fDenom * fDenom);
     float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
-
-    //float fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
 
     Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 

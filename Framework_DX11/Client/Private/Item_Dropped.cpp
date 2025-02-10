@@ -88,7 +88,7 @@ HRESULT CItem_Dropped::Ready_Components()
 {
     /* For.Com_Collider */
     CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-    ColliderDesc.vExtents = _float3(1.f, 1.f, 1.f);
+    ColliderDesc.vExtents = _float3(1.2f, 1.2f, 1.2f);
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_AABB"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))

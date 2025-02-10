@@ -1296,7 +1296,7 @@ void CRaxasia::ChangePhase()
 	m_pColliderBindMatrix[CT_LOWERARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(24);//ForeArm
 	m_pColliderBindMatrix[CT_LOWERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(71);
 
-	m_eStat.fHp = 1900.f;
+	m_eStat.fHp = 400.f;
 	m_eStat.fMaxHp = 1900.f;
 	m_eStat.fAtk = 250.f;
 	//m_eStat.fDefence = 8.f;

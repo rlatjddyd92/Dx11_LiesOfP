@@ -134,7 +134,7 @@ public:
 		_float fRegion_Interval = 200.f;
 
 		// 에르고 
-		_int iErgo = 5000;
+		_int iErgo = 7000;
 
 		// 레벨 업에 필요한 에르고 
 		_int iErgo_LevelUp = 100;
